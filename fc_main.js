@@ -1639,11 +1639,12 @@ function autoSweetAction() {
 
 function autoEasterAction() {
     if (FrozenCookies.autoEaster == 0) return;
+    if (!Game.UpgradesById[181].unlocked) return;
     if (Game.season == 'easter') return;
     if (haveAll('easter')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
-    if (Game.hasBuff('Cookie storm') && !haveAll('easter')) {
+    if (Game.hasBuff('Cookie storm') && Game.season != 'easter' && !haveAll('easter')) {
         Game.UpgradesById[209].buy();
         logEvent("autoEaster", "Swapping to Easter for Cookie Storm");
     }
@@ -1651,12 +1652,13 @@ function autoEasterAction() {
 
 function autoHalloweenAction() {
     if (FrozenCookies.autoHalloween == 0) return;
+    if (!Game.UpgradesById[181].unlocked) return;
     if (Game.season == 'halloween' || Game.season == 'easter') return;
     if (haveAll('halloween')) return;
+    if (Game.elderWrath == 0) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
-    var living = liveWrinklers();
-    if (living.length > 0 && !haveAll('halloween')) {
+    if (Game.elderWrath > 0 && Game.season != 'halloween' && !haveAll('halloween')) {
         Game.UpgradesById[183].buy();
         logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
     }
