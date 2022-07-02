@@ -1883,6 +1883,68 @@ function autoWorship2Action() {
     }
 }
 
+function getOtherUpgrades() { // I'm sure there's a better way to do this
+    //Buy eggs
+    if (Game.season = 'easter' && Game.HasUnlocked("Omelette") && !Game.Has("Omelette")) {
+        Game.Upgrades["Omelette"].buy();
+        logEvent("Store", "Bought an egg");
+    }
+    if (Game.season = 'easter' && Game.HasUnlocked("Faberge egg") && !Game.Has("Faberge egg")) {
+        Game.Upgrades["Faberge egg"].buy();
+        logEvent("Store", "Bought an egg");
+    }
+    if (Game.season = 'easter' && Game.HasUnlocked('\"egg\"') && !Game.Has('\"egg\"')) {
+        Game.Upgrades['\"egg\"'].buy();
+        logEvent("Store", "Bought an egg");
+    }
+    if (Game.season = 'halloween' && Game.HasUnlocked("Wrinklerspawn") && !Game.Has("Wrinklerspawn")) {
+        Game.Upgrades["Wrinklerspawn"].buy();
+        logEvent("Store", "Bought an egg");
+    }
+    
+    //Buy Santa stuff
+    if (Game.season = 'christmas' && Game.HasUnlocked("Weighted sleighs") && !Game.Has("Weighted sleighs")) {
+        Game.Upgrades["Weighted sleighs"].buy();
+        logEvent("Store", "Bought a gift from Santa");
+    }
+    if (Game.season = 'christmas' && Game.HasUnlocked("Santa\'s bottomless bag") && !Game.Has("Santa\'s bottomless bag")) {
+        Game.Upgrades["Santa\'s bottomless bag"].buy();
+        logEvent("Store", "Bought a gift from Santa");
+    }
+    
+    //Buy dragon drops
+    if (Game.HasUnlocked("Dragon teddy bear") && !Game.Has("Dragon teddy bear")) {
+        Game.Upgrades["Dragon teddy bear"].buy();
+        logEvent("petDragon", "Bought a dragon drop");
+    }
+    if (Game.HasUnlocked("Dragon fang") && !Game.Has("Dragon fang")) {
+        Game.Upgrades["Dragon fang"].buy();
+        logEvent("petDragon", "Bought a dragon drop");
+    }
+    
+    //Buy other essential upgrades
+    if (Game.Upgrades["Elder Pact"].bought == 1 && Game.HasUnlocked("Sacrificial rolling pins") && !Game.Has("Sacrificial rolling pins")) {
+        Game.Upgrades["Sacrificial rolling pins"].buy();
+        logEvent("Store", "Bought non-CpS upgrade");
+    }
+    if (Game.HasUnlocked("Green yeast digestives") && !Game.Has("Green yeast digestives")) {
+        Game.Upgrades["Green yeast digestives"].buy();
+        logEvent("Store", "Bought non-CpS upgrade");
+    }
+    if (Game.HasUnlocked("Fern tea") && !Game.Has("Fern tea")) {
+        Game.Upgrades["Fern tea"].buy();
+        logEvent("Store", "Bought non-CpS upgrade");
+    }
+    if (Game.HasUnlocked("Ichor syrup") && !Game.Has("Ichor syrup")) {
+        Game.Upgrades["Ichor syrup"].buy();
+        logEvent("Store", "Bought non-CpS upgrade");
+    }
+    if (Game.HasUnlocked("Fortune #102") && !Game.Has("Fortune #102")) {
+        Game.Upgrades["Fortune #102"].buy();
+        logEvent("Store", "Bought non-CpS upgrade");
+    }
+}
+
 function generateProbabilities(upgradeMult, minBase, maxMult) {
     var cumProb = [];
     var remainingProbability = 1;
@@ -3952,6 +4014,8 @@ function autoCookie() {
             FrozenCookies.processing = false;
             itemBought = true;
         }
+        
+        if ( !hasClickBuff() && FrozenCookies.autoBuy) { getOtherUpgrades(); }
 
         if (FrozenCookies.autoAscend && !Game.OnAscend && !Game.AscendTimer) {
             var currPrestige = Game.prestige;
