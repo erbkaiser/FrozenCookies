@@ -1893,7 +1893,7 @@ function getOtherUpgrades() { // I'm sure there's a better way to do this
     if (Game.season = 'easter' && Game.HasUnlocked("Omelette") && !Game.Has("Omelette")) {
          Game.UpgradesById['226'].buy(); // Omelette
     }
-    if (Game.HasUnlocked('"egg"') && !Game.Has('"egg"') {
+    if (Game.HasUnlocked('"egg"') && !Game.Has('"egg"')) {
          Game.UpgradesById['229'].buy(); // "egg"
     }
     
