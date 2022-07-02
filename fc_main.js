@@ -3987,16 +3987,18 @@ function autoCookie() {
             } else if (FrozenCookies.trackStats == 6) {
                 FrozenCookies.delayPurchaseCount += 1;
             }
-            logEvent(
-                "Store",
-                "Autobought " +
-                recommendation.purchase.name +
-                " for " +
-                Beautify(recommendation.cost) +
-                ", resulting in " +
-                Beautify(recommendation.delta_cps) +
-                " CPS."
-            );
+            if (FrozenCookies.purchaseLog == 1) {
+                logEvent(
+                    "Store",
+                    "Autobought " +
+                    recommendation.purchase.name +
+                    " for " +
+                    Beautify(recommendation.cost) +
+                    ", resulting in " +
+                    Beautify(recommendation.delta_cps) +
+                    " CPS."
+                );
+            }
             disabledPopups = true;
             if (FrozenCookies.autobuyCount >= 10) {
                 Game.Draw();

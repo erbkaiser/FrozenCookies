@@ -446,6 +446,11 @@ FrozenCookies.preferenceValues = {
         display: ["Logging OFF", "Logging ON"],
         default: 1,
     },
+    purchaseLog: {
+        hint: "Log all automatic purchases as well",
+        display: ["Purchase Log OFF", "Purchase Log ON"],
+        default: 0,
+    },
     trackStats: {
         hint: "Track your CpS / HC earned over time during a single session to enable graphing. This may end up being *extremely* memory-intensive",
         display: [
