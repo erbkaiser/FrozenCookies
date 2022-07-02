@@ -1656,7 +1656,7 @@ function autoHalloweenAction() {
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     var living = liveWrinklers();
-    if (living.length > 0) && !haveAll('halloween')) {
+    if (living.length > 0 && !haveAll('halloween')) {
         Game.UpgradesById[183].buy()
         logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
     }
