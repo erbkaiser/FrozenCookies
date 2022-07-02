@@ -1703,7 +1703,7 @@ function autoBrokerAction() {
 
 function autoDragonAction() {
     if (!Game.HasUnlocked("A crumbly egg")) return;
-    if (Game.dragonLevel = 26) return;
+    if (Game.dragonLevel == 26) return;
     if (hasClickBuff()) return; // Don't pet during click buff
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
@@ -1729,6 +1729,7 @@ function autoDragonAction() {
 
 function petDragonAction() {
     if (
+        !Game.Has("A crumbly egg") ||
         Game.dragonLevel < 4 ||
         !(Game.Has("Pet the dragon"))
     ) { //Need to actually be able to pet
