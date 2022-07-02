@@ -4248,6 +4248,10 @@ function FCStart() {
             autoCookie,
             FrozenCookies.frequency
         );
+        FrozenCookies.otherUpgradesBot = setTimeout(
+            getOtherUpgrades,
+            FrozenCookies.frequency
+        );
     }
 
     /*if (FrozenCookies.autoGC) {
@@ -4400,13 +4404,6 @@ function FCStart() {
     if (FrozenCookies.autoWorship2) {
         FrozenCookies.autoWorship2Bot = setInterval(
             autoWorship2Action,
-            FrozenCookies.frequency
-        );
-    }
-    
-    if (FrozenCookies.frequency) {
-        FrozenCookies.otherUpgradesBot = setTimeout(
-            getOtherUpgrades,
             FrozenCookies.frequency
         );
     }
