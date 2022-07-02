@@ -2936,11 +2936,6 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
         return true;
     }
-    
-    // No season swapping if the current one is incomplete
-    if (upgrade.season && !haveAll(Game.season)) {
-        return true
-    }
 
     if (upgrade.id == 74 && !haveAll('halloween')) { // Don't pledge if Halloween not complete
         return true;
