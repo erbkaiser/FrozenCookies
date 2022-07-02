@@ -40,6 +40,11 @@ FrozenCookies.preferenceValues = {
         display: ["AutoBuy OFF", "AutoBuy ON"],
         default: 0,
     },
+    otherUpgrades: {
+        hint: "Automatically buy upgrades that don't provide a direct CpS boost. This includes eggs and idle upgrades.",
+        display: ["Other Upgrades OFF", "Other Upgrades ON"],
+        default: 1,
+    },
     autoBulk: {
         hint: "Automatically set buildings to be bought in bulk after reincarnation",
         display: ["Auto Bulkbuy OFF", "Auto Bulkbuy x10", "Auto Bulkbuy x100"],
