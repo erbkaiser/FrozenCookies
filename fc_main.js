@@ -1646,21 +1646,6 @@ function autoEasterAction() {
 
     if (Game.hasBuff('Cookie storm') && Game.season != 'easter' && !haveAll('easter')) {
         Game.UpgradesById[209].buy();
-        logEvent("autoEaster", "Swapping to Easter for Cookie Storm");
-    }
-}
-
-function autoHalloweenAction() {
-    if (FrozenCookies.autoHalloween == 0) return;
-    if (!Game.UpgradesById[181].unlocked) return;
-    if (Game.season == 'halloween' || Game.season == 'easter') return;
-    if (haveAll('halloween')) return;
-    if (Game.elderWrath == 0) return;
-    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
-
-    if (Game.elderWrath > 0 && Game.season != 'halloween' && !haveAll('halloween')) {
-        Game.UpgradesById[183].buy();
-        logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
     }
 }
 
@@ -2938,8 +2923,25 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
         return true;
     }
+    
+    // No season swapping if the current one is incomplete
+    if (upgrade.id == 182 && !haveAll(Game.season)) {
+        return true
+    }
+    if (upgrade.id == 183 && !haveAll(Game.season)) {
+        return true
+    }
+    if (upgrade.id == 184 && !haveAll(Game.season)) {
+        return true
+    }
+    if (upgrade.id == 185 && !haveAll(Game.season)) {
+        return true
+    }
+    if (upgrade.id == 209 && !haveAll(Game.season)) {
+        return true
+    }
 
-    if (upgrade.id == 74 && (Game.season == "halloween" || Game.season == "easter") && !haveAll(Game.season)) { // Don't pledge if Easter or Halloween not complete
+    if (upgrade.id == 74 && !haveAll('halloween')) { // Don't pledge if Halloween not complete
         return true;
     }
 
