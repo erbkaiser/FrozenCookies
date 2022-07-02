@@ -1640,6 +1640,7 @@ function autoSweetAction() {
 function autoEasterAction() {
     if (FrozenCookies.autoEaster == 0) return;
     if (Game.season == 'easter') return;
+    if (haveAll('easter')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (Game.hasBuff('Cookie storm') && Game.season != 'easter' && !haveAll('easter')) {
@@ -1649,6 +1650,7 @@ function autoEasterAction() {
 
 function autoHalloweenAction() {
     if (FrozenCookies.autoHalloween == 0) return;
+    if (Game.season == 'halloween') return;
     if (haveAll('halloween')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
@@ -1701,6 +1703,7 @@ function autoBrokerAction() {
 
 function autoDragonAction() {
     if (!Game.HasUnlocked("A crumbly egg")) return;
+    if (Game.dragonLevel = 26) return;
     if (hasClickBuff()) return; // Don't pet during click buff
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
@@ -1710,9 +1713,12 @@ function autoDragonAction() {
     }
 
     if (Game.dragonLevel < Game.dragonLevels.length - 1 && Game.dragonLevels[Game.dragonLevel].cost()) {
+        Game.specialTab = "dragon";
+        Game.ToggleSpecialMenu(1);
         PlaySound('snd/shimmerClick.mp3');
         Game.dragonLevels[Game.dragonLevel].buy();
         Game.dragonLevel = (Game.dragonLevel + 1) % Game.dragonLevels.length;
+        Game.ToggleSpecialMenu(0);
         logEvent("autoDragon", "Upgraded the dragon");
 
         if (Game.dragonLevel >= Game.dragonLevels.length - 1) Game.Win('Here be dragon');
@@ -1723,7 +1729,6 @@ function autoDragonAction() {
 
 function petDragonAction() {
     if (
-        !Game.Has("A crumbly egg") ||
         Game.dragonLevel < 4 ||
         !(Game.Has("Pet the dragon"))
     ) { //Need to actually be able to pet
