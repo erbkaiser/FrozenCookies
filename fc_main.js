@@ -1750,7 +1750,7 @@ function petDragonAction() {
         Game.ToggleSpecialMenu(1);
         Game.ClickSpecialPic();
         Game.ToggleSpecialMenu(0);
-        logEvent("petDragon", "Who's a good dragon? You are!");
+        //logEvent("petDragon", "Who's a good dragon? You are!");
     }
 }
 
