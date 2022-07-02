@@ -1640,9 +1640,10 @@ function autoSweetAction() {
 function autoEasterAction() {
     if (FrozenCookies.autoEaster == 0) return;
     if (Game.season == 'easter') return;
+    if (haveAll('easter')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
-    if (Game.hasBuff('Cookie storm') && !haveAll('easter') && Game.season != 'easter') {
+    if (Game.hasBuff('Cookie storm') && !haveAll('easter')) {
         Game.UpgradesById[209].buy()
         logEvent("autoEaster", "Swapping to Easter for Cookie Storm");
     }
@@ -1651,14 +1652,13 @@ function autoEasterAction() {
 function autoHalloweenAction() {
     if (FrozenCookies.autoHalloween == 0) return;
     if (Game.season == 'halloween' || Game.season == 'easter') return;
+    if (haveAll('halloween')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     var living = liveWrinklers();
-    if (living.length > 0) {
-        if (Game.season != 'easter' && Game.season != 'halloween' && !haveAll('halloween')) {
-            Game.UpgradesById[183].buy()
-            logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
-        }
+    if (living.length > 0) && !haveAll('halloween')) {
+        Game.UpgradesById[183].buy()
+        logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
     }
 }
 
@@ -4000,8 +4000,6 @@ function autoCookie() {
             FrozenCookies.processing = false;
             itemBought = true;
         }
-        
-        if ( !hasClickBuff() && FrozenCookies.autoBuy) { getOtherUpgrades(); }
 
         if (FrozenCookies.autoAscend && !Game.OnAscend && !Game.AscendTimer) {
             var currPrestige = Game.prestige;
@@ -4231,6 +4229,11 @@ function FCStart() {
         clearInterval(FrozenCookies.autoWorship2Bot);
         FrozenCookies.autoWorship2Bot = 0;
     }
+    
+    if (FrozenCookies.otherUpgradesBot) {
+        clearInterval(FrozenCookies.otherUpgradesBot);
+        FrozenCookies.otherUpgradesBot = 0;
+    }
 
     // Remove until timing issues are fixed
     //  if (FrozenCookies.goldenCookieBot) {
@@ -4397,6 +4400,13 @@ function FCStart() {
     if (FrozenCookies.autoWorship2) {
         FrozenCookies.autoWorship2Bot = setInterval(
             autoWorship2Action,
+            FrozenCookies.frequency
+        );
+    }
+    
+    if (FrozenCookies.frequency) {
+        FrozenCookies.otherUpgradesBot = setTimeout(
+            getOtherUpgrades,
             FrozenCookies.frequency
         );
     }
