@@ -1649,6 +1649,20 @@ function autoEasterAction() {
     }
 }
 
+function autoHalloweenAction() {
+    if (FrozenCookies.autoHalloween == 0) return;
+    if (!Game.UpgradesById[181].unlocked) return;
+    if (Game.season == 'halloween' || Game.season == 'easter') return;
+    if (haveAll('halloween')) return;
+    if (Game.elderWrath == 0) return;
+    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
+
+    if (Game.elderWrath > 0 && Game.season != 'halloween' && !haveAll('halloween')) {
+        Game.UpgradesById[183].buy();
+        logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
+    }
+}
+
 function autoBlacklistOff() {
     switch (FrozenCookies.blacklist) {
         case 1:
@@ -1705,7 +1719,6 @@ function autoDragonAction() {
         Game.dragonLevels[Game.dragonLevel].buy();
         Game.dragonLevel = (Game.dragonLevel + 1) % Game.dragonLevels.length;
         logEvent("autoDragon", "Upgraded the dragon");
-        Game.specialTab = "dragon";
         Game.ToggleSpecialMenu(0);
 
         if (Game.dragonLevel >= Game.dragonLevels.length - 1) Game.Win('Here be dragon');
