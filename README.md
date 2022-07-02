@@ -60,6 +60,7 @@ If you want to manually install it:
 2022 Jul 02
 - Completed the Shiny Wrinkler protection code so you can now keep your shinies.
 - Frozen Cookies will now buy upgrades that don't give an immediate CpS benefit, too, such as Omelette, offline cookie production upgrades, and the Sacrificial rolling pins
+- Tweaked the infobox text
 
 2022 Jun 30
 - Add option to toggle display of missed golden cookie clicks (and turn off by default)
