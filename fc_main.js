@@ -2925,19 +2925,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     }
     
     // No season swapping if the current one is incomplete
-    if (upgrade.id == 182 && !haveAll(Game.season)) {
-        return true
-    }
-    if (upgrade.id == 183 && !haveAll(Game.season)) {
-        return true
-    }
-    if (upgrade.id == 184 && !haveAll(Game.season)) {
-        return true
-    }
-    if (upgrade.id == 185 && !haveAll(Game.season)) {
-        return true
-    }
-    if (upgrade.id == 209 && !haveAll(Game.season)) {
+    if (upgrade.season && !haveAll(Game.season)) {
         return true
     }
 
@@ -2975,12 +2963,6 @@ function isUnavailable(upgrade, upgradeBlacklist) {
             "christmas" != Game.season &&
             !Game.UpgradesById[181].unlocked &&
             !Game.prestige);
-    result =
-        result ||
-        (upgrade.season &&
-            (!haveAll(Game.season) ||
-                (upgrade.season != seasons[FrozenCookies.defaultSeason] &&
-                    haveAll(upgrade.season))));
 
     return result;
 }
