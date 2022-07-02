@@ -1719,11 +1719,13 @@ function autoDragonAction() {
         PlaySound('snd/shimmerClick.mp3');
         Game.dragonLevels[Game.dragonLevel].buy();
         Game.dragonLevel = (Game.dragonLevel + 1) % Game.dragonLevels.length;
+        logEvent("autoDragon", "Upgraded the dragon");
+        Game.specialTab = "dragon";
+        Game.ToggleSpecialMenu(0);
 
         if (Game.dragonLevel >= Game.dragonLevels.length - 1) Game.Win('Here be dragon');
         Game.recalculateGains = 1;
         Game.upgradesToRebuild = 1;
-        logEvent("autoDragon", "Upgraded the dragon");
     }
 }
 
