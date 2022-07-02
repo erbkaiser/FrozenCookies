@@ -335,7 +335,7 @@ FrozenCookies.preferenceValues = {
         'hint': 'Switch to Easter season if Cookie Storm is active and you do not have all eggs yet',
         'display': ["Auto Easter OFF", "Auto Easter ON"],
         'default': 0,
-    },    
+    },
     autoHalloween: {
         'hint': 'Switch to Halloween season if you have wrinklers and you do not have all spooky biscuits yet',
         'display': ["Auto Halloween OFF", "Auto Halloween ON"],

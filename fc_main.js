@@ -1639,9 +1639,7 @@ function autoSweetAction() {
 
 function autoEasterAction() {
     if (FrozenCookies.autoEaster == 0) return;
-    if (!Game.UpgradesById[181].unlocked) return;
     if (Game.season == 'easter') return;
-    if (haveAll('easter')) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (Game.hasBuff('Cookie storm') && Game.season != 'easter' && !haveAll('easter')) {
@@ -1651,10 +1649,7 @@ function autoEasterAction() {
 
 function autoHalloweenAction() {
     if (FrozenCookies.autoHalloween == 0) return;
-    if (!Game.UpgradesById[181].unlocked) return;
-    if (Game.season == 'halloween' || Game.season == 'easter') return;
     if (haveAll('halloween')) return;
-    if (Game.elderWrath == 0) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (Game.elderWrath > 0 && Game.season != 'halloween' && !haveAll('halloween')) {
@@ -1719,7 +1714,6 @@ function autoDragonAction() {
         Game.dragonLevels[Game.dragonLevel].buy();
         Game.dragonLevel = (Game.dragonLevel + 1) % Game.dragonLevels.length;
         logEvent("autoDragon", "Upgraded the dragon");
-        Game.ToggleSpecialMenu(0);
 
         if (Game.dragonLevel >= Game.dragonLevels.length - 1) Game.Win('Here be dragon');
         Game.recalculateGains = 1;
@@ -1889,10 +1883,10 @@ function buyOtherUpgrades() { // I'm sure there's a better way to do this
     if (Game.UpgradesById['223'].unlocked == 1 && Game.UpgradesById['223'].bought == 0) {
          Game.UpgradesById['223'].buy(); // Faberge egg
     }
-    if (Game.season = 'halloween' && Game.UpgradesById['224'].unlocked == 1 && Game.UpgradesById['224'].bought == 0) {
+    if (Game.season == 'halloween' && Game.UpgradesById['224'].unlocked == 1 && Game.UpgradesById['224'].bought == 0) {
          Game.UpgradesById['224'].buy(); // Wrinklerspawn
     }
-    if (Game.season = 'easter' && Game.UpgradesById['226'].unlocked == 1 && Game.UpgradesById['226'].bought == 0) {
+    if (Game.season == 'easter' && Game.UpgradesById['226'].unlocked == 1 && Game.UpgradesById['226'].bought == 0) {
          Game.UpgradesById['226'].buy(); // Omelette
     }
     if (Game.UpgradesById['229'].unlocked == 1 && Game.UpgradesById['229'].bought == 0) {
@@ -1900,10 +1894,10 @@ function buyOtherUpgrades() { // I'm sure there's a better way to do this
     }
     
     //Buy Santa stuff
-    if (Game.season = 'christmas' && Game.UpgradesById['158'].unlocked == 1 && Game.UpgradesById['158'].bought == 0) {
+    if (Game.season == 'christmas' && Game.UpgradesById['158'].unlocked == 1 && Game.UpgradesById['158'].bought == 0) {
          Game.UpgradesById['158'].buy(); // Weighted sleighs
     }
-    if (Game.season = 'christmas' && Game.UpgradesById['163'].unlocked == 1 && Game.UpgradesById['163'].bought == 0) {
+    if (Game.season == 'christmas' && Game.UpgradesById['163'].unlocked == 1 && Game.UpgradesById['163'].bought == 0) {
          Game.UpgradesById['163'].buy(); // Santa's bottomless bag
     }
     
@@ -2937,7 +2931,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
         return true;
     }
 
-    if (upgrade.id == 74 && !haveAll('halloween')) { // Don't pledge if Halloween not complete
+    if (upgrade.id == 74 && (Game.season == "halloween" || Game.season == "easter") && !haveAll(Game.season)) { // Don't pledge if Easter or Halloween not complete
         return true;
     }
 
@@ -2971,7 +2965,12 @@ function isUnavailable(upgrade, upgradeBlacklist) {
             "christmas" != Game.season &&
             !Game.UpgradesById[181].unlocked &&
             !Game.prestige);
-
+    result =
+        result ||
+        (upgrade.season &&
+            (!haveAll(Game.season) ||
+                (upgrade.season != seasons[FrozenCookies.defaultSeason] &&
+                    haveAll(upgrade.season))));
     return result;
 }
 
