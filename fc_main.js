@@ -1644,7 +1644,7 @@ function autoEasterAction() {
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (Game.hasBuff('Cookie storm') && !haveAll('easter')) {
-        Game.UpgradesById[209].buy()
+        Game.UpgradesById[209].buy();
         logEvent("autoEaster", "Swapping to Easter for Cookie Storm");
     }
 }
@@ -1657,7 +1657,7 @@ function autoHalloweenAction() {
 
     var living = liveWrinklers();
     if (living.length > 0 && !haveAll('halloween')) {
-        Game.UpgradesById[183].buy()
+        Game.UpgradesById[183].buy();
         logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
     }
 }
@@ -1884,49 +1884,49 @@ function autoWorship2Action() {
 
 function getOtherUpgrades() { // I'm sure there's a better way to do this
     //Buy eggs
-    if (Game.UpgradesById['223'].unlocked == 1 && Game.UpgradesById['223'].bought == 0) {
+    if (Game.HasUnlocked("Faberge egg") && !Game.Has("Faberge egg")) {
          Game.UpgradesById['223'].buy(); // Faberge egg
     }
-    if (Game.season = 'halloween' && Game.UpgradesById['224'].unlocked == 1 && Game.UpgradesById['224'].bought == 0) {
+    if (Game.season = 'halloween' && Game.HasUnlocked("Wrinklerspawn") && !Game.Has("Wrinklerspawn")) {
          Game.UpgradesById['224'].buy(); // Wrinklerspawn
     }
-    if (Game.season = 'easter' && Game.UpgradesById['226'].unlocked == 1 && Game.UpgradesById['226'].bought == 0) {
+    if (Game.season = 'easter' && Game.HasUnlocked("Omelette") && !Game.Has("Omelette")) {
          Game.UpgradesById['226'].buy(); // Omelette
     }
-    if (Game.UpgradesById['229'].unlocked == 1 && Game.UpgradesById['229'].bought == 0) {
+    if (Game.HasUnlocked('"egg"') && !Game.Has('"egg"') {
          Game.UpgradesById['229'].buy(); // "egg"
     }
     
     //Buy Santa stuff
-    if (Game.season = 'christmas' && Game.UpgradesById['158'].unlocked == 1 && Game.UpgradesById['158'].bought == 0) {
+    if (Game.season = 'christmas' && Game.HasUnlocked("Weighted sleighs") && !Game.Has("Weighted sleighs")) {
          Game.UpgradesById['158'].buy(); // Weighted sleighs
     }
-    if (Game.season = 'christmas' && Game.UpgradesById['163'].unlocked == 1 && Game.UpgradesById['163'].bought == 0) {
+    if (Game.season = 'christmas' && Game.HasUnlocked("Santa's bottomless bag") && !Game.Has("Santa's bottomless bag")) {
          Game.UpgradesById['163'].buy(); // Santa's bottomless bag
     }
     
     //Buy dragon drops
-    if (Game.UpgradesById['650'].unlocked == 1 && Game.UpgradesById['650'].bought == 0) {
+    if (Game.HasUnlocked("Dragon fang") && !Game.Has("Dragon fang")) {
          Game.UpgradesById['650'].buy(); // Dragon fang
     }
-    if (Game.UpgradesById['651'].unlocked == 1 && Game.UpgradesById['651'].bought == 0) {
+    if (Game.HasUnlocked("Dragon teddy bear") && !Game.Has("Dragon teddy bear")) {
          Game.UpgradesById['651'].buy(); // Dragon teddy bear
     }
     
     //Buy other essential upgrades
-    if (Game.Upgrades["Elder Pact"].bought == 1 && Game.UpgradesById['87'].unlocked == 1 && Game.UpgradesById['87'].bought == 0) {
+    if (Game.Upgrades["Elder Pact"].bought == 1 && Game.HasUnlocked("Sacrificial rolling pins") && !Game.Has("Sacrificial rolling pins")) {
          Game.UpgradesById['87'].buy(); // Sacrificial rolling pins
     }
-    if (Game.UpgradesById['473'].unlocked == 1 && Game.UpgradesById['473'].bought == 0) {
+    if (Game.HasUnlocked("Green yeast digestives") && !Game.Has("Green yeast digestives")) {
          Game.UpgradesById['473'].buy(); // Green yeast digestives
     }
-    if (Game.UpgradesById['474'].unlocked == 1 && Game.UpgradesById['474'].bought == 0) {
+    if (Game.HasUnlocked("Fern tea") && !Game.Has("Fern tea")) {
          Game.UpgradesById['474'].buy(); // Fern tea
     }
-    if (Game.UpgradesById['475'].unlocked == 1 && Game.UpgradesById['475'].bought == 0) {
+    if (Game.HasUnlocked("Ichor syrup") && !Game.Has("Ichor syrup")) {
          Game.UpgradesById['475'].buy(); // Ichor syrup
     }
-    if (Game.UpgradesById['640'].unlocked == 1 && Game.UpgradesById['640'].bought == 0) {
+    if (Game.HasUnlocked("Fortune #102") && !Game.Has("Fortune #102")) {
          Game.UpgradesById['640'].buy(); // Fortune #102
     }
 }
