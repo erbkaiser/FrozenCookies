@@ -404,19 +404,32 @@ function timeDisplay(seconds) {
     } else if (seconds == Number.POSITIVE_INFINITY) {
         return "Never!";
     }
-    seconds = Math.floor(seconds);
-    var days, hours, minutes;
-    days = Math.floor(seconds / (24 * 60 * 60));
-    days = days > 0 ? Beautify(days) + "d " : "";
-    seconds %= 24 * 60 * 60;
-    hours = Math.floor(seconds / (60 * 60));
-    hours = hours > 0 ? hours + "h " : "";
-    seconds %= 60 * 60;
-    minutes = Math.floor(seconds / 60);
-    minutes = minutes > 0 ? minutes + "m " : "";
-    seconds %= 60;
-    seconds = seconds > 0 ? seconds + "s" : "";
-    return (days + hours + minutes + seconds).trim();
+    // seconds = Math.floor(seconds);
+    // var days, hours, minutes;
+    // days = Math.floor(seconds / (24 * 60 * 60));
+    // days = days > 0 ? Beautify(days) + "d " : "";
+    // seconds %= 24 * 60 * 60;
+    // hours = Math.floor(seconds / (60 * 60));
+    // hours = hours > 0 ? hours + "h " : "";
+    // seconds %= 60 * 60;
+    // minutes = Math.floor(seconds / 60);
+    // minutes = minutes > 0 ? minutes + "m " : "";
+    // seconds %= 60;
+    // seconds = seconds > 0 ? seconds + "s" : "";
+    // return (days + hours + minutes + seconds).trim();
+    var y, m, d, h, n, s, r;
+    y = Math.floor(time / 31104000);
+    r = time % 31104000;
+    m = Math.floor(r / 2592000);
+    r = r % 2592000;
+    d = Math.floor(r / 86400);
+    r = r % 86400;
+    h = Math.floor(r / 3600);
+    r = r % 3600;
+    n = Math.floor(r / 60);
+    r = r % 60;
+    s = r; // no floor needed, will be an integer less than 60
+    return (y+" yr "+m+" mon "+d+" day "+h+" hr "+n+ " min "+s+" sec").trim();
 }
 
 function fcDraw(from, text, origin) {
