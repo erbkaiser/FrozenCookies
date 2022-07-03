@@ -6,7 +6,7 @@ if (Game.version > lastCompatibleVersion) {
     );
     console.log(
         "This version of Frozen Cookies has only been tested through Cookie Clicker version " +
-        lastCompatibleVersion
+            lastCompatibleVersion
     );
     console.log(
         "There may be incompatibilities, undesirable effects, bugs, shifts in reality, immoral behavior, and who knows what else."
@@ -14,12 +14,13 @@ if (Game.version > lastCompatibleVersion) {
 }
 
 var scriptElement =
-    document.getElementById("frozenCookieScript") !== null ?
-    document.getElementById("frozenCookieScript") :
-    document.getElementById("modscript_frozen_cookies");
-var baseUrl = scriptElement !== null ?
-    scriptElement.getAttribute("src").replace(/\/frozen_cookies\.js$/, "") :
-    "https://github.erbkaiser.com/FrozenCookies/";
+    document.getElementById("frozenCookieScript") !== null
+        ? document.getElementById("frozenCookieScript")
+        : document.getElementById("modscript_frozen_cookies");
+var baseUrl =
+    scriptElement !== null
+        ? scriptElement.getAttribute("src").replace(/\/frozen_cookies\.js$/, "")
+        : "https://github.erbkaiser.com/FrozenCookies/";
 var FrozenCookies = {
     baseUrl: baseUrl,
     branch: "Main-",
@@ -49,7 +50,7 @@ var script_list = [
     FrozenCookies.baseUrl + "/fc_infobox.js",
 ];
 
-FrozenCookies.loadInterval = setInterval(function() {
+FrozenCookies.loadInterval = setInterval(function () {
     if (Game && Game.ready) {
         clearInterval(FrozenCookies.loadInterval);
         FrozenCookies.loadInterval = 0;
@@ -63,7 +64,7 @@ function loadScript(id) {
     } else {
         var url = script_list[id];
         if (/\.js$/.exec(url)) {
-            $.getScript(url, function() {
+            $.getScript(url, function () {
                 loadScript(id + 1);
             });
         } else if (/\.css$/.exec(url)) {
@@ -91,7 +92,7 @@ function fcInit() {
         "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     );
     jquery.setAttribute("crossorigin", "anonymous");
-    jquery.onload = function() {
+    jquery.onload = function () {
         loadScript(0);
     };
     document.head.appendChild(jquery);

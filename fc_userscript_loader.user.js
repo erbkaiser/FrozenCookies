@@ -12,10 +12,12 @@
 
 // Source:    https://github.com/erbkaiser/FrozenCookies/main/
 // Github.io: https://erbkaiser.github.io/FrozenCookies/
-var loadInterval = setInterval(function() {
+var loadInterval = setInterval(function () {
     const Game = unsafeWindow.Game;
     if (Game && Game.ready) {
         clearInterval(loadInterval);
-        Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js");
+        Game.LoadMod(
+            "https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js"
+        );
     }
 }, 1000);
