@@ -424,7 +424,7 @@ function timeDisplay(seconds) {
         seconds = seconds % ord[i];
     }
     str += seconds+" sec";
-    return str;
+    return str.trim();
 }
 
 function fcDraw(from, text, origin) {
