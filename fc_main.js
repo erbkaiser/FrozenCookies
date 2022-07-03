@@ -398,7 +398,7 @@ function beautifyUpgradesAndAchievements() {
     });
 }
 
-function timeDisplay(seconds) {
+function timeDisplay(r) {
     if (seconds === "---" || seconds === 0) {
         return "Done!";
     } else if (seconds == Number.POSITIVE_INFINITY) {
@@ -417,19 +417,14 @@ function timeDisplay(seconds) {
     // seconds %= 60;
     // seconds = seconds > 0 ? seconds + "s" : "";
     // return (days + hours + minutes + seconds).trim();
-    var y, m, d, h, n, s, r;
-    y = Math.floor(time / 31104000);
-    r = time % 31104000;
-    m = Math.floor(r / 2592000);
-    r = r % 2592000;
-    d = Math.floor(r / 86400);
-    r = r % 86400;
-    h = Math.floor(r / 3600);
-    r = r % 3600;
-    n = Math.floor(r / 60);
-    r = r % 60;
-    s = r; // no floor needed, will be an integer less than 60
-    return (y+" yr "+m+" mon "+d+" day "+h+" hr "+n+ " min "+s+" sec").trim();
+    ord = {yr:31556926,mon:2629743,day:86400,hr:3600,min:60};
+    str = "";
+    for (var i in ord) {
+        str += Math.floor(r/ord[i])+" "+i+" ";
+        r = r % ord[i];
+    }
+    str += r+" sec";
+    return str;
 }
 
 function fcDraw(from, text, origin) {
