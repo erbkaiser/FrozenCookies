@@ -149,7 +149,7 @@ FrozenCookies.preferenceValues = {
         hint: "Pantheon options:",
     },
     pantheonNotes: {
-        hint: "Turn off autobuy while setting. Do not slot the same god in multiple slots",
+        hint: "(Turn off autobuy while setting. Do not slot the same god in multiple slots)",
     },
     autoWorship0: {
         hint: "Automatically slots desired god in DIAMOND slot",
@@ -211,7 +211,7 @@ FrozenCookies.preferenceValues = {
         hint: "Grimoire options:",
     },
     spellNotes: {
-        hint: "Only one combo is active at the same time, with the last one winning. See the readme for more info",
+        hint: "(Only one combo is active at the same time, with the last one winning. See the readme for more info)",
     },
     towerLimit: {
         hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for max single casting FTHOF. Not recommended to set over 100",
@@ -274,7 +274,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     dragonNotes: {
-        hint: "Select your desired aura from the list. Turn off autoBuy option while changing. Cannot set the same aura to both slots",
+        hint: "(Select your desired aura from the list. Turn off autoBuy option while changing. Cannot set the same aura to both slots)",
     },
     autoDragonAura1: {
         hint: "Automatically set FIRST dragon aura",
@@ -336,7 +336,7 @@ FrozenCookies.preferenceValues = {
         hint: "Season options:",
     },
     seasonNotes: {
-        hint: "Turn off autoBuy option while changing default season",
+        hint: "(Turn off autoBuy option while changing default season)",
     },
     defaultSeason: {
         hint: "Autobuy a selected season when no others have needed upgrades",
@@ -454,7 +454,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     otherNotes2: {
-        hint: "The following options can drastically slow down the game. Do not touch unless you know what you're doing",
+        hint: "(The following options can drastically slow down the game. Do not touch unless you know what you're doing)",
     },
     fpsModifier: {
         hint: "Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc.",
