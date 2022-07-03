@@ -404,27 +404,23 @@ function timeDisplay(seconds) {
     } else if (seconds == Number.POSITIVE_INFINITY) {
         return "Never!";
     }
-    // seconds = Math.floor(seconds);
-    // var days, hours, minutes;
-    // days = Math.floor(seconds / (24 * 60 * 60));
-    // days = days > 0 ? Beautify(days) + "d " : "";
-    // seconds %= 24 * 60 * 60;
-    // hours = Math.floor(seconds / (60 * 60));
-    // hours = hours > 0 ? hours + "h " : "";
-    // seconds %= 60 * 60;
-    // minutes = Math.floor(seconds / 60);
-    // minutes = minutes > 0 ? minutes + "m " : "";
-    // seconds %= 60;
-    // seconds = seconds > 0 ? seconds + "s" : "";
-    // return (days + hours + minutes + seconds).trim();
-    ord = {yr:31556926,mon:2629743,day:86400,hr:3600,min:60};
-    str = "";
-    for (var i in ord) {
-        str += Math.floor(seconds/ord[i])+" "+i+" ";
-        seconds = seconds % ord[i];
-    }
-    str += seconds+" sec";
-    return str.trim();
+    seconds = Math.floor(seconds);
+    var years, weeks, days, hours, minutes;
+    years = Math.floor(seconds / (365.25 * 24 * 60 * 60));
+    years = years > 0 ? Beautify(years) + "y " : "";
+    weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
+    weeks = weeks > 0 ? Beautify(weeks) + "w " : "";
+    days = Math.floor(seconds / (24 * 60 * 60));
+    days = days > 0 ? Beautify(days) + "d " : "";
+    seconds %= 24 * 60 * 60;
+    hours = Math.floor(seconds / (60 * 60));
+    hours = hours > 0 ? hours + "h " : "";
+    seconds %= 60 * 60;
+    minutes = Math.floor(seconds / 60);
+    minutes = minutes > 0 ? minutes + "m " : "";
+    seconds %= 60;
+    seconds = seconds > 0 ? seconds + "s" : "";
+    return (years + weeks + days + hours + minutes + seconds).trim();
 }
 
 function fcDraw(from, text, origin) {
