@@ -36,12 +36,12 @@ FrozenCookies.preferenceValues = {
         hint: "Auto buying options:",
     },
     autoBuy: {
-        hint: "Automatically buy the most efficient building when you've met its cost.\nAlso controls some other automated purchases.",
+        hint: "Automatically buy the most efficient building when you've met its cost. Also controls some other automated purchases",
         display: ["AutoBuy OFF", "AutoBuy ON"],
         default: 0,
     },
     otherUpgrades: {
-        hint: "Automatically buy upgrades that don't provide a direct CpS boost.\nThis includes eggs and idle upgrades.",
+        hint: "Automatically buy upgrades that don't provide a direct CpS boost. This includes eggs and idle upgrades",
         display: ["Other Upgrades OFF", "Other Upgrades ON"],
         default: 1,
     },
@@ -79,7 +79,7 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="factoryMax" onclick="updateFactoryMax(\'factoryMax\');">${factoryMax} Factories</a>',
     },
     pastemode: {
-        hint: "Always autobuy the least efficient purchase. This is a stupid idea, you should never turn this on.",
+        hint: "Always autobuy the least efficient purchase. This is a stupid idea, you should never turn this on",
         display: ["Pastemode OFF", "Pastemode ON"],
         default: 0,
     },
@@ -89,7 +89,7 @@ FrozenCookies.preferenceValues = {
         hint: "Other automatic actions:",
     },
     autoAscend: {
-        hint: "Automatically ascend when your heavenly chip count hits a certain number.\nNote: this will skip the upgrade screen.",
+        hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
         display: ["Autoascend OFF", "Autoascend ON"],
         default: 0,
         extras: '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>',
@@ -104,7 +104,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     shinyPop: {
-        hint: "Protect the endangered Shiny Wrinkler from being auomatically popped.\nNote: this disables buying the Elder Pledge.",
+        hint: "Protect the endangered Shiny Wrinkler from being auomatically popped. Note: this disables buying the Elder Pledge",
         display: ["Save Shiny Wrinklers OFF", "Save Shiny Wrinklers ON"],
         default: 0,
     },
@@ -148,8 +148,11 @@ FrozenCookies.preferenceValues = {
     pantheonOptions: {
         hint: "Pantheon options:",
     },
+    pantheonNotes: {
+        hint: "Turn off autobuy while setting. Do not slot the same god in multiple slots",
+    },
     autoWorship0: {
-        hint: "Automatically slots desired god in DIAMOND slot in Pantheon. Turn off autoBuy option while changing.\nIt's not possible to put the same god in all slots.",
+        hint: "Automatically slots desired god in DIAMOND slot",
         display: [
             "No God",
             "Vomitrax",
@@ -167,7 +170,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoWorship1: {
-        hint: "Automatically slots desired god in RUBY slot in Pantheon.",
+        hint: "Automatically slots desired god in RUBY slot",
         display: [
             "No God",
             "Vomitrax",
@@ -185,7 +188,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoWorship2: {
-        hint: "Automatically slots desired god in JADE slot in Pantheon.",
+        hint: "Automatically slots desired god in JADE slot",
         display: [
             "No God",
             "Vomitrax",
@@ -207,8 +210,11 @@ FrozenCookies.preferenceValues = {
     spellOptions: {
         hint: "Grimoire options:",
     },
+    spellNotes: {
+        hint: "Only one combo is active at the same time, with the last one winning. See the readme for more info",
+    },
     towerLimit: {
-        hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for max efficiency for single casting FTHOF.\nNot recommended to set over 100.",
+        hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for max single casting FTHOF. Not recommended to set over 100",
         display: ["Wizard Tower Cap OFF", "Wizard Tower Cap ON"],
         default: 0,
         extras: '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>',
@@ -225,21 +231,8 @@ FrozenCookies.preferenceValues = {
         default: 0,
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
     },
-    autoFTHOFCombo: {
-        hint: "This replaces Auto Cast.\nWill cast Haggler's charm until a double cast of Click Frenzy and either Elder Frenzy or Building Special is possible.\nMake sure to have enough mana for double casting!",
-        display: ["Auto FTHOF Combo OFF", "Auto FTHOF Combo ON"],
-        default: 0,
-    },
-    auto100ConsistencyCombo: {
-        hint: "EXPERIMENTAL: Does the 100% Consistency Combo with two building specials.\nWARNING: This will spend a sugar lump, do not enable unless you know what this is!",
-        display: [
-            "Auto 100% Consistency Combo OFF",
-            "Auto 100% Consistency Combo ON",
-        ],
-        default: 0,
-    },
     autoSugarFrenzy: {
-        hint: "Buy Sugar Frenzy during the first 100% Consistency and/or FTHOF combo - requires a sugar lump!",
+        hint: "Buy Sugar Frenzy during the first 100% Consistency and/or FTHOF combo",
         display: [
             "Auto Sugar Frenzy OFF",
             "ASF for 100% Consistency Combo",
@@ -247,8 +240,21 @@ FrozenCookies.preferenceValues = {
         ],
         default: 0,
     },
+    autoFTHOFCombo: {
+        hint: "Perform FTHOF double cast combos - needs enough mana! Disables Auto Cast",
+        display: ["Auto FTHOF Combo OFF", "Auto FTHOF Combo ON"],
+        default: 0,
+    },
+    auto100ConsistencyCombo: {
+        hint: "EXPERIMENTAL: Does the 100% Consistency Combo. Disables autocast and auto FTHOF Combo",
+        display: [
+            "Auto 100% Consistency Combo OFF",
+            "Auto 100% Consistency Combo ON",
+        ],
+        default: 0,
+    },
     autoSweet: {
-        hint: 'EXPERIMENTAL: Automatically ascend until "Sweet" (free sugar lump) is in the next ten spells.\nThis option will turn itself off once a "Sweet" is detected, no manual shutdown!',
+        hint: "EXPERIMENTAL: Automatically ascend until 'Sweet' is in the next ten spells. Disables other combos. No manual shutdown!",
         display: ["Auto Sweet OFF", "Auto Sweet ON"],
         default: 0,
     },
@@ -267,8 +273,11 @@ FrozenCookies.preferenceValues = {
         display: ["Auto-Petting OFF", "Auto-Petting ON"],
         default: 0,
     },
+    dragonNotes: {
+        hint: "Select your desired aura from the list. Turn off autoBuy option while changing. Cannot set the same aura to both slots",
+    },
     autoDragonAura1: {
-        hint: "Automatically set FIRST dragon aura. Select your desired aura from the list.\nTurn off autoBuy option while changing.",
+        hint: "Automatically set FIRST dragon aura",
         display: [
             "No Aura",
             "Breath of Milk",
@@ -295,7 +304,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoDragonAura2: {
-        hint: "Automatically set SECOND dragon aura. Cannot set both slots to the same aura.",
+        hint: "Automatically set SECOND dragon aura",
         display: [
             "No Aura",
             "Breath of Milk",
@@ -323,11 +332,14 @@ FrozenCookies.preferenceValues = {
     },
 
     // Season options
-    SeasonOptions: {
+    seasonOptions: {
         hint: "Season options:",
     },
+    seasonNotes: {
+        hint: "Turn off autoBuy option while changing default season",
+    },
     defaultSeason: {
-        hint: "Autobuy a selected season when no others have needed upgrades. Turn off autoBuy option while changing.",
+        hint: "Autobuy a selected season when no others have needed upgrades",
         display: [
             "Default Season OFF",
             "Default Season BUSINESS DAY",
@@ -380,9 +392,12 @@ FrozenCookies.preferenceValues = {
         hint: "Other options:",
     },
     FCshortcuts: {
-        hint: "Use a variety of helpful keyboard shortcuts: 'a' for autobuy. 'b' for building spread.\n'c' to toggle auto-GC. 'e' for save export. 'r' for reset.\n's' for manual save. 'w' for wrinkler info",
+        hint: "Use a variety of helpful keyboard shortcuts. See the readme for info",
         display: ["Shortcuts OFF", "Shortcuts ON"],
         default: 1,
+    },
+    otherOptions: {
+        hint: "Setting a bank delays autobuy until the bank is complete",
     },
     holdSEBank: {
         hint: "Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)",
@@ -404,7 +419,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     setHarvestBankType: {
-        hint: "Calculate the needed harvesting bank based on whether a CPS multiplier is in effect when you intend to harvest\n(no effect if no plant was selected above).",
+        hint: "Calculate the needed harvesting bank based on whether a CPS multiplier is in effect when you intend to harvest (no effect if no plant was selected above)",
         display: [
             "Harvesting during NO CPS MULTIPLER",
             "Harvesting during FRENZY",
@@ -415,13 +430,19 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>',
     },
     /*
-      'timeTravelMethod':{
-          hint:"Time travel is unstable. This determines how time travel works. If you're unsure, don't touch this.",
-          display:["Time Travel DISABLED"], //, "Purchases by Estimated Effective CPS", "Purchases by Simulated Real Time", "Heavenly Chips by Estimated Effective CPS", "Heavenly Chips by Simulated Real Time"],
-          default:0,
-          extras:"<a class="option" id="timeTravelPurchases" onclick="updateTimeTravelAmount();">Set Time Travel Amount</a>"
+      timeTravelMethod:{
+        hint: "Time travel is unstable. This determines how time travel works. If you're unsure, don't touch this",
+        display: [
+            Time Travel DISABLED"],
+            "Purchases by Estimated Effective CPS",
+            "Purchases by Simulated Real Time",
+            "Heavenly Chips by Estimated Effective CPS",
+            "Heavenly Chips by Simulated Real Time"
+        ],
+        default: 0,
+        extras: '<a class="option" id="timeTravelPurchases" onclick="updateTimeTravelAmount();">Set Time Travel Amount</a>',
       },
-      */
+    */
     simulatedGCPercent: {
         hint: 'Assume a percentage of Golden Cookies as "clicked" for GC efficiency calculations (100% recommended)',
         display: ["GC clicked 0%", "GC clicked 100%"],
@@ -432,8 +453,11 @@ FrozenCookies.preferenceValues = {
         display: ["Show Missed GCs OFF", "Show Missed GCs ON"],
         default: 0,
     },
+    otherNotes2: {
+        hint: "The following options can drastically slow down the game. Do not touch unless you know what you're doing",
+    },
     fpsModifier: {
-        hint: "Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc.\nIf you're not sure, keep this at 30",
+        hint: "Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc.",
         display: [
             "Frame Rate 15 fps",
             "Frame Rate 24 fps",
@@ -464,7 +488,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     trackStats: {
-        hint: "Track your CpS / HC earned over time during a single session to enable graphing.\nThis may end up being *extremely* memory-intensive",
+        hint: "Track your CpS / HC earned over time during a single session to enable graphing",
         display: [
             "Tracking OFF",
             "Tracking EVERY 60s",
@@ -479,7 +503,7 @@ FrozenCookies.preferenceValues = {
     },
 
     /* Doesnt work
-    showAchievements:{
+    showAchievements :{
         hint: "Show achievement popups (Kind of broken early game)",
         display: ["Achievement Popups OFF", "Achievement Popups ON"],
         default: 0
