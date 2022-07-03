@@ -398,7 +398,7 @@ function beautifyUpgradesAndAchievements() {
     });
 }
 
-function timeDisplay(r) {
+function timeDisplay(seconds) {
     if (seconds === "---" || seconds === 0) {
         return "Done!";
     } else if (seconds == Number.POSITIVE_INFINITY) {
@@ -420,10 +420,10 @@ function timeDisplay(r) {
     ord = {yr:31556926,mon:2629743,day:86400,hr:3600,min:60};
     str = "";
     for (var i in ord) {
-        str += Math.floor(r/ord[i])+" "+i+" ";
-        r = r % ord[i];
+        str += Math.floor(seconds/ord[i])+" "+i+" ";
+        seconds = seconds % ord[i];
     }
-    str += r+" sec";
+    str += seconds+" sec";
     return str;
 }
 
