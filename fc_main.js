@@ -408,10 +408,12 @@ function timeDisplay(seconds) {
     var years, weeks, days, hours, minutes;
     years = Math.floor(seconds / (365.25 * 24 * 60 * 60));
     years = years > 0 ? Beautify(years) + "y " : "";
+    seconds %= 365.25 * 24 * 60 * 60;
     weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
-    weeks = weeks > 0 ? Beautify(weeks) + "w " : "";
+    weeks = weeks > 0 ? weeks + "w " : "";
+    seconds %= 7 * 24 * 60 * 60;
     days = Math.floor(seconds / (24 * 60 * 60));
-    days = days > 0 ? Beautify(days) + "d " : "";
+    days = days > 0 ? days + "d " : "";
     seconds %= 24 * 60 * 60;
     hours = Math.floor(seconds / (60 * 60));
     hours = hours > 0 ? hours + "h " : "";
