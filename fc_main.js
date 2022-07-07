@@ -19,12 +19,12 @@ function registerMod(mod_id = "frozen_cookies") {
                 // called when the player has reincarnated after an ascension
                 if (FrozenCookies.autoBulk != 0) {
                     if (FrozenCookies.autoBulk == 1) {
-                        // Buy x10
-                        Game.buyBulk = 10;
+                        // Game.buyBulk = 10;
+                        document.getElementById("storeBulk10").click();
                     }
                     if (FrozenCookies.autoBulk == 2) {
-                        // Buy x100
-                        Game.buyBulk = 100;
+                        // Game.buyBulk = 100;
+                        document.getElementById("storeBulk100").click();
                     }
                 }
             });
@@ -4478,7 +4478,7 @@ function autoCookie() {
 
         //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
         if (
-            !hasClickBuff() && // Don't buy during click combos
+            // !hasClickBuff() && // Don't buy during click combos
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
                 recommendation.purchase.name == "Elder Pledge") &&
@@ -4500,8 +4500,7 @@ function autoCookie() {
                     Game.Objects["Cortex baker"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        (Game.Objects["Wizard tower"].level >= 5 ||
-                            M.magicM >= FrozenCookies.manaMax - 30)) ||
+                        M.magicM >= FrozenCookies.manaMax - 30) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >=
