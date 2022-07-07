@@ -60,6 +60,7 @@ If you want to manually install it:
 2022 Jul 07
 - Returned Frozen Cookies ticker messages (now less common)
 - Changed auto-cast behaviour: Frenzy minimum is only checked for FTHOF, more chances are taken to shorten debuffs, and sugar lumps are always taken
+- (Hopefully) fixed a long standing issue with autobuying overshooting building limits (#25)
 
 2022 Jul 02
 - Completed the Shiny Wrinkler protection code so you can now keep your shinies.
