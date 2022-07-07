@@ -20,11 +20,11 @@ function registerMod(mod_id = "frozen_cookies") {
                 if (FrozenCookies.autoBulk != 0) {
                     if (FrozenCookies.autoBulk == 1) {
                         // Buy x10
-                        document.getElementById("storeBulk10").click();
+                        Game.buyBulk = 10;
                     }
                     if (FrozenCookies.autoBulk == 2) {
                         // Buy x100
-                        document.getElementById("storeBulk100").click();
+                        Game.buyBulk = 100;
                     }
                 }
             });
@@ -927,9 +927,7 @@ function autoCast() {
                     );
                 }
 
-                if (
-                    cpsBonus() >= FrozenCookies.minCpSMult
-                ) {
+                if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     var CBG = M.spellsById[0];
                     if (
                         M.magicM <
@@ -2068,17 +2066,17 @@ function autoBrokerAction() {
         );
     }
     //Upgrade bank level
-    var countCursor = Game.Objects["Cursor"].amount;
     let currentOffice = B.offices[B.officeLevel];
     if (
         currentOffice.cost &&
         Game.Objects["Cursor"].amount >= currentOffice.cost[0] &&
         Game.Objects["Cursor"].level >= currentOffice.cost[1]
     ) {
+        var countBankCursor = currentOffice.cost[0];
         l("bankOfficeUpgrade").click();
         logEvent("AutoBroker", "Upgrade bank level");
-        safeBuy(Game.Objects["Cursor"], countCursor);
-        logEvent("AutoBroker", "Bought " + countCursor + " cursors");
+        safeBuy(Game.Objects["Cursor"], countBankCursor);
+        logEvent("AutoBroker", "Bought " + countBankCursor + " cursors");
     }
 }
 
@@ -4494,7 +4492,30 @@ function autoCookie() {
             recommendation.purchase.clickFunction = null;
             disabledPopups = false;
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
-            if (recommendation.type == "building") {
+            if (
+                recommendation.type == "building" &&
+                Game.buyBulk != 1 &&
+                ((FrozenCookies.autoSpell == 3 &&
+                    recommendation.purchase.name == "Cortex baker" &&
+                    Game.Objects["Cortex baker"].amount >= 299) ||
+                    (FrozenCookies.towerLimit &&
+                        recommendation.purchase.name == "Wizard tower" &&
+                        (Game.Objects["Wizard tower"].level >= 5 ||
+                            M.magicM >= FrozenCookies.manaMax - 30)) ||
+                    (FrozenCookies.mineLimit &&
+                        recommendation.purchase.name == "Mine" &&
+                        Game.Objects["Mine"].amount >=
+                            FrozenCookies.mineMax - 100) ||
+                    (FrozenCookies.factoryLimit &&
+                        recommendation.purchase.name == "Factory" &&
+                        Game.Objects["Factory"].amount >=
+                            FrozenCookies.factoryMax - 100))
+            ) {
+                Game.buyBulkOld = Game.buyBulk;
+                Game.buyBulk = 1;
+                safeBuy(recommendation.purchase);
+                Game.buyBulk = Game.buyBulkOld;
+            } else if (recommendation.type == "building") {
                 safeBuy(recommendation.purchase);
             } else {
                 recommendation.purchase.buy();
