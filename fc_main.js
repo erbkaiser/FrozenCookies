@@ -2068,13 +2068,13 @@ function autoBrokerAction() {
         Game.upgradesToRebuild = 1;
     }
     //Upgrade bank level
-    var countCursor = Game.Objects["Cursor"].amount;
     let currentOffice = B.offices[B.officeLevel];
     if (
         currentOffice.cost &&
         Game.Objects["Cursor"].amount >= currentOffice.cost[0] &&
         Game.Objects["Cursor"].level >= currentOffice.cost[1]
     ) {
+        var countBankCursor = currentOffice.cost[0];
         l("bankOfficeUpgrade").click();
         safeBuy(Game.Objects["Cursor"], countBankCursor);
         logEvent(
@@ -2102,81 +2102,11 @@ function autoDragonAction() {
         Game.dragonLevels[Game.dragonLevel].cost()
     ) {
         Game.specialTab = "dragon";
-        Game.ToggleSpecialMenu(1);
-        PlaySound("snd/shimmerClick.mp3");
-        Game.dragonLevels[Game.dragonLevel].buy();
-        Game.dragonLevel = (Game.dragonLevel + 1) % Game.dragonLevels.length;
-        Game.ToggleSpecialMenu(0);
-        if (Game.dragonLevel == 5) safebuy(Game.Objects["Cursor"], 100);
-        if (Game.dragonLevel == 6) safebuy(Game.Objects["Grandma"], 100);
-        if (Game.dragonLevel == 7) safebuy(Game.Objects["Farm"], 100);
-        if (Game.dragonLevel == 8) safebuy(Game.Objects["Mine"], 100);
-        if (Game.dragonLevel == 9) safebuy(Game.Objects["Factory"], 100);
-        if (Game.dragonLevel == 10) safebuy(Game.Objects["Bank"], 100);
-        if (Game.dragonLevel == 11) safebuy(Game.Objects["Temple"], 100);
-        if (Game.dragonLevel == 12) safebuy(Game.Objects["Wizard tower"], 100);
-        if (Game.dragonLevel == 13) safebuy(Game.Objects["Shipment"], 100);
-        if (Game.dragonLevel == 14) safebuy(Game.Objects["Alchemy lab"], 100);
-        if (Game.dragonLevel == 15) safebuy(Game.Objects["Portal"], 100);
-        if (Game.dragonLevel == 16) safebuy(Game.Objects["Time machine"], 100);
-        if (Game.dragonLevel == 17)
-            safebuy(Game.Objects["Antimatter condenser"], 100);
-        if (Game.dragonLevel == 18) safebuy(Game.Objects["Prism"], 100);
-        if (Game.dragonLevel == 19) safebuy(Game.Objects["Chancemaker"], 100);
-        if (Game.dragonLevel == 20)
-            safebuy(Game.Objects["Fractal engine"], 100);
-        if (Game.dragonLevel == 21)
-            safebuy(Game.Objects["Javascript console"], 100);
-        if (Game.dragonLevel == 22) safebuy(Game.Objects["Idleverse"], 100);
-        if (Game.dragonLevel == 23) safebuy(Game.Objects["Cortex baker"], 100);
-        if (Game.dragonLevel == 24) {
-            safebuy(Game.Objects["Cursor"], 50);
-            safebuy(Game.Objects["Grandma"], 50);
-            safebuy(Game.Objects["Farm"], 50);
-            safebuy(Game.Objects["Mine"], 50);
-            safebuy(Game.Objects["Factory"], 50);
-            safebuy(Game.Objects["Bank"], 50);
-            safebuy(Game.Objects["Temple"], 50);
-            safebuy(Game.Objects["Wizard tower"], 50);
-            safebuy(Game.Objects["Shipment"], 50);
-            safebuy(Game.Objects["Alchemy lab"], 50);
-            safebuy(Game.Objects["Portal"], 50);
-            safebuy(Game.Objects["Time machine"], 50);
-            safebuy(Game.Objects["Antimatter condenser"], 50);
-            safebuy(Game.Objects["Prism"], 50);
-            safebuy(Game.Objects["Chancemaker"], 50);
-            safebuy(Game.Objects["Fractal engine"], 50);
-            safebuy(Game.Objects["Javascript console"], 50);
-            safebuy(Game.Objects["Idleverse"], 50);
-            safebuy(Game.Objects["Cortex baker"], 50);
-        }
-        if (Game.dragonLevel == 25) {
-            safebuy(Game.Objects["Cursor"], 200);
-            safebuy(Game.Objects["Grandma"], 200);
-            safebuy(Game.Objects["Farm"], 200);
-            safebuy(Game.Objects["Mine"], 200);
-            safebuy(Game.Objects["Factory"], 200);
-            safebuy(Game.Objects["Bank"], 200);
-            safebuy(Game.Objects["Temple"], 200);
-            safebuy(Game.Objects["Wizard tower"], 200);
-            safebuy(Game.Objects["Shipment"], 200);
-            safebuy(Game.Objects["Alchemy lab"], 200);
-            safebuy(Game.Objects["Portal"], 200);
-            safebuy(Game.Objects["Time machine"], 200);
-            safebuy(Game.Objects["Antimatter condenser"], 200);
-            safebuy(Game.Objects["Prism"], 200);
-            safebuy(Game.Objects["Chancemaker"], 200);
-            safebuy(Game.Objects["Fractal engine"], 200);
-            safebuy(Game.Objects["Javascript console"], 200);
-            safebuy(Game.Objects["Idleverse"], 200);
-            safebuy(Game.Objects["Cortex baker"], 200);
-            if (!Game.HasAchiev("Here be dragon")) {
-                Game.Win("Here be dragon");
-            }
+        Game.UpgradeDragon();
+        if (Game.dragonLevel + 1 >= Game.dragonLevels.length) {
+            Game.ToggleSpecialMenu();
         }
         logEvent("autoDragon", "Upgraded the dragon");
-        Game.recalculateGains = 1;
-        Game.upgradesToRebuild = 1;
     }
 }
 
