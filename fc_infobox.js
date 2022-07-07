@@ -231,25 +231,6 @@ function updateTimers() {
         });
     }
     if (bankMax > 0) {
-        if (
-            FrozenCookies.autoSpell == 3 ||
-            FrozenCookies.holdSEBank == 1 ||
-            FrozenCookies.setHarvestBankPlant > 0
-        ) {
-            maxColor =
-                Game.cookies >= bankTotal
-                    ? "rgba(252, 212, 0, 1)"
-                    : "rgba(201, 169, 0, 1)";
-            t_draw.push({
-                f_percent: bankMax,
-                name: !FrozenCookies.setHarvestBankPlant
-                    ? "Max Bank"
-                    : "Harvest Bank",
-                display: Beautify(bankTotal),
-                c1: maxColor,
-                overlay: true,
-            });
-        }
         if (bankPercent > 0 && Game.cookies < bankTotal) {
             t_draw.push({
                 f_percent: bankPercent,
@@ -287,7 +268,7 @@ function updateTimers() {
     if (interest1_delay > 0) {
         t_draw.push({
             f_percent: interest1_delay,
-            c1: "rgba(193, 98, 3, 1)",
+            c1: "rgba(255, 155, 0, 1)",
             name: "Interest 1 Time",
             display: timeDisplay(buffDuration("Loan 1 (interest)") / Game.fps),
         });
@@ -295,7 +276,7 @@ function updateTimers() {
     if (interest2_delay > 0) {
         t_draw.push({
             f_percent: interest2_delay,
-            c1: "rgba(193, 98, 3, 1)",
+            c1: "rgba(255, 155, 0, 1)",
             name: "Interest 2 Time",
             display: timeDisplay(buffDuration("Loan 2 (interest)") / Game.fps),
         });
@@ -303,7 +284,7 @@ function updateTimers() {
     if (interest3_delay > 0) {
         t_draw.push({
             f_percent: interest3_delay,
-            c1: "rgba(193, 98, 3, 1)",
+            c1: "rgba(255, 155, 0, 1)",
             name: "Interest 3 Time",
             display: timeDisplay(buffDuration("Loan 3 (interest)") / Game.fps),
         });
@@ -311,7 +292,7 @@ function updateTimers() {
     if (clot_delay > 0) {
         t_draw.push({
             f_percent: clot_delay,
-            c1: "rgba(193, 98, 3, 1)",
+            c1: "rgba(255, 155, 0, 1)",
             name: "Clot (x" + Game.buffs["Clot"].multCpS + ") Time",
             display: timeDisplay(buffDuration("Clot") / Game.fps),
         });
@@ -319,7 +300,7 @@ function updateTimers() {
     if (loan1_delay > 0) {
         t_draw.push({
             f_percent: loan1_delay,
-            c1: "rgba(255, 0, 0, 1)",
+            c1: "rgba(255, 195, 0, 1)",
             name: "Loan 1 Time",
             display: timeDisplay(buffDuration("Loan 1") / Game.fps),
         });
@@ -327,7 +308,7 @@ function updateTimers() {
     if (loan2_delay > 0) {
         t_draw.push({
             f_percent: loan2_delay,
-            c1: "rgba(255, 0, 0, 1)",
+            c1: "rgba(255, 195, 0, 1)",
             name: "Loan 2 Time",
             display: timeDisplay(buffDuration("Loan 2") / Game.fps),
         });
@@ -335,7 +316,7 @@ function updateTimers() {
     if (loan3_delay > 0) {
         t_draw.push({
             f_percent: loan3_delay,
-            c1: "rgba(255, 0, 0, 1)",
+            c1: "rgba(255, 195, 0, 1)",
             name: "Loan 3 Time",
             display: timeDisplay(buffDuration("Loan 3") / Game.fps),
         });
@@ -354,7 +335,7 @@ function updateTimers() {
     if (frenzy_delay > 0) {
         t_draw.push({
             f_percent: frenzy_delay,
-            c1: "rgba(255, 0, 0, 1)",
+            c1: "rgba(255, 195, 0, 1)",
             name: "Frenzy (x" + Game.buffs["Frenzy"].multCpS + ") Time",
             display: timeDisplay(buffDuration("Frenzy") / Game.fps),
         });
