@@ -19,11 +19,11 @@ function registerMod(mod_id = "frozen_cookies") {
                 // called when the player has reincarnated after an ascension
                 if (FrozenCookies.autoBulk != 0) {
                     if (FrozenCookies.autoBulk == 1) {
-                        // Buy x10
+                        // Game.buyBulk = 10;
                         document.getElementById("storeBulk10").click();
                     }
                     if (FrozenCookies.autoBulk == 2) {
-                        // Buy x100
+                        // Game.buyBulk = 100;
                         document.getElementById("storeBulk100").click();
                     }
                 }
@@ -4478,7 +4478,7 @@ function autoCookie() {
 
         //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
         if (
-            !hasClickBuff() && // Don't buy during click combos
+            // !hasClickBuff() && // Don't buy during click combos
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
                 recommendation.purchase.name == "Elder Pledge") &&
@@ -4492,7 +4492,30 @@ function autoCookie() {
             recommendation.purchase.clickFunction = null;
             disabledPopups = false;
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
-            if (recommendation.type == "building") {
+            if (
+                recommendation.type == "building" &&
+                Game.buyBulk != 1 &&
+                ((FrozenCookies.autoSpell == 3 &&
+                    recommendation.purchase.name == "Cortex baker" &&
+                    Game.Objects["Cortex baker"].amount >= 299) ||
+                    (FrozenCookies.towerLimit &&
+                        recommendation.purchase.name == "Wizard tower" &&
+                        M.magicM >= FrozenCookies.manaMax - 10) ||
+                    (FrozenCookies.mineLimit &&
+                        recommendation.purchase.name == "Mine" &&
+                        Game.Objects["Mine"].amount >=
+                            FrozenCookies.mineMax - 100) ||
+                    (FrozenCookies.factoryLimit &&
+                        recommendation.purchase.name == "Factory" &&
+                        Game.Objects["Factory"].amount >=
+                            FrozenCookies.factoryMax - 100))
+            ) {
+                Game.buyBulkOld = Game.buyBulk;
+                if (Game.buyBulkOld == 100) Game.buyBulk = 10;
+                if (Game.buyBulkOld == 10) Game.buyBulk = 1;
+                safeBuy(recommendation.purchase);
+                Game.buyBulk = Game.buyBulkOld;
+            } else if (recommendation.type == "building") {
                 safeBuy(recommendation.purchase);
             } else {
                 recommendation.purchase.buy();
