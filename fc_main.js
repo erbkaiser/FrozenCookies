@@ -2086,9 +2086,20 @@ function autoBrokerAction() {
     }
 }
 
+function autoLoanBuy() {
+    if (!B) return; // Just leave if you don't have the bank
+    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
+
+    if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
+        B.takeLoan(1);
+        B.takeLoan(2);
+        // B.takeLoan(3);
+    }
+}
+
 function autoDragonAction() {
     if (!Game.HasUnlocked("A crumbly egg")) return;
-    if (Game.dragonLevel == 26) return;
+    if (Game.dragonLevel == Game.dragonLevels.length) return;
     if (hasClickBuff()) return; // Don't pet during click buff
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
@@ -2144,14 +2155,45 @@ function petDragonAction() {
     }
 }
 
-function autoLoanBuy() {
-    if (!B) return; // Just leave if you don't have the bank
+function autoDragonAura1Action() {
+    if (
+        !Game.Has("A crumbly egg") ||
+        Game.dragonLevel < 5 ||
+        FrozenCookies.autoDragonAura1 == 0
+    )
+        return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
-    if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
-        B.takeLoan(1);
-        B.takeLoan(2);
-        // B.takeLoan(3);
+    if (Game.dragonAura == FrozenCookies.autoDragonAura1) return;
+
+    if (Game.dragonLevel >= FrozenCookies.autoDragonAura1 + 4) {
+        Game.SetDragonAura(FrozenCookies.autoDragonAura1, 0);
+        Game.ConfirmPrompt();
+        return;
+    }
+}
+
+function autoDragonAura2Action() {
+    if (
+        !Game.Has("A crumbly egg") ||
+        Game.dragonLevel < Game.dragonLevels.length ||
+        FrozenCookies.autoDragonAura2 == 0
+    )
+        return;
+    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
+
+    if (Game.dragonAura2 == FrozenCookies.autoDragonAura2) return;
+
+    if (FrozenCookies.autoDragonAura1 == FrozenCookies.autoDragonAura2) {
+        FrozenCookies.autoDragonAura2 = 0;
+        logEvent("autoDragonAura", "Can't set both auras to the same one!");
+        return;
+    }
+
+    if (Game.dragonLevel == Game.dragonLevels.length - 1) {
+        Game.SetDragonAura(FrozenCookies.autoDragonAura2, 1);
+        Game.ConfirmPrompt();
+        return;
     }
 }
 
@@ -2181,48 +2223,6 @@ function autoSugarFrenzyAction() {
         Game.UpgradesById["452"].buy();
         Game.ConfirmPrompt();
         logEvent("autoSugarFrenzy", "Started a Sugar Frenzy this ascension");
-    }
-}
-
-function autoDragonAura1Action() {
-    if (
-        !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 5 ||
-        FrozenCookies.autoDragonAura1 == 0
-    )
-        return;
-    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
-
-    if (Game.dragonAura == FrozenCookies.autoDragonAura1) return;
-
-    if (Game.dragonLevel >= FrozenCookies.autoDragonAura1 + 4) {
-        Game.SetDragonAura(FrozenCookies.autoDragonAura1, 0);
-        Game.ConfirmPrompt();
-        return;
-    }
-}
-
-function autoDragonAura2Action() {
-    if (
-        !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 26 ||
-        FrozenCookies.autoDragonAura2 == 0
-    )
-        return;
-    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
-
-    if (Game.dragonAura2 == FrozenCookies.autoDragonAura2) return;
-
-    if (FrozenCookies.autoDragonAura1 == FrozenCookies.autoDragonAura2) {
-        FrozenCookies.autoDragonAura2 = 0;
-        logEvent("autoDragonAura", "Can't set both auras to the same one!");
-        return;
-    }
-
-    if (Game.dragonLevel >= 26) {
-        Game.SetDragonAura(FrozenCookies.autoDragonAura2, 1);
-        Game.ConfirmPrompt();
-        return;
     }
 }
 
@@ -4719,6 +4719,11 @@ function FCStart() {
         FrozenCookies.autoBrokerBot = 0;
     }
 
+    if (FrozenCookies.autoLoanBot) {
+        clearInterval(FrozenCookies.autoLoanBot);
+        FrozenCookies.autoLoanBot = 0;
+    }
+
     if (FrozenCookies.autoDragonBot) {
         clearInterval(FrozenCookies.autoDragonBot);
         FrozenCookies.autoDragonBot = 0;
@@ -4729,16 +4734,6 @@ function FCStart() {
         FrozenCookies.petDragonBot = 0;
     }
 
-    if (FrozenCookies.autoLoanBot) {
-        clearInterval(FrozenCookies.autoLoanBot);
-        FrozenCookies.autoLoanBot = 0;
-    }
-
-    if (FrozenCookies.autoSugarFrenzyBot) {
-        clearInterval(FrozenCookies.autoSugarFrenzyBot);
-        FrozenCookies.autoSugarFrenzyBot = 0;
-    }
-
     if (FrozenCookies.autoDragonAura1Bot) {
         clearInterval(FrozenCookies.autoDragonAura1Bot);
         FrozenCookies.autoDragonAura1Bot = 0;
@@ -4747,6 +4742,11 @@ function FCStart() {
     if (FrozenCookies.autoDragonAura2Bot) {
         clearInterval(FrozenCookies.autoDragonAura2Bot);
         FrozenCookies.autoDragonAura2Bot = 0;
+    }
+
+    if (FrozenCookies.autoSugarFrenzyBot) {
+        clearInterval(FrozenCookies.autoSugarFrenzyBot);
+        FrozenCookies.autoSugarFrenzyBot = 0;
     }
 
     if (FrozenCookies.autoWorship0Bot) {
@@ -4875,6 +4875,13 @@ function FCStart() {
         );
     }
 
+    if (FrozenCookies.autoLoan) {
+        FrozenCookies.autoLoanBot = setInterval(
+            autoLoanBuy,
+            FrozenCookies.frequency
+        );
+    }
+
     if (FrozenCookies.autoDragon) {
         FrozenCookies.autoDragonBot = setInterval(
             autoDragonAction,
@@ -4885,20 +4892,6 @@ function FCStart() {
     if (FrozenCookies.petDragon) {
         FrozenCookies.petDragonBot = setInterval(
             petDragonAction,
-            FrozenCookies.frequency * 2
-        );
-    }
-
-    if (FrozenCookies.autoLoan) {
-        FrozenCookies.autoLoanBot = setInterval(
-            autoLoanBuy,
-            FrozenCookies.frequency
-        );
-    }
-
-    if (FrozenCookies.autoSugarFrenzy) {
-        FrozenCookies.autoSugarFrenzyBot = setInterval(
-            autoSugarFrenzyAction,
             FrozenCookies.frequency * 2
         );
     }
@@ -4914,6 +4907,13 @@ function FCStart() {
         FrozenCookies.autoDragonAura2Bot = setInterval(
             autoDragonAura2Action,
             FrozenCookies.frequency
+        );
+    }
+
+    if (FrozenCookies.autoSugarFrenzy) {
+        FrozenCookies.autoSugarFrenzyBot = setInterval(
+            autoSugarFrenzyAction,
+            FrozenCookies.frequency * 2
         );
     }
 
