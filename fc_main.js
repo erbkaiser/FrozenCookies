@@ -4511,8 +4511,8 @@ function autoCookie() {
                             FrozenCookies.factoryMax - 100))
             ) {
                 Game.buyBulkOld = Game.buyBulk;
-                if (Game.buyBulkOld = 100) Game.buyBulk = 10;
-                if (Game.buyBulkOld = 10) Game.buyBulk = 1;
+                if (Game.buyBulkOld == 100) Game.buyBulk = 10;
+                if (Game.buyBulkOld == 10) Game.buyBulk = 1;
                 safeBuy(recommendation.purchase);
                 Game.buyBulk = Game.buyBulkOld;
             } else if (recommendation.type == "building") {
