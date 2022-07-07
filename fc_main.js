@@ -4500,7 +4500,7 @@ function autoCookie() {
                     Game.Objects["Cortex baker"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        M.magicM >= FrozenCookies.manaMax - 30) ||
+                        M.magicM >= FrozenCookies.manaMax - 10) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >=
@@ -4511,7 +4511,8 @@ function autoCookie() {
                             FrozenCookies.factoryMax - 100))
             ) {
                 Game.buyBulkOld = Game.buyBulk;
-                Game.buyBulk = 1;
+                if (Game.buyBulkOld = 100) Game.buyBulk = 10;
+                if (Game.buyBulkOld = 10) Game.buyBulk = 1;
                 safeBuy(recommendation.purchase);
                 Game.buyBulk = Game.buyBulkOld;
             } else if (recommendation.type == "building") {
