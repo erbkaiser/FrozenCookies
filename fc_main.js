@@ -2176,7 +2176,7 @@ function autoDragonAura1Action() {
 function autoDragonAura2Action() {
     if (
         !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < Game.dragonLevels.length ||
+        Game.dragonLevel != Game.dragonLevels.length ||
         FrozenCookies.autoDragonAura2 == 0
     )
         return;
