@@ -2100,7 +2100,7 @@ function autoLoanBuy() {
 function autoDragonAction() {
     if (!Game.HasUnlocked("A crumbly egg")) return;
     if (Game.dragonLevel == Game.dragonLevels.length) return;
-    if (hasClickBuff()) return; // Don't pet during click buff
+    if (hasClickBuff()) return; // Don't upgrade during click buff
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (Game.HasUnlocked("A crumbly egg") && !Game.Has("A crumbly egg")) {
@@ -2176,7 +2176,7 @@ function autoDragonAura1Action() {
 function autoDragonAura2Action() {
     if (
         !Game.Has("A crumbly egg") ||
-        Game.dragonLevel != Game.dragonLevels.length ||
+        Game.dragonLevel < 26 ||
         FrozenCookies.autoDragonAura2 == 0
     )
         return;
