@@ -155,7 +155,13 @@ function updateTimers() {
             (probabilitySpan("golden", Game.shimmerTypes.golden.time, 0.01) -
                 Game.shimmerTypes.golden.time) /
             maxCookieTime(),
+        interest1_delay = buffDuration("Loan 1 (interest)") / maxCookieTime(),
+        interest2_delay = buffDuration("Loan 2 (interest)") / maxCookieTime(),
+        interest3_delay = buffDuration("Loan 3 (interest)") / maxCookieTime(),
         clot_delay = buffDuration("Clot") / maxCookieTime(),
+        loan1_delay = buffDuration("Loan 1") / maxCookieTime(),
+        loan2_delay = buffDuration("Loan 2") / maxCookieTime(),
+        loan3_delay = buffDuration("Loan 3") / maxCookieTime(),
         elder_frenzy_delay = buffDuration("Elder frenzy") / maxCookieTime(),
         frenzy_delay = buffDuration("Frenzy") / maxCookieTime(),
         dragon_harvest_delay = buffDuration("Dragon Harvest") / maxCookieTime(),
@@ -164,12 +170,6 @@ function updateTimers() {
         cursed_finger_delay = buffDuration("Cursed finger") / maxCookieTime(),
         building_special_delay = hasBuildingSpecialBuff() / maxCookieTime(),
         cookie_storm_delay = buffDuration("Cookie storm") / maxCookieTime(),
-        loan1_delay = buffDuration("Loan 1") / maxCookieTime(),
-        loan2_delay = buffDuration("Loan 2") / maxCookieTime(),
-        loan3_delay = buffDuration("Loan 3") / maxCookieTime(),
-        interest1_delay = buffDuration("Loan 1 (interest)") / maxCookieTime(),
-        interest2_delay = buffDuration("Loan 2 (interest)") / maxCookieTime(),
-        interest3_delay = buffDuration("Loan 3 (interest)") / maxCookieTime(),
         // useless decimal_HC_complete = (Game.HowMuchPrestige(Game.cookiesEarned + Game.cookiesReset)%1),
         bankTotal = delayAmount(),
         purchaseTotal = nextPurchase().cost,
@@ -230,20 +230,26 @@ function updateTimers() {
             ),
         });
     }
-    if (bankMax > 0 && bankMax < 1) {
-        maxColor =
-            Game.cookies >= bankTotal
-                ? "rgba(252, 212, 0, 1)"
-                : "rgba(201, 169, 0, 1)";
-        t_draw.push({
-            f_percent: bankMax,
-            name: !FrozenCookies.setHarvestBankPlant
-                ? "Max Bank"
-                : "Harvest Bank",
-            display: Beautify(bankTotal),
-            c1: maxColor,
-            overlay: true,
-        });
+    if (bankMax > 0) {
+        if (
+            FrozenCookies.autoSpell == 3 ||
+            FrozenCookies.holdSEBank == 1 ||
+            FrozenCookies.setHarvestBankPlant > 0
+        ) {
+            maxColor =
+                Game.cookies >= bankTotal
+                    ? "rgba(252, 212, 0, 1)"
+                    : "rgba(201, 169, 0, 1)";
+            t_draw.push({
+                f_percent: bankMax,
+                name: !FrozenCookies.setHarvestBankPlant
+                    ? "Max Bank"
+                    : "Harvest Bank",
+                display: Beautify(bankTotal),
+                c1: maxColor,
+                overlay: true,
+            });
+        }
         if (bankPercent > 0 && Game.cookies < bankTotal) {
             t_draw.push({
                 f_percent: bankPercent,
