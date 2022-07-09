@@ -3419,7 +3419,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     }
 
     // Is it vaulted?
-    if (this.isVaulted()) return true;
+    if (Game.vault.indexOf(this.id)) return true;
 
     // Don't pledge if Easter or Halloween not complete
     if (
