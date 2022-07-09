@@ -2099,7 +2099,7 @@ function autoLoanBuy() {
 
 function autoDragonAction() {
     if (!Game.HasUnlocked("A crumbly egg")) return;
-    if (Game.dragonLevel == Game.dragonLevels.length) return;
+    if (Game.dragonLevel == 26) return;
     if (hasClickBuff()) return; // Don't upgrade during click buff
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
@@ -2190,7 +2190,7 @@ function autoDragonAura2Action() {
         return;
     }
 
-    if (Game.dragonLevel == Game.dragonLevels.length - 1) {
+    if (Game.dragonLevel == 26) {
         Game.SetDragonAura(FrozenCookies.autoDragonAura2, 1);
         Game.ConfirmPrompt();
         return;
@@ -2309,12 +2309,14 @@ function buyOtherUpgrades() {
 
     //Buy Santa stuff
     if (
+        Game.santaLevel == 14 &&
         Game.UpgradesById["158"].unlocked == 1 &&
         Game.UpgradesById["158"].bought == 0
     ) {
         Game.UpgradesById["158"].buy(); // Weighted sleighs
     }
     if (
+        Game.santaLevel == 14 &&
         Game.UpgradesById["163"].unlocked == 1 &&
         Game.UpgradesById["163"].bought == 0
     ) {
@@ -2323,12 +2325,14 @@ function buyOtherUpgrades() {
 
     //Buy dragon drops
     if (
+        Game.dragonLevel == 26 &&
         Game.UpgradesById["650"].unlocked == 1 &&
         Game.UpgradesById["650"].bought == 0
     ) {
         Game.UpgradesById["650"].buy(); // Dragon fang
     }
     if (
+        Game.dragonLevel == 26 &&
         Game.UpgradesById["651"].unlocked == 1 &&
         Game.UpgradesById["651"].bought == 0
     ) {
@@ -3414,29 +3418,25 @@ function isUnavailable(upgrade, upgradeBlacklist) {
         return true;
     }
 
+    // Is it vaulted?
+    if (this.isVaulted()) return true;
+
+    // Don't pledge if Easter or Halloween not complete
     if (
         upgrade.id == 74 &&
         (Game.season == "halloween" || Game.season == "easter") &&
         !haveAll(Game.season)
-    ) {
-        // Don't pledge if Easter or Halloween not complete
+    )
         return true;
-    }
 
-    if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) {
-        // Don't pledge if we want to protect Shiny Wrinklers
-        return true;
-    }
+    // Don't pledge if we want to protect Shiny Wrinklers
+    if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) return true;
 
-    if (App && upgrade.id == 816) {
-        // Web cookies are only on Browser
-        return true;
-    }
+    // Web cookies are only on Browser
+    if (App && upgrade.id == 816) return true;
 
-    if (!App && upgrade.id == 817) {
-        // Steamed cookies are only on Steam
-        return true;
-    }
+    // Steamed cookies are only on Steam
+    if (!App && upgrade.id == 817) return true;
 
     var result = false;
 
