@@ -2215,8 +2215,8 @@ function autoDragonGodzAction() {
     if (autoDragonGodzAction.state == 0) {
         if (
             Game.hasAura("Dragonflight") &&
-            (FrozenCookies.autoDragonAura == 10 ||
-                FrozenCookies.autoDragonAura == 0)
+            (FrozenCookies.autoDragonAura1 == 10 ||
+                FrozenCookies.autoDragonAura1 == 0)
         ) {
             autoDragonGodzAction.state = 1;
         }
@@ -2237,7 +2237,7 @@ function autoDragonGodzAction() {
                 Game.hasBuff("Dragonflight") &&
                 !Game.hasAura("Elder Battalion")
             ) {
-                FrozenCookies.autoDragonAura = 0;
+                FrozenCookies.autoDragonAura1 = 0;
                 Game.SetDragonAura(3, 0);
                 Game.ConfirmPrompt();
                 logEvent(
@@ -2251,7 +2251,7 @@ function autoDragonGodzAction() {
             ) {
                 Game.SetDragonAura(10, 0);
                 Game.ConfirmPrompt();
-                FrozenCookies.autoDragonAura = 10;
+                FrozenCookies.autoDragonAura1 = 10;
                 autoDragonGodzAction.state = 0;
                 logEvent(
                     "autoDragon",
