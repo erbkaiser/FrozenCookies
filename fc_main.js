@@ -2150,8 +2150,8 @@ function petDragonAction() {
         Game.specialTab = "dragon";
         Game.ToggleSpecialMenu(1);
         Game.ClickSpecialPic();
-        Game.ToggleSpecialMenu(0);
-        //logEvent("petDragon", "Who's a good dragon? You are!");
+        //Game.ToggleSpecialMenu(0);
+        //logEvent("autoDragon", "Who's a good dragon? You are!");
     }
 }
 
@@ -2169,6 +2169,7 @@ function autoDragonAura1Action() {
     if (Game.dragonLevel >= FrozenCookies.autoDragonAura1 + 4) {
         Game.SetDragonAura(FrozenCookies.autoDragonAura1, 0);
         Game.ConfirmPrompt();
+        logEvent("autoDragon", "Set first dragon aura");
         return;
     }
 }
@@ -2186,26 +2187,24 @@ function autoDragonAura2Action() {
 
     if (FrozenCookies.autoDragonAura1 == FrozenCookies.autoDragonAura2) {
         FrozenCookies.autoDragonAura2 = 0;
-        logEvent("autoDragonAura", "Can't set both auras to the same one!");
+        logEvent("autoDragon", "Can't set both auras to the same one!");
         return;
     }
 
     if (Game.dragonLevel == 26) {
         Game.SetDragonAura(FrozenCookies.autoDragonAura2, 1);
         Game.ConfirmPrompt();
+        logEvent("autoDragon", "Set second dragon aura");
         return;
     }
 }
 
 function autoDragonGodzAction() {
     if (
-        !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 26 ||
         FrozenCookies.autoDragonGodz == 0 ||
         !Game.hasGod("ruin") ||
         !(Game.dragonaura == 10 || Game.dragonaura2 == 10) || // Only works with DF
-        Game.dragonAura == 3 ||
-        Game.dragonAura2 == 3 //Already running EB
+        (Game.dragonAura == 3 || Game.dragonAura2 == 3) //Already running EB
     )
         return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
@@ -2214,7 +2213,7 @@ function autoDragonGodzAction() {
         autoDragonGodzAction.state = 0;
     }
 
-    if (autoSweetAction.state == 0) {
+    if (autoDragonGodzAction.state == 0) {
         if (Game.dragonaura == 10) {
             autoDragonGodzAction.state = 1;
         }
@@ -2226,28 +2225,32 @@ function autoDragonGodzAction() {
     switch (autoDragonGodzAction.state) {
         case 1:
             if (Game.hasBuff("Dragonflight")) {
-                FrozenCookies.autoDragonAura == 0;
+                FrozenCookies.autoDragonAura = 0;
                 Game.SetDragonAura(3, 0);
                 Game.ConfirmPrompt();
+                logEvent("autoDragon", "Swapped Dragonflight for Elder Batallion");
             }
             if (!Game.hasBuff("Dragonflight")) {
-                FrozenCookies.autoDragonAura == 10;
+                FrozenCookies.autoDragonAura = 10;
                 Game.SetDragonAura(10, 0);
                 Game.ConfirmPrompt();
                 autoDragonGodzAction.state = 0;
+                logEvent("autoDragon", "Swapped Elder Batallion back to Dragonflight");
             }
             return;
         case 2:
             if (Game.hasBuff("Dragonflight")) {
-                FrozenCookies.autoDragonAura2 == 0;
+                FrozenCookies.autoDragonAura2 = 0;
                 Game.SetDragonAura(3, 1);
                 Game.ConfirmPrompt();
+                logEvent("autoDragon", "Swapped Dragonflight for Elder Batallion");
             }
             if (!Game.hasBuff("Dragonflight")) {
-                FrozenCookies.autoDragonAura2 == 10;
+                FrozenCookies.autoDragonAura2 = 10;
                 Game.SetDragonAura(10, 1);
                 Game.ConfirmPrompt();
                 autoDragonGodzAction.state = 0;
+                logEvent("autoDragon", "Swapped Elder Batallion back to Dragonflight");
             }
             return;
     }
@@ -2303,7 +2306,7 @@ function autoWorship1Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship1) {
         FrozenCookies.autoworship1 = 0;
-        logEvent("autoWorship1", "Can't worship the same god twice!");
+        logEvent("autoWorship", "Can't worship the same god in Diamond and Ruby slots!");
         return;
     }
 
@@ -2321,12 +2324,12 @@ function autoWorship2Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship2-0", "Can't worship the same god twice!");
+        logEvent("autoWorship", "Can't worship the same god in Diamond and Jade slots!");
         return;
     }
     if (T.slot[1] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship2-1", "Can't worship the same god twice!");
+        logEvent("autoWorship", "Can't worship the same god in Ruby and Jade slots!");
         return;
     }
 
