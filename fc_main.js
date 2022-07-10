@@ -2222,18 +2222,24 @@ function autoDragonGodzAction() {
         case 0:
             return;
         case 1:
-            if (Game.hasBuff("Dragonflight")) {
+            if (Game.hasBuff("Dragonflight") && !(Game.dragonAura == 3)) {
                 FrozenCookies.autoDragonAura2 = 0;
-                Game.SetDragonAura(3, 1);
+                Game.SetDragonAura(3, 0);
                 Game.ConfirmPrompt();
-                logEvent("autoDragon", "Swapped Dragonflight for Elder Batallion");
+                logEvent(
+                    "autoDragon",
+                    "Swapped Dragonflight for Elder Batallion"
+                );
             }
             if (!Game.hasBuff("Dragonflight") && Game.dragonAura == 3) {
                 FrozenCookies.autoDragonAura2 = 15;
-                Game.SetDragonAura(15, 1);
+                Game.SetDragonAura(15, 0);
                 Game.ConfirmPrompt();
                 autoDragonGodzAction.state = 0;
-                logEvent("autoDragon", "Swapped Elder Batallion back to Dragonflight");
+                logEvent(
+                    "autoDragon",
+                    "Swapped Elder Batallion back to Dragonflight"
+                );
             }
             return;
     }
@@ -2289,7 +2295,10 @@ function autoWorship1Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship1) {
         FrozenCookies.autoworship1 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Diamond and Ruby slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Diamond and Ruby slots!"
+        );
         return;
     }
 
@@ -2307,12 +2316,18 @@ function autoWorship2Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Diamond and Jade slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Diamond and Jade slots!"
+        );
         return;
     }
     if (T.slot[1] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Ruby and Jade slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Ruby and Jade slots!"
+        );
         return;
     }
 
