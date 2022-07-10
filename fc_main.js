@@ -2245,7 +2245,10 @@ function autoDragonGodzAction() {
                     "Swapped Dragonflight for Elder Batallion"
                 );
             }
-            if (!Game.hasBuff("Dragonflight")) {
+            if (
+                !Game.hasBuff("Dragonflight") &&
+                Game.hasAura("Elder Battalion")
+            ) {
                 FrozenCookies.autoDragonAura = 15;
                 Game.SetDragonAura(15, 0);
                 Game.ConfirmPrompt();
@@ -2269,7 +2272,10 @@ function autoDragonGodzAction() {
                     "Swapped Dragonflight for Elder Batallion"
                 );
             }
-            if (!Game.hasBuff("Dragonflight")) {
+            if (
+                !Game.hasBuff("Dragonflight") &&
+                Game.hasAura("Elder Battalion")
+            ) {
                 FrozenCookies.autoDragonAura2 = 15;
                 Game.SetDragonAura(15, 1);
                 Game.ConfirmPrompt();
