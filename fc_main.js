@@ -2197,6 +2197,63 @@ function autoDragonAura2Action() {
     }
 }
 
+function autoDragonGodzAction() {
+    if (
+        !Game.Has("A crumbly egg") ||
+        Game.dragonLevel < 26 ||
+        FrozenCookies.autoDragonGodz == 0 ||
+        !Game.hasGod("ruin") ||
+        !(Game.dragonaura == 10 || Game.dragonaura2 == 10) || // Only works with DF
+        Game.dragonAura == 3 ||
+        Game.dragonAura2 == 3 //Already running EB
+    )
+        return;
+    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
+
+    if (typeof autoDragonGodzAction.state == "undefined") {
+        autoDragonGodzAction.state = 0;
+    }
+
+    if (autoSweetAction.state == 0) {
+        if (Game.dragonaura == 10) {
+            autoDragonGodzAction.state = 1;
+        }
+        if (Game.dragonaura2 == 10) {
+            autoDragonGodzAction.state = 2;
+        }
+    }
+
+    switch (autoDragonGodzAction.state) {
+        case 1:
+            if (Game.hasBuff("Dragonflight")) {
+                FrozenCookies.autoDragonAura == 0;
+                Game.SetDragonAura(3, 0);
+                Game.ConfirmPrompt();
+            }
+            if (!Game.hasBuff("Dragonflight")) {
+                FrozenCookies.autoDragonAura == 10;
+                Game.SetDragonAura(10, 0);
+                Game.ConfirmPrompt();
+                autoDragonGodzAction.state = 0;
+            }
+            return;
+        case 2:
+            if (Game.hasBuff("Dragonflight")) {
+                FrozenCookies.autoDragonAura2 == 0;
+                Game.SetDragonAura(3, 1);
+                Game.ConfirmPrompt();
+            }
+            if (!Game.hasBuff("Dragonflight")) {
+                FrozenCookies.autoDragonAura2 == 10;
+                Game.SetDragonAura(10, 1);
+                Game.ConfirmPrompt();
+                autoDragonGodzAction.state = 0;
+            }
+            return;
+    }
+    return;
+}
+
 function autoSugarFrenzyAction() {
     if (
         FrozenCookies.autoSugarFrenzy == 1 &&
@@ -3419,7 +3476,8 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     }
 
     // Is it vaulted?
-    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id)) return true;
+    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id))
+        return true;
 
     // Don't pledge if Easter or Halloween not complete
     if (
@@ -4762,6 +4820,11 @@ function FCStart() {
         FrozenCookies.autoDragonAura1Bot = 0;
     }
 
+    if (FrozenCookies.autoDragonGodzBot) {
+        clearInterval(FrozenCookies.autoDragonGodzBot);
+        FrozenCookies.autoDragonGodzBot = 0;
+    }
+
     if (FrozenCookies.autoDragonAura2Bot) {
         clearInterval(FrozenCookies.autoDragonAura2Bot);
         FrozenCookies.autoDragonAura2Bot = 0;
@@ -4930,6 +4993,13 @@ function FCStart() {
         FrozenCookies.autoDragonAura2Bot = setInterval(
             autoDragonAura2Action,
             FrozenCookies.frequency
+        );
+    }
+
+    if (FrozenCookies.autoDragonGodz) {
+        FrozenCookies.autoDragonGodzBot = setInterval(
+            autoDragonGodzAction,
+            FrozenCookies.frequency * 2
         );
     }
 

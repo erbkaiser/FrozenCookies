@@ -273,6 +273,11 @@ FrozenCookies.preferenceValues = {
         display: ["Auto-Petting OFF", "Auto-Petting ON"],
         default: 0,
     },
+    autoDragonGodz: {
+        hint: "Automatically swap Dragonflight for Elder Batallion while Godzamok is busy for an extra boost, and back at the end",
+        display: ["Swap DF with EB OFF", "Swap DF with EB ON"],
+        default: 0,
+    },
     dragonNotes: {
         hint: "(Select your desired aura from the list. Turn off autoBuy option while changing. Cannot set the same aura to both slots)",
     },
