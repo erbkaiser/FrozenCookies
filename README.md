@@ -57,6 +57,9 @@ If you want to manually install it:
 
 ## What's new?
 
+2022 Jul 10
+- Added **Swap DF with EB** option that will automatically swap out the Dragonflight aura with Elder Batallion if a Dragonflight boost is active, and swap back at the end
+
 2022 Jul 09
 - Putting an upgrade in the vault (once **Inspired checklist** is unlocked) will now prevent it from being auto-bought
 

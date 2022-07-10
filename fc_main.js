@@ -2117,7 +2117,10 @@ function autoDragonAction() {
         if (Game.dragonLevel + 1 >= Game.dragonLevels.length) {
             Game.ToggleSpecialMenu();
         }
-        logEvent("autoDragon", "Upgraded the dragon");
+        logEvent(
+            "autoDragon",
+            "Upgraded the dragon to level " + Game.dragonLevel
+        );
     }
 }
 
@@ -2202,7 +2205,7 @@ function autoDragonAura2Action() {
 function autoDragonGodzAction() {
     if (
         FrozenCookies.autoDragonGodz == 0 ||
-        Game.dragonLevel < 19 ||
+        Game.dragonLevel < 14 ||
         !Game.hasGod("ruin")
     )
         return;
