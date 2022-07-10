@@ -2213,11 +2213,8 @@ function autoDragonGodzAction() {
     }
 
     if (autoDragonGodzAction.state == 0) {
-        if (Game.dragonaura == 15) {
+        if (Game.hasAura("Dragonflight")) {
             autoDragonGodzAction.state = 1;
-        }
-        if (Game.dragonaura2 == 15) {
-            autoDragonGodzAction.state = 2;
         }
     }
 
@@ -2226,27 +2223,12 @@ function autoDragonGodzAction() {
             return;
         case 1:
             if (Game.hasBuff("Dragonflight")) {
-                FrozenCookies.autoDragonAura = 0;
-                Game.SetDragonAura(3, 0);
-                Game.ConfirmPrompt();
-                logEvent("autoDragon", "Swapped Dragonflight for Elder Batallion");
-            }
-            if (!Game.hasBuff("Dragonflight") && Game.dragonAura == 3) {
-                FrozenCookies.autoDragonAura = 15;
-                Game.SetDragonAura(15, 0);
-                Game.ConfirmPrompt();
-                autoDragonGodzAction.state = 0;
-                logEvent("autoDragon", "Swapped Elder Batallion back to Dragonflight");
-            }
-            return;
-        case 2:
-            if (Game.hasBuff("Dragonflight")) {
                 FrozenCookies.autoDragonAura2 = 0;
                 Game.SetDragonAura(3, 1);
                 Game.ConfirmPrompt();
                 logEvent("autoDragon", "Swapped Dragonflight for Elder Batallion");
             }
-            if (!Game.hasBuff("Dragonflight") && Game.dragonAura2 == 3) {
+            if (!Game.hasBuff("Dragonflight") && Game.dragonAura == 3) {
                 FrozenCookies.autoDragonAura2 = 15;
                 Game.SetDragonAura(15, 1);
                 Game.ConfirmPrompt();
