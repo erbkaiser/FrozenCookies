@@ -1282,7 +1282,7 @@ function autoFTHOFComboAction() {
         M.magicM < 81 || // Below minimum mana
         FrozenCookies.auto100ConsistencyCombo == 1 || // 100% combo should override
         FrozenCookies.autoSweet == 1 || // Autosweet overrides
-        Game.hasBuff("Dragonflight"))
+        Game.hasBuff("Dragonflight")
     )
         return;
 
