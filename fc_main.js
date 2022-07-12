@@ -900,58 +900,86 @@ function BuffTimeFactor() {
 
 function autoCast() {
     if (!M) return; // Just leave if you don't have grimoire
-    if (M.magic == M.magicM) {
-        if (
-            FrozenCookies.autoFTHOFCombo == 1 ||
-            FrozenCookies.auto100ConsistencyCombo == 1 ||
-            FrozenCookies.autoSweet == 1
-        )
-            return; // combo option will override any auto cast function
+    if (
+        FrozenCookies.autoFTHOFCombo == 1 ||
+        FrozenCookies.auto100ConsistencyCombo == 1 ||
+        FrozenCookies.autoSweet == 1
+    )
+        return; // combo option will override any auto cast function
 
+    if (M.magic == M.magicM) {
         switch (FrozenCookies.autoSpell) {
             case 1:
-                // Can we shorten a negative buff with a backfire?
+                var CBG = M.spellsById[0];
                 if (
-                    nextSpellName(0) == "Clot" ||
-                    nextSpellName(0) == "Ruin Cookies"
-                ) {
-                    if (cpsBonus() < 1) {
-                        var streT = M.spellsById[2];
-                        M.castSpell(streT);
-                        logEvent(
-                            "AutoSpell",
-                            "Cast Stretch Time instead of Conjure Baked Goods"
-                        );
-                    } else {
-                        var hagC = M.spellsById[4];
-                        M.castSpell(hagC);
-                        logEvent(
-                            "AutoSpell",
-                            "Cast Haggler's Charm instead of Conjure Baked Goods"
-                        );
-                    }
-                }
+                    M.magicM <
+                    Math.floor(CBG.costMin + CBG.costPercent * M.magicM)
+                )
+                    return;
 
-                if (nextSpellName(0) == "Sugar Lump") {
+                // Free lump!
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            FTHOF.costMin + FTHOF.costPercent * M.magicM
+                        ) &&
+                    nextSpellName(0) == "Sugar Lump"
+                ) {
                     var FTHOF = M.spellsById[1];
                     M.castSpell(FTHOF);
                     logEvent(
                         "AutoSpell",
                         "Cast Force the Hand of Fate instead of Conjure Baked Goods"
                     );
-                }
-
-                if (cpsBonus() >= FrozenCookies.minCpSMult) {
-                    var CBG = M.spellsById[0];
-                    if (
-                        M.magicM <
-                        Math.floor(CBG.costMin + CBG.costPercent * M.magicM)
-                    )
-                        return;
-                    M.castSpell(CBG);
-                    logEvent("AutoSpell", "Cast Conjure Baked Goods");
                     return;
                 }
+
+                // Can we shorten a negative buff with a backfire?
+                var streT = M.spellsById[2];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            streT.costMin + streT.costPercent * M.magicM
+                        ) &&
+                    cpsBonus() < 1 &&
+                    (nextSpellName(0) == "Clot" ||
+                        nextSpellName(0) == "Ruin Cookies")
+                ) {
+                    M.castSpell(streT);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Stretch Time instead of Conjure Baked Goods"
+                    );
+                    return;
+                }
+
+                // Will it backfire?
+                var hagC = M.spellsById[4];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            hagC.costMin + hagC.costPercent * M.magicM
+                        ) &&
+                    cpsBonus() >= FrozenCookies.minCpSMult
+                ) {
+                    if (
+                        nextSpellName(0) == "Clot" ||
+                        nextSpellName(0) == "Blab" ||
+                        nextSpellName(0) == "Cookie Storm (Drop)" ||
+                        nextSpellName(0) == "Ruin Cookies"
+                    ) {
+                        M.castSpell(hagC);
+                        logEvent(
+                            "AutoSpell",
+                            "Cast Haggler's Charm instead of Conjure Baked Goods"
+                        );
+                    } else {
+                        M.castSpell(CBG);
+                        logEvent("AutoSpell", "Cast Conjure Baked Goods");
+                    }
+                }
+                return;
+
             case 2:
                 if (Game.hasBuff("Dragonflight") || goldenCookieLife()) return;
 
@@ -963,46 +991,73 @@ function autoCast() {
                     return;
 
                 // Can we shorten a negative buff with a backfire?
+                var streT = M.spellsById[2];
                 if (
+                    M.magicM >=
+                        Math.floor(
+                            streT.costMin + streT.costPercent * M.magicM
+                        ) &&
                     cpsBonus() < 1 &&
                     (nextSpellName(0) == "Clot" ||
                         nextSpellName(0) == "Ruin Cookies")
                 ) {
-                    var streT = M.spellsById[2];
                     M.castSpell(streT);
                     logEvent("AutoSpell", "Cast Stretch Time instead of FTHOF");
+                    return;
                 }
 
-                if (nextSpellName(0) == "Sugar Lump") {
-                    M.castSpell(FTHOF);
-                    logEvent("autoFTHOFCombo", "Cast Force the Hand of Fate");
-                }
-
-                if (
-                    cpsBonus() >= FrozenCookies.minCpSMult ||
-                    Game.hasBuff("Click frenzy")
-                ) {
+                if (cpsBonus() >= FrozenCookies.minCpSMult) {
+                    // Will it backfire?
+                    var hagC = M.spellsById[4];
                     if (
-                        nextSpellName(0) == "Clot" ||
+                        (M.magicM >=
+                            Math.floor(
+                                hagC.costMin + hagC.costPercent * M.magicM
+                            ) &&
+                            nextSpellName(0) == "Clot") ||
                         nextSpellName(0) == "Blab" ||
                         nextSpellName(0) == "Cookie Storm (Drop)" ||
                         nextSpellName(0) == "Ruin Cookies"
                     ) {
-                        var hagC = M.spellsById[4];
                         M.castSpell(hagC);
                         logEvent(
                             "AutoSpell",
                             "Cast Haggler's Charm instead of FTHOF"
                         );
+                        return;
                     }
 
-                    if (nextSpellName(0) == "Cookie Chain") {
+                    if (
+                        nextSpellName(0) == "Cookie Chain" ||
+                        nextSpellName(0) == "Cookie Storm" ||
+                        nextSpellName(0) == "Sugar Lump"
+                    ) {
                         M.castSpell(FTHOF);
                         logEvent("AutoSpell", "Cast Force the Hand of Fate");
                     }
 
                     if (nextSpellName(0) == "Lucky") {
                         if (cpsBonus() >= 7) {
+                            M.castSpell(FTHOF);
+                            logEvent(
+                                "AutoSpell",
+                                "Cast Force the Hand of Fate"
+                            );
+                        }
+                    }
+
+                    if (nextSpellName(0) == "Click Frenzy") {
+                        if (
+                            (Game.hasBuff("Frenzy") ||
+                                Game.hasBuff("Dragon Harvest")) &&
+                            BuildingSpecialBuff() == 1 &&
+                            (Game.hasBuff("Frenzy").time / 30 >=
+                                Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                Game.hasBuff("Dragon Harvest").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1) &&
+                            BuildingBuffTime() >=
+                                Math.ceil(13 * BuffTimeFactor())
+                        ) {
                             M.castSpell(FTHOF);
                             logEvent(
                                 "AutoSpell",
@@ -1058,31 +1113,6 @@ function autoCast() {
                         }
                     }
 
-                    if (nextSpellName(0) == "Click Frenzy") {
-                        if (
-                            (Game.hasBuff("Frenzy") ||
-                                Game.hasBuff("Dragon Harvest")) &&
-                            BuildingSpecialBuff() == 1 &&
-                            (Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                                Game.hasBuff("Dragon Harvest").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                            BuildingBuffTime() >=
-                                Math.ceil(13 * BuffTimeFactor())
-                        ) {
-                            M.castSpell(FTHOF);
-                            logEvent(
-                                "AutoSpell",
-                                "Cast Force the Hand of Fate"
-                            );
-                        }
-                    }
-
-                    if (nextSpellName(0) == "Cookie Storm") {
-                        M.castSpell(FTHOF);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                    }
-
                     if (nextSpellName(0) == "Cursed Finger") {
                         if (
                             Game.hasBuff("Click frenzy") &&
@@ -1097,45 +1127,10 @@ function autoCast() {
                         }
                     }
                 }
-
                 return;
+
             case 3:
-                // Can we shorten a negative buff with a backfire?
-                if (
-                    nextSpellName(0) == "Clot" ||
-                    nextSpellName(0) == "Ruin Cookies"
-                ) {
-                    if (cpsBonus() < 1) {
-                        var streT = M.spellsById[2];
-                        M.castSpell(streT);
-                        logEvent(
-                            "AutoSpell",
-                            "Cast Stretch Time instead of Spontaneous Edifice"
-                        );
-                    } else {
-                        var hagC = M.spellsById[4];
-                        M.castSpell(hagC);
-                        logEvent(
-                            "AutoSpell",
-                            "Cast Haggler's Charm instead of Spontaneous Edifice"
-                        );
-                    }
-                }
-
-                if (nextSpellName(0) == "Sugar Lump") {
-                    var FTHOF = M.spellsById[1];
-                    M.castSpell(FTHOF);
-                    logEvent(
-                        "AutoSpell",
-                        "Cast Force the Hand of Fate instead of Spontaneous Edifice"
-                    );
-                }
-
                 var SE = M.spellsById[3];
-                // This code apparently works under the following assumptions:
-                //      - you want to spend your mana to get the highest value building (currently Cortex baker)
-                //      - therefore you'll manually keep your number of Cortex bakers < 400, or don't mind selling the excess for the chance to win a free one
-
                 // If you don't have any Cortex baker yet, or can't cast SE, just give up.
                 if (
                     Game.Objects["Cortex baker"].amount == 0 ||
@@ -1143,6 +1138,61 @@ function autoCast() {
                         Math.floor(SE.costMin + SE.costPercent * M.magicM)
                 )
                     return;
+
+                // Free lump!
+                var FTHOF = M.spellsById[1];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            FTHOF.costMin + FTHOF.costPercent * M.magicM
+                        ) &&
+                    nextSpellName(0) == "Sugar Lump"
+                ) {
+                    M.castSpell(FTHOF);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Force the Hand of Fate instead of Spontaneous Edifice"
+                    );
+                    return;
+                }
+
+                // Can we shorten a negative buff with a backfire?
+                var streT = M.spellsById[2];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            streT.costMin + streT.costPercent * M.magicM
+                        ) &&
+                    cpsBonus() < 1 &&
+                    (nextSpellName(0) == "Clot" ||
+                        nextSpellName(0) == "Ruin Cookies")
+                ) {
+                    M.castSpell(streT);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Stretch Time instead of Spontaneous Edifice"
+                    );
+                    return;
+                }
+                // Will it backfire?
+                var hagC = M.spellsById[4];
+                if (
+                    (M.magicM >=
+                        Math.floor(
+                            hagC.costMin + hagC.costPercent * M.magicM
+                        ) &&
+                        nextSpellName(0) == "Clot") ||
+                    nextSpellName(0) == "Blab" ||
+                    nextSpellName(0) == "Cookie Storm (Drop)" ||
+                    nextSpellName(0) == "Ruin Cookies"
+                ) {
+                    M.castSpell(hagC);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Haggler's Charm instead of Conjure Baked Goods"
+                    );
+                    return;
+                }
 
                 // If we have over 400 Cortex bakers, always going to sell down to 399.
                 // If you don't have half a Cortex baker's worth of cookies in bank, sell one or more until you do
@@ -1166,28 +1216,41 @@ function autoCast() {
                 M.castSpell(SE);
                 logEvent("AutoSpell", "Cast Spontaneous Edifice");
                 return;
-            case 4:
-                // Can we shorten a negative buff with a backfire?
-                if (
-                    cpsBonus() < 1 &&
-                    (nextSpellName(0) == "Clot" ||
-                        nextSpellName(0) == "Ruin Cookies")
-                ) {
-                    var streT = M.spellsById[2];
-                    M.castSpell(streT);
-                    logEvent(
-                        "AutoSpell",
-                        "Cast Stretch Time instead of Haggler's Charm"
-                    );
-                }
 
-                if (nextSpellName(0) == "Sugar Lump") {
-                    var FTHOF = M.spellsById[1];
+            case 4:
+                // Free lump!
+                var FTHOF = M.spellsById[1];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            FTHOF.costMin + FTHOF.costPercent * M.magicM
+                        ) &&
+                    nextSpellName(0) == "Sugar Lump"
+                ) {
                     M.castSpell(FTHOF);
                     logEvent(
                         "AutoSpell",
                         "Cast Force the Hand of Fate instead of Haggler's Charm"
                     );
+                }
+
+                // Can we shorten a negative buff with a backfire?
+                var streT = M.spellsById[2];
+                if (
+                    M.magicM >=
+                        Math.floor(
+                            streT.costMin + streT.costPercent * M.magicM
+                        ) &&
+                    cpsBonus() < 1 &&
+                    (nextSpellName(0) == "Clot" ||
+                        nextSpellName(0) == "Ruin Cookies")
+                ) {
+                    M.castSpell(streT);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Stretch Time instead of Haggler's Charm"
+                    );
+                    return;
                 }
 
                 var hagC = M.spellsById[4];
