@@ -981,7 +981,7 @@ function autoCast() {
                 return;
 
             case 2:
-                if (Game.hasBuff("Dragonflight") || goldenCookieLife()) return;
+                if (Game.hasBuff("Dragonflight")) return;
 
                 var FTHOF = M.spellsById[1];
                 if (
@@ -1282,8 +1282,7 @@ function autoFTHOFComboAction() {
         M.magicM < 81 || // Below minimum mana
         FrozenCookies.auto100ConsistencyCombo == 1 || // 100% combo should override
         FrozenCookies.autoSweet == 1 || // Autosweet overrides
-        Game.hasBuff("Dragonflight") ||
-        (auto100ConsistencyComboAction.state < 2 && goldenCookieLife())
+        Game.hasBuff("Dragonflight"))
     )
         return;
 
@@ -1532,7 +1531,6 @@ function auto100ConsistencyComboAction() {
         M.magicM < 98 || // Below minimum mana
         FrozenCookies.autoSweet == 1 || // Autosweet overrides
         Game.hasBuff("Dragonflight") ||
-        (auto100ConsistencyComboAction.state < 2 && goldenCookieLife()) ||
         Game.lumps < 101 ||
         (FrozenCookies.sugarBakingGuard == 0 && Game.lumps < 1) || // Needs at least 1 lump
         Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
