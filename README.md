@@ -57,6 +57,9 @@ If you want to manually install it:
 
 ## What's new?
 
+2022 Jul 12
+- Fix some old issues with smart Auto cast and simplify the code; and finally documented how it works
+
 2022 Jul 09
 - Putting an upgrade in the vault (once **Inspired checklist** is unlocked) will now prevent it from being auto-bought
 
@@ -402,7 +405,20 @@ All of these calculations are subject to change if it is revealed that a differe
 
 # Special casting combos
 
-This fork includes two different FTHOF casting combo mechanics. Brief documentation and setup guides follow.
+This fork includes some different auto casting combo mechanics. Brief documentation and setup guides follow.
+
+## Smart Auto cast
+
+Auto cast will cast the selected spell when max mana is reached, with some exceptions:
+
+- If the next detected spell is **'Sweet'** (free Sugar lump), it will always cast *FTHOF* next, if it has enough mana
+- If the next detected spell is either **Clot** or **Ruin cookies** AND you are currently under a timed debuff like a clot, it will cast *Stretch Time* to shorten the timer
+- If the next detected spell is either **Clot** or **Ruin cookies** and you are not currently under a timed debuff, it will cast *Haggler's Charm*  instead of the selected spell, to avoid a backfire
+
+If the selected spell is Force the Hand of Fate (FTHOF), there are some additional checks:
+
+- If the next detected spell is *Click Frenzy*, it will not cast the spell unless either a Frenzy or Dragon Harvest is active for long enough to last the entire CF
+- If the next detected spell is either *Elder Frenzy* or *Cursed Finger*, it will not cast this spell unless a Click Frenzy is active for long enough to last the entire spell
 
 ## Auto FTHOF Combo
 
@@ -436,6 +452,12 @@ In order to use this, you must meet the following requirements:
 For optimal use, also turn off the mine and factory building caps in Frozen Cookies settings before enabling the combo.
 
 \*https://pastebin.com/raw/bMHEJ3R9
+
+## Auto Sweet
+
+If enabled, Auto Sweet will continually rapidly ascend until a grimoire seed with **'Sweet'** (free Sugar Lump) in the first 10 spells is found, then it will cast *Haggler's Charm* until 'Sweet' has been cast. After that, it turns itself off.
+
+WARNING: once activated, it can only disabled in the console with *FrozenCookies.autosweet = 0*. There is currently no way to turn it off on Steam.
 
 # Information about Frozen Cookies' Data
 

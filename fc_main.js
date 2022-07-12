@@ -945,8 +945,6 @@ function autoCast() {
         ) {
             if (
                 nextSpellName(0) == "Clot" ||
-                nextSpellName(0) == "Blab" ||
-                nextSpellName(0) == "Cookie Storm (Drop)" ||
                 nextSpellName(0) == "Ruin Cookies"
             ) {
                 M.castSpell(hagC);
@@ -981,20 +979,15 @@ function autoCast() {
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     if (
                         nextSpellName(0) == "Cookie Chain" ||
-                        nextSpellName(0) == "Cookie Storm"
+                        nextSpellName(0) == "Cookie Storm" ||
+                        nextSpellName(0) == "Frenzy" ||
+                        nextSpellName(0) == "Building Special" ||
+                        nextSpellName(0) == "Blab" ||
+                        nextSpellName(0) == "Cookie Storm (Drop)" ||
+                        nextSpellName(0) == "Lucky"
                     ) {
                         M.castSpell(FTHOF);
                         logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                    }
-
-                    if (nextSpellName(0) == "Lucky") {
-                        if (cpsBonus() >= 7) {
-                            M.castSpell(FTHOF);
-                            logEvent(
-                                "AutoSpell",
-                                "Cast Force the Hand of Fate"
-                            );
-                        }
                     }
 
                     if (nextSpellName(0) == "Click Frenzy") {
@@ -1044,23 +1037,6 @@ function autoCast() {
                                     "Cast Force the Hand of Fate"
                                 );
                             }
-                        }
-                    }
-
-                    if (
-                        nextSpellName(0) == "Frenzy" ||
-                        nextSpellName(0) == "Building Special"
-                    ) {
-                        if (
-                            Game.hasBuff("Click frenzy") &&
-                            Game.hasBuff("Click frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1
-                        ) {
-                            M.castSpell(FTHOF);
-                            logEvent(
-                                "AutoSpell",
-                                "Cast Force the Hand of Fate"
-                            );
                         }
                     }
 
