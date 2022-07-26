@@ -876,7 +876,8 @@ function autoRigidel() {
 }
 
 function autoTicker() {
-    if (Game.TickerEffect && Game.TickerEffect.type == "fortune") Game.tickerL.click();
+    if (Game.TickerEffect && Game.TickerEffect.type == "fortune")
+        Game.tickerL.click();
 }
 
 // Used in autoCast() for some maths in the smart Force The Hand of Fate subroutine
@@ -1564,23 +1565,29 @@ function auto100ConsistencyComboAction() {
         return;
     }
 
-    if (typeof auto100ConsistencyComboAction.state == "undefined") auto100ConsistencyComboAction.state = 0;
-    if (typeof auto100ConsistencyComboAction.countFarm == "undefined") auto100ConsistencyComboAction.countFarm = 0;
-    if (typeof auto100ConsistencyComboAction.countMine == "undefined") auto100ConsistencyComboAction.countMine = 0;
-    if (typeof auto100ConsistencyComboAction.countFactory == "undefined") auto100ConsistencyComboAction.countFactory = 0;
-    if (typeof auto100ConsistencyComboAction.countBank == "undefined") auto100ConsistencyComboAction.countBank = 0;
-    if (typeof auto100ConsistencyComboAction.countTemple == "undefined") auto100ConsistencyComboAction.countTemple = 0;
-    if (typeof auto100ConsistencyComboAction.countWizard == "undefined") 
+    if (typeof auto100ConsistencyComboAction.state == "undefined")
+        auto100ConsistencyComboAction.state = 0;
+    if (typeof auto100ConsistencyComboAction.countFarm == "undefined")
+        auto100ConsistencyComboAction.countFarm = 0;
+    if (typeof auto100ConsistencyComboAction.countMine == "undefined")
+        auto100ConsistencyComboAction.countMine = 0;
+    if (typeof auto100ConsistencyComboAction.countFactory == "undefined")
+        auto100ConsistencyComboAction.countFactory = 0;
+    if (typeof auto100ConsistencyComboAction.countBank == "undefined")
+        auto100ConsistencyComboAction.countBank = 0;
+    if (typeof auto100ConsistencyComboAction.countTemple == "undefined")
+        auto100ConsistencyComboAction.countTemple = 0;
+    if (typeof auto100ConsistencyComboAction.countWizard == "undefined")
         auto100ConsistencyComboAction.countWizard = 0;
-    if (typeof auto100ConsistencyComboAction.countShipment == "undefined") 
+    if (typeof auto100ConsistencyComboAction.countShipment == "undefined")
         auto100ConsistencyComboAction.countShipment = 0;
-    if (typeof auto100ConsistencyComboAction.countAlchemy == "undefined") 
+    if (typeof auto100ConsistencyComboAction.countAlchemy == "undefined")
         auto100ConsistencyComboAction.countAlchemy = 0;
-    if (typeof auto100ConsistencyComboAction.countTimeMach == "undefined") 
+    if (typeof auto100ConsistencyComboAction.countTimeMach == "undefined")
         auto100ConsistencyComboAction.countTimeMach = 0;
-    if (typeof auto100ConsistencyComboAction.countAntiMatter == "undefined") 
+    if (typeof auto100ConsistencyComboAction.countAntiMatter == "undefined")
         auto100ConsistencyComboAction.countAntiMatter = 0;
-    if (typeof auto100ConsistencyComboAction.countPrism == "undefined") 
+    if (typeof auto100ConsistencyComboAction.countPrism == "undefined")
         auto100ConsistencyComboAction.countPrism = 0;
 
     if (
@@ -2037,7 +2044,8 @@ function autoSweetAction() {
     if (FrozenCookies.autoSweet == 0) return;
 
     if (typeof Game.ready !== "undefined" && Game.ready) {
-        if (typeof autoSweetAction.state == "undefined") autoSweetAction.state = 0;
+        if (typeof autoSweetAction.state == "undefined")
+            autoSweetAction.state = 0;
 
         if (autoSweetAction.state == 0) {
             if (
@@ -2227,7 +2235,8 @@ function autoDragonAction() {
     ) {
         Game.specialTab = "dragon";
         Game.UpgradeDragon();
-        if (Game.dragonLevel + 1 >= Game.dragonLevels.length) Game.ToggleSpecialMenu();
+        if (Game.dragonLevel + 1 >= Game.dragonLevels.length)
+            Game.ToggleSpecialMenu();
         logEvent(
             "autoDragon",
             "Upgraded the dragon to level " + Game.dragonLevel
@@ -3883,7 +3892,8 @@ function buildingToggle(building, achievements) {
         achievements.forEach(function (won, index) {
             var achievement = Game.AchievementsById[index];
             achievement.won = won;
-            if (won && achievement.pool != "shadow")  Game.AchievementsOwned += 1;
+            if (won && achievement.pool != "shadow")
+                Game.AchievementsOwned += 1;
         });
     }
     Game.recalculateGains = 1;
@@ -4409,7 +4419,7 @@ function autoGodzamokAction() {
             FrozenCookies.mineLimit == 0
         ) {
             var countMine = 500;
-        } else if (Game.hasGod("ruin")) {
+        } else if (Game.hasGod("ruin") && Game.Objects["Mine"].amount >= 10) {
             var countMine = Game.Objects["Mine"].amount;
         } else {
             return;
@@ -4437,16 +4447,49 @@ function autoGodzamokAction() {
             Game.Objects["Factory"].sell(countFactory);
 
             if (countMine != 0) {
-                safeBuy(Game.Objects["Mine"], countMine);
-                logEvent("AutoGodzamok", "Bought " + countMine + " mines");
+                if (FrozenCookies.mineLimit == 0) {
+                    safeBuy(Game.Objects["Mine"], countMine);
+                    logEvent("AutoGodzamok", "Bought " + countMine + " mines");
+                }
+                if (
+                    FrozenCookies.mineLimit == 1 &&
+                    Game.Objects["Mine"].amount < FrozenCookies.mineMax
+                ) {
+                    var countMine =
+                        FrozenCookies.mineMax - Game.Objects["Mine"].amount;
+                    if (countMine != 0) {
+                        safeBuy(Game.Objects["Mine"], countMine);
+                        logEvent(
+                            "AutoGodzamok",
+                            "Bought " + countMine + " mines"
+                        );
+                    }
+                }
             }
 
             if (countFactory != 0) {
-                safeBuy(Game.Objects["Factory"], countFactory);
-                logEvent(
-                    "AutoGodzamok",
-                    "Bought " + countFactory + " factories"
-                );
+                if (FrozenCookies.factoryLimit == 0) {
+                    safeBuy(Game.Objects["Factory"], countFactory);
+                    logEvent(
+                        "AutoGodzamok",
+                        "Bought " + countFactory + " factories"
+                    );
+                }
+                if (
+                    FrozenCookies.factoryLimit == 1 &&
+                    Game.Objects["Factory"].amount < FrozenCookies.factoryMax
+                ) {
+                    var countFactory =
+                        FrozenCookies.factoryMax -
+                        Game.Objects["Factory"].amount;
+                    if (countFactory != 0) {
+                        safeBuy(Game.Objects["Factory"], countFactory);
+                        logEvent(
+                            "AutoGodzamok",
+                            "Bought " + countFactory + " factories"
+                        );
+                    }
+                }
             }
         }
     }
@@ -4520,7 +4563,8 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0) logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                if (popCount > 0)
+                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
             } else {
                 _.filter(Game.wrinklers, function (w) {
                     return _.contains(popList, w.id);
@@ -4528,7 +4572,8 @@ function autoCookie() {
                     w.hp = 0;
                     popCount += 1;
                 });
-                if (popCount > 0) logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                if (popCount > 0)
+                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
             }
         }
         if (FrozenCookies.autoWrinkler == 2) {
@@ -4541,7 +4586,8 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0) logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                if (popCount > 0)
+                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
             } else {
                 popList.forEach(function (w) {
                     if (w.close == true) {
@@ -4549,7 +4595,8 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0)  logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                if (popCount > 0)
+                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
             }
         }
 
