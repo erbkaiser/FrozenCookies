@@ -61,6 +61,9 @@ If you want to manually install it:
 ## What's new?
 <details>
 <summary>Click to expand!</summary>
+  
+2022 Jul 26
+- Auto-Godzamok now limits itself to the mine and factory cap. If no cap is set, it is still limited to 500 max, to prevent accidentally ending up with a net loss after a clicking buff.
 
 2022 Jul 20
 - New feature: Auto-Dragon Orbs, with accompanying Cortex bakers Limit.
