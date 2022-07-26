@@ -1563,8 +1563,8 @@ function auto100ConsistencyComboAction() {
         (FrozenCookies.sugarBakingGuard == 0 && Game.lumps < 1) || // Needs at least 1 lump
         Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
         (T.swaps < 1 && (!Game.hasGod("mother") || !Game.hasGod("ruin"))) ||
-        (T.swaps < 2 && !Game.hasGod("mother") && !Game.hasGod("ruin")) || // Need to have Moka and Godz or enough swaps
-        G.plants["whiskerbloom"].id.unlocked != 1 // Whiskerbloom must be unlocked
+        (T.swaps < 2 && !Game.hasGod("mother") && !Game.hasGod("ruin")) // Need to have Moka and Godz or enough swaps
+        //G.plants["whiskerbloom"].id.unlocked != 1 // Whiskerbloom must be unlocked
     ) {
         return;
     }
@@ -4487,33 +4487,30 @@ function autoGodzamokAction() {
         // if Pantheon is here and autoGodzamok is set
         if (
             Game.hasGod("ruin") &&
-            Game.Objects["Mine"].amount > 10 &&
-            (Game.Objects["Mine"].amount < 500 || FrozenCookies.mineMax != 0)
-        ) {
-            var countMine = Game.Objects["Mine"].amount;
-        } else if (
-            Game.hasGod("ruin") &&
             Game.Objects["Mine"].amount >= 500 &&
-            FrozenCookies.mineMax == 0
+            FrozenCookies.mineLimit == 0
         ) {
             var countMine = 500;
+        } else if (
+            Game.hasGod("ruin") &&
+            Game.Objects["Mine"].amount > 10
+        ) {
+            var countMine = Game.Objects["Mine"].amount;
         } else {
             return;
         }
 
         if (
             Game.hasGod("ruin") &&
-            Game.Objects["Factory"].amount > 10 &&
-            (Game.Objects["Factory"].amount < 500 ||
-                FrozenCookies.factoryMax != 0)
-        ) {
-            var countFactory = Game.Objects["Factory"].amount;
-        } else if (
-            Game.hasGod("ruin") &&
             Game.Objects["Factory"].amount >= 500 &&
-            FrozenCookies.factoryMax == 0
+            FrozenCookies.factoryLimit == 0
         ) {
             var countFactory = 500;
+        } else if (
+            Game.hasGod("ruin") &&
+            Game.Objects["Factory"].amount > 10
+        ) {
+            var countFactory = Game.Objects["Factory"].amount;
         } else {
             return;
         }
