@@ -4488,10 +4488,14 @@ function autoGodzamokAction() {
         if (
             Game.hasGod("ruin") &&
             Game.Objects["Mine"].amount > 10 &&
-            Game.Objects["Mine"].amount < 500
+            (Game.Objects["Mine"].amount < 500 || FrozenCookies.mineMax != 0)
         ) {
             var countMine = Game.Objects["Mine"].amount;
-        } else if (Game.hasGod("ruin") && Game.Objects["Mine"].amount >= 500) {
+        } else if (
+            Game.hasGod("ruin") &&
+            Game.Objects["Mine"].amount >= 500 &&
+            FrozenCookies.mineMax == 0
+        ) {
             var countMine = 500;
         } else {
             return;
@@ -4500,19 +4504,21 @@ function autoGodzamokAction() {
         if (
             Game.hasGod("ruin") &&
             Game.Objects["Factory"].amount > 10 &&
-            Game.Objects["Factory"].amount < 500
+            (Game.Objects["Factory"].amount < 500 ||
+                FrozenCookies.factoryMax != 0)
         ) {
             var countFactory = Game.Objects["Factory"].amount;
         } else if (
             Game.hasGod("ruin") &&
-            Game.Objects["Factory"].amount >= 500
+            Game.Objects["Factory"].amount >= 500 &&
+            FrozenCookies.factoryMax == 0
         ) {
             var countFactory = 500;
         } else {
             return;
         }
 
-        //Automatically sell up to 500 mines and factories and prevent rapid buy/sell spam
+        //Automatically sell up to limit mines and factories and prevent rapid buy/sell spam
         if (
             FrozenCookies.autoGodzamok >= 1 &&
             hasClickBuff() &&
