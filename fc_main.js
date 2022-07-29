@@ -1939,6 +1939,7 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 13: // sell buildings
+            if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
             Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
             Game.Objects["Factory"].sell(
@@ -1975,107 +1976,143 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 15: // buy back buildings
-            Game.Objects["Farm"].buy(auto100ConsistencyComboAction.countFarm);
-            Game.Objects["Mine"].buy(auto100ConsistencyComboAction.countMine);
-            Game.Objects["Factory"].buy(
+            safeBuy(
+                Game.Objects["Farm"],
+                auto100ConsistencyComboAction.countFarm
+            );
+            safeBuy(
+                Game.Objects["Mine"],
+                auto100ConsistencyComboAction.countMine
+            );
+            safeBuy(
+                Game.Objects["Factory"],
                 auto100ConsistencyComboAction.countFactory
             );
-            Game.Objects["Bank"].buy(auto100ConsistencyComboAction.countBank);
-            Game.Objects["Temple"].buy(
+            safeBuy(
+                Game.Objects["Bank"],
+                auto100ConsistencyComboAction.countBank
+            );
+            safeBuy(
+                Game.Objects["Temple"],
                 auto100ConsistencyComboAction.countTemple
             );
-            Game.Objects["Wizard tower"].buy(
+            safeBuy(
+                Game.Objects["Wizard tower"],
                 auto100ConsistencyComboAction.countWizard
             );
-            Game.Objects["Shipment"].buy(
+            safeBuy(
+                Game.Objects["Shipment"],
                 auto100ConsistencyComboAction.countShipment
             );
-            Game.Objects["Alchemy lab"].buy(
+            safeBuy(
+                Game.Objects["Alchemy lab"],
                 auto100ConsistencyComboAction.countAlchemy
             );
-            Game.Objects["Time machine"].buy(
+            safeBuy(
+                Game.Objects["Time machine"],
                 auto100ConsistencyComboAction.countTimeMach
             );
-            Game.Objects["Antimatter condenser"].buy(
+            safeBuy(
+                Game.Objects["Antimatter condenser"],
                 auto100ConsistencyComboAction.countAntiMatter
             );
-            Game.Objects["Prism"].buy(auto100ConsistencyComboAction.countPrism);
+            safeBuy(
+                Game.Objects["Prism"],
+                auto100ConsistencyComboAction.countPrism
+            );
             auto100ConsistencyComboAction.state = 16;
             return;
 
         case 16: // Perform custom autogodzamok
-            if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
             if (!Game.hasBuff("Devastation") && hasClickBuff()) {
-                if (Game.Objects["Farm"].amount >= 10) {
+                if (Game.Objects["Farm"].amount >= 10)
                     Game.Objects["Farm"].sell(
                         auto100ConsistencyComboAction.countFarm
                     );
+                if (Game.Objects["Mine"].amount >= 10)
                     Game.Objects["Mine"].sell(
                         auto100ConsistencyComboAction.countMine
                     );
+                if (Game.Objects["Factory"].amount >= 10)
                     Game.Objects["Factory"].sell(
                         auto100ConsistencyComboAction.countFactory
                     );
+                if (Game.Objects["Bank"].amount >= 10)
                     Game.Objects["Bank"].sell(
                         auto100ConsistencyComboAction.countBank
                     );
+                if (Game.Objects["Temple"].amount >= 10)
                     Game.Objects["Temple"].sell(
                         auto100ConsistencyComboAction.countTemple
                     );
+                if (Game.Objects["Wizard tower"].amount >= 10)
                     Game.Objects["Wizard tower"].sell(
                         auto100ConsistencyComboAction.countWizard
                     );
+                if (Game.Objects["Shipment"].amount >= 10)
                     Game.Objects["Shipment"].sell(
                         auto100ConsistencyComboAction.countShipment
                     );
+                if (Game.Objects["Alchemy lab"].amount >= 10)
                     Game.Objects["Alchemy lab"].sell(
                         auto100ConsistencyComboAction.countAlchemy
                     );
+                if (Game.Objects["Time machine"].amount >= 10)
                     Game.Objects["Time machine"].sell(
                         auto100ConsistencyComboAction.countTimeMach
                     );
+                if (Game.Objects["Antimatter condenser"].amount >= 10)
                     Game.Objects["Antimatter condenser"].sell(
                         auto100ConsistencyComboAction.countAntiMatter
                     );
+                if (Game.Objects["Prism"].amount >= 10)
                     Game.Objects["Prism"].sell(
                         auto100ConsistencyComboAction.countPrism
                     );
-                }
-                if (Game.Objects["Farm"].amount < 10) {
+                if (Game.Objects["Farm"].amount < 10)
                     Game.Objects["Farm"].buy(
                         auto100ConsistencyComboAction.countFarm
                     );
+                if (Game.Objects["Mine"].amount < 10)
                     Game.Objects["Mine"].buy(
                         auto100ConsistencyComboAction.countMine
                     );
+                if (Game.Objects["Factory"].amount < 10)
                     Game.Objects["Factory"].buy(
                         auto100ConsistencyComboAction.countFactory
                     );
+                if (Game.Objects["Bank"].amount < 10)
                     Game.Objects["Bank"].buy(
                         auto100ConsistencyComboAction.countBank
                     );
+                if (Game.Objects["Temple"].amount < 10)
                     Game.Objects["Temple"].buy(
                         auto100ConsistencyComboAction.countTemple
                     );
+                if (Game.Objects["Wizard tower"].amount < 10)
                     Game.Objects["Wizard tower"].buy(
                         auto100ConsistencyComboAction.countWizard
                     );
+                if (Game.Objects["Shipment"].amount < 10)
                     Game.Objects["Shipment"].buy(
                         auto100ConsistencyComboAction.countShipment
                     );
+                if (Game.Objects["Alchemy lab"].amount < 10)
                     Game.Objects["Alchemy lab"].buy(
                         auto100ConsistencyComboAction.countAlchemy
                     );
+                if (Game.Objects["Time machine"].amount < 10)
                     Game.Objects["Time machine"].buy(
                         auto100ConsistencyComboAction.countTimeMach
                     );
+                if (Game.Objects["Antimatter condenser"].amount < 10)
                     Game.Objects["Antimatter condenser"].buy(
                         auto100ConsistencyComboAction.countAntiMatter
                     );
+                if (Game.Objects["Prism"].amount < 10)
                     Game.Objects["Prism"].buy(
                         auto100ConsistencyComboAction.countPrism
                     );
-                }
             }
 
             if (!hasClickBuff()) {
