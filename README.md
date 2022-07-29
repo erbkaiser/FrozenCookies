@@ -64,6 +64,7 @@ If you want to manually install it:
 
 2022 Jul 29
 - Add a fifth auto cast option (#75). This works like the existing FTHOF auto cast but will only cast click and building specials.
+- Rewrote the 100% Consistency Combo again. Should actually work now.
 
 2022 Jul 26
 - Auto-Godzamok now limits itself to the mine and factory cap (if set) and no longer is capped at 500. If you have more buildings than the cap, it will rebuy up to that cap.
@@ -494,6 +495,8 @@ In order to use this, you must meet the following requirements:
 * Have whiskerblooms unlocked in the garden (any current plants will be harvested -- this includes growing Juicy queenbeets!)
 
 For optimal use, also turn off any mine and factory building caps in Frozen Cookies settings before enabling the combo.
+
+Note: while the combo is active, it will let any wrath cookies expire. This is by design, as they are incredibly likely to be clots.
 
 \*https://pastebin.com/raw/bMHEJ3R9
 
