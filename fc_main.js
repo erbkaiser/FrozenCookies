@@ -1703,8 +1703,6 @@ function auto100ConsistencyComboAction() {
         auto100ConsistencyComboAction.countAlchemy = 0;
     if (typeof auto100ConsistencyComboAction.countTimeMach == "undefined")
         auto100ConsistencyComboAction.countTimeMach = 0;
-    if (typeof auto100ConsistencyComboAction.countAntiMatter == "undefined")
-        auto100ConsistencyComboAction.countAntiMatter = 0;
 
     if (
         ((auto100ConsistencyComboAction.state == 0 &&
@@ -1766,8 +1764,6 @@ function auto100ConsistencyComboAction() {
         Game.Objects["Alchemy lab"].amount;
     auto100ConsistencyComboAction.countTimeMach =
         Game.Objects["Time machine"].amount;
-    auto100ConsistencyComboAction.countAntiMatter =
-        Game.Objects["Antimatter condenser"].amount;
 
     var FTHOF = M.spellsById[1];
 
@@ -1867,15 +1863,25 @@ function auto100ConsistencyComboAction() {
             auto100ConsistencyComboAction.state = 5;
             return;
 
-        case 5: // Cast FTHOF 1
+        case 5: // Activate golden switch to prevent backfired natural GCs
+            if (
+                Game.Upgrades["Golden switch [off]"].unlocked &&
+                !Game.Upgrades["Golden switch [off]"].bought
+            ) {
+                Game.Upgrades["Golden switch [off]"].buy();
+            }
+            auto100ConsistencyComboAction.state = 6;
+            return;
+
+        case 6: // Cast FTHOF 1
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 1");
-                auto100ConsistencyComboAction.state = 6;
+                auto100ConsistencyComboAction.state = 7;
             }
             return;
 
-        case 6: // Cast FTHOF 2 then buy
+        case 7: // Cast FTHOF 2 then buy
             Game.Objects["Wizard tower"].sell(
                 auto100ConsistencyComboAction.countWizard
             );
@@ -1886,25 +1892,25 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-                auto100ConsistencyComboAction.state = 7;
+                auto100ConsistencyComboAction.state = 8;
             }
             return;
 
-        case 7: // Use sugar lump to refill magic
+        case 8: // Use sugar lump to refill magic
             M.lumpRefill.click();
             Game.ConfirmPrompt();
-            auto100ConsistencyComboAction.state = 8;
+            auto100ConsistencyComboAction.state = 9;
             return;
 
-        case 8: // Cast FTHOF 3
+        case 9: // Cast FTHOF 3
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 3");
-                auto100ConsistencyComboAction.state = 9;
+                auto100ConsistencyComboAction.state = 10;
             }
             return;
 
-        case 9: // Cast FTHOF 4 then buy
+        case 10: // Cast FTHOF 4 then buy
             Game.Objects["Wizard tower"].sell(
                 auto100ConsistencyComboAction.countWizard
             );
@@ -1915,43 +1921,33 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-                auto100ConsistencyComboAction.state = 10;
+                auto100ConsistencyComboAction.state = 11;
             }
 
             return;
 
-        case 10: // Take Stock Market loans
+        case 11: // Take Stock Market loans
             B.takeLoan(1);
             B.takeLoan(2);
             B.takeLoan(3);
-            auto100ConsistencyComboAction.state = 11;
+            auto100ConsistencyComboAction.state = 12;
 
             return;
 
-        case 11: // If autoGodzamok is on, disable
+        case 12: // If autoGodzamok is on, disable
             if (FrozenCookies.autoGodzamok > 0) {
                 auto100ConsistencyComboAction.autogodyes = 1;
                 FrozenCookies.autoGodzamok = 0;
             } else {
                 auto100ConsistencyComboAction.autogodyes = 0;
             }
-            auto100ConsistencyComboAction.state = 12;
-
-            return;
-
-        case 12: // Activate Building Special and Click Frenzy buffs
-            Game.shimmers[0].pop();
-            Game.shimmers[0].pop();
             auto100ConsistencyComboAction.state = 13;
+
             return;
 
-        case 13: // Activate golden switch to prevent backfired natural GCs
-            if (
-                Game.Upgrades["Golden switch [off]"].unlocked &&
-                !Game.Upgrades["Golden switch [off]"].bought
-            ) {
-                Game.Upgrades["Golden switch [off]"].buy();
-            }
+        case 13: // Activate Building Special and Click Frenzy buffs
+            Game.shimmers[0].pop();
+            Game.shimmers[0].pop();
             auto100ConsistencyComboAction.state = 14;
             return;
 
@@ -1977,9 +1973,6 @@ function auto100ConsistencyComboAction() {
             );
             Game.Objects["Time machine"].sell(
                 auto100ConsistencyComboAction.countTimeMach
-            );
-            Game.Objects["Antimatter condenser"].sell(
-                auto100ConsistencyComboAction.countAntiMatter
             );
             auto100ConsistencyComboAction.state = 15;
             return;
@@ -2026,10 +2019,6 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Time machine"],
                 auto100ConsistencyComboAction.countTimeMach
             );
-            safeBuy(
-                Game.Objects["Antimatter condenser"],
-                auto100ConsistencyComboAction.countAntiMatter
-            );
             auto100ConsistencyComboAction.state = 17;
             return;
 
@@ -2062,9 +2051,6 @@ function auto100ConsistencyComboAction() {
                     );
                     Game.Objects["Time machine"].sell(
                         auto100ConsistencyComboAction.countTimeMach
-                    );
-                    Game.Objects["Antimatter condenser"].sell(
-                        auto100ConsistencyComboAction.countAntiMatter
                     );
                 }
                 if (Game.Objects["Farm"].amount < 10) {
@@ -2112,11 +2098,6 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Time machine"],
                         auto100ConsistencyComboAction.countTimeMach -
                             Game.Objects["Time machine"].amount
-                    );
-                    safeBuy(
-                        Game.Objects["Antimatter condenser"],
-                        auto100ConsistencyComboAction.countAntiMatter -
-                            Game.Objects["Antimatter condenser"].amount
                     );
                 }
             }
@@ -2209,16 +2190,6 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Time machine"],
                         auto100ConsistencyComboAction.countTimeMach -
                             Game.Objects["Time machine"].amount
-                    );
-                }
-                if (
-                    Game.Objects["Antimatter condenser"].amount <
-                    auto100ConsistencyComboAction.countAntiMatter
-                ) {
-                    safeBuy(
-                        Game.Objects["Antimatter condenser"],
-                        auto100ConsistencyComboAction.countAntiMatter -
-                            Game.Objects["Antimatter condenser"].amount
                     );
                 }
             }
