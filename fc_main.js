@@ -1962,9 +1962,6 @@ function auto100ConsistencyComboAction() {
             Game.Objects["Temple"].sell(
                 auto100ConsistencyComboAction.countTemple
             );
-            Game.Objects["Wizard tower"].sell(
-                auto100ConsistencyComboAction.countWizard
-            );
             Game.Objects["Shipment"].sell(
                 auto100ConsistencyComboAction.countShipment
             );
@@ -2002,10 +1999,6 @@ function auto100ConsistencyComboAction() {
             safeBuy(
                 Game.Objects["Temple"],
                 auto100ConsistencyComboAction.countTemple
-            );
-            safeBuy(
-                Game.Objects["Wizard tower"],
-                auto100ConsistencyComboAction.countWizard
             );
             safeBuy(
                 Game.Objects["Shipment"],
@@ -2049,9 +2042,6 @@ function auto100ConsistencyComboAction() {
                     Game.Objects["Temple"].sell(
                         auto100ConsistencyComboAction.countTemple
                     );
-                    Game.Objects["Wizard tower"].sell(
-                        auto100ConsistencyComboAction.countWizard
-                    );
                     Game.Objects["Shipment"].sell(
                         auto100ConsistencyComboAction.countShipment
                     );
@@ -2087,11 +2077,6 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Temple"],
                         auto100ConsistencyComboAction.countTemple -
                             Game.Objects["Temple"].amount
-                    );
-                    safeBuy(
-                        Game.Objects["Wizard tower"],
-                        auto100ConsistencyComboAction.countWizard -
-                            Game.Objects["Wizard tower"].amount
                     );
                     safeBuy(
                         Game.Objects["Shipment"],
@@ -2159,16 +2144,6 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Temple"],
                         auto100ConsistencyComboAction.countTemple -
                             Game.Objects["Temple"].amount
-                    );
-                }
-                if (
-                    Game.Objects["Wizard tower"].amount <
-                    auto100ConsistencyComboAction.countWizard
-                ) {
-                    safeBuy(
-                        Game.Objects["Wizard tower"],
-                        auto100ConsistencyComboAction.countWizard -
-                            Game.Objects["Wizard tower"].amount
                     );
                 }
                 if (
@@ -2276,16 +2251,6 @@ function auto100ConsistencyComboAction() {
                     Game.Objects["Temple"],
                     auto100ConsistencyComboAction.countTemple -
                         Game.Objects["Temple"].amount
-                );
-            }
-            if (
-                Game.Objects["Wizard tower"].amount <
-                auto100ConsistencyComboAction.countWizard
-            ) {
-                safeBuy(
-                    Game.Objects["Wizard tower"],
-                    auto100ConsistencyComboAction.countWizard -
-                        Game.Objects["Wizard tower"].amount
                 );
             }
             if (
