@@ -496,8 +496,6 @@ In order to use this, you must meet the following requirements:
 
 For optimal use, also turn off any mine and factory building caps in Frozen Cookies settings before enabling the combo.
 
-Note: while the combo is active, it will let any wrath cookies expire. This is by design, as they are incredibly likely to be clots.
-
 \*https://pastebin.com/raw/bMHEJ3R9
 
 ## Auto Sweet
