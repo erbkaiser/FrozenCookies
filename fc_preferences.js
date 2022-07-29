@@ -231,6 +231,7 @@ FrozenCookies.preferenceValues = {
             "Auto Cast FORCE THE HAND OF FATE",
             "Auto Cast SPONTANEOUS EDIFICE",
             "Auto Cast HAGGLER'S CHARM (cheapest)",
+            "Auto Cast FTHOF (Click and Building Specials only)",
         ],
         default: 0,
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',

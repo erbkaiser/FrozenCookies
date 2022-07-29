@@ -980,18 +980,24 @@ function autoCast() {
                     M.castSpell(hagC);
                     logEvent(
                         "AutoSpell",
-                        "Cast Haggler's Charm instead of useless spell"
+                        "Cast Haggler's Charm instead of Force the Hand of Fate"
                     );
                 }
 
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     if (
                         !Game.hasBuff("Dragonflight") &&
-                        (nextSpellName(0) == "Cookie Chain" ||
-                            nextSpellName(0) == "Cookie Storm" ||
-                            nextSpellName(0) == "Frenzy" ||
-                            nextSpellName(0) == "Building Special" ||
-                            nextSpellName(0) == "Lucky")
+                        nextSpellName(0) == "Lucky"
+                    ) {
+                        M.castSpell(FTHOF);
+                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                    }
+
+                    if (
+                        nextSpellName(0) == "Cookie Chain" ||
+                        nextSpellName(0) == "Cookie Storm" ||
+                        nextSpellName(0) == "Frenzy" ||
+                        nextSpellName(0) == "Building Special"
                     ) {
                         M.castSpell(FTHOF);
                         logEvent("AutoSpell", "Cast Force the Hand of Fate");
@@ -1117,9 +1123,118 @@ function autoCast() {
                     Math.floor(hagC.costMin + hagC.costPercent * M.magicM)
                 )
                     return;
-
                 M.castSpell(hagC);
                 logEvent("AutoSpell", "Cast Haggler's Charm");
+                return;
+
+            case 5:
+                var FTHOF = M.spellsById[1];
+                if (
+                    M.magicM <
+                    Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)
+                )
+                    return;
+
+                if (
+                    !Game.hasBuff("Dragonflight") &&
+                    (nextSpellName(0) == "Blab" ||
+                        nextSpellName(0) == "Cookie Storm (Drop)" ||
+                        nextSpellName(0) == "Cookie Chain" ||
+                        nextSpellName(0) == "Cookie Storm" ||
+                        nextSpellName(0) == "Frenzy" ||
+                        nextSpellName(0) == "Lucky")
+                ) {
+                    M.castSpell(hagC);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Haggler's Charm instead of Force the Hand of Fate"
+                    );
+                }
+
+                if (cpsBonus() >= FrozenCookies.minCpSMult) {
+                    if (nextSpellName(0) == "Building Special") {
+                        M.castSpell(FTHOF);
+                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                    }
+
+                    if (nextSpellName(0) == "Click Frenzy") {
+                        if (
+                            (Game.hasBuff("Frenzy") ||
+                                Game.hasBuff("Dragon Harvest")) &&
+                            BuildingSpecialBuff() == 1 &&
+                            (Game.hasBuff("Frenzy").time / 30 >=
+                                Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                Game.hasBuff("Dragon Harvest").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1) &&
+                            BuildingBuffTime() >=
+                                Math.ceil(13 * BuffTimeFactor())
+                        ) {
+                            M.castSpell(FTHOF);
+                            logEvent(
+                                "AutoSpell",
+                                "Cast Force the Hand of Fate"
+                            );
+                        }
+                    }
+
+                    if (nextSpellName(0) == "Elder Frenzy") {
+                        if (Game.Upgrades["Elder Pact"].bought == 1) {
+                            if (
+                                (Game.hasBuff("Click frenzy") ||
+                                    Game.hasBuff("Dragonflight")) &&
+                                (Game.hasBuff("Click frenzy").time / 30 >=
+                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
+                                    Game.hasBuff("Dragonflight").time / 30 >=
+                                        Math.ceil(6 * BuffTimeFactor()) - 1)
+                            ) {
+                                M.castSpell(FTHOF);
+                                logEvent(
+                                    "AutoSpell",
+                                    "Cast Force the Hand of Fate"
+                                );
+                            }
+                        } else if (Game.Upgrades["Elder Pact"].bought == 0) {
+                            if (
+                                (Game.hasBuff("Frenzy") ||
+                                    Game.hasBuff("Dragon Harvest")) &&
+                                (Game.hasBuff("Frenzy").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                    Game.hasBuff("Dragon Harvest").time / 30 >=
+                                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
+                                (Game.hasBuff("Click frenzy") ||
+                                    Game.hasBuff("Dragonflight")) &&
+                                (Game.hasBuff("Click frenzy").time / 30 >=
+                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
+                                    Game.hasBuff("Dragonflight").time / 30 >=
+                                        Math.ceil(6 * BuffTimeFactor()) - 1)
+                            ) {
+                                M.castSpell(FTHOF);
+                                logEvent(
+                                    "AutoSpell",
+                                    "Cast Force the Hand of Fate"
+                                );
+                            }
+                        }
+                    }
+
+                    if (nextSpellName(0) == "Cursed Finger") {
+                        if (
+                            (Game.hasBuff("Click frenzy") ||
+                                Game.hasBuff("Dragonflight")) &&
+                            (Game.hasBuff("Click frenzy").time / 30 >=
+                                Math.ceil(10 * BuffTimeFactor()) - 1 ||
+                                Game.hasBuff("Dragonflight").time / 30 >=
+                                    Math.ceil(6 * BuffTimeFactor()) - 1)
+                        ) {
+                            M.castSpell(FTHOF);
+                            logEvent(
+                                "AutoSpell",
+                                "Cast Force the Hand of Fate"
+                            );
+                        }
+                    }
+                    return;
+                }
                 return;
         }
     }
@@ -1153,7 +1268,7 @@ function autoFTHOFComboAction() {
     }
 
     if (
-        autoFTHOFComboAction.state == 3 &&
+        autoFTHOFComboAction.state > 2 &&
         M.magic == M.magicM &&
         !Game.hasBuff("Click frenzy") &&
         !(
@@ -1161,6 +1276,10 @@ function autoFTHOFComboAction() {
             nextSpellName(1) == "Click Frenzy"
         )
     ) {
+        if (autoFTHOFComboAction.autobuyyes == 1) {
+            FrozenCookies.autoBuy = 1;
+            autoFTHOFComboAction.autobuyyes = 0;
+        }
         autoFTHOFComboAction.state = 0;
         logEvent("autoFTHOFCombo", "Soft fail, spell combo is gone");
     }
@@ -1191,11 +1310,7 @@ function autoFTHOFComboAction() {
 
     switch (autoFTHOFComboAction.state) {
         case 0:
-            if (
-                M.magic == M.magicM &&
-                !Game.hasBuff("Dragonflight") &&
-                !goldenCookieLife()
-            ) {
+            if (M.magic == M.magicM) {
                 //Continue casting Haggler's Charm - unless it's something we need right now
                 if (nextSpellName(0) == "Sugar Lump") {
                     M.castSpell(FTHOF);

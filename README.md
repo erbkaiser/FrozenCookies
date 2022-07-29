@@ -61,7 +61,10 @@ If you want to manually install it:
 ## What's new?
 <details>
 <summary>Click to expand!</summary>
-  
+
+2022 Jul 29
+- Add a fifth auto cast option (#75). This works like the existing FTHOF auto cast but will only cast click and building specials.
+
 2022 Jul 26
 - Auto-Godzamok now limits itself to the mine and factory cap (if set) and no longer is capped at 500. If you have more buildings than the cap, it will rebuy up to that cap.
 - Renamed a few preferences to make what they do more clear
