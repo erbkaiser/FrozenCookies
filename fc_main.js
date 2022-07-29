@@ -1714,7 +1714,7 @@ function auto100ConsistencyComboAction() {
             (auto100ConsistencyComboAction.autobuyyes == 1 ||
                 auto100ConsistencyComboAction.autogcyes == 1 ||
                 auto100ConsistencyComboAction.autogodyes == 1)) ||
-            (auto100ConsistencyComboAction.state >= 1 &&
+            (auto100ConsistencyComboAction.state > 1 &&
                 BuildingSpecialBuff() == 0 &&
                 !hasClickBuff())) &&
         M.magic == M.magicM
