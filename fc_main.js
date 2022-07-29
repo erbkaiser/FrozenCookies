@@ -1678,14 +1678,8 @@ function auto100ConsistencyComboAction() {
 
     // Not currently possible to do the combo
     if (
-        M.magicM < 98 || // Below minimum mana
         FrozenCookies.autoSweet == 1 || // Autosweet overrides
-        Game.lumps < 101 ||
-        (FrozenCookies.sugarBakingGuard == 0 && Game.lumps < 1) || // Needs at least 1 lump
-        Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
-        (T.swaps < 1 && (!Game.hasGod("mother") || !Game.hasGod("ruin"))) ||
-        (T.swaps < 2 && !Game.hasGod("mother") && !Game.hasGod("ruin")) // Need to have Moka and Godz or enough swaps
-        //G.plants["whiskerbloom"].id.unlocked != 1 // Whiskerbloom must be unlocked
+        Game.dragonLevel < 26 // Fully upgraded dragon needed for two auras
     ) {
         return;
     }
@@ -1739,6 +1733,7 @@ function auto100ConsistencyComboAction() {
 
     if (
         auto100ConsistencyComboAction.state == 0 &&
+        M.magicM >= 98 &&
         ((nextSpellName(0) == "Click Frenzy" &&
             nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
@@ -1802,6 +1797,7 @@ function auto100ConsistencyComboAction() {
                 }
             }
             return;
+
         case 1: // Turn off auto buy
             if (
                 (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
@@ -1818,10 +1814,9 @@ function auto100ConsistencyComboAction() {
                 } else {
                     auto100ConsistencyComboAction.autobuyyes = 0;
                 }
-
+                logEvent("auto100ConsistencyCombo", "Starting combo");
                 auto100ConsistencyComboAction.state = 2;
             }
-
             return;
 
         case 2: // Turn off auto click golden cookie
@@ -1831,23 +1826,18 @@ function auto100ConsistencyComboAction() {
             } else {
                 auto100ConsistencyComboAction.autogcyes = 0;
             }
-
             auto100ConsistencyComboAction.state = 3;
-
             return;
 
         case 3: // Harvest garden then plant whiskerbloom
             G.harvestAll();
-
             for (var y = 0; y <= 5; y++) {
                 for (var x = 0; x <= 5; x++) {
                     G.seedSelected = G.plants["whiskerbloom"].id;
                     G.clickTile(x, y);
                 }
             }
-
             auto100ConsistencyComboAction.state = 4;
-
             return;
 
         case 4: // Change dragon auras to radiant appetite and dragon's fortune
@@ -1863,30 +1853,28 @@ function auto100ConsistencyComboAction() {
                 Game.ConfirmPrompt();
                 Game.ToggleSpecialMenu();
             }
-
             auto100ConsistencyComboAction.state = 5;
             return;
 
         case 5: // Cast FTHOF 1 then sell
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
+                logEvent("auto100ConsistencyCombo", "Cast FTHOF 1");
                 Game.Objects["Wizard tower"].sell(
                     auto100ConsistencyComboAction.countWizard
                 );
                 M.computeMagicM(); //Recalc max after selling
-
                 auto100ConsistencyComboAction.state = 6;
             }
-
             return;
 
         case 6: // Cast FTHOF 2 then buy
             if (M.magic >= 30) {
                 M.castSpell(FTHOF);
+                logEvent("auto100ConsistencyCombo", "Cast FTHOF 2");
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-
                 auto100ConsistencyComboAction.state = 7;
             }
             return;
@@ -1894,14 +1882,13 @@ function auto100ConsistencyComboAction() {
         case 7: // Use sugar lump to refill magic
             M.lumpRefill.click();
             Game.ConfirmPrompt();
-
             auto100ConsistencyComboAction.state = 8;
-
             return;
 
         case 8: // Cast FTHOF 3 then sell
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
+                logEvent("auto100ConsistencyCombo", "Cast FTHOF 3");
                 Game.Objects["Wizard tower"].sell(
                     auto100ConsistencyComboAction.countWizard
                 );
@@ -1909,16 +1896,15 @@ function auto100ConsistencyComboAction() {
 
                 auto100ConsistencyComboAction.state = 9;
             }
-
             return;
 
         case 9: // Cast FTHOF 4 then buy
             if (M.magic >= 30) {
                 M.castSpell(FTHOF);
+                logEvent("auto100ConsistencyCombo", "Cast FTHOF 4");
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-
                 auto100ConsistencyComboAction.state = 10;
             }
 
@@ -1928,7 +1914,6 @@ function auto100ConsistencyComboAction() {
             B.takeLoan(1);
             B.takeLoan(2);
             B.takeLoan(3);
-
             auto100ConsistencyComboAction.state = 11;
 
             return;
@@ -1940,7 +1925,6 @@ function auto100ConsistencyComboAction() {
             } else {
                 auto100ConsistencyComboAction.autogodyes = 0;
             }
-
             auto100ConsistencyComboAction.state = 12;
 
             return;
@@ -1948,9 +1932,7 @@ function auto100ConsistencyComboAction() {
         case 12: // Activate Building Special and Click Frenzy buffs
             Game.shimmers[0].pop();
             Game.shimmers[0].pop();
-
             auto100ConsistencyComboAction.state = 13;
-
             return;
 
         case 13: // sell buildings
@@ -1981,16 +1963,12 @@ function auto100ConsistencyComboAction() {
             Game.Objects["Prism"].sell(
                 auto100ConsistencyComboAction.countPrism
             );
-
             auto100ConsistencyComboAction.state = 14;
-
             return;
 
         case 14: // Swap Mokalsium to ruby slot
-            swapIn(8, 1);
-
+            if (!Game.hasGod("mother") && T.swaps >= 1) swapIn(8, 1);
             auto100ConsistencyComboAction.state = 15;
-
             return;
 
         case 15: // buy back buildings
@@ -2019,17 +1997,12 @@ function auto100ConsistencyComboAction() {
                 auto100ConsistencyComboAction.countAntiMatter
             );
             Game.Objects["Prism"].buy(auto100ConsistencyComboAction.countPrism);
-
             auto100ConsistencyComboAction.state = 16;
-
             return;
 
         case 16: // Perform custom autogodzamok
-            if (
-                Game.hasGod("ruin") &&
-                !Game.hasBuff("Devastation") &&
-                hasClickBuff()
-            ) {
+            if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
+            if (!Game.hasBuff("Devastation") && hasClickBuff()) {
                 if (Game.Objects["Farm"].amount >= 10) {
                     Game.Objects["Farm"].sell(
                         auto100ConsistencyComboAction.countFarm
@@ -2105,16 +2078,13 @@ function auto100ConsistencyComboAction() {
             if (!hasClickBuff()) {
                 auto100ConsistencyComboAction.state = 17;
             }
-
             return;
 
         case 17: // Turn autobuy back on if on before
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
             }
-
             auto100ConsistencyComboAction.state = 18;
-
             return;
 
         case 18: // Once click frenzy buff is gone, turn autoGC on if it were on previously
@@ -2122,19 +2092,15 @@ function auto100ConsistencyComboAction() {
                 if (auto100ConsistencyComboAction.autogcyes == 1) {
                     FrozenCookies.autoGC = 1;
                 }
-
                 auto100ConsistencyComboAction.state = 19;
             }
-
             return;
 
         case 19: // Re-enable autoGodzamok if it were on previously
             if (auto100ConsistencyComboAction.autogodyes == 1) {
                 FrozenCookies.autoGodzamok = 1;
             }
-
             auto100ConsistencyComboAction.state = 0;
-
             return;
     }
 }
