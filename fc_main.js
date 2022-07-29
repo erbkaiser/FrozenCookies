@@ -972,6 +972,18 @@ function autoCast() {
                 )
                     return;
 
+                if (
+                    !Game.hasBuff("Dragonflight") &&
+                    (nextSpellName(0) == "Blab" ||
+                        nextSpellName(0) == "Cookie Storm (Drop)")
+                ) {
+                    M.castSpell(hagC);
+                    logEvent(
+                        "AutoSpell",
+                        "Cast Haggler's Charm instead of useless spell"
+                    );
+                }
+
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     if (
                         !Game.hasBuff("Dragonflight") &&
@@ -979,8 +991,6 @@ function autoCast() {
                             nextSpellName(0) == "Cookie Storm" ||
                             nextSpellName(0) == "Frenzy" ||
                             nextSpellName(0) == "Building Special" ||
-                            nextSpellName(0) == "Blab" ||
-                            nextSpellName(0) == "Cookie Storm (Drop)" ||
                             nextSpellName(0) == "Lucky")
                     ) {
                         M.castSpell(FTHOF);
