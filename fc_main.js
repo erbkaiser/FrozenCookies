@@ -2006,7 +2006,7 @@ function auto100ConsistencyComboAction() {
         case 16: // Perform custom autogodzamok
             if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
             if (!Game.hasBuff("Devastation") && hasClickBuff()) {
-                if (Game.Objects["Farm"].amount >= 10) {
+                if (Game.Objects["Prism"].amount >= 1) {
                     Game.Objects["Farm"].sell(
                         auto100ConsistencyComboAction.countFarm
                     );
@@ -2041,7 +2041,7 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.countPrism
                     );
                 }
-                if (Game.Objects["Farm"].amount < 10) {
+                if (Game.Objects["Prism"].amount < 1) {
                     Game.Objects["Farm"].buy(
                         auto100ConsistencyComboAction.countFarm
                     );
@@ -2084,7 +2084,7 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 17: // Turn autobuy back on if on before
-            if (Game.Objects["Farm"].amount < 10) {
+            if (Game.Objects["Prism"].amount < 1) {
                 Game.Objects["Farm"].buy(
                     auto100ConsistencyComboAction.countFarm
                 );
