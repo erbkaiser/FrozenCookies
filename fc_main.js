@@ -2084,6 +2084,41 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 17: // Turn autobuy back on if on before
+            if (Game.Objects["Farm"].amount < 10) {
+                Game.Objects["Farm"].buy(
+                    auto100ConsistencyComboAction.countFarm
+                );
+                Game.Objects["Mine"].buy(
+                    auto100ConsistencyComboAction.countMine
+                );
+                Game.Objects["Factory"].buy(
+                    auto100ConsistencyComboAction.countFactory
+                );
+                Game.Objects["Bank"].buy(
+                    auto100ConsistencyComboAction.countBank
+                );
+                Game.Objects["Temple"].buy(
+                    auto100ConsistencyComboAction.countTemple
+                );
+                Game.Objects["Wizard tower"].buy(
+                    auto100ConsistencyComboAction.countWizard
+                );
+                Game.Objects["Shipment"].buy(
+                    auto100ConsistencyComboAction.countShipment
+                );
+                Game.Objects["Alchemy lab"].buy(
+                    auto100ConsistencyComboAction.countAlchemy
+                );
+                Game.Objects["Time machine"].buy(
+                    auto100ConsistencyComboAction.countTimeMach
+                );
+                Game.Objects["Antimatter condenser"].buy(
+                    auto100ConsistencyComboAction.countAntiMatter
+                );
+                Game.Objects["Prism"].buy(
+                    auto100ConsistencyComboAction.countPrism
+                );
+            }
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
             }
@@ -2103,6 +2138,7 @@ function auto100ConsistencyComboAction() {
             if (auto100ConsistencyComboAction.autogodyes == 1) {
                 FrozenCookies.autoGodzamok = 1;
             }
+            logEvent("auto100ConsistencyCombo", "Combo completed");
             auto100ConsistencyComboAction.state = 0;
             return;
     }
