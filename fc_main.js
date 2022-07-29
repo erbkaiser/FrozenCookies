@@ -1749,8 +1749,8 @@ function auto100ConsistencyComboAction() {
     }
 
     auto100ConsistencyComboAction.countFarm = Game.Objects["Farm"].amount - 1;
-    auto100ConsistencyComboAction.countMine = Game.Objects["Mine"].amount;
-    auto100ConsistencyComboAction.countFactory = Game.Objects["Factory"].amount;
+    auto100ConsistencyComboAction.countMine = Game.Objects["Mine"].amount - 10;
+    auto100ConsistencyComboAction.countFactory = Game.Objects["Factory"].amount - 10;
     auto100ConsistencyComboAction.countBank = Game.Objects["Bank"].amount - 1;
     auto100ConsistencyComboAction.countTemple =
         Game.Objects["Temple"].amount - 1;
