@@ -2237,7 +2237,6 @@ function autoBrokerAction() {
 
 function autoLoanBuy() {
     if (!B) return; // Just leave if you don't have the bank
-    if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
     if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
         B.takeLoan(1);
