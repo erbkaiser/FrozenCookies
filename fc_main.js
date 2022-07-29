@@ -1719,8 +1719,7 @@ function auto100ConsistencyComboAction() {
         auto100ConsistencyComboAction.state == 0 ||
         (auto100ConsistencyComboAction.state > 1 &&
             BuildingSpecialBuff() == 0 &&
-            !hasClickBuff() &&
-            M.magic == M.magicM)
+            !hasClickBuff())
     ) {
         if (auto100ConsistencyComboAction.autobuyyes == 1) {
             FrozenCookies.autoBuy = 1;
@@ -1826,65 +1825,66 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 2: // Turn off auto click golden cookie
-            if (M.magic == M.magicM) {
-                if (FrozenCookies.autoGC > 0) {
-                    auto100ConsistencyComboAction.autogcyes = 1;
-                    FrozenCookies.autoGC = 0;
-                } else {
-                    auto100ConsistencyComboAction.autogcyes = 0;
-                }
-
-                auto100ConsistencyComboAction.state = 3;
+            if (FrozenCookies.autoGC > 0) {
+                auto100ConsistencyComboAction.autogcyes = 1;
+                FrozenCookies.autoGC = 0;
+            } else {
+                auto100ConsistencyComboAction.autogcyes = 0;
             }
+
+            auto100ConsistencyComboAction.state = 3;
 
             return;
 
         case 3: // Harvest garden then plant whiskerbloom
-            if (M.magic == M.magicM) {
-                G.harvestAll();
+            G.harvestAll();
 
-                for (var y = 0; y <= 5; y++) {
-                    for (var x = 0; x <= 5; x++) {
-                        G.seedSelected = G.plants["whiskerbloom"].id;
-                        G.clickTile(x, y);
-                    }
+            for (var y = 0; y <= 5; y++) {
+                for (var x = 0; x <= 5; x++) {
+                    G.seedSelected = G.plants["whiskerbloom"].id;
+                    G.clickTile(x, y);
                 }
-
-                auto100ConsistencyComboAction.state = 4;
             }
+
+            auto100ConsistencyComboAction.state = 4;
 
             return;
 
         case 4: // Change dragon auras to radiant appetite and dragon's fortune
-            if (M.magic == M.magicM) {
-                Game.SetDragonAura(15, 0);
-                Game.ConfirmPrompt();
+            if (!Game.hasAura("Dragon's Fortune")) {
+                Game.specialTab = "dragon";
                 Game.SetDragonAura(16, 1);
                 Game.ConfirmPrompt();
-
-                auto100ConsistencyComboAction.state = 5;
+                Game.ToggleSpecialMenu();
             }
+            if (!Game.hasAura("Radiant Appetite")) {
+                Game.specialTab = "dragon";
+                Game.SetDragonAura(15, 0);
+                Game.ConfirmPrompt();
+                Game.ToggleSpecialMenu();
+            }
+
+            auto100ConsistencyComboAction.state = 5;
             return;
 
-        case 5: // Cast FTHOF then sell
+        case 5: // Cast FTHOF 1 then sell
             if (M.magic == M.magicM) {
-                auto100ConsistencyComboAction.count =
-                    Game.Objects["Wizard tower"].amount - 1;
                 M.castSpell(FTHOF);
                 Game.Objects["Wizard tower"].sell(
-                    auto100ConsistencyComboAction.count
+                    auto100ConsistencyComboAction.countWizard
                 );
+                M.computeMagicM(); //Recalc max after selling
 
                 auto100ConsistencyComboAction.state = 6;
             }
 
             return;
 
-        case 6: // Cast FTHOF then buy
-            if (M.magic == M.magicM) {
+        case 6: // Cast FTHOF 2 then buy
+            if (M.magic >= 30) {
                 M.castSpell(FTHOF);
                 Game.Objects["Wizard tower"].buy(
-                    auto100ConsistencyComboAction.count
+                    auto100ConsistencyComboAction.countWizard
                 );
 
                 auto100ConsistencyComboAction.state = 7;
@@ -1899,23 +1899,28 @@ function auto100ConsistencyComboAction() {
 
             return;
 
-        case 8: // Cast FTHOF then sell
-            M.castSpell(FTHOF);
-            Game.Objects["Wizard tower"].sell(
-                auto100ConsistencyComboAction.count
-            );
+        case 8: // Cast FTHOF 3 then sell
+            if (M.magic == M.magicM) {
+                M.castSpell(FTHOF);
+                Game.Objects["Wizard tower"].sell(
+                    auto100ConsistencyComboAction.countWizard
+                );
+                M.computeMagicM(); //Recalc max after selling
 
-            auto100ConsistencyComboAction.state = 9;
+                auto100ConsistencyComboAction.state = 9;
+            }
 
             return;
 
-        case 9: // Cast FTHOF then buy
-            M.castSpell(FTHOF);
-            Game.Objects["Wizard tower"].buy(
-                auto100ConsistencyComboAction.count
-            );
+        case 9: // Cast FTHOF 4 then buy
+            if (M.magic >= 30) {
+                M.castSpell(FTHOF);
+                Game.Objects["Wizard tower"].buy(
+                    auto100ConsistencyComboAction.countWizard
+                );
 
-            auto100ConsistencyComboAction.state = 10;
+                auto100ConsistencyComboAction.state = 10;
+            }
 
             return;
 
@@ -1949,19 +1954,17 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 13: // sell buildings
-            Game.Objects["Farm"].sell(
-                auto100ConsistencyComboAction.countFarm - 1
-            );
+            Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
             Game.Objects["Factory"].sell(
                 auto100ConsistencyComboAction.countFactory
             );
             Game.Objects["Bank"].sell(auto100ConsistencyComboAction.countBank);
             Game.Objects["Temple"].sell(
-                auto100ConsistencyComboAction.countTemple - 1
+                auto100ConsistencyComboAction.countTemple
             );
             Game.Objects["Wizard tower"].sell(
-                auto100ConsistencyComboAction.countWizard - 1
+                auto100ConsistencyComboAction.countWizard
             );
             Game.Objects["Shipment"].sell(
                 auto100ConsistencyComboAction.countShipment
@@ -1991,19 +1994,17 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 15: // buy back buildings
-            Game.Objects["Farm"].buy(
-                auto100ConsistencyComboAction.countFarm - 1
-            );
+            Game.Objects["Farm"].buy(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].buy(auto100ConsistencyComboAction.countMine);
             Game.Objects["Factory"].buy(
                 auto100ConsistencyComboAction.countFactory
             );
             Game.Objects["Bank"].buy(auto100ConsistencyComboAction.countBank);
             Game.Objects["Temple"].buy(
-                auto100ConsistencyComboAction.countTemple - 1
+                auto100ConsistencyComboAction.countTemple
             );
             Game.Objects["Wizard tower"].buy(
-                auto100ConsistencyComboAction.countWizard - 1
+                auto100ConsistencyComboAction.countWizard
             );
             Game.Objects["Shipment"].buy(
                 auto100ConsistencyComboAction.countShipment
@@ -2031,7 +2032,7 @@ function auto100ConsistencyComboAction() {
             ) {
                 if (Game.Objects["Farm"].amount >= 10) {
                     Game.Objects["Farm"].sell(
-                        auto100ConsistencyComboAction.countFarm - 1
+                        auto100ConsistencyComboAction.countFarm
                     );
                     Game.Objects["Mine"].sell(
                         auto100ConsistencyComboAction.countMine
@@ -2043,10 +2044,10 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.countBank
                     );
                     Game.Objects["Temple"].sell(
-                        auto100ConsistencyComboAction.countTemple - 1
+                        auto100ConsistencyComboAction.countTemple
                     );
                     Game.Objects["Wizard tower"].sell(
-                        auto100ConsistencyComboAction.countWizard - 1
+                        auto100ConsistencyComboAction.countWizard
                     );
                     Game.Objects["Shipment"].sell(
                         auto100ConsistencyComboAction.countShipment
@@ -2066,7 +2067,7 @@ function auto100ConsistencyComboAction() {
                 }
                 if (Game.Objects["Farm"].amount < 10) {
                     Game.Objects["Farm"].buy(
-                        auto100ConsistencyComboAction.countFarm - 1
+                        auto100ConsistencyComboAction.countFarm
                     );
                     Game.Objects["Mine"].buy(
                         auto100ConsistencyComboAction.countMine
@@ -2078,10 +2079,10 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.countBank
                     );
                     Game.Objects["Temple"].buy(
-                        auto100ConsistencyComboAction.countTemple - 1
+                        auto100ConsistencyComboAction.countTemple
                     );
                     Game.Objects["Wizard tower"].buy(
-                        auto100ConsistencyComboAction.countWizard - 1
+                        auto100ConsistencyComboAction.countWizard
                     );
                     Game.Objects["Shipment"].buy(
                         auto100ConsistencyComboAction.countShipment
