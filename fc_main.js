@@ -1706,8 +1706,6 @@ function auto100ConsistencyComboAction() {
         auto100ConsistencyComboAction.countTimeMach = 0;
     if (typeof auto100ConsistencyComboAction.countAntiMatter == "undefined")
         auto100ConsistencyComboAction.countAntiMatter = 0;
-    if (typeof auto100ConsistencyComboAction.countPrism == "undefined")
-        auto100ConsistencyComboAction.countPrism = 0;
 
     if (
         ((auto100ConsistencyComboAction.state == 0 &&
@@ -1766,7 +1764,6 @@ function auto100ConsistencyComboAction() {
         Game.Objects["Time machine"].amount;
     auto100ConsistencyComboAction.countAntiMatter =
         Game.Objects["Antimatter condenser"].amount;
-    auto100ConsistencyComboAction.countPrism = Game.Objects["Prism"].amount;
 
     var FTHOF = M.spellsById[1];
 
@@ -1964,9 +1961,6 @@ function auto100ConsistencyComboAction() {
             Game.Objects["Antimatter condenser"].sell(
                 auto100ConsistencyComboAction.countAntiMatter
             );
-            Game.Objects["Prism"].sell(
-                auto100ConsistencyComboAction.countPrism
-            );
             auto100ConsistencyComboAction.state = 14;
             return;
 
@@ -2016,10 +2010,6 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Antimatter condenser"],
                 auto100ConsistencyComboAction.countAntiMatter
             );
-            safeBuy(
-                Game.Objects["Prism"],
-                auto100ConsistencyComboAction.countPrism
-            );
             auto100ConsistencyComboAction.state = 16;
             return;
 
@@ -2065,53 +2055,85 @@ function auto100ConsistencyComboAction() {
                     Game.Objects["Antimatter condenser"].sell(
                         auto100ConsistencyComboAction.countAntiMatter
                     );
-                if (Game.Objects["Prism"].amount >= 10)
-                    Game.Objects["Prism"].sell(
-                        auto100ConsistencyComboAction.countPrism
-                    );
-                if (Game.Objects["Farm"].amount < 10)
-                    Game.Objects["Farm"].buy(
+                if (
+                    Game.Objects["Farm"].amount <
+                    auto100ConsistencyComboAction.countFarm
+                )
+                    safebuy(
+                        Game.Objects["Farm"],
                         auto100ConsistencyComboAction.countFarm
                     );
-                if (Game.Objects["Mine"].amount < 10)
-                    Game.Objects["Mine"].buy(
+                if (
+                    Game.Objects["Mine"].amount <
+                    auto100ConsistencyComboAction.countMine
+                )
+                    safebuy(
+                        Game.Objects["Mine"],
                         auto100ConsistencyComboAction.countMine
                     );
-                if (Game.Objects["Factory"].amount < 10)
-                    Game.Objects["Factory"].buy(
+                if (
+                    Game.Objects["Factory"].amount <
+                    auto100ConsistencyComboAction.countFactory
+                )
+                    safebuy(
+                        Game.Objects["Factory"],
                         auto100ConsistencyComboAction.countFactory
                     );
-                if (Game.Objects["Bank"].amount < 10)
-                    Game.Objects["Bank"].buy(
+                if (
+                    Game.Objects["Bank"].amount <
+                    auto100ConsistencyComboAction.countBank
+                )
+                    safebuy(
+                        Game.Objects["Bank"],
                         auto100ConsistencyComboAction.countBank
                     );
-                if (Game.Objects["Temple"].amount < 10)
-                    Game.Objects["Temple"].buy(
+                if (
+                    Game.Objects["Temple"].amount <
+                    auto100ConsistencyComboAction.countTemple
+                )
+                    safebuy(
+                        Game.Objects["Temple"],
                         auto100ConsistencyComboAction.countTemple
                     );
-                if (Game.Objects["Wizard tower"].amount < 10)
-                    Game.Objects["Wizard tower"].buy(
+                if (
+                    Game.Objects["Wizard tower"].amount <
+                    auto100ConsistencyComboAction.countWizard
+                )
+                    safebuy(
+                        Game.Objects["Wizard tower"],
                         auto100ConsistencyComboAction.countWizard
                     );
-                if (Game.Objects["Shipment"].amount < 10)
-                    Game.Objects["Shipment"].buy(
+                if (
+                    Game.Objects["Shipment"].amount <
+                    auto100ConsistencyComboAction.countShipment
+                )
+                    safebuy(
+                        Game.Objects["Shipment"],
                         auto100ConsistencyComboAction.countShipment
                     );
-                if (Game.Objects["Alchemy lab"].amount < 10)
-                    Game.Objects["Alchemy lab"].buy(
+                if (
+                    Game.Objects["Alchemy lab"].amount <
+                    auto100ConsistencyComboAction.countAlchemy
+                )
+                    safebuy(
+                        Game.Objects["Alchemy lab"],
                         auto100ConsistencyComboAction.countAlchemy
                     );
-                if (Game.Objects["Time machine"].amount < 10)
-                    Game.Objects["Time machine"].buy(
+                if (
+                    Game.Objects["Time machine"].amount <
+                    auto100ConsistencyComboAction.countTimeMach
+                )
+                    safebuy(
+                        Game.Objects["Time machine"],
                         auto100ConsistencyComboAction.countTimeMach
                     );
-                if (Game.Objects["Antimatter condenser"].amount < 10)
-                    Game.Objects["Antimatter condenser"].buy(
+                if (
+                    Game.Objects["Antimatter condenser"].amount <
+                    auto100ConsistencyComboAction.countAntiMatter
+                )
+                    safebuy(
+                        Game.Objects["Antimatter condenser"],
                         auto100ConsistencyComboAction.countAntiMatter
-                    );
-                if (Game.Objects["Prism"].amount < 10)
-                    Game.Objects["Prism"].buy(
-                        auto100ConsistencyComboAction.countPrism
                     );
             }
 
@@ -2121,54 +2143,89 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 17: // Turn autobuy back on if on before
-            if (Game.Objects["Farm"].amount < 10)
-                Game.Objects["Farm"].buy(
+            if (
+                Game.Objects["Farm"].amount <
+                auto100ConsistencyComboAction.countFarm
+            )
+                safebuy(
+                    Game.Objects["Farm"],
                     auto100ConsistencyComboAction.countFarm
                 );
-            if (Game.Objects["Mine"].amount < 10)
-                Game.Objects["Mine"].buy(
+            if (
+                Game.Objects["Mine"].amount <
+                auto100ConsistencyComboAction.countMine
+            )
+                safebuy(
+                    Game.Objects["Mine"],
                     auto100ConsistencyComboAction.countMine
                 );
-            if (Game.Objects["Factory"].amount < 10)
-                Game.Objects["Factory"].buy(
+            if (
+                Game.Objects["Factory"].amount <
+                auto100ConsistencyComboAction.countFactory
+            )
+                safebuy(
+                    Game.Objects["Factory"],
                     auto100ConsistencyComboAction.countFactory
                 );
-            if (Game.Objects["Bank"].amount < 10)
-                Game.Objects["Bank"].buy(
+            if (
+                Game.Objects["Bank"].amount <
+                auto100ConsistencyComboAction.countBank
+            )
+                safebuy(
+                    Game.Objects["Bank"],
                     auto100ConsistencyComboAction.countBank
                 );
-            if (Game.Objects["Temple"].amount < 10)
-                Game.Objects["Temple"].buy(
+            if (
+                Game.Objects["Temple"].amount <
+                auto100ConsistencyComboAction.countTemple
+            )
+                safebuy(
+                    Game.Objects["Temple"],
                     auto100ConsistencyComboAction.countTemple
                 );
-            if (Game.Objects["Wizard tower"].amount < 10)
-                Game.Objects["Wizard tower"].buy(
+            if (
+                Game.Objects["Wizard tower"].amount <
+                auto100ConsistencyComboAction.countWizard
+            )
+                safebuy(
+                    Game.Objects["Wizard tower"],
                     auto100ConsistencyComboAction.countWizard
                 );
-            if (Game.Objects["Shipment"].amount < 10)
-                Game.Objects["Shipment"].buy(
+            if (
+                Game.Objects["Shipment"].amount <
+                auto100ConsistencyComboAction.countShipment
+            )
+                safebuy(
+                    Game.Objects["Shipment"],
                     auto100ConsistencyComboAction.countShipment
                 );
-            if (Game.Objects["Alchemy lab"].amount < 10)
-                Game.Objects["Alchemy lab"].buy(
+            if (
+                Game.Objects["Alchemy lab"].amount <
+                auto100ConsistencyComboAction.countAlchemy
+            )
+                safebuy(
+                    Game.Objects["Alchemy lab"],
                     auto100ConsistencyComboAction.countAlchemy
                 );
-            if (Game.Objects["Time machine"].amount < 10)
-                Game.Objects["Time machine"].buy(
+            if (
+                Game.Objects["Time machine"].amount <
+                auto100ConsistencyComboAction.countTimeMach
+            )
+                safebuy(
+                    Game.Objects["Time machine"],
                     auto100ConsistencyComboAction.countTimeMach
                 );
-            if (Game.Objects["Antimatter condenser"].amount < 10)
-                Game.Objects["Antimatter condenser"].buy(
+            if (
+                Game.Objects["Antimatter condenser"].amount <
+                auto100ConsistencyComboAction.countAntiMatter
+            )
+                safebuy(
+                    Game.Objects["Antimatter condenser"],
                     auto100ConsistencyComboAction.countAntiMatter
-                );
-            if (Game.Objects["Prism"].amount < 10)
-                Game.Objects["Prism"].buy(
-                    auto100ConsistencyComboAction.countPrism
                 );
 
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
-                document.getElementById("storeBulk100").click();
             }
             auto100ConsistencyComboAction.state = 18;
             return;
@@ -2186,7 +2243,6 @@ function auto100ConsistencyComboAction() {
             if (auto100ConsistencyComboAction.autogodyes == 1) {
                 FrozenCookies.autoGodzamok = 1;
             }
-            document.getElementById("storeBulk1").click();
             logEvent("auto100ConsistencyCombo", "Combo completed");
             auto100ConsistencyComboAction.state = 0;
             return;
