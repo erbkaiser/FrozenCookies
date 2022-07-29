@@ -1715,13 +1715,12 @@ function auto100ConsistencyComboAction() {
     if (typeof auto100ConsistencyComboAction.countPrism == "undefined")
         auto100ConsistencyComboAction.countPrism = 0;
 
-    var buffsN = 0;
-    for (var ii in Game.buffs) {
-        buffsN++;
-    }
     if (
         (auto100ConsistencyComboAction.state == 0 ||
-            (auto100ConsistencyComboAction.state > 2 && buffsN == 0)) &&
+            (auto100ConsistencyComboAction.state > 2 &&
+                BuildingSpecialBuff() == 0 &&
+                !hasClickBuff() &&
+                !GoldenCookieLife())) &&
         M.magic == M.magicM &&
         (auto100ConsistencyComboAction.autobuyyes ||
             auto100ConsistencyComboAction.autogcyes ||
@@ -1796,7 +1795,7 @@ function auto100ConsistencyComboAction() {
                 }
             }
             return;
-        case 1:
+        case 1: //Stored click buff
             if (
                 M.magic == M.magicM &&
                 (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
@@ -1810,7 +1809,7 @@ function auto100ConsistencyComboAction() {
                 auto100ConsistencyComboAction.state = 3;
             }
             return;
-        case 2:
+        case 2: //Stored two building specials
             if (
                 M.magic == M.magicM &&
                 (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
@@ -1912,7 +1911,7 @@ function auto100ConsistencyComboAction() {
             );
             auto100ConsistencyComboAction.state = 7;
             return;
-        case 7: // Sell, cast FTHOF 2, then buy
+        case 7: // Sell and cast FTHOF 2
             Game.Objects["Wizard tower"].sell(
                 auto100ConsistencyComboAction.countWizard
             );
@@ -1926,6 +1925,7 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"],
                 auto100ConsistencyComboAction.countWizard
             );
+            M.computeMagicM(); //Recalc max after buying
             auto100ConsistencyComboAction.state = 8;
             return;
         case 8: // Use sugar lump to refill magic
@@ -1955,6 +1955,7 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"],
                 auto100ConsistencyComboAction.countWizard
             );
+            M.computeMagicM(); //Recalc max after buying
             auto100ConsistencyComboAction.state = 11;
             return;
         case 11: // Take Stock Market loans
