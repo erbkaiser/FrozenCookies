@@ -1710,10 +1710,14 @@ function auto100ConsistencyComboAction() {
         auto100ConsistencyComboAction.countPrism = 0;
 
     if (
-        auto100ConsistencyComboAction.state == 0 ||
-        (auto100ConsistencyComboAction.state > 1 &&
-            BuildingSpecialBuff() == 0 &&
-            !hasClickBuff())
+        ((auto100ConsistencyComboAction.state == 0 &&
+            (auto100ConsistencyComboAction.autobuyyes == 1 ||
+                auto100ConsistencyComboAction.autogcyes == 1 ||
+                auto100ConsistencyComboAction.autogodyes == 1)) ||
+            (auto100ConsistencyComboAction.state >= 1 &&
+                BuildingSpecialBuff() == 0 &&
+                !hasClickBuff())) &&
+        M.magic == M.magicM
     ) {
         if (auto100ConsistencyComboAction.autobuyyes == 1) {
             FrozenCookies.autoBuy = 1;
@@ -1856,19 +1860,19 @@ function auto100ConsistencyComboAction() {
             auto100ConsistencyComboAction.state = 5;
             return;
 
-        case 5: // Cast FTHOF 1 then sell
+        case 5: // Cast FTHOF 1
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 1");
-                Game.Objects["Wizard tower"].sell(
-                    auto100ConsistencyComboAction.countWizard
-                );
-                M.computeMagicM(); //Recalc max after selling
                 auto100ConsistencyComboAction.state = 6;
             }
             return;
 
         case 6: // Cast FTHOF 2 then buy
+            Game.Objects["Wizard tower"].sell(
+                auto100ConsistencyComboAction.countWizard
+            );
+            M.computeMagicM(); //Recalc max after selling
             if (M.magic >= 30) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 2");
@@ -1885,20 +1889,19 @@ function auto100ConsistencyComboAction() {
             auto100ConsistencyComboAction.state = 8;
             return;
 
-        case 8: // Cast FTHOF 3 then sell
+        case 8: // Cast FTHOF 3
             if (M.magic == M.magicM) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 3");
-                Game.Objects["Wizard tower"].sell(
-                    auto100ConsistencyComboAction.countWizard
-                );
-                M.computeMagicM(); //Recalc max after selling
-
                 auto100ConsistencyComboAction.state = 9;
             }
             return;
 
         case 9: // Cast FTHOF 4 then buy
+            Game.Objects["Wizard tower"].sell(
+                auto100ConsistencyComboAction.countWizard
+            );
+            M.computeMagicM(); //Recalc max after selling
             if (M.magic >= 30) {
                 M.castSpell(FTHOF);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 4");
