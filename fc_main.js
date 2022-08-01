@@ -1723,8 +1723,6 @@ function autoFTHOFComboAction() {
             if (autoFTHOFComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
                 autoFTHOFComboAction.autobuyyes = 0;
-                if (FrozenCookies.autoBulk != 0)
-                    document.getElementById("storeBulk10").click();
             }
             autoFTHOFComboAction.count = 0;
             autoFTHOFComboAction.state = 0;
@@ -2380,8 +2378,6 @@ function auto100ConsistencyComboAction() {
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
                 auto100ConsistencyComboAction.autobuyyes = 0;
-                if (FrozenCookies.autoBulk != 0)
-                    document.getElementById("storeBulk10").click();
             }
             auto100ConsistencyComboAction.state = 21;
             return;
@@ -4834,8 +4830,6 @@ function autoGodzamokAction() {
             if (autoGodzamokAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
                 autoGodzamokAction.autobuyyes = 0;
-                if (FrozenCookies.autoBulk != 0)
-                    document.getElementById("storeBulk10").click();
             }
         }
     }
