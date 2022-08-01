@@ -61,6 +61,8 @@ If you want to manually install it:
 ## What's new?
 <details>
 <summary>Click to expand!</summary>
+2022 Aug 1
+- Any spell casting method that checks for a frenzy will now also check for a Dragon Harvest, IF Reaper of Fields is an active aura
 
 2022 Jul 29
 - Add a fifth auto cast option (#75). This works like the existing FTHOF auto cast but will only cast click and building specials.
