@@ -566,7 +566,7 @@ function getBuildingSpread() {
 }
 
 // todo: add bind for autoascend
-// Press 'a' to toggle autobuy.
+// Press 'a' to toggle autoBuy.
 // Press 'b' to pop up a copyable window with building spread.
 // Press 'c' to toggle auto-GC
 // Press 'e' to pop up a copyable window with your export string
@@ -692,7 +692,7 @@ function updateMaxSpecials(base) {
 function updateMineMax(base) {
     userInputPrompt(
         "Mine Cap!",
-        "How many Mines should Autobuy stop at?",
+        "How many Mines should autoBuy stop at?",
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
@@ -701,7 +701,7 @@ function updateMineMax(base) {
 function updateFactoryMax(base) {
     userInputPrompt(
         "Factory Cap!",
-        "How many Factories should Autobuy stop at?",
+        "How many Factories should autoBuy stop at?",
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
@@ -710,7 +710,7 @@ function updateFactoryMax(base) {
 function updateCortexMax(base) {
     userInputPrompt(
         "Cortex baker Cap!",
-        "How many Cortex bakers should Autobuy stop at?",
+        "How many Cortex bakers should autoBuy stop at?",
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
@@ -831,7 +831,10 @@ function autoRigidel() {
                 rigiSell(); //Meet the %10 condition
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) Game.clickLump(); //harvest the ripe lump, AutoSL probably covers this but this should avoid issues with autoBuy going first and disrupting Rigidel
-                if (autoRigidel.autobuyyes == 1) FrozenCookies.autoBuy = 1;
+                if (autoRigidel.autobuyyes == 1) {
+                    FrozenCookies.autoBuy = 1;
+                    autoRigidel.autobuyyes = 0;
+                }
                 if (prev != -1) swapIn(prev, 0); //put the old one back
             }
         case 1: //Rigidel is already in diamond slot
@@ -844,8 +847,11 @@ function autoRigidel() {
                 }
                 rigiSell();
                 Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) Game.clickLump(); 
-                if (autoRigidel.autobuyyes == 1) FrozenCookies.autoBuy = 1;
+                if (Date.now() - started >= ripeAge) Game.clickLump();
+                if (autoRigidel.autobuyyes == 1) {
+                    FrozenCookies.autoBuy = 1;
+                    autoRigidel.autobuyyes = 0;
+                }
             }
         case 2: //Rigidel in Ruby slot,
             if (timeToRipe < 40 && Game.BuildingsOwned % 10) {
@@ -857,8 +863,11 @@ function autoRigidel() {
                 }
                 rigiSell();
                 Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) Game.clickLump(); 
-                if (autoRigidel.autobuyyes == 1) FrozenCookies.autoBuy = 1;
+                if (Date.now() - started >= ripeAge) Game.clickLump();
+                if (autoRigidel.autobuyyes == 1) {
+                    FrozenCookies.autoBuy = 1;
+                    autoRigidel.autobuyyes = 0;
+                }
             }
         case 3: //Rigidel in Jade slot
             if (timeToRipe < 20 && Game.BuildingsOwned % 10) {
@@ -870,8 +879,11 @@ function autoRigidel() {
                 }
                 rigiSell();
                 Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) Game.clickLump(); 
-                if (autoRigidel.autobuyyes == 1) FrozenCookies.autoBuy = 1;
+                if (Date.now() - started >= ripeAge) Game.clickLump();
+                if (autoRigidel.autobuyyes == 1) {
+                    FrozenCookies.autoBuy = 1;
+                    autoRigidel.autobuyyes = 0;
+                }
             }
     }
 }
@@ -1006,15 +1018,23 @@ function autoCast() {
 
                     if (nextSpellName(0) == "Click Frenzy") {
                         if (
-                            (Game.hasBuff("Frenzy") ||
-                                Game.hasBuff("Dragon Harvest")) &&
-                            BuildingSpecialBuff() == 1 &&
-                            (Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                            (Game.hasAura("Reaper of Fields") &&
+                                Game.hasBuff("Dragon Harvest") &&
+                                Game.hasBuff("Frenzy") &&
+                                BuildingSpecialBuff() == 1 &&
                                 Game.hasBuff("Dragon Harvest").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                            BuildingBuffTime() >=
-                                Math.ceil(13 * BuffTimeFactor())
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                Game.hasBuff("Frenzy").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                BuildingBuffTime() >=
+                                    Math.ceil(13 * BuffTimeFactor())) ||
+                            (!Game.hasAura("Reaper of Fields") &&
+                                Game.hasBuff("Frenzy") &&
+                                BuildingSpecialBuff() == 1 &&
+                                Game.hasBuff("Frenzy").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                BuildingBuffTime() >=
+                                    Math.ceil(13 * BuffTimeFactor()))
                         ) {
                             M.castSpell(FTHOF);
                             logEvent(
@@ -1042,12 +1062,18 @@ function autoCast() {
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
-                                (Game.hasBuff("Frenzy") ||
-                                    Game.hasBuff("Dragon Harvest")) &&
-                                (Game.hasBuff("Frenzy").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                ((Game.hasAura("Reaper of Fields") &&
+                                    Game.hasBuff("Dragon Harvest") &&
+                                    Game.hasBuff("Frenzy") &&
                                     Game.hasBuff("Dragon Harvest").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
+                                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                    Game.hasBuff("Frenzy").time / 30 >=
+                                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
+                                    (!Game.hasAura("Reaper of Fields") &&
+                                        Game.hasBuff("Frenzy") &&
+                                        Game.hasBuff("Frenzy").time / 30 >=
+                                            Math.ceil(13 * BuffTimeFactor()) -
+                                                1)) &&
                                 (Game.hasBuff("Click frenzy") ||
                                     Game.hasBuff("Dragonflight")) &&
                                 (Game.hasBuff("Click frenzy").time / 30 >=
@@ -1160,15 +1186,23 @@ function autoCast() {
 
                     if (nextSpellName(0) == "Click Frenzy") {
                         if (
-                            (Game.hasBuff("Frenzy") ||
-                                Game.hasBuff("Dragon Harvest")) &&
-                            BuildingSpecialBuff() == 1 &&
-                            (Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                            (Game.hasAura("Reaper of Fields") &&
+                                Game.hasBuff("Dragon Harvest") &&
+                                Game.hasBuff("Frenzy") &&
+                                BuildingSpecialBuff() == 1 &&
                                 Game.hasBuff("Dragon Harvest").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                            BuildingBuffTime() >=
-                                Math.ceil(13 * BuffTimeFactor())
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                Game.hasBuff("Frenzy").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                BuildingBuffTime() >=
+                                    Math.ceil(13 * BuffTimeFactor())) ||
+                            (!Game.hasAura("Reaper of Fields") &&
+                                Game.hasBuff("Frenzy") &&
+                                BuildingSpecialBuff() == 1 &&
+                                Game.hasBuff("Frenzy").time / 30 >=
+                                    Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                BuildingBuffTime() >=
+                                    Math.ceil(13 * BuffTimeFactor()))
                         ) {
                             M.castSpell(FTHOF);
                             logEvent(
@@ -1196,12 +1230,18 @@ function autoCast() {
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
-                                (Game.hasBuff("Frenzy") ||
-                                    Game.hasBuff("Dragon Harvest")) &&
-                                (Game.hasBuff("Frenzy").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                ((Game.hasAura("Reaper of Fields") &&
+                                    Game.hasBuff("Dragon Harvest") &&
+                                    Game.hasBuff("Frenzy") &&
                                     Game.hasBuff("Dragon Harvest").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
+                                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                                    Game.hasBuff("Frenzy").time / 30 >=
+                                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
+                                    (!Game.hasAura("Reaper of Fields") &&
+                                        Game.hasBuff("Frenzy") &&
+                                        Game.hasBuff("Frenzy").time / 30 >=
+                                            Math.ceil(13 * BuffTimeFactor()) -
+                                                1)) &&
                                 (Game.hasBuff("Click frenzy") ||
                                     Game.hasBuff("Dragonflight")) &&
                                 (Game.hasBuff("Click frenzy").time / 30 >=
@@ -1268,6 +1308,7 @@ function autoFTHOFComboAction() {
     }
 
     if (
+        // Combo started but failed
         autoFTHOFComboAction.state > 2 &&
         M.magic == M.magicM &&
         !Game.hasBuff("Click frenzy") &&
@@ -1339,13 +1380,21 @@ function autoFTHOFComboAction() {
         case 1:
             if (
                 M.magic == M.magicM &&
-                (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
-                BuildingSpecialBuff() == 1 &&
-                (Game.hasBuff("Frenzy").time / 30 >=
-                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                ((Game.hasAura("Reaper of Fields") &&
+                    Game.hasBuff("Dragon Harvest") &&
+                    Game.hasBuff("Frenzy") &&
+                    BuildingSpecialBuff() == 1 &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    Game.hasBuff("Frenzy").time / 30 >=
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())) ||
+                    (!Game.hasAura("Reaper of Fields") &&
+                        Game.hasBuff("Frenzy") &&
+                        BuildingSpecialBuff() == 1 &&
+                        Game.hasBuff("Frenzy").time / 30 >=
+                            Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                        BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())))
             ) {
                 switch (SugarLevel) {
                     case 0:
@@ -1477,17 +1526,29 @@ function autoFTHOFComboAction() {
         case 2:
             if (
                 M.magic == M.magicM &&
-                (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
-                (Game.hasBuff("Click frenzy") ||
-                    Game.hasBuff("Dragonflight")) &&
-                (Game.hasBuff("Frenzy").time / 30 >=
-                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                ((Game.hasAura("Reaper of Fields") &&
+                    Game.hasBuff("Dragon Harvest") &&
+                    Game.hasBuff("Frenzy") &&
+                    (Game.hasBuff("Click frenzy") ||
+                        Game.hasBuff("Dragonflight")) &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                (Game.hasBuff("Click frenzy").time / 30 >=
-                    Math.ceil(10 * BuffTimeFactor()) - 1 ||
-                    Game.hasBuff("Dragonflight").time / 30 >=
-                        Math.ceil(6 * BuffTimeFactor()) - 1)
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    Game.hasBuff("Frenzy").time / 30 >=
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    (Game.hasBuff("Click frenzy").time / 30 >=
+                        Math.ceil(10 * BuffTimeFactor()) - 1 ||
+                        Game.hasBuff("Dragonflight").time / 30 >=
+                            Math.ceil(6 * BuffTimeFactor()) - 1)) ||
+                    (!Game.hasAura("Reaper of Fields") &&
+                        Game.hasBuff("Frenzy") &&
+                        (Game.hasBuff("Click frenzy") ||
+                            Game.hasBuff("Dragonflight")) &&
+                        Game.hasBuff("Frenzy").time / 30 >=
+                            Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                        (Game.hasBuff("Click frenzy").time / 30 >=
+                            Math.ceil(10 * BuffTimeFactor()) - 1 ||
+                            Game.hasBuff("Dragonflight").time / 30 >=
+                                Math.ceil(6 * BuffTimeFactor()) - 1)))
             ) {
                 switch (SugarLevel) {
                     case 0:
@@ -1617,7 +1678,7 @@ function autoFTHOFComboAction() {
             }
             return;
         case 3:
-            // Turn off auto buy and make sure we're not in sell mode
+            // Turn off autoBuy and make sure we're not in sell mode
             if (FrozenCookies.autoBuy == 1) {
                 autoFTHOFComboAction.autobuyyes = 1;
                 FrozenCookies.autoBuy = 0;
@@ -1652,10 +1713,12 @@ function autoFTHOFComboAction() {
                     autoFTHOFComboAction.count
                 );
             }
-            // Turn autobuy back on if it was on before
+            // Turn autoBuy back on if it was on before
             if (autoFTHOFComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
                 autoFTHOFComboAction.autobuyyes = 0;
+                if (FrozenCookies.autoBulk != 0)
+                    document.getElementById("storeBulk10").click();
             }
             autoFTHOFComboAction.count = 0;
             autoFTHOFComboAction.state = 0;
@@ -1706,7 +1769,8 @@ function auto100ConsistencyComboAction() {
         auto100ConsistencyComboAction.countTimeMach = 0;
 
     if (
-        ((auto100ConsistencyComboAction.state == 0 &&
+        // Either at stage 0 or 1 with flags set or in progress, but broken
+        ((auto100ConsistencyComboAction.state < 2 &&
             (auto100ConsistencyComboAction.autobuyyes == 1 ||
                 auto100ConsistencyComboAction.autogcyes == 1 ||
                 auto100ConsistencyComboAction.autogsyes == 1 ||
@@ -1800,16 +1864,25 @@ function auto100ConsistencyComboAction() {
             }
             return;
 
-        case 1: // Turn off auto buy
+        case 1: // Start combo
             if (
-                (Game.hasBuff("Frenzy") || Game.hasBuff("Dragon Harvest")) &&
-                BuildingSpecialBuff() == 1 &&
-                (Game.hasBuff("Frenzy").time / 30 >=
-                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                (Game.hasAura("Reaper of Fields") &&
+                    Game.hasBuff("Dragon Harvest") &&
+                    Game.hasBuff("Frenzy") &&
+                    BuildingSpecialBuff() == 1 &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) &&
-                BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    Game.hasBuff("Frenzy").time / 30 >=
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())) ||
+                (!Game.hasAura("Reaper of Fields") &&
+                    Game.hasBuff("Frenzy") &&
+                    BuildingSpecialBuff() == 1 &&
+                    Game.hasBuff("Frenzy").time / 30 >=
+                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                    BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor()))
             ) {
+                // Turn off autoBuy - also disables dragon aura and pantheon setting
                 if (FrozenCookies.autoBuy == 1) {
                     auto100ConsistencyComboAction.autobuyyes = 1;
                     FrozenCookies.autoBuy = 0;
@@ -2015,7 +2088,7 @@ function auto100ConsistencyComboAction() {
             );
             auto100ConsistencyComboAction.state = 17;
             return;
-            
+
         case 17: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
                 if (Game.shimmers[i].type == "golden" && !Game.shimmer.wrath) {
@@ -2195,15 +2268,17 @@ function auto100ConsistencyComboAction() {
                 }
                 if (auto100ConsistencyComboAction.autogcyes == 1) {
                     FrozenCookies.autoGC = 1;
+                    auto100ConsistencyComboAction.autogcyes = 0;
                 }
                 if (auto100ConsistencyComboAction.autogsyes == 1) {
                     FrozenCookies.autoGS = 1;
+                    auto100ConsistencyComboAction.autogsyes = 0;
                 }
                 auto100ConsistencyComboAction.state = 20;
             }
             return;
 
-        case 20: // Buy back and turn autobuy back on if on before
+        case 20: // Buy back
             if (
                 Game.Objects["Farm"].amount <
                 auto100ConsistencyComboAction.countFarm
@@ -2294,9 +2369,12 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Antimatter condenser"].amount
                 );
             }
+            // Turning autoBuy back on will also allow dragon auras to be reset, if running RoF
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
-                document.getElementById("storeBulk10").click();
+                auto100ConsistencyComboAction.autobuyyes = 0;
+                if (FrozenCookies.autoBulk != 0)
+                    document.getElementById("storeBulk10").click();
             }
             auto100ConsistencyComboAction.state = 21;
             return;
@@ -2304,6 +2382,7 @@ function auto100ConsistencyComboAction() {
         case 21: // Re-enable autoGodzamok if it were on previously
             if (auto100ConsistencyComboAction.autogodyes == 1) {
                 FrozenCookies.autoGodzamok = 1;
+                auto100ConsistencyComboAction.autogodyes = 0;
             }
             logEvent("auto100ConsistencyCombo", "Combo completed");
             auto100ConsistencyComboAction.state = 0;
@@ -2379,8 +2458,10 @@ function autoSweetAction() {
                         );
                         if (autoSweetAction.manaPrev != -1)
                             FrozenCookies.manaMax = autoSweetAction.manaPrev;
-                        if (autoSweetAction.autobuyyes == 1)
+                        if (autoSweetAction.autobuyyes == 1) {
                             FrozenCookies.autoBuy = 1;
+                            autoSweetAction.autobuyyes = 0;
+                        }
                         FrozenCookies.autoSweet = 0;
                     }
                 }
@@ -4743,7 +4824,12 @@ function autoGodzamokAction() {
                     "Bought " + countFactory + " factories"
                 );
             }
-            if (autoGodzamokAction.autobuyyes == 1) FrozenCookies.autoBuy = 1;
+            if (autoGodzamokAction.autobuyyes == 1) {
+                FrozenCookies.autoBuy = 1;
+                autoGodzamokAction.autobuyyes = 0;
+                if (FrozenCookies.autoBulk != 0)
+                    document.getElementById("storeBulk10").click();
+            }
         }
     }
 }
