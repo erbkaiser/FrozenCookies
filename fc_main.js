@@ -1018,7 +1018,8 @@ function autoCast() {
 
                     if (nextSpellName(0) == "Click Frenzy") {
                         if (
-                            (Game.hasAura("Reaper of Fields") &&
+                            ((Game.hasAura("Reaper of Fields") ||
+                                Game.hasAura("Reality Bending")) &&
                                 Game.hasBuff("Dragon Harvest") &&
                                 Game.hasBuff("Frenzy") &&
                                 BuildingSpecialBuff() == 1 &&
@@ -1062,7 +1063,8 @@ function autoCast() {
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
-                                ((Game.hasAura("Reaper of Fields") &&
+                                (((Game.hasAura("Reaper of Fields") ||
+                                    Game.hasAura("Reality Bending")) &&
                                     Game.hasBuff("Dragon Harvest") &&
                                     Game.hasBuff("Frenzy") &&
                                     Game.hasBuff("Dragon Harvest").time / 30 >=
@@ -1186,7 +1188,8 @@ function autoCast() {
 
                     if (nextSpellName(0) == "Click Frenzy") {
                         if (
-                            (Game.hasAura("Reaper of Fields") &&
+                            ((Game.hasAura("Reaper of Fields") ||
+                                Game.hasAura("Reality Bending")) &&
                                 Game.hasBuff("Dragon Harvest") &&
                                 Game.hasBuff("Frenzy") &&
                                 BuildingSpecialBuff() == 1 &&
@@ -1230,7 +1233,8 @@ function autoCast() {
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
-                                ((Game.hasAura("Reaper of Fields") &&
+                                (((Game.hasAura("Reaper of Fields") ||
+                                    Game.hasAura("Reality Bending")) &&
                                     Game.hasBuff("Dragon Harvest") &&
                                     Game.hasBuff("Frenzy") &&
                                     Game.hasBuff("Dragon Harvest").time / 30 >=
@@ -1380,7 +1384,8 @@ function autoFTHOFComboAction() {
         case 1:
             if (
                 M.magic == M.magicM &&
-                ((Game.hasAura("Reaper of Fields") &&
+                (((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     BuildingSpecialBuff() == 1 &&
@@ -1526,7 +1531,8 @@ function autoFTHOFComboAction() {
         case 2:
             if (
                 M.magic == M.magicM &&
-                ((Game.hasAura("Reaper of Fields") &&
+                (((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     (Game.hasBuff("Click frenzy") ||
@@ -1866,7 +1872,8 @@ function auto100ConsistencyComboAction() {
 
         case 1: // Start combo
             if (
-                (Game.hasAura("Reaper of Fields") &&
+                ((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     BuildingSpecialBuff() == 1 &&
