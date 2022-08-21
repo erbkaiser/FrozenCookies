@@ -65,6 +65,7 @@ If you want to manually install it:
 2022 Aug 21
 * Extended Auto Loan to also take loan 3, if desired
 * Completed documentation of the options
+* Add Auto-Cyclius to automate swapping Cyclius god throughout the day
 
 2022 Aug 1
 * Any spell casting method that checks for a frenzy will now also check for a Dragon Harvest, *if* Reaper of Fields or Reality Bending is an active aura
@@ -453,6 +454,7 @@ If you want to manually install it:
 
 ## Pantheon options
 * **Auto Pantheon** The main option to toggle setting the gods or not. The next three options are to select a god per slot. If the same god is set to multiple slots, the highest rank slot stays and the lower one is automatically cleared.
+* **Auto-Cyclius** Cyclius' bonus over the course of the day can be maximized by switching him between slots periodically. This option will automate the process. For those periods where Cyclius only has negative effects, it will attempt to re-slot a god that was slotted before and fallback to Rigidel otherwise. See the schedule on https://cookieclicker.fandom.com/wiki/Pantheon
 
 ## Grimoire options
 * **Wizard Tower Cap** This cap works different than the other building ones, since it will not directly cap at a given WT number, but instead at the amount of mana that is set. 37 is the best value for the auto cast FTHOF or manual casting option, for double casting higher values are needed. Setting this to any value over 100 is wasting mana and can make double casting impossible.

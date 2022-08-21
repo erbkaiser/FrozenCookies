@@ -212,6 +212,11 @@ FrozenCookies.preferenceValues = {
         ],
         default: 0,
     },
+    autoCyclius: {
+        hint: "Continually swap Cyclius throughout the day for max bonus. Disables Auto Pantheon!",
+        display: ["Auto-Cyclius ON", "Auto-Cyclius OFF"],
+        default: 0,
+    },
 
     // Spell options
     spellOptions: {
