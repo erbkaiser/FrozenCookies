@@ -2672,7 +2672,7 @@ function autoCycliusAction() {
     const Diamond5 = 21 * 60;
     const CycNone2 = 22 * 60 + 30;
     var now = new Date();
-    var currentTime = now.getHours() * 60 + now.getMinutes(); // Minutes since Midnight
+    var currentTime = now.getUTCHours() * 60 + now.getUTCMinutes(); // Time in UTC
 
     if (currentTime < Ruby1) {
         swapIn(3, 0);
