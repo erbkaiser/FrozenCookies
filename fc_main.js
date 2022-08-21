@@ -2655,30 +2655,9 @@ function autoCycliusAction() {
     if (!T || T.swaps < 1 || FrozenCookies.autoCyclius == 0) return;
     if (FrozenCookies.autoBuy == 0) return; // Treat like global on/off switch
 
-    if (FrozenCookies.autoWorshipToggle == 1) FrozenCookies.autoWorshipToggle = 0; //Turn off auto Pantheon
-
-    var agesLvl = Game.hasGod("ages") ? Game.hasGod("ages") : 0;
-    switch (agesLvl) {
-        case 0: //Cyclius isn't in a slot
-            var cyclGod0 = T.slot[0];
-            var cyclGod1 = T.slot[1];
-            var cyclGod2 = T.slot[2];
-            return;
-        case 1: //Cyclius is in diamond
-            var cyclGod0 = 0;
-            var cyclGod1 = T.slot[1];
-            var cyclGod2 = T.slot[2];
-            return;
-        case 2: //Cyclius is in ruby
-            var cyclGod0 = T.slot[0];
-            var cyclGod1 = 0;
-            var cyclGod2 = T.slot[2];
-            return;
-        case 1: //Cyclius is in jade
-            var cyclGod0 = T.slot[0];
-            var cyclGod1 = T.slot[1];
-            var cyclGod2 = 0;
-            return;
+    if (FrozenCookies.autoWorshipToggle == 1) {
+        FrozenCookies.autoWorshipToggle = 0;
+        logEvent("autoCyclius", "Turning off Auto-Pantheon");
     }
 
     //const Diamond1 = 0;
@@ -2695,66 +2674,69 @@ function autoCycliusAction() {
     var now = new Date();
     var currentTime = now.getHours() * 60 + now.getMinutes(); // Minutes since Midnight
 
-    if (currentTime < Ruby1) swapIn(3, 0);
-    if (currentTime > Ruby1 && currentTime < Jade1) swapIn(3, 1);
-    if (currentTime > Jade1 && currentTime < Diamond2) swapIn(3, 2);
-    if (currentTime > Diamond2 && currentTime < Jade2) swapIn(3, 0);
-    if (currentTime > Jade2 && currentTime < Diamond3) swapIn(3, 2);
-    if (currentTime > Diamond3 && currentTime < Ruby2) swapIn(3, 0);
-    if (currentTime > Ruby2 && currentTime < Diamond4) swapIn(3, 1);
-    if (currentTime > Diamond4 && currentTime < CycNone1) swapIn(3, 0);
+    if (currentTime < Ruby1) {
+        swapIn(3, 0);
+        logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+    }
+    if (currentTime > Ruby1 && currentTime < Jade1) {
+        swapIn(3, 1);
+        logEvent("autoCyclius", "Putting Cyclius in RUBY");
+    }
+    if (currentTime > Jade1 && currentTime < Diamond2) {
+        swapIn(3, 2);
+        logEvent("autoCyclius", "Putting Cyclius in JADE");
+    }
+    if (currentTime > Diamond2 && currentTime < Jade2) {
+        swapIn(3, 0);
+        logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+    }
+    if (currentTime > Jade2 && currentTime < Diamond3) {
+        swapIn(3, 2);
+        logEvent("autoCyclius", "Putting Cyclius in JADE");
+    }
+    if (currentTime > Diamond3 && currentTime < Ruby2) {
+        swapIn(3, 0);
+        logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+    }
+    if (currentTime > Ruby2 && currentTime < Diamond4) {
+        swapIn(3, 1);
+        logEvent("autoCyclius", "Putting Cyclius in RUBY");
+    }
+    if (currentTime > Diamond4 && currentTime < CycNone1) {
+        swapIn(3, 0);
+        logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+    }
     if (currentTime > CycNone1 && currentTime < Diamond5) {
         if (
-            cyclGod0 != 0 &&
-            T.slot[0] != cyclGod0 &&
-            T.slot[1] != cyclGod0 &&
-            T.slot[2] != cyclGod0
+            FrozenCookies.autoWorship0 != 0 &&
+            T.slot[1] != FrozenCookies.autoWorship0 &&
+            T.slot[2] != FrozenCookies.autoWorship0
         ) {
-            swapIn(cyclGod0, 0);
+            swapIn(FrozenCookies.autoWorship0, 0);
         } else if (
-            cyclGod1 != 0 &&
-            T.slot[0] != cyclGod1 &&
-            T.slot[1] != cyclGod1 &&
-            T.slot[2] != cyclGod1
+            FrozenCookies.autoWorship1 != 0 &&
+            T.slot[1] != FrozenCookies.autoWorship1 &&
+            T.slot[2] != FrozenCookies.autoWorship1
         ) {
-            swapIn(cyclGod1, 0);
+            swapIn(FrozenCookies.autoWorship1, 0);
         } else if (
-            cyclGod2 != 0 &&
-            T.slot[0] != cyclGod2 &&
-            T.slot[1] != cyclGod2 &&
-            T.slot[2] != cyclGod2
+            FrozenCookies.autoWorship2 != 0 &&
+            T.slot[1] != FrozenCookies.autoWorship2 &&
+            T.slot[2] != FrozenCookies.autoWorship2
         ) {
-            swapIn(cyclGod2, 0);
+            swapIn(FrozenCookies.autoWorship2, 0);
         } else {
-            swapIn(10, 0);
-        } //Rigidel
+            Game.forceUnslotGod("ages");
+        }
+        logEvent("autoCyclius", "Removing Cyclius");
     }
-    if (currentTime > Diamond5 && currentTime < CycNone2) swapIn(3, 0);
+    if (currentTime > Diamond5 && currentTime < CycNone2) {
+        swapIn(3, 0);
+        logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+    }
     if (currentTime > CycNone2 && currentTime < Diamond5) {
-        if (
-            cyclGod0 != 0 &&
-            T.slot[0] != cyclGod0 &&
-            T.slot[1] != cyclGod0 &&
-            T.slot[2] != cyclGod0
-        ) {
-            swapIn(cyclGod0, 0);
-        } else if (
-            cyclGod1 != 0 &&
-            T.slot[0] != cyclGod1 &&
-            T.slot[1] != cyclGod1 &&
-            T.slot[2] != cyclGod1
-        ) {
-            swapIn(cyclGod1, 0);
-        } else if (
-            cyclGod2 != 0 &&
-            T.slot[0] != cyclGod2 &&
-            T.slot[1] != cyclGod2 &&
-            T.slot[2] != cyclGod2
-        ) {
-            swapIn(cyclGod2, 0);
-        } else {
-            swapIn(10, 0);
-        } //Rigidel
+        Game.forceUnslotGod("ages");
+        logEvent("autoCyclius", "Removing Cyclius");
     }
 }
 
