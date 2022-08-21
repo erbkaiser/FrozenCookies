@@ -2675,39 +2675,39 @@ function autoCycliusAction() {
     var now = new Date();
     var currentTime = now.getUTCHours() * 60 + now.getUTCMinutes(); // Time in UTC
 
-    if (currentTime >= 0 && currentTime < Ruby1) {
+    if (T.slot[0] != 3 && currentTime >= 0 && currentTime < Ruby1) {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (currentTime >= Ruby1 && currentTime < Jade1) {
+    if (T.slot[1] != 3 && currentTime >= Ruby1 && currentTime < Jade1) {
         swapIn(3, 1);
         logEvent("autoCyclius", "Putting Cyclius in RUBY");
     }
-    if (currentTime >= Jade1 && currentTime < Diamond2) {
+    if (T.slot[2] != 3 && currentTime >= Jade1 && currentTime < Diamond2) {
         swapIn(3, 2);
         logEvent("autoCyclius", "Putting Cyclius in JADE");
     }
-    if (currentTime >= Diamond2 && currentTime < Jade2) {
+    if (T.slot[0] != 3 && currentTime >= Diamond2 && currentTime < Jade2) {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (currentTime >= Jade2 && currentTime < Diamond3) {
+    if (T.slot[2] != 3 && currentTime >= Jade2 && currentTime < Diamond3) {
         swapIn(3, 2);
         logEvent("autoCyclius", "Putting Cyclius in JADE");
     }
-    if (currentTime >= Diamond3 && currentTime < Ruby2) {
+    if (T.slot[0] != 3 && currentTime >= Diamond3 && currentTime < Ruby2) {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (currentTime >= Ruby2 && currentTime < Diamond4) {
+    if (T.slot[1] != 3 && currentTime >= Ruby2 && currentTime < Diamond4) {
         swapIn(3, 1);
         logEvent("autoCyclius", "Putting Cyclius in RUBY");
     }
-    if (currentTime >= Diamond4 && currentTime < CycNone1) {
+    if (T.slot[3] != 3 && currentTime >= Diamond4 && currentTime < CycNone1) {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (currentTime >= CycNone1 && currentTime < Diamond5) {
+    if (hasGod('ages' && currentTime >= CycNone1 && currentTime < Diamond5) {
         if (
             FrozenCookies.autoWorship0 != 0 &&
             T.slot[1] != FrozenCookies.autoWorship0 &&
@@ -2731,11 +2731,11 @@ function autoCycliusAction() {
         }
         logEvent("autoCyclius", "Removing Cyclius");
     }
-    if (currentTime >= Diamond5 && currentTime < CycNone2) {
+    if (T.slot[0] != 3 && currentTime >= Diamond5 && currentTime < CycNone2) {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (currentTime >= CycNone2 && currentTime < Diamond5) {
+    if (hasGod('ages' && currentTime >= CycNone2 && currentTime < Diamond5) {
         Game.forceUnslotGod("ages");
         logEvent("autoCyclius", "Removing Cyclius");
     }
