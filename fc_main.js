@@ -2707,7 +2707,7 @@ function autoCycliusAction() {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (hasGod('ages' && currentTime >= CycNone1 && currentTime < Diamond5) {
+    if (hasGod('ages') && currentTime >= CycNone1 && currentTime < Diamond5) {
         if (
             FrozenCookies.autoWorship0 != 0 &&
             T.slot[1] != FrozenCookies.autoWorship0 &&
@@ -2735,7 +2735,7 @@ function autoCycliusAction() {
         swapIn(3, 0);
         logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
     }
-    if (hasGod('ages' && currentTime >= CycNone2 && currentTime < Diamond5) {
+    if (hasGod('ages') && currentTime >= CycNone2 && currentTime < Diamond5) {
         Game.forceUnslotGod("ages");
         logEvent("autoCyclius", "Removing Cyclius");
     }
