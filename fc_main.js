@@ -34,7 +34,7 @@ function registerMod(mod_id = "frozen_cookies") {
                     return [
                         "News : debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
                         "News : Supreme Court rules Frozen Cookies not unauthorized cheating after all.",
-                        "News : frozen cookies considered 'cool'. Pun-haters heard groaning.",
+                        "News : Frozen Cookies considered 'cool'. Pun-haters heard groaning.",
                     ];
                 }
                 if (
@@ -49,21 +49,19 @@ function registerMod(mod_id = "frozen_cookies") {
                     ];
                 }
                 if (
-                    nextPurchase().cost > 0
+                    nextPurchase().cost > 0 &&
                     Math.random() < 0.2 &&
                     Game.season != "fools"
                 ) {
                     return [
-                        "You should buy that " +
-                            nextPurchase().purchase.name +
-                            " soon.",
+                        "You should buy that " + nextPurchase().purchase.name + " soon.",
                     ];
                 }
                 if (Math.random() < 0.3 && Game.season == "fools") {
                     return [
-                        "Investigation into your potential cheating is blocked by your lawyers.",
-                        "Your Frozen Cookies are now available in markets everywhere.",
-                        "Movie studio suit against your use of the term 'frozen' dismissed with prejudice.",
+                        "Investigation into potential cheating with Frozen Cookies is blocked by your lawyers.",
+                        "Your Frozen Cookies are now available in stores everywhere.",
+                        "Movie studio suit against your use of 'Frozen' dismissed with prejudice.",
                     ];
                 }
                 if (
@@ -80,19 +78,17 @@ function registerMod(mod_id = "frozen_cookies") {
                     ];
                 }
                 if (
-                    nextPurchase().cost > 0
+                    nextPurchase().cost > 0 &&
                     nextPurchase().type != "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
                 ) {
                     return [
-                        "Your next investment: " +
-                            nextPurchase().purchase.name +
-                            ".",
+                        "Your next investment: " + nextPurchase().purchase.name + ".",
                     ];
                 }
                 if (
-                    nextPurchase().cost > 0
+                    nextPurchase().cost > 0 &&
                     nextPurchase().type == "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
