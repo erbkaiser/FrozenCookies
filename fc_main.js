@@ -72,7 +72,7 @@ function registerMod(mod_id = "frozen_cookies") {
                     ];
                 }
                 if (
-                    recommendation.type != "building" &&
+                    nextPurchase().purchase.type != "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
                 ) {
@@ -83,7 +83,7 @@ function registerMod(mod_id = "frozen_cookies") {
                     ];
                 }
                 if (
-                    recommendation.type == "building" &&
+                    nextPurchase().purchase.type == "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
                 ) {

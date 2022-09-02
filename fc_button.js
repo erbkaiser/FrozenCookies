@@ -32,7 +32,7 @@ function getBuildingTooltip(purchaseRec) {
             .prop("style", "float:right;")
             .text(Beautify(purchaseRec.purchase.price))
     );
-    if (recommendation.type == "building" && Game.season == "fools") {
+    if (purchaseRec.purchase.type == "building" && Game.season == "fools") {
         parent.append(
             $("<div>")
                 .addClass("name")
