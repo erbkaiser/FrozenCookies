@@ -32,7 +32,15 @@ function getBuildingTooltip(purchaseRec) {
             .prop("style", "float:right;")
             .text(Beautify(purchaseRec.purchase.price))
     );
-    parent.append($("<div>").addClass("name").text(purchaseRec.purchase.name));
+    if (recommendation.type == "building" && Game.season == "fools") {
+        parent.append(
+            $("<div>")
+                .addClass("name")
+                .text(Game.foolObjects[purchaseRec.purchase.name].name)
+        );
+    } else {
+        parent.append($("<div>").addClass("name").text(purchaseRec.purchase.name));
+    }
     parent.append(
         $("<div>")
             .prop("style", "font-size:80%;")

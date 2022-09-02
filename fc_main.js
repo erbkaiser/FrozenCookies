@@ -38,6 +38,14 @@ function registerMod(mod_id = "frozen_cookies") {
                         "Haven't you bought that " +
                             nextPurchase().purchase.name +
                             " yet?",
+                    ];
+                }
+                if (
+                    bestBank(nextChainedPurchase().efficiency).cost > 0 &&
+                    Math.random() < 0.2 &&
+                    Game.season != "fools"
+                ) {
+                    return [
                         "You wonder if those " +
                             Beautify(bestBank(nextChainedPurchase().efficiency).cost) +
                             " banked cookies are still fresh.",
@@ -48,14 +56,41 @@ function registerMod(mod_id = "frozen_cookies") {
                         "Investigation into your potential cheating is blocked by your lawyers.",
                         "Your Frozen Cookies are now available in markets everywhere.",
                         "Movie studio suit against your use of the term 'frozen' dismissed with prejudice.",
-                        "Your next business venture: " +
-                            nextPurchase().purchase.name +
-                            ".",
+                    ];
+                }
+                if (
+                    bestBank(nextChainedPurchase().efficiency).cost > 0 &&
+                    Math.random() < 0.2 &&
+                    Game.season == "fools"
+                ) {
+                    return [
                         "You have " +
                             Beautify(
                                 bestBank(nextChainedPurchase().efficiency).cost * 0.08
                             ) +
                             " cookie dollars just sitting in your wallet.",
+                    ];
+                }
+                if (
+                    recommendation.type != "building" &&
+                    Math.random() < 0.2 &&
+                    Game.season == "fools"
+                ) {
+                    return [
+                        "Your next business venture: " +
+                            nextPurchase().purchase.name +
+                            ".",
+                    ];
+                }
+                if (
+                    recommendation.type == "building" &&
+                    Math.random() < 0.2 &&
+                    Game.season == "fools"
+                ) {
+                    return [
+                        "Your next business venture: " +
+                            Game.foolObjects[nextPurchase().purchase.name].name +
+                            ".",
                     ];
                 }
             });
@@ -5243,7 +5278,7 @@ function safeBuy(bldg, count) {
 
 function autoGodzamokAction() {
     if (!T) return;
-    
+
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
         // Need at least 10 of each to be useful

@@ -202,7 +202,22 @@ function updateTimers() {
             ),
         });
     }
-    if (purchaseTotal > 0) {
+    if (
+        purchaseTotal > 0 &&
+        recommendation.type == "building" &&
+        Game.season == "fools"
+    ) {
+        t_draw.push({
+            f_percent: purchaseCompletion,
+            c1: "rgba(17, 17, 17, 1)",
+            name:
+                "Next: " +
+                decodeHtml(Game.foolObjects[nextPurchase().purchase.name].name),
+            display: timeDisplay(
+                divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)
+            ),
+        });
+    } else {
         t_draw.push({
             f_percent: purchaseCompletion,
             c1: "rgba(17, 17, 17, 1)",
