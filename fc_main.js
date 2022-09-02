@@ -35,9 +35,6 @@ function registerMod(mod_id = "frozen_cookies") {
                         "News : debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
                         "News : Supreme Court rules Frozen Cookies not unauthorized cheating after all.",
                         "News : frozen cookies considered 'cool'. Pun-haters heard groaning.",
-                        "Haven't you bought that " +
-                            nextPurchase().purchase.name +
-                            " yet?",
                     ];
                 }
                 if (
@@ -49,6 +46,17 @@ function registerMod(mod_id = "frozen_cookies") {
                         "You wonder if those " +
                             Beautify(bestBank(nextChainedPurchase().efficiency).cost) +
                             " banked cookies are still fresh.",
+                    ];
+                }
+                if (
+                    nextPurchase().cost > 0
+                    Math.random() < 0.2 &&
+                    Game.season != "fools"
+                ) {
+                    return [
+                        "You should buy that " +
+                            nextPurchase().purchase.name +
+                            " soon.",
                     ];
                 }
                 if (Math.random() < 0.3 && Game.season == "fools") {
@@ -72,23 +80,25 @@ function registerMod(mod_id = "frozen_cookies") {
                     ];
                 }
                 if (
+                    nextPurchase().cost > 0
                     nextPurchase().type != "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
                 ) {
                     return [
-                        "Your next business venture: " +
+                        "Your next investment: " +
                             nextPurchase().purchase.name +
                             ".",
                     ];
                 }
                 if (
+                    nextPurchase().cost > 0
                     nextPurchase().type == "building" &&
                     Math.random() < 0.2 &&
                     Game.season == "fools"
                 ) {
                     return [
-                        "Your next business venture: " +
+                        "Your next investment: " +
                             Game.foolObjects[nextPurchase().purchase.name].name +
                             ".",
                     ];
