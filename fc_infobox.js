@@ -204,7 +204,7 @@ function updateTimers() {
     }
     if (
         purchaseTotal > 0 &&
-        recommendation.type == "building" &&
+        nextPurchase().purchase.type == "building" &&
         Game.season == "fools"
     ) {
         t_draw.push({
