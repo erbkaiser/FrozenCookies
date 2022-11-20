@@ -997,7 +997,10 @@ function autoCast() {
 
         // Can we shorten a negative buff with a backfire?
         if (
-            M.magicM >= Math.floor(M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM) &&
+            M.magicM >=
+                Math.floor(
+                    M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+                ) &&
             ((cpsBonus() < 7 &&
                 (Game.hasBuff("Loan 1 (interest)") ||
                     Game.hasBuff("Loan 2 (interest)"))) ||
@@ -1011,7 +1014,10 @@ function autoCast() {
 
         // Will it backfire?
         if (
-            M.magicM >= Math.floor(hagC.costMin + hagC.costPercent * M.magicM) &&
+            M.magicM >=
+                Math.floor(
+                    M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                ) &&
             cpsBonus() >= FrozenCookies.minCpSMult &&
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
@@ -1162,7 +1168,11 @@ function autoCast() {
                 // If you don't have any Cortex baker yet, or can't cast SE, just give up.
                 if (
                     Game.Objects["Cortex baker"].amount == 0 ||
-                    M.magicM < Math.floor(SE.costMin + SE.costPercent * M.magicM)
+                    M.magicM <
+                        Math.floor(
+                            M.spellsById[3].costMin +
+                                M.spellsById[3].costPercent * M.magicM
+                        )
                 ) {
                     return;
                 }
@@ -1189,7 +1199,12 @@ function autoCast() {
                 return;
 
             case 4:
-                if (M.magicM < Math.floor(hagC.costMin + hagC.costPercent * M.magicM)) {
+                if (
+                    M.magicM <
+                    Math.floor(
+                        M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                    )
+                ) {
                     return;
                 }
                 M.castSpell(M.spellsById[4]);
@@ -2499,7 +2514,10 @@ function autoFTHOFCombo2Action() {
 
         // Can we shorten a negative buff with a backfire?
         if (
-            M.magicM >= Math.floor(M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM) &&
+            M.magicM >=
+                Math.floor(
+                    M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+                ) &&
             ((cpsBonus() < 7 &&
                 (Game.hasBuff("Loan 1 (interest)") ||
                     Game.hasBuff("Loan 2 (interest)"))) ||
