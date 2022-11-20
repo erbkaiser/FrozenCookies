@@ -997,7 +997,7 @@ function autoCast() {
 
         // Can we shorten a negative buff with a backfire?
         if (
-            M.magicM >= Math.floor(streT.costMin + streT.costPercent * M.magicM) &&
+            M.magicM >= Math.floor(M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM) &&
             ((cpsBonus() < 7 &&
                 (Game.hasBuff("Loan 1 (interest)") ||
                     Game.hasBuff("Loan 2 (interest)"))) ||
@@ -2499,7 +2499,7 @@ function autoFTHOFCombo2Action() {
 
         // Can we shorten a negative buff with a backfire?
         if (
-            M.magicM >= Math.floor(streT.costMin + streT.costPercent * M.magicM) &&
+            M.magicM >= Math.floor(M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM) &&
             ((cpsBonus() < 7 &&
                 (Game.hasBuff("Loan 1 (interest)") ||
                     Game.hasBuff("Loan 2 (interest)"))) ||
