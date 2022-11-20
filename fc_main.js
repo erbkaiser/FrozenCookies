@@ -17,7 +17,7 @@ function registerMod(mod_id = "frozen_cookies") {
         init: function () {
             Game.registerHook("reincarnate", function () {
                 // called when the player has reincarnated after an ascension
-                if (FrozenCookies.autoBulk == 0) return;
+                if (!FrozenCookies.autoBulk) return;
                 if (FrozenCookies.autoBulk == 1) {
                     document.getElementById("storeBulk10").click();
                 }
@@ -806,7 +806,7 @@ function lumpIn(mins) {
 
 function swapIn(godId, targetSlot) {
     //mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
-    if (T.swaps == 0) return;
+    if (!T.swaps) return;
     T.useSwap(1);
     T.lastSwapT = 0;
     var div = l("templeGod" + godId);
@@ -1348,7 +1348,7 @@ function autoFTHOFComboAction() {
     if (typeof autoFTHOFComboAction.count == "undefined") autoFTHOFComboAction.count = 0;
 
     if (
-        autoFTHOFComboAction.state == 0 &&
+        !autoFTHOFComboAction.state &&
         ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
@@ -1358,7 +1358,7 @@ function autoFTHOFComboAction() {
         autoFTHOFComboAction.state = 1;
     }
     if (
-        autoFTHOFComboAction.state == 0 &&
+        !autoFTHOFComboAction.state &&
         nextSpellName(0) == "Building Special" &&
         nextSpellName(1) == "Building Special"
     ) {
@@ -1790,7 +1790,7 @@ function auto100ConsistencyComboAction() {
                 auto100ConsistencyComboAction.autodragonyes == 1 ||
                 auto100ConsistencyComboAction.autoworshipyes == 1)) ||
             (auto100ConsistencyComboAction.state > 1 &&
-                BuildingSpecialBuff() == 0 &&
+                !BuildingSpecialBuff() &&
                 !hasClickBuff())) &&
             M.magic >= M.magicM - 1)
     ) {
@@ -1823,7 +1823,7 @@ function auto100ConsistencyComboAction() {
     }
 
     if (
-        auto100ConsistencyComboAction.state == 0 &&
+        !auto100ConsistencyComboAction.state &&
         M.magicM >= 98 &&
         ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
@@ -2354,7 +2354,7 @@ function auto100ConsistencyComboAction() {
 }
 
 function autoSweetAction() {
-    if (FrozenCookies.autoSweet == 0) return;
+    if (!FrozenCookies.autoSweet) return;
 
     if (FrozenCookies.autoBuy == 1) {
         autoSweetAction.autobuyyes = 1;
@@ -2366,7 +2366,7 @@ function autoSweetAction() {
     if (typeof Game.ready !== "undefined" && Game.ready) {
         if (typeof autoSweetAction.state == "undefined") autoSweetAction.state = 0;
 
-        if (autoSweetAction.state == 0) {
+        if (!autoSweetAction.state) {
             if (
                 // Check first 10 spells
                 nextSpellName(0) == "Sugar Lump" ||
@@ -2470,7 +2470,7 @@ function autoFTHOFCombo2Action() {
         autoFTHOFCombo2Action.count = 0;
 
     if (
-        autoFTHOFCombo2Action.state == 0 &&
+        !autoFTHOFCombo2Action.state &&
         ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
@@ -2480,7 +2480,7 @@ function autoFTHOFCombo2Action() {
         autoFTHOFCombo2Action.state = 1;
     }
     if (
-        autoFTHOFCombo2Action.state == 0 &&
+        !autoFTHOFCombo2Action.state &&
         nextSpellName(0) == "Building Special" &&
         nextSpellName(1) == "Building Special"
     ) {
@@ -3018,7 +3018,7 @@ function autoFTHOFCombo2Action() {
 }
 
 function autoEasterAction() {
-    if (FrozenCookies.autoEaster == 0 || Game.season == "easter" || haveAll("easter")) {
+    if (!FrozenCookies.autoEaster || Game.season == "easter" || haveAll("easter")) {
         return;
     }
 
@@ -3029,7 +3029,7 @@ function autoEasterAction() {
 
 function autoHalloweenAction() {
     if (
-        FrozenCookies.autoHalloween == 0 ||
+        !FrozenCookies.autoHalloween ||
         Game.season == "valentines" ||
         Game.season == "easter" ||
         Game.season == "halloween" ||
@@ -3114,7 +3114,7 @@ function autoLoanBuy() {
         ((!Game.hasBuff("Loan 1 (interest)") &&
             !Game.hasBuff("Loan 2 (interest)") &&
             !Game.hasBuff("Loan 3 (interest)")) ||
-            FrozenCookies.minLoanMult == 0)
+            !FrozenCookies.minLoanMult)
     ) {
         if (B.officeLevel >= 2) B.takeLoan(1);
         if (B.officeLevel >= 4) B.takeLoan(2);
@@ -3174,8 +3174,8 @@ function autoDragonAura0Action() {
     if (
         !Game.Has("A crumbly egg") ||
         Game.dragonLevel < 5 ||
-        FrozenCookies.autoDragonAura0 == 0 ||
-        FrozenCookies.autoDragonToggle == 0 ||
+        !FrozenCookies.autoDragonAura0 ||
+        !FrozenCookies.autoDragonToggle ||
         Game.dragonAura == FrozenCookies.autoDragonAura0 ||
         Game.dragonAura2 == FrozenCookies.autoDragonAura0
     ) {
@@ -3212,9 +3212,9 @@ function autoDragonAura1Action() {
     if (
         !Game.Has("A crumbly egg") ||
         Game.dragonLevel < 26 ||
-        FrozenCookies.autoDragonAura0 == 0 ||
-        FrozenCookies.autoDragonAura1 == 0 ||
-        FrozenCookies.autoDragonToggle == 0 ||
+        !FrozenCookies.autoDragonAura0 ||
+        !FrozenCookies.autoDragonAura1 ||
+        !FrozenCookies.autoDragonToggle ||
         Game.dragonAura == FrozenCookies.autoDragonAura1 ||
         Game.dragonAura2 == FrozenCookies.autoDragonAura1
     ) {
@@ -3258,7 +3258,7 @@ function autoDragonOrbsAction() {
     for (var ii in Game.buffs) {
         buffsN++;
     }
-    if (!goldenCookieLife() && Game.hasAura("Dragon Orbs") && buffsN == 0) {
+    if (!goldenCookieLife() && Game.hasAura("Dragon Orbs") && !buffsN) {
         Game.Objects["Cortex baker"].sell(1);
         logEvent(
             "autoDragonOrbs",
@@ -3275,7 +3275,7 @@ function autoDragonOrbsAction() {
 function autoSugarFrenzyAction() {
     if (
         FrozenCookies.autoSugarFrenzy == 1 &&
-        ((FrozenCookies.sugarBakingGuard == 0 && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
         cpsBonus() >= FrozenCookies.minASFMult &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
@@ -3283,7 +3283,7 @@ function autoSugarFrenzyAction() {
         ((!Game.hasBuff("Loan 1 (interest)") &&
             !Game.hasBuff("Loan 2 (interest)") &&
             !Game.hasBuff("Loan 3 (interest)")) ||
-            FrozenCookies.minLoanMult == 0)
+            !FrozenCookies.minLoanMult)
     ) {
         Game.UpgradesById["452"].buy();
         Game.ConfirmPrompt();
@@ -3292,7 +3292,7 @@ function autoSugarFrenzyAction() {
 
     if (
         FrozenCookies.autoSugarFrenzy == 2 &&
-        ((FrozenCookies.sugarBakingGuard == 0 && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
         cpsBonus() >= FrozenCookies.minASFMult &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
@@ -3302,7 +3302,7 @@ function autoSugarFrenzyAction() {
         ((!Game.hasBuff("Loan 1 (interest)") &&
             !Game.hasBuff("Loan 2 (interest)") &&
             !Game.hasBuff("Loan 3 (interest)")) ||
-            FrozenCookies.minLoanMult == 0)
+            !FrozenCookies.minLoanMult)
     ) {
         Game.UpgradesById["452"].buy();
         Game.ConfirmPrompt();
@@ -3314,7 +3314,7 @@ function autoWorship0Action() {
     if (
         !T ||
         T.swaps < 1 ||
-        FrozenCookies.autoWorshipToggle == 0 ||
+        !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship0 == 11 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[0] == FrozenCookies.autoWorship0
@@ -3329,7 +3329,7 @@ function autoWorship1Action() {
     if (
         !T ||
         T.swaps < 1 ||
-        FrozenCookies.autoWorshipToggle == 0 ||
+        !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship1 == 11 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[1] == FrozenCookies.autoWorship1
@@ -3350,7 +3350,7 @@ function autoWorship2Action() {
     if (
         !T ||
         T.swaps < 1 ||
-        FrozenCookies.autoWorshipToggle == 0 ||
+        !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship2 == 11 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[2] == FrozenCookies.autoWorship2
@@ -3435,7 +3435,7 @@ function buyOtherUpgrades() {
 }
 
 function autoCycliusAction() {
-    if (!T || T.swaps < 1 || FrozenCookies.autoCyclius == 0) return;
+    if (!T || T.swaps < 1 || !FrozenCookies.autoCyclius) return;
 
     if (FrozenCookies.autoWorshipToggle == 1) {
         FrozenCookies.autoWorshipToggle = 0;
@@ -4771,7 +4771,7 @@ function harvestBank() {
             break;
     }
 
-    if (FrozenCookies.maxSpecials == 0) FrozenCookies.maxSpecials = 1;
+    if (!FrozenCookies.maxSpecials) FrozenCookies.maxSpecials = 1;
 
     return (
         (baseCps() *
@@ -5405,7 +5405,7 @@ function unfinishedUpgradePrereqs(upgrade) {
                 id: 0,
             });
         }
-        if (prereqs.wrinklers && Game.elderWrath == 0) {
+        if (prereqs.wrinklers && !Game.elderWrath) {
             needed.push({
                 type: "wrinklers",
                 id: 0,
