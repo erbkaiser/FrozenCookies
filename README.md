@@ -62,6 +62,10 @@ If you want to manually install it:
 <details>
 <summary>Click to expand!</summary> 
 
+2022 Nov 20
+* Hopefully finally fixed Rigidel failures
+* Removed 'Combo Cast' since it was too buggy
+
 2022 Nov 08
 * Add new spell combo 'Combo Cast' which works like 'Double Cast', but instead of using HagC it will single cast spells until a combo is found
 
@@ -498,7 +502,7 @@ See the schedule on https://cookieclicker.fandom.com/wiki/Pantheon
 
 ## Grimoire options
 * **Wizard Tower Cap** This cap works different than the other building ones, since it will not directly cap at a given WT number, but instead at the amount of mana that is set. 37 is the best value for the auto cast FTHOF or manual casting option, for double casting higher values are needed (between 81 and 100). Setting this to any value over 100 is wasting mana and ruins spell casting speed.
-* **Auto Cast FTHOF**, **Double Cast FTHOF**, **Combo Cast FTHOF**, **Auto Cast 100% Consistency Combo** Select one of the auto casting methods. More details further on. Cannot use multiple options at once, the lowest enabled entry in the list will be active.
+* **Auto Cast FTHOF**, **Double Cast FTHOF**, **Auto Cast 100% Consistency Combo** Select one of the auto casting methods. More details further on. Cannot use multiple options at once, the lowest enabled entry in the list will be active.
 * **Auto Sugar Frenzy** Will buy Sugar Frenzy with a sugar lump during the first 100% Consistency and/or Double Cast combo (depending on what is set) of that ascension. If Sugar Baking Guard is active, it will only buy ASF if you have 101 lumps or more. You can also set the minimum frenzy level before ASF should be bought, to prevent it from getting used on 'weak' combos.
 * **Auto Sweet** Experimental auto casting/ascending option to farm sugar lumps. This is dangerous as it cannot be turned off without access to the console. Do not enable unless you know how to. This will disable all other automated spell casting methods.
 
@@ -615,12 +619,6 @@ Dualcasting does require a set level of minimum mana, depending on your Wizard T
 For convenience sake, you can just set max mana to 100 for all WT levels. The code will work with any value equal to or higher than the minimum, but because of how the mana refueling system works setting having any higher than 100 mana is not recommended.
 
 The combo will not work if you upgrade Wizard Towers beyond level 10.
-
-## Combo Cast FTHOF
-
-This works like **Auto Cast FTHOF (Click and Building Specials only)** until a combo like in Double Cast is found. It will automatically set your max mana to 37 while single casting and to whatever high amount is needed for your wizard tower level once a combo is spotted.
-
-Like Double Cast, it will not work if you upgrade Wizard Towers beyond level 10.
 
 ## 100% Consistency Combo
 

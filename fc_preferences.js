@@ -267,11 +267,6 @@ FrozenCookies.preferenceValues = {
         display: ["Double Cast FTHOF OFF", "Double Cast FTHOF ON"],
         default: 0,
     },
-    autoFTHOFCombo2: {
-        hint: "Like the Double Cast combo, but will single cast all spells until a combo is found",
-        display: ["Combo Cast FTHOF OFF", "Combo Cast FTHOF ON"],
-        default: 0,
-    },
     auto100ConsistencyCombo: {
         hint: "EXPERIMENTAL: Does the 100% Consistency Combo. Replaces Auto Cast and FTHOF Double Casting",
         display: [
