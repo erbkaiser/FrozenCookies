@@ -718,7 +718,7 @@ function FCMenu() {
         if (liveWrinklers().length > 0) {
             subsection.append(buildListing("Wrinkler Value", Beautify(wrinklerValue())));
         }
-        subsection.append(buildListing("Game Seed", Game.seed)));
+        subsection.append(buildListing("Game Seed", Game.seed));
         menu.append(subsection);
 
         // Internal Information
