@@ -371,7 +371,6 @@ function FCMenu() {
             buildListing("Base Δ CPS", Beautify(recommendation.base_delta_cps))
         );
         subsection.append(buildListing("Full Δ CPS", Beautify(recommendation.delta_cps)));
-        subsection.append(buildListing("Current Frenzy", Beautify(currentFrenzy)));
         subsection.append(
             buildListing("Purchase Efficiency", Beautify(recommendation.efficiency))
         );
@@ -470,6 +469,7 @@ function FCMenu() {
         isMax = currentCookies == maxCookies;
         targetTxt = isTarget ? "" : " (Building Bank)";
         maxTxt = isMax ? " (Max)" : "";
+        subsection.append(buildListing("Current Frenzy", Beautify(currentFrenzy)));
         subsection.append(
             buildListing(
                 "Current Average Cookie Value" + targetTxt + maxTxt,
@@ -718,6 +718,7 @@ function FCMenu() {
         if (liveWrinklers().length > 0) {
             subsection.append(buildListing("Wrinkler Value", Beautify(wrinklerValue())));
         }
+        subsection.append(buildListing("Game Seed", Game.seed)));
         menu.append(subsection);
 
         // Internal Information
