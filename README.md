@@ -62,6 +62,10 @@ If you want to manually install it:
 <details>
 <summary>Click to expand!</summary> 
 
+2022 Nov 29
+* Added Game Seed to the Other Information section of the FC Menu
+* Moved current frenzy value to Golden Cookie Info section
+
 2022 Nov 21
 * Implemented Ronna (R) and Quetta (Q) SI prefixes for 10^27 and 10^30.
 
