@@ -64,6 +64,7 @@ If you want to manually install it:
 
 2022 Nov 30
 * Auto 100% Consistency Combo will no longer remove planted whiskerblooms to plant more whiskerblooms
+* Added option to avoid clicking Wrath Cookies (recommended not to use as not all wraths are negative)
 
 2022 Nov 29
 * Added Game Seed to the Other Information section of the FC Menu
@@ -370,8 +371,7 @@ If you want to manually install it:
 
 2014 May 20:
 
-* Wrinklers will autopop if turned on, in Easter or Halloween, and don't have all seasonal cookies for that season unlocked
-  Will autobuy and value Faberge Egg, Golden Goose Egg, and Wrinklerspawn
+* Wrinklers will autopop if turned on, in Easter or Halloween, and don't have all seasonal cookies for that season unlocked.  Will autobuy and value Faberge Egg, Golden Goose Egg, and Wrinklerspawn
 * Century Egg doesn't cause the browser to freeze (note: It's still broken in beta; won't be fixed)
 * "Manual Seasons" blacklist removed (this is now integrated with the core autobuy - if you're in a season and don't have all related cookies, autobuy won't buy another season upgrade)
 * Wrinkler Saving functionality removed entirely, due to that working with the core game now
@@ -476,8 +476,9 @@ If you want to manually install it:
 
 ## Auto clicking Options
 * **Autoclick** This will simulate clicking the big cookie by directly calling the function that register cookie clicks. A value of 250 will best well for most people playing on web, but if you have a fast computer and are playing the Steam version, you can go up to 1000. Basically, to find the sweet spot for your system, start at a value like 100 and increase it until the 'Next' upgrade in the options or infobox begins to go wrong, either by losing the seconds value or by showing a clearly incorrect count. If it does, lower the Autoclick count again until you find the optimal speed. Or, just set it 250 and forget about it.
-* **Autofrenzy** This is Autoclick but during click frenzies. The same rules as Autoclick apply, but you can use a higher value here if you cannot normally run Autoclick at top speed. 
+* **Autofrenzy** This is Autoclick but during click frenzies. The same rules as Autoclick apply, but you can use a higher value here even if you cannot  normally run Autoclick at top speed. 
 * **Autoclick GC** All golden cookes, including wrath cookies, will be collected as soon as they appear if enabled. 
+* **Autoclick Wrath Cookies** If DISABLED along with the above, this will allow wrath cookies to time out. Not recommended, as some wrath cookies actually have positive effects. 
 * **Autoclick Reindeer** This will click Reindeer the moment they appear. 
 * **Auto Fortune** The moment a fortune appears in the newsticker, it will be collected. It may be a good idea to disable this during active play, as you will only collect fortune bonuses once per ascension and *Your Lucky numbers are* gives up to double your bank, so you will likely want this at a later point. 
 
