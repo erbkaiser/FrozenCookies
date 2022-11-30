@@ -5731,9 +5731,9 @@ function autoCookie() {
                         Game.Objects["Cortex baker"].amount >=
                             FrozenCookies.cortexMax - 100))
             ) {
-                Game.buyBulk = 10;
+                document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
-                Game.buyBulk = 100;
+                document.getElementById("storeBulk100").click();
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 10 &&
@@ -5756,9 +5756,9 @@ function autoCookie() {
                         Game.Objects["Cortex baker"].amount >=
                             FrozenCookies.cortexMax - 10))
             ) {
-                Game.buyBulk = 1;
+                document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);
-                Game.buyBulk = 10;
+                document.getElementById("storeBulk10").click();
             } else if (recommendation.type == "building") {
                 safeBuy(recommendation.purchase);
             } else {
