@@ -277,6 +277,55 @@ function setOverrides(gameSaveData) {
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
         FrozenCookies.cortexMax = preferenceParse("cortexMax", 0);
 
+        // Restore some possibly broken settings
+        if (FrozenCookies.autoSL != 2 && autoRigidel.autoworshipyes == 1) {
+            FrozenCookies.autoWorshipToggle = 1;
+            autoRigidel.autoworshipyes = 0;
+        }
+        if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
+            FrozenCookies.autoBuy = 1;
+            autoSweetAction.autobuyyes = 0;
+        }
+        if (!FrozenCookies.autoFTHOFCombo && autoFTHOFComboAction.autobuyyes == 1) {
+            FrozenCookies.autoBuy = 1;
+            autoFTHOFComboAction.autobuyyes = 0;
+        }
+        if (
+            !FrozenCookies.auto100ConsistencyCombo &&
+            auto100ConsistencyComboAction.autobuyyes == 1
+        ) {
+            FrozenCookies.autoBuy = 1;
+            auto100ConsistencyComboAction.autobuyyes = 0;
+        }
+        if (
+            !FrozenCookies.auto100ConsistencyCombo &&
+            auto100ConsistencyComboAction.autogcyes == 1
+        ) {
+            FrozenCookies.autoGC = 1;
+            auto100ConsistencyComboAction.autogcyes = 0;
+        }
+        if (
+            !FrozenCookies.auto100ConsistencyCombo &&
+            auto100ConsistencyComboAction.autogodyes == 1
+        ) {
+            FrozenCookies.autoGodzamok = 1;
+            auto100ConsistencyComboAction.autogodyes = 0;
+        }
+        if (
+            !FrozenCookies.auto100ConsistencyCombo &&
+            auto100ConsistencyComboAction.autoworshipyes == 1
+        ) {
+            FrozenCookies.autoWorshipToggle = 1;
+            auto100ConsistencyComboAction.autoworshipyes = 0;
+        }
+        if (
+            !FrozenCookies.auto100ConsistencyCombo &&
+            auto100ConsistencyComboAction.autodragonyes == 1
+        ) {
+            FrozenCookies.autoDragonToggle = 1;
+            auto100ConsistencyComboAction.autodragonyes = 0;
+        }
+
         // Get historical data
         FrozenCookies.frenzyTimes =
             JSON.parse(
