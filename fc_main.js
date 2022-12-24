@@ -1045,13 +1045,14 @@ function BuffTimeFactor() {
 }
 
 function autoCast() {
+    if (!M) return;
+
     if (
-        !M ||
         FrozenCookies.autoFTHOFCombo == 1 ||
         FrozenCookies.auto100ConsistencyCombo == 1 ||
         FrozenCookies.autoSweet == 1
     ) {
-        return;
+        FrozenCookies.autoSpell = 0;
     }
 
     if (
@@ -1423,7 +1424,7 @@ function autoFTHOFComboAction() {
         FrozenCookies.auto100ConsistencyCombo == 1 || // 100% combo should override
         FrozenCookies.autoSweet == 1 // Autosweet overrides
     ) {
-        return;
+        FrozenCookies.autoFTHOFCombo = 0;
     }
 
     if (typeof autoFTHOFComboAction.state == "undefined") autoFTHOFComboAction.state = 0;
@@ -1857,9 +1858,11 @@ function auto100ConsistencyComboAction() {
         return;
     }
 
+    // Autosweet overrides
+    if (FrozenCookies.autoSweet == 1) FrozenCookies.auto100ConsistencyCombo = 0;
+
     // Not currently possible to do the combo
     if (
-        FrozenCookies.autoSweet == 1 || // Autosweet overrides
         Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
         !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
     ) {
