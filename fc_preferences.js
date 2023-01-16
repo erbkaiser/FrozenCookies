@@ -400,6 +400,15 @@ FrozenCookies.preferenceValues = {
         ],
         default: 0,
     },
+    freeSeason: {
+        hint: "Stay in the current base (free) season as long as no others have upgrades. Overrides the Default Season option",
+        display: [
+            "Free Season OFF",
+            "Free Season for CHRISTMAS and BUSINESS DAY",
+            "Free Season for ALL",
+        ],
+        default: 1,
+    },
     autoEaster: {
         hint: "Switch to Easter season if Cookie Storm is active and you do not have all eggs yet",
         display: ["Auto-Easter Switch OFF", "Auto-Easter Switch ON"],
@@ -541,7 +550,7 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="viewStats" onclick="viewStatGraphs();">View Stat Graphs</a>',
     },
     recommendedSettings: {
-        hint: "Enable all recommended settings. WARNING: game will save and reload and this will override anything you have currently set!",
+        hint: "Enable all recommended settings. WARNING: the game will save and reload, possibly unloading Frozen Cookies. This will override any current setting!",
         display: ["Recommended OFF", "Recommended ON"],
         default: 0,
     },

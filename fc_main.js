@@ -278,10 +278,6 @@ function setOverrides(gameSaveData) {
         FrozenCookies.cortexMax = preferenceParse("cortexMax", 0);
 
         // Restore some possibly broken settings
-        if (FrozenCookies.autoSL != 2 && autoRigidel.autoworshipyes == 1) {
-            FrozenCookies.autoWorshipToggle = 1;
-            autoRigidel.autoworshipyes = 0;
-        }
         if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
             FrozenCookies.autoBuy = 1;
             autoSweetAction.autobuyyes = 0;
@@ -897,21 +893,8 @@ function autoRigidel() {
     var orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
     switch (orderLvl) {
         case 0: //Rigidel isn't in a slot
-            if (timeToRipe > 60 && autoRigidel.autoworshipyes == 1) {
-                if (autoRigidel.autoworshipyes == 1) {
-                    FrozenCookies.autoWorshipToggle = 1;
-                    autoRigidel.autoworshipyes = 0;
-                }
-            }
             if (T.swaps < 2 || (T.swaps == 1 && T.slot[0] == -1)) return; //Don't do anything if we can't swap Rigidel in
             if (timeToRipe < 60) {
-                // Turn off Auto Pantheon
-                if (FrozenCookies.autoWorshipToggle == 1) {
-                    autoRigidel.autoworshipyes = 1;
-                    FrozenCookies.autoWorshipToggle = 0;
-                } else {
-                    autoRigidel.autoworshipyes = 0;
-                }
                 var prev = T.slot[0]; //cache whatever god you have equipped
                 swapIn(10, 0); //swap in rigidel
                 Game.computeLumpTimes();
@@ -925,10 +908,6 @@ function autoRigidel() {
                     }
                     if (prev != -1) swapIn(prev, 0); //put the old one back
                     logEvent("autoRigidel", "Sugar lump harvested early");
-                    if (autoRigidel.autoworshipyes == 1) {
-                        FrozenCookies.autoWorshipToggle = 1;
-                        autoRigidel.autoworshipyes = 0;
-                    }
                 }
             }
         case 1: //Rigidel is already in diamond slot
@@ -3807,6 +3786,7 @@ function recommendedSettingsAction() {
         FrozenCookies.cortexMax = 200;
         // Season options
         FrozenCookies.defaultSeason = 1;
+        FrozenCookies.freeSeason = 1;
         FrozenCookies.autoEaster = 1;
         FrozenCookies.autoHalloween = 1;
         //Bank options
@@ -4800,6 +4780,20 @@ function isUnavailable(upgrade, upgradeBlacklist) {
 
     // Steamed cookies are only on Steam
     if (!App && upgrade.id == 817) return true;
+
+    // Don't leave base season if it's desired
+    if (
+        Game.baseSeason != 0 &&
+        Game.UpgradesById[181].unlocked &&
+        FrozenCookies.freeSeason != 0 &&
+        haveAll("christmas") &&
+        haveAll("halloween") &&
+        haveAll("valentines") &&
+        haveAll("easter") &&
+        ((FrozenCookies.freeSeason == 1 && (upgrade.id == 182 || upgrade.id == 185)) ||
+            (FrozenCookies.freeSeason == 2 && upgrade.season))
+    )
+        return true;
 
     var result = false;
 

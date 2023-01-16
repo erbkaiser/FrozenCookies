@@ -12,6 +12,12 @@ CCSE changes base game functions that break the switches like the season switch 
 
 ## How to use
 
+If you have the **FrozenCookies** button on the top right of your Cookie Clicker, replacing the **Info** button, you're all set!
+
+Click that button to configure everything or use the Recommended Settings at the bottom of the menu for a quick start. Read on for details on what each option does.
+
+If you do not have the button, confirm FC is installed. Instructions for each platform and method are below.
+
 ## Steam Install
 Get it from the Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538
 
@@ -61,6 +67,9 @@ If you want to manually install it:
 ## What's new?
 <details>
 <summary>Click to expand!</summary> 
+
+2022 Dec 30
+* Added 'Free Season' option to remain in the game base season
 
 2022 Nov 30
 * Auto 100% Consistency Combo will no longer remove planted whiskerblooms to plant more whiskerblooms
@@ -495,7 +504,7 @@ If you want to manually install it:
 * **Auto Bulkbuy** This sets the bulk buy mode directly after ascending only. It does not carry over on reloads. If some buildings are capped, it will temporarily bypass bulk buy for those if they are near the cap. 
 * **Auto Buy All Upgrades** This will effectively hit the 'buy all upgrades' button as many times as it can until at least one prestige level (heavenly chip) is earned.
 * **Autoascend** This is mainly useful if you're grinding out ascensions for Endless Cycle, or want to build up your HC boost. Note that it can take a few seconds before the upgrade screen disappears each ascension, the transition isn't instantaneous.
-* **Autopop Wrinklers** Pop any wrinklers, either the moment they appear, or when they have eaten enough to provide a decent bonus toward the next purchase. This is ignored during Halloween and Easter season as long as halloween cookies and eggs are still not found. 
+* **Autopop Wrinklers** Pop any wrinklers, either the moment they appear, or when they have eaten enough to provide a decent bonus toward the next purchase. This is ignored during the Halloween and Easter seasons as long as some halloween cookies and eggs are still not found. 
 * **Save Shiny Wrinklers** This overrides the Autopop function for the shiny wrinkler, and will also prevent the Grandmapocalypse from ever ending, if enabled. 
 * **Autoharvest Sugar Lump** Will harvest a lump as soon as it is safe to do so (ripe). It can also swap in Rigidel automatically to make the harvest occur up to one hour early. 
 * **Auto-Dragon's Curve** Will swap the dragon aura to Dragon's Curve when a lump is harvested, to try to get an unusual type. Can also swap in Reality Bending at the same time for an ever bigger chance at unusual lumps. Enabling DC at harvest increases your _average_ number lumps over time (as long as the game is open) by 3,5%, using DC and RB increases this to 3.8%!
@@ -525,7 +534,8 @@ See the schedule on https://cookieclicker.fandom.com/wiki/Pantheon
 * **Cortex bakers Limit** This will cap the number of Cortex bakers that can be bought to a given number to make sure ADO doesn't wipe out all your cookies.
 
 ## Season options
-* **Default Season** Will buy the given season, if no season is active and all other seasons with drops have had all their upgrades unlocked. This will immediately change seasons if possible so turn off Auto-Buy if you're going through the list to avoid overpaying.
+* **Default Season** Will buy the given season, if no season is active and all other seasons with drops have had all their upgrades unlocked. This will immediately change seasons if possible, so turn off Auto-Buy if you're going through the list to avoid overpaying.
+* **Free Season** Will override the Default Season option to stay in the game's base season. This can be set for either Christmas and Business Day only (the two seasons that provide benefits throughout) or for all five seasons.
 * **Auto-Easter Switch** If you do not have all eggs yet, this will instantly start Easter the moment a Cookie Storm starts. This because eggs can be extremely tedious to unlock by normal means.
 * **Auto-Halloween Switch** If you do not have all spooky biscuits yet, this will change to Halloween if the season is not Easter and there are wrinklers.
 
