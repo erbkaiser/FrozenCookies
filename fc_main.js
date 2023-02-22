@@ -55,9 +55,7 @@ function registerMod(mod_id = "frozen_cookies") {
                     Math.random() < 0.3 &&
                     Game.season != "fools"
                 ) {
-                    return [
-                        "You should buy that " + nextPurchase().purchase.name + " soon.",
-                    ];
+                    return ["You should buy " + nextPurchase().purchase.name + " next."];
                 }
                 if (Math.random() < 0.3 && Game.season == "fools") {
                     return [
@@ -2277,69 +2275,83 @@ function auto100ConsistencyComboAction() {
                 }
             }
             if (Game.hasBuff("Devastation") && hasClickBuff()) {
-                if (Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm)
+                if (
+                    Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm
+                ) {
                     safeBuy(
                         Game.Objects["Farm"],
                         auto100ConsistencyComboAction.countFarm -
                             Game.Objects["Farm"].amount
                     );
-                if (Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine)
+                }
+                if (
+                    Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine
+                ) {
                     safeBuy(
                         Game.Objects["Mine"],
                         auto100ConsistencyComboAction.countMine -
                             Game.Objects["Mine"].amount
                     );
+                }
                 if (
                     Game.Objects["Factory"].amount <
                     auto100ConsistencyComboAction.countFactory
-                )
+                ) {
                     safeBuy(
                         Game.Objects["Factory"],
                         auto100ConsistencyComboAction.countFactory -
                             Game.Objects["Factory"].amount
                     );
-                if (Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank)
+                }
+                if (
+                    Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank
+                ) {
                     safeBuy(
                         Game.Objects["Bank"],
                         auto100ConsistencyComboAction.countBank -
                             Game.Objects["Bank"].amount
                     );
+                }
                 if (
                     Game.Objects["Temple"].amount <
                     auto100ConsistencyComboAction.countTemple
-                )
+                ) {
                     safeBuy(
                         Game.Objects["Temple"],
                         auto100ConsistencyComboAction.countTemple -
                             Game.Objects["Temple"].amount
                     );
+                }
                 if (
                     Game.Objects["Shipment"].amount <
                     auto100ConsistencyComboAction.countShipment
-                )
+                ) {
                     safeBuy(
                         Game.Objects["Shipment"],
                         auto100ConsistencyComboAction.countShipment -
                             Game.Objects["Shipment"].amount
                     );
+                }
                 if (
                     Game.Objects["Alchemy lab"].amount <
                     auto100ConsistencyComboAction.countAlchemy
-                )
+                ) {
                     safeBuy(
                         Game.Objects["Alchemy lab"],
                         auto100ConsistencyComboAction.countAlchemy -
                             Game.Objects["Alchemy lab"].amount
                     );
+                }
                 if (
                     Game.Objects["Time machine"].amount <
                     auto100ConsistencyComboAction.countTimeMach
-                )
+                ) {
                     safeBuy(
                         Game.Objects["Time machine"],
                         auto100ConsistencyComboAction.countTimeMach -
                             Game.Objects["Time machine"].amount
                     );
+                }
                 FrozenCookies.autobuyCount += 1;
             }
 
@@ -2368,72 +2380,83 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 19: // Buy back
-            if (Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm)
+            if (Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm) {
                 safeBuy(
                     Game.Objects["Farm"],
                     auto100ConsistencyComboAction.countFarm - Game.Objects["Farm"].amount
                 );
-            if (Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine)
+            }
+            if (Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine) {
                 safeBuy(
                     Game.Objects["Mine"],
                     auto100ConsistencyComboAction.countMine - Game.Objects["Mine"].amount
                 );
+            }
             if (
                 Game.Objects["Factory"].amount <
                 auto100ConsistencyComboAction.countFactory
-            )
+            ) {
                 safeBuy(
                     Game.Objects["Factory"],
                     auto100ConsistencyComboAction.countFactory -
                         Game.Objects["Factory"].amount
                 );
-            if (Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank)
+            }
+            if (Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank) {
                 safeBuy(
                     Game.Objects["Bank"],
                     auto100ConsistencyComboAction.countBank - Game.Objects["Bank"].amount
                 );
-            if (Game.Objects["Temple"].amount < auto100ConsistencyComboAction.countTemple)
+            }
+            if (
+                Game.Objects["Temple"].amount < auto100ConsistencyComboAction.countTemple
+            ) {
                 safeBuy(
                     Game.Objects["Temple"],
                     auto100ConsistencyComboAction.countTemple -
                         Game.Objects["Temple"].amount
                 );
+            }
             if (
                 Game.Objects["Shipment"].amount <
                 auto100ConsistencyComboAction.countShipment
-            )
+            ) {
                 safeBuy(
                     Game.Objects["Shipment"],
                     auto100ConsistencyComboAction.countShipment -
                         Game.Objects["Shipment"].amount
                 );
+            }
             if (
                 Game.Objects["Alchemy lab"].amount <
                 auto100ConsistencyComboAction.countAlchemy
-            )
+            ) {
                 safeBuy(
                     Game.Objects["Alchemy lab"],
                     auto100ConsistencyComboAction.countAlchemy -
                         Game.Objects["Alchemy lab"].amount
                 );
+            }
             if (
                 Game.Objects["Time machine"].amount <
                 auto100ConsistencyComboAction.countTimeMach
-            )
+            ) {
                 safeBuy(
                     Game.Objects["Time machine"],
                     auto100ConsistencyComboAction.countTimeMach -
                         Game.Objects["Time machine"].amount
                 );
+            }
             if (
                 Game.Objects["Antimatter condenser"].amount <
                 auto100ConsistencyComboAction.countAntiMatter
-            )
+            ) {
                 safeBuy(
                     Game.Objects["Antimatter condenser"],
                     auto100ConsistencyComboAction.countAntiMatter -
                         Game.Objects["Antimatter condenser"].amount
                 );
+            }
             FrozenCookies.autobuyCount += 1;
             auto100ConsistencyComboAction.state = 20;
             return;
@@ -5578,12 +5601,12 @@ function autoGodzamokAction() {
             Game.Objects["Mine"].sell(countMine);
             Game.Objects["Factory"].sell(countFactory);
             //Rebuy mines
-            if (FrozenCookies.mineLimit && countMine > FrozenCookies.mineMax) {
-                var countMine = FrozenCookies.mineMax - Game.Objects["Mine"].amount;
-                if (countMine > 0) {
-                    safeBuy(Game.Objects["Mine"], countMine);
+            if (FrozenCookies.mineLimit) {
+                var countMineL = FrozenCookies.mineMax - countMine;
+                if (countMineL > 0) {
+                    safeBuy(Game.Objects["Mine"], countMineL);
                     FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countMine + " mines");
+                    logEvent("AutoGodzamok", "Bought " + countMineL + " mines");
                 }
             } else {
                 safeBuy(Game.Objects["Mine"], countMine);
@@ -5591,13 +5614,12 @@ function autoGodzamokAction() {
                 logEvent("AutoGodzamok", "Bought " + countMine + " mines");
             }
             //Rebuy factories
-            if (FrozenCookies.factoryLimit && countFactory > FrozenCookies.factoryMax) {
-                var countFactory =
-                    FrozenCookies.factoryMax - Game.Objects["Factory"].amount;
-                if (countFactory > 0) {
-                    safeBuy(Game.Objects["Factory"], countFactory);
+            if (FrozenCookies.factoryLimit) {
+                var countFactoryL = FrozenCookies.factoryMax - countFactory;
+                if (countFactoryL > 0) {
+                    safeBuy(Game.Objects["Factory"], countFactoryL);
                     FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countFactory + " factories");
+                    logEvent("AutoGodzamok", "Bought " + countFactoryL + " factories");
                 }
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);

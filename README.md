@@ -66,7 +66,7 @@ If you want to manually install it:
 
 ## What's new?
 <details>
-<summary>Click to expand!</summary> 
+<summary>Click to expand!</summary>
 
 2022 Dec 30
 * Added 'Free Season' option to remain in the game base season
