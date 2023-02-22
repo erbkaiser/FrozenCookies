@@ -1809,7 +1809,7 @@ function autoFTHOFComboAction() {
                     autoFTHOFComboAction.bulk = 1;
                     return;
                 case 10:
-                    autoFTHOFComboAction.bulk = 10;
+                    autoFTHOFComboAction.bulk = 2;
             }
             if (autoFTHOFComboAction.bulk != 0) {
                 document.getElementById("storeBulk100").click();
@@ -1837,7 +1837,7 @@ function autoFTHOFComboAction() {
                 case 1:
                     document.getElementById("storeBulk1").click();
                     return;
-                case 10:
+                case 2:
                     document.getElementById("storeBulk10").click();
             }
             if (autoFTHOFComboAction.autobuyyes == 1) {
@@ -2213,7 +2213,7 @@ function auto100ConsistencyComboAction() {
                     auto100ConsistencyComboAction.bulk = 1;
                     return;
                 case 10:
-                    auto100ConsistencyComboAction.bulk = 10;
+                    auto100ConsistencyComboAction.bulk = 2;
             }
             if (auto100ConsistencyComboAction.bulk != 0) {
                 document.getElementById("storeBulk100").click();
@@ -2241,7 +2241,7 @@ function auto100ConsistencyComboAction() {
                 case 1:
                     document.getElementById("storeBulk1").click();
                     return;
-                case 10:
+                case 2:
                     document.getElementById("storeBulk10").click();
             }
             FrozenCookies.autobuyCount += 1;
@@ -2286,7 +2286,7 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.bulk = 1;
                         return;
                     case 10:
-                        auto100ConsistencyComboAction.bulk = 10;
+                        auto100ConsistencyComboAction.bulk = 2;
                 }
                 if (auto100ConsistencyComboAction.bulk != 0) {
                     document.getElementById("storeBulk100").click();
@@ -2338,7 +2338,7 @@ function auto100ConsistencyComboAction() {
                         case 1:
                             document.getElementById("storeBulk1").click();
                             return;
-                        case 10:
+                        case 2:
                             document.getElementById("storeBulk10").click();
                     }
                     FrozenCookies.autobuyCount += 1;
@@ -2352,7 +2352,7 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.bulk = 1;
                         return;
                     case 10:
-                        auto100ConsistencyComboAction.bulk = 10;
+                        auto100ConsistencyComboAction.bulk = 2;
                 }
                 if (auto100ConsistencyComboAction.bulk != 0) {
                     document.getElementById("storeBulk100").click();
@@ -2440,7 +2440,7 @@ function auto100ConsistencyComboAction() {
                     case 1:
                         document.getElementById("storeBulk1").click();
                         return;
-                    case 10:
+                    case 2:
                         document.getElementById("storeBulk10").click();
                 }
                 FrozenCookies.autobuyCount += 1;
@@ -2478,7 +2478,7 @@ function auto100ConsistencyComboAction() {
                     auto100ConsistencyComboAction.bulk = 1;
                     return;
                 case 10:
-                    auto100ConsistencyComboAction.bulk = 10;
+                    auto100ConsistencyComboAction.bulk = 2;
             }
             if (auto100ConsistencyComboAction.bulk != 0) {
                 document.getElementById("storeBulk100").click();
@@ -2566,7 +2566,7 @@ function auto100ConsistencyComboAction() {
                 case 1:
                     document.getElementById("storeBulk1").click();
                     return;
-                case 10:
+                case 2:
                     document.getElementById("storeBulk10").click();
             }
             FrozenCookies.autobuyCount += 1;
@@ -2742,7 +2742,7 @@ function autoBankAction() {
                 autoBankAction.bulk = 1;
                 return;
             case 10:
-                autoBankAction.bulk = 10;
+                autoBankAction.bulk = 2;
         }
         if (autoBankAction.bulk != 0) {
             document.getElementById("storeBulk100").click();
@@ -2754,7 +2754,7 @@ function autoBankAction() {
             case 1:
                 document.getElementById("storeBulk1").click();
                 return;
-            case 10:
+            case 2:
                 document.getElementById("storeBulk10").click();
         }
         FrozenCookies.autobuyCount += 1;
@@ -5739,7 +5739,7 @@ function autoGodzamokAction() {
                     autoGodzamokAction.bulk = 1;
                     return;
                 case 10:
-                    autoGodzamokAction.bulk = 10;
+                    autoGodzamokAction.bulk = 2;
             }
             if (autoGodzamokAction.bulk != 0) {
                 document.getElementById("storeBulk100").click();
@@ -5776,7 +5776,7 @@ function autoGodzamokAction() {
                 case 1:
                     document.getElementById("storeBulk1").click();
                     return;
-                case 10:
+                case 2:
                     document.getElementById("storeBulk10").click();
             }
         }
