@@ -56,7 +56,7 @@ function registerMod(mod_id = "frozen_cookies") {
                     Game.season != "fools"
                 ) {
                     return [
-                        "You should buy that " + nextPurchase().purchase.name + " soon.",
+                        "You should buy " + nextPurchase().purchase.name + " next.",
                     ];
                 }
                 if (Math.random() < 0.3 && Game.season == "fools") {
