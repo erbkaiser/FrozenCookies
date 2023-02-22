@@ -17,13 +17,11 @@ function registerMod(mod_id = "frozen_cookies") {
         init: function () {
             Game.registerHook("reincarnate", function () {
                 // called when the player has reincarnated after an ascension
-                switch (FrozenCookies.autoBulk) {
-                    case 0:
-                        return;
-                    case 1:
+                if (!FrozenCookies.autoBulk) return;
+                if (FrozenCookies.autoBulk == 1) {
                         document.getElementById("storeBulk10").click();
-                        return;
-                    case 2:
+                }
+                if (FrozenCookies.autoBulk == 2) {
                         document.getElementById("storeBulk100").click();
                 }
             });
@@ -1012,19 +1010,14 @@ function BuffTimeFactor() {
     if (Game.Has("Green yeast digestives")) DurMod *= 1.01;
     if (Game.Has("Lucky payout")) DurMod *= 1.01;
     DurMod *= 1 + Game.auraMult("Epoch Manipulator") * 0.05;
+
     if (Game.hasGod) {
         var godLvl = Game.hasGod("decadence");
-        switch (godLvl) {
-            case 1:
-                DurMod *= 1.07;
-                break;
-            case 2:
-                DurMod *= 1.05;
-                break;
-            case 3:
-                DurMod *= 1.02;
-        }
+        if (godLvl == 1) DurMod *= 1.07;
+        else if (godLvl == 2) DurMod *= 1.05;
+        else if (godLvl == 3) DurMod *= 1.02;
     }
+
     return DurMod;
 }
 
@@ -1802,18 +1795,6 @@ function autoFTHOFComboAction() {
             M.computeMagicM(); //Recalc max after selling
             M.castSpell(M.spellsById[1]);
             logEvent("autoFTHOFCombo", "Double cast Force the Hand of Fate");
-            switch (Game.buyBulk) {
-                case 100:
-                    return;
-                case 1:
-                    autoFTHOFComboAction.bulk = 1;
-                    return;
-                case 10:
-                    autoFTHOFComboAction.bulk = 2;
-            }
-            if (autoFTHOFComboAction.bulk != 0) {
-                document.getElementById("storeBulk100").click();
-            }
             if (
                 FrozenCookies.towerLimit &&
                 FrozenCookies.manaMax <= 100 &&
@@ -1834,17 +1815,6 @@ function autoFTHOFComboAction() {
             if (autoFTHOFComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;
                 autoFTHOFComboAction.autobuyyes = 0;
-            }
-            if (Game.Objects["Wizard tower"].amount >= autoFTHOFComboAction.count) {
-                switch (autoFTHOFComboAction.bulk) {
-                    case 0:
-                        return;
-                    case 1:
-                        document.getElementById("storeBulk1").click();
-                        return;
-                    case 2:
-                        document.getElementById("storeBulk10").click();
-                }
             }
             autoFTHOFComboAction.count = 0;
             autoFTHOFComboAction.state = 0;
@@ -2208,18 +2178,6 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 15: // buy back buildings
-            switch (Game.buyBulk) {
-                case 100:
-                    return;
-                case 1:
-                    auto100ConsistencyComboAction.bulk = 1;
-                    return;
-                case 10:
-                    auto100ConsistencyComboAction.bulk = 2;
-            }
-            if (auto100ConsistencyComboAction.bulk != 0) {
-                document.getElementById("storeBulk100").click();
-            }
             safeBuy(Game.Objects["Farm"], auto100ConsistencyComboAction.countFarm);
             safeBuy(Game.Objects["Mine"], auto100ConsistencyComboAction.countMine);
             safeBuy(Game.Objects["Factory"], auto100ConsistencyComboAction.countFactory);
@@ -2237,17 +2195,6 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Time machine"],
                 auto100ConsistencyComboAction.countTimeMach
             );
-            if (Game.Objects["Farm"].amount >= auto100ConsistencyComboAction.countFarm) {
-                switch (auto100ConsistencyComboAction.bulk) {
-                    case 0:
-                        return;
-                    case 1:
-                        document.getElementById("storeBulk1").click();
-                        return;
-                    case 2:
-                        document.getElementById("storeBulk10").click();
-                }
-            }
             FrozenCookies.autobuyCount += 1;
             auto100ConsistencyComboAction.state = 16;
             return;
@@ -2282,18 +2229,6 @@ function auto100ConsistencyComboAction() {
                     Game.Objects["Time machine"].sell(
                         auto100ConsistencyComboAction.countTimeMach
                     );
-                }
-                switch (Game.buyBulk) {
-                    case 100:
-                        return;
-                    case 1:
-                        auto100ConsistencyComboAction.bulk = 1;
-                        return;
-                    case 10:
-                        auto100ConsistencyComboAction.bulk = 2;
-                }
-                if (auto100ConsistencyComboAction.bulk != 0) {
-                    document.getElementById("storeBulk100").click();
                 }
                 if (Game.Objects["Farm"].amount < 10) {
                     safeBuy(
@@ -2337,35 +2272,9 @@ function auto100ConsistencyComboAction() {
                             Game.Objects["Time machine"].amount
                     );
                     FrozenCookies.autobuyCount += 1;
-                    if (
-                        Game.Objects["Farm"].amount >=
-                        auto100ConsistencyComboAction.countFarm
-                    ) {
-                        switch (auto100ConsistencyComboAction.bulk) {
-                            case 0:
-                                return;
-                            case 1:
-                                document.getElementById("storeBulk1").click();
-                                return;
-                            case 2:
-                                document.getElementById("storeBulk10").click();
-                        }
-                    }
                 }
             }
             if (Game.hasBuff("Devastation") && hasClickBuff()) {
-                switch (Game.buyBulk) {
-                    case 100:
-                        return;
-                    case 1:
-                        auto100ConsistencyComboAction.bulk = 1;
-                        return;
-                    case 10:
-                        auto100ConsistencyComboAction.bulk = 2;
-                }
-                if (auto100ConsistencyComboAction.bulk != 0) {
-                    document.getElementById("storeBulk100").click();
-                }
                 if (
                     Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm
                 ) {
@@ -2444,19 +2353,6 @@ function auto100ConsistencyComboAction() {
                     );
                 }
                 FrozenCookies.autobuyCount += 1;
-                if (
-                    Game.Objects["Farm"].amount >= auto100ConsistencyComboAction.countFarm
-                ) {
-                    switch (auto100ConsistencyComboAction.bulk) {
-                        case 0:
-                            return;
-                        case 1:
-                            document.getElementById("storeBulk1").click();
-                            return;
-                        case 2:
-                            document.getElementById("storeBulk10").click();
-                    }
-                }
             }
 
             if (!hasClickBuff()) auto100ConsistencyComboAction.state = 18;
@@ -2484,18 +2380,6 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 19: // Buy back
-            switch (Game.buyBulk) {
-                case 100:
-                    return;
-                case 1:
-                    auto100ConsistencyComboAction.bulk = 1;
-                    return;
-                case 10:
-                    auto100ConsistencyComboAction.bulk = 2;
-            }
-            if (auto100ConsistencyComboAction.bulk != 0) {
-                document.getElementById("storeBulk100").click();
-            }
             if (Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm) {
                 safeBuy(
                     Game.Objects["Farm"],
@@ -2572,18 +2456,6 @@ function auto100ConsistencyComboAction() {
                     auto100ConsistencyComboAction.countAntiMatter -
                         Game.Objects["Antimatter condenser"].amount
                 );
-            }
-            if (Game.Objects["Farm"].amount >= auto100ConsistencyComboAction.countFarm) {
-                switch (auto100ConsistencyComboAction.bulk) {
-                    case 0:
-                        return;
-                    case 1:
-                        document.getElementById("storeBulk1").click();
-                        return;
-                    case 2:
-                        document.getElementById("storeBulk10").click();
-                }
-            }
             FrozenCookies.autobuyCount += 1;
             auto100ConsistencyComboAction.state = 20;
             return;
@@ -2750,30 +2622,7 @@ function autoBankAction() {
     ) {
         var countBankCursor = currentOffice.cost[0];
         l("bankOfficeUpgrade").click();
-        switch (Game.buyBulk) {
-            case 100:
-                return;
-            case 1:
-                autoBankAction.bulk = 1;
-                return;
-            case 10:
-                autoBankAction.bulk = 2;
-        }
-        if (autoBankAction.bulk != 0) {
-            document.getElementById("storeBulk100").click();
-        }
         safeBuy(Game.Objects["Cursor"], countBankCursor);
-        if (Game.Objects["Cursor"].amount >= countBankCursor) {
-            switch (autoBankAction.bulk) {
-                case 0:
-                    return;
-                case 1:
-                    document.getElementById("storeBulk1").click();
-                    return;
-                case 2:
-                    document.getElementById("storeBulk10").click();
-            }
-        }
         FrozenCookies.autobuyCount += 1;
         logEvent("AutoBank", "Upgrade bank level for " + countBankCursor + " cursors");
         Game.recalculateGains = 1;
@@ -5749,18 +5598,6 @@ function autoGodzamokAction() {
         if (!Game.hasBuff("Devastation") && hasClickBuff()) {
             Game.Objects["Mine"].sell(countMine);
             Game.Objects["Factory"].sell(countFactory);
-            switch (Game.buyBulk) {
-                case 100:
-                    return;
-                case 1:
-                    autoGodzamokAction.bulk = 1;
-                    return;
-                case 10:
-                    autoGodzamokAction.bulk = 2;
-            }
-            if (autoGodzamokAction.bulk != 0) {
-                document.getElementById("storeBulk100").click();
-            }
             //Rebuy mines
             if (FrozenCookies.mineLimit) {
                 var countMineL = FrozenCookies.mineMax - countMine;
@@ -5786,20 +5623,6 @@ function autoGodzamokAction() {
                 safeBuy(Game.Objects["Factory"], countFactory);
                 FrozenCookies.autobuyCount += 1;
                 logEvent("AutoGodzamok", "Bought " + countFactory + " factories");
-            }
-            if (
-                Game.Objects["Mine"].amount >= countMine &&
-                Game.Objects["Factory"].amount >= countFactory
-            ) {
-                switch (autoGodzamokAction.bulk) {
-                    case 0:
-                        return;
-                    case 1:
-                        document.getElementById("storeBulk1").click();
-                        return;
-                    case 2:
-                        document.getElementById("storeBulk10").click();
-                }
             }
         }
     }
