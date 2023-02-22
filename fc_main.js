@@ -19,10 +19,10 @@ function registerMod(mod_id = "frozen_cookies") {
                 // called when the player has reincarnated after an ascension
                 if (!FrozenCookies.autoBulk) return;
                 if (FrozenCookies.autoBulk == 1) {
-                        document.getElementById("storeBulk10").click();
+                    document.getElementById("storeBulk10").click();
                 }
                 if (FrozenCookies.autoBulk == 2) {
-                        document.getElementById("storeBulk100").click();
+                    document.getElementById("storeBulk100").click();
                 }
             });
             Game.registerHook("draw", updateTimers); // called every draw tick
@@ -2456,6 +2456,7 @@ function auto100ConsistencyComboAction() {
                     auto100ConsistencyComboAction.countAntiMatter -
                         Game.Objects["Antimatter condenser"].amount
                 );
+            }
             FrozenCookies.autobuyCount += 1;
             auto100ConsistencyComboAction.state = 20;
             return;
