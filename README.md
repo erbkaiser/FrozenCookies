@@ -68,6 +68,9 @@ If you want to manually install it:
 <details>
 <summary>Click to expand!</summary> 
 
+2023 Feb 22
+* Bulk buy will be automatically enabled (and turned back to what was set previously) for Godzamok repurchases
+
 2022 Dec 30
 * Added 'Free Season' option to remain in the game base season
 
