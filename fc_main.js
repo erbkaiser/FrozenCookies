@@ -1022,7 +1022,7 @@ function BuffTimeFactor() {
 }
 
 function autoCast() {
-    if (!M) return;
+    if (!M || FrozenCookies.autoSpell == 0) return;
 
     if (
         FrozenCookies.autoFTHOFCombo == 1 ||
@@ -1388,11 +1388,13 @@ function autoCast() {
 
 // Thank goodness for static variables otherwise this function would not have worked as intended.
 function autoFTHOFComboAction() {
+    if (!M || FrozenCookies.autoFTHOFCombo == 0) return;
+
     // Prereqs check
-    if (!M || Game.Objects["Wizard tower"].level > 10) {
+    if (Game.Objects["Wizard tower"].level > 10) {
         // Will not work with wizard tower level > 10
         FrozenCookies.autoFTHOFCombo = 0;
-        logEvent("autoFTHOFCombo", "Combo disabled, impossible");
+        logEvent("autoFTHOFCombo", "Combo disabled, wizard tower level too high");
         return;
     }
 
@@ -1824,11 +1826,11 @@ function autoFTHOFComboAction() {
 }
 
 function auto100ConsistencyComboAction() {
+    if (!M || !G || FrozenCookies.auto100ConsistencyCombo == 0) return;
+
     // Prereqs check
     if (
-        !M ||
-        Game.Objects["Wizard tower"].level != 10 || // Only works with wizard towers level 10
-        !G // Garden must be unlocked
+        Game.Objects["Wizard tower"].level != 10 // Only works with wizard towers level 10
     ) {
         FrozenCookies.auto100ConsistencyCombo = 0;
         logEvent("auto100ConsistencyCombo", "Combo disabled, impossible");
