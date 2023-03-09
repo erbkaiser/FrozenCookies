@@ -215,7 +215,7 @@ BuildingSpecialBuff = function () {
         //	Game.hasBuff('Antipattern') ||
         Game.hasBuff("Cosmic nursery") ||
         //	Game.hasBuff('Big crunch')) ||
-        Game.hasBuff("Brainstorm") // ||
+        Game.hasBuff("Brainstorm") ||
         //	Game.hasBuff("Brain freeze") ||
         Game.hasBuff("Deduplication") // ||
         //	Game.hasBuff("Clone strike") ||
