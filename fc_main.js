@@ -1022,7 +1022,8 @@ function BuffTimeFactor() {
 }
 
 function autoCast() {
-    if (!M || FrozenCookies.autoSpell == 0) return;
+    if (!M) return;
+    if (FrozenCookies.autoSpell == 0) return;
 
     if (
         FrozenCookies.autoFTHOFCombo == 1 ||
@@ -1388,7 +1389,8 @@ function autoCast() {
 
 // Thank goodness for static variables otherwise this function would not have worked as intended.
 function autoFTHOFComboAction() {
-    if (!M || FrozenCookies.autoFTHOFCombo == 0) return;
+    if (!M) return;
+    if (FrozenCookies.autoFTHOFCombo == 0) return;
 
     // Prereqs check
     if (Game.Objects["Wizard tower"].level > 10) {
@@ -1826,7 +1828,9 @@ function autoFTHOFComboAction() {
 }
 
 function auto100ConsistencyComboAction() {
-    if (!M || !G || FrozenCookies.auto100ConsistencyCombo == 0) return;
+    if (!M) return;
+    if (!G) return;
+    if (FrozenCookies.auto100ConsistencyCombo == 0) return;
 
     // Prereqs check
     if (
