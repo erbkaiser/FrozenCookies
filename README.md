@@ -68,6 +68,9 @@ If you want to manually install it:
 <details>
 <summary>Click to expand!</summary>
 
+2023 Feb 09
+* Updated for 2.05 beta (final building)
+
 2022 Dec 30
 * Added 'Free Season' option to remain in the game base season
 

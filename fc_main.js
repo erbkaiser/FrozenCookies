@@ -962,7 +962,7 @@ function autoDragonsCurve() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == 18 && //RB
         !Game.dragonAura2 == 17 // DC
     ) {
@@ -979,7 +979,7 @@ function autoDragonsCurve() {
 
     if (
         FrozenCookies.dragonsCurve == 2 &&
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         !Game.hasAura("Reality Bending")
     ) {
         Game.specialTab = "dragon";
@@ -1842,7 +1842,7 @@ function auto100ConsistencyComboAction() {
 
     // Not currently possible to do the combo
     if (
-        Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
+        Game.dragonLevel < 27 || // Fully upgraded dragon needed for two auras
         !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
     ) {
         return;
@@ -2665,7 +2665,7 @@ function autoLoanBuy() {
 }
 
 function autoDragonAction() {
-    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 25 || hasClickBuff()) {
+    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 26 || hasClickBuff()) {
         return;
     }
 
@@ -2731,7 +2731,7 @@ function autoDragonAura0Action() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == FrozenCookies.autoDragonAura1 &&
         Game.dragonAura2 != FrozenCookies.autoDragonAura0
     ) {
@@ -2753,7 +2753,7 @@ function autoDragonAura0Action() {
 function autoDragonAura1Action() {
     if (
         !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 26 ||
+        Game.dragonLevel < 27 ||
         !FrozenCookies.autoDragonAura0 ||
         !FrozenCookies.autoDragonAura1 ||
         !FrozenCookies.autoDragonToggle ||
@@ -2964,7 +2964,7 @@ function buyOtherUpgrades() {
 
     //Buy dragon drops
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon fang"].unlocked == 1 &&
         !Game.Upgrades["Dragon fang"].bought &&
         Game.cookies > Game.Upgrades["Dragon fang"].getPrice()
@@ -2972,7 +2972,7 @@ function buyOtherUpgrades() {
         Game.Upgrades["Dragon fang"].buy();
     }
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon teddy bear"].unlocked == 1 &&
         !Game.Upgrades["Dragon teddy bear"].bought &&
         Game.cookies > Game.Upgrades["Dragon teddy bear"].getPrice()

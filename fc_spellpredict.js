@@ -217,6 +217,8 @@ BuildingSpecialBuff = function () {
         //	Game.hasBuff('Big crunch')) ||
         Game.hasBuff("Brainstorm") // ||
         //	Game.hasBuff("Brain freeze") ||
+        Game.hasBuff("Deduplication") // ||
+        //	Game.hasBuff("Clone strike") ||
     ) {
         return 1;
     } else {
