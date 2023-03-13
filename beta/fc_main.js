@@ -2253,7 +2253,7 @@ function auto100ConsistencyComboAction() {
 
         case 16: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden" && Game.shimmer.wrath == 0) {
+                if (Game.shimmers[i].type == "golden" && !Game.shimmer.wrath == 1) {
                     Game.shimmers[i].pop();
                 }
             }
@@ -3842,7 +3842,7 @@ function recommendedSettingsAction() {
         // Spell options
         FrozenCookies.towerLimit = 1;
         FrozenCookies.manaMax = 37;
-        FrozenCookies.autoCasting = 2;
+        FrozenCookies.autoCasting = 3;
         FrozenCookies.minCpSMult = 7;
         FrozenCookies.autoFTHOFCombo = 0;
         FrozenCookies.auto100ConsistencyCombo = 0;
@@ -5946,7 +5946,7 @@ function autoCookie() {
             for (var i in Game.shimmers) {
                 if (
                     Game.shimmers[i].type == "golden" &&
-                    (Game.shimmer.wrath == 0 || FrozenCookies.autoWC)
+                    (!Game.shimmer.wrath == 1 || FrozenCookies.autoWC)
                 )
                     Game.shimmers[i].pop();
             }
