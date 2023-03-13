@@ -279,7 +279,7 @@ function setOverrides(gameSaveData) {
         switch (FrozenCookies.autoSpell) {
             case 0:
                 return;
-                
+
             case 1: // CBG
                 FrozenCookies.autoCasting = 1;
                 FrozenCookies.autoSpell = 0;
@@ -4348,8 +4348,7 @@ function harvestBank() {
             Game.Objects["Fractal engine"].amount,
             Game.Objects["Javascript console"].amount,
             Game.Objects["Idleverse"].amount,
-            Game.Objects["
-            baker"].amount,
+            Game.Objects["Cortex baker"].amount,
             Game.Objects["You"].amount,
         ];
         harvestBuildingArray.sort(function (a, b) {

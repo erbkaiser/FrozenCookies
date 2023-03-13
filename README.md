@@ -6,8 +6,8 @@ An automated Cookie Clicker tool.
 
 ## Compatiblity
 
-Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are used.
-Most other mods will also be compatible.
+Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are
+used. Most other mods will also be compatible.
 
 ## How to use
 
@@ -94,7 +94,8 @@ that I currently know of.
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
     options in Preferences **WARNING**: as part of this change, the spell options have
     been changed. Existing settings should transfer 1:1.
--   Added option to avoid clicking Wrath Cookies (recommended not to use as not all wraths are negative)
+-   Added option to avoid clicking Wrath Cookies (recommended not to use as not all wraths
+    are negative)
 
 2022 Dec 30
 
@@ -660,8 +661,9 @@ that I currently know of.
     Autoclick at top speed.
 -   **Autoclick GC** All golden cookes, including wrath cookies, will be collected as soon
     as they appear if enabled.
--   **Autoclick Wrath Cookies** If DISABLED along with the above, this will allow wrath cookies 
-    to time out. Not recommended, as some wrath cookies actually have positive effects.
+-   **Autoclick Wrath Cookies** If DISABLED along with the above, this will allow wrath
+    cookies to time out. Not recommended, as some wrath cookies actually have positive
+    effects.
 -   **Autoclick Reindeer** This will click Reindeer the moment they appear.
 -   **Auto Fortune** The moment a fortune appears in the newsticker, it will be collected.
     It may be a good idea to disable this during active play, as you will only collect
@@ -781,10 +783,10 @@ that I currently know of.
 -   **Dragon Auras** Will set the desired aura. Aura 1 will be set in the first slot and
     Aura 2 will set in the second slot, even if Aura 2 could theoretically be set earlier.
 -   **Auto Dragon Orbs** If Dragon Orbs is one of the active auras and Godzamok is not a
-    slotted god, this will repeatedly sell Yous to try to spawn Golden Cookies.
-    Works together with:
--   **You Limit** This will cap the number of Yous that can be bought
-    to a given number to make sure ADO doesn't wipe out all your cookies.
+    slotted god, this will repeatedly sell Yous to try to spawn Golden Cookies. Works
+    together with:
+-   **You Limit** This will cap the number of Yous that can be bought to a given number to
+    make sure ADO doesn't wipe out all your cookies.
 
 ## Season options
 
@@ -947,8 +949,8 @@ other spells will be replacved with _Haggler's Charm_
 
 ## Auto Cast SPONTANEOUS EDIFICE
 
-Will sell one You and then cast _Spontaneous Edifice_, to try to get a free
-building. This spell becomes useless once you have over 400 of all buildings.
+Will sell one You and then cast _Spontaneous Edifice_, to try to get a free building. This
+spell becomes useless once you have over 400 of all buildings.
 
 ## Auto Cast HAGGLER'S CHARM
 
