@@ -5596,8 +5596,7 @@ function autoGodzamokAction() {
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
         // Need at least 10 of each to be useful
-        if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10)
-            return;
+        //if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10) return;
         var countMine = Game.Objects["Mine"].amount;
         var countFactory = Game.Objects["Factory"].amount;
 
@@ -5607,12 +5606,9 @@ function autoGodzamokAction() {
             Game.Objects["Factory"].sell(countFactory);
             //Rebuy mines
             if (FrozenCookies.mineLimit) {
-                var countMineL = FrozenCookies.mineMax - countMine;
-                if (countMineL > 0) {
-                    safeBuy(Game.Objects["Mine"], countMineL);
-                    FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countMineL + " mines");
-                }
+                safeBuy(Game.Objects["Mine"], FrozenCookies.mineMax);
+                FrozenCookies.autobuyCount += 1;
+                logEvent("AutoGodzamok", "Bought " + FrozenCookies.mineMax + " mines");
             } else {
                 safeBuy(Game.Objects["Mine"], countMine);
                 FrozenCookies.autobuyCount += 1;
@@ -5620,12 +5616,12 @@ function autoGodzamokAction() {
             }
             //Rebuy factories
             if (FrozenCookies.factoryLimit) {
-                var countFactoryL = FrozenCookies.factoryMax - countFactory;
-                if (countFactoryL > 0) {
-                    safeBuy(Game.Objects["Factory"], countFactoryL);
-                    FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countFactoryL + " factories");
-                }
+                safeBuy(Game.Objects["Factory"], FrozenCookies.factoryMax);
+                FrozenCookies.autobuyCount += 1;
+                logEvent(
+                    "AutoGodzamok",
+                    "Bought " + FrozenCookies.factoryMax + " factories"
+                );
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);
                 FrozenCookies.autobuyCount += 1;
