@@ -246,15 +246,16 @@ FrozenCookies.preferenceValues = {
         default: 0,
         extras: '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>',
     },
-    autoSpell: {
+    autoCasting: {
         hint: "Automatically cast selected spell when your mana is full",
         display: [
             "Auto Cast OFF",
             "Auto Cast CONJURE BAKED GOODS",
-            "Auto Cast FORCE THE HAND OF FATE",
-            "Auto Cast SPONTANEOUS EDIFICE",
-            "Auto Cast HAGGLER'S CHARM (cheapest)",
+            "Auto Cast FORCE THE HAND OF FATE (simple)",
+            "Auto Cast FORCE THE HAND OF FATE (smart)",
             "Auto Cast FTHOF (Click and Building Specials only)",
+            "Auto Cast SPONTANEOUS EDIFICE",
+            "Auto Cast HAGGLER'S CHARM",
         ],
         default: 0,
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
