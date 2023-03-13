@@ -338,6 +338,7 @@ FrozenCookies.preferenceValues = {
             "Reality Bending",
             "Dragon Orbs",
             "Supreme Intellect",
+            "Dragon Guts",
         ],
         default: 0,
     },
@@ -365,19 +366,20 @@ FrozenCookies.preferenceValues = {
             "Reality Bending",
             "Dragon Orbs",
             "Supreme Intellect",
+            "Dragon Guts",
         ],
         default: 0,
     },
     autoDragonOrbs: {
-        hint: "Automatically sell Cortex bakers to summon a Golden Cookie, if Dragon Orbs is an aura and Godzamok is not slotted",
+        hint: "Automatically sell Yous to summon a Golden Cookie, if Dragon Orbs is an aura and Godzamok is not slotted",
         display: ["Auto-Dragon Orbs OFF", "Auto-Dragon Orbs ON"],
         default: 0,
     },
-    cortexLimit: {
-        hint: "Limit max number of Cortex bakers to keep Dragon Orbs useful",
-        display: ["Cortex bakers Limit OFF", "Cortex bakers Limit ON"],
+    youLimit: {
+        hint: "Limit max number of Yous to keep Dragon Orbs useful",
+        display: ["You Limit OFF", "You Limit ON"],
         default: 0,
-        extras: '<a class="option" id="cortexMax" onclick="updateCortexMax(\'cortexMax\');">${cortexMax} Cortex bakers</a>',
+        extras: '<a class="option" id="youMax" onclick="updateYouMax(\'youMax\');">${youMax} Yous</a>',
     },
 
     // Season options

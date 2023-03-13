@@ -273,7 +273,7 @@ function setOverrides(gameSaveData) {
         FrozenCookies.mineMax = preferenceParse("mineMax", 0);
         FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
-        FrozenCookies.cortexMax = preferenceParse("cortexMax", 0);
+        FrozenCookies.youMax = preferenceParse("youMax", 0);
 
         // Temporary, for switch from autoSpell to autoCasting
         switch (FrozenCookies.autoSpell) {
@@ -631,7 +631,7 @@ function saveFCData() {
     saveString.lastHCTime = FrozenCookies.lastHCTime;
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
-    saveString.cortexMax = FrozenCookies.cortexMax;
+    saveString.youMax = FrozenCookies.youMax;
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
@@ -802,10 +802,10 @@ function updateFactoryMax(base) {
     );
 }
 
-function updateCortexMax(base) {
+function updateYouMax(base) {
     userInputPrompt(
-        "Cortex baker Cap!",
-        "How many Cortex bakers should autoBuy stop at?",
+        "You Cap!",
+        "How many Yous should autoBuy stop at?",
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
@@ -992,7 +992,7 @@ function autoDragonsCurve() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == 18 && //RB
         !Game.dragonAura2 == 17 // DC
     ) {
@@ -1009,7 +1009,7 @@ function autoDragonsCurve() {
 
     if (
         FrozenCookies.dragonsCurve == 2 &&
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         !Game.hasAura("Reality Bending")
     ) {
         Game.specialTab = "dragon";
@@ -1384,9 +1384,9 @@ function autoCast() {
                 return;
 
             case 5:
-                // If you don't have any Cortex baker yet, or can't cast SE, just give up.
+                // If you don't have any You yet, or can't cast SE, just give up.
                 if (
-                    Game.Objects["Cortex baker"].amount == 0 ||
+                    Game.Objects["You"].amount == 0 ||
                     M.magicM <
                         Math.floor(
                             M.spellsById[3].costMin +
@@ -1396,19 +1396,19 @@ function autoCast() {
                     return;
                 }
 
-                // If we have over 400 Cortex bakers, always going to sell down to 399.
-                // If you don't have half a Cortex baker's worth of cookies in bank, sell one or more until you do
+                // If we have over 400 Yous, always going to sell down to 399.
+                // If you don't have half a You's worth of cookies in bank, sell one or more until you do
                 while (
-                    Game.Objects["Cortex baker"].amount >= 400 ||
-                    Game.cookies < Game.Objects["Cortex baker"].price / 2
+                    Game.Objects["You"].amount >= 400 ||
+                    Game.cookies < Game.Objects["You"].price / 2
                 ) {
-                    Game.Objects["Cortex baker"].sell(1);
+                    Game.Objects["You"].sell(1);
                     logEvent(
                         "Store",
-                        "Sold 1 Cortex baker for " +
+                        "Sold 1 You for " +
                             (Beautify(
-                                Game.Objects["Cortex baker"].price *
-                                    Game.Objects["Cortex baker"].getSellMultiplier()
+                                Game.Objects["You"].price *
+                                    Game.Objects["You"].getSellMultiplier()
                             ) +
                                 " cookies")
                     );
@@ -1892,7 +1892,7 @@ function auto100ConsistencyComboAction() {
 
     // Not currently possible to do the combo
     if (
-        Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
+        Game.dragonLevel < 27 || // Fully upgraded dragon needed for two auras
         !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
     ) {
         return;
@@ -2715,7 +2715,7 @@ function autoLoanBuy() {
 }
 
 function autoDragonAction() {
-    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 25 || hasClickBuff()) {
+    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 26 || hasClickBuff()) {
         return;
     }
 
@@ -2781,7 +2781,7 @@ function autoDragonAura0Action() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == FrozenCookies.autoDragonAura1 &&
         Game.dragonAura2 != FrozenCookies.autoDragonAura0
     ) {
@@ -2803,7 +2803,7 @@ function autoDragonAura0Action() {
 function autoDragonAura1Action() {
     if (
         !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 26 ||
+        Game.dragonLevel < 27 ||
         !FrozenCookies.autoDragonAura0 ||
         !FrozenCookies.autoDragonAura1 ||
         !FrozenCookies.autoDragonToggle ||
@@ -2840,7 +2840,7 @@ function autoDragonOrbsAction() {
         FrozenCookies.autoDragonOrbs == 1 &&
         (!Game.hasAura("Dragon Orbs") ||
             Game.hasGod("ruin") ||
-            Game.Objects["Cortex baker"].amount < 1)
+            Game.Objects["You"].amount < 1)
     ) {
         FrozenCookies.autoDragonOrbs = 0;
         logEvent("autoDragonOrbs", "Not currently possible to use Dragon Orbs");
@@ -2851,13 +2851,12 @@ function autoDragonOrbsAction() {
         buffsN++;
     }
     if (!goldenCookieLife() && Game.hasAura("Dragon Orbs") && !buffsN) {
-        Game.Objects["Cortex baker"].sell(1);
+        Game.Objects["You"].sell(1);
         logEvent(
             "autoDragonOrbs",
-            "Sold 1 Cortex baker for " +
+            "Sold 1 You for " +
                 (Beautify(
-                    Game.Objects["Cortex baker"].price *
-                        Game.Objects["Cortex baker"].getSellMultiplier()
+                    Game.Objects["You"].price * Game.Objects["You"].getSellMultiplier()
                 ) +
                     " cookies and a wish")
         );
@@ -3014,7 +3013,7 @@ function buyOtherUpgrades() {
 
     //Buy dragon drops
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon fang"].unlocked == 1 &&
         !Game.Upgrades["Dragon fang"].bought &&
         Game.cookies > Game.Upgrades["Dragon fang"].getPrice()
@@ -3022,7 +3021,7 @@ function buyOtherUpgrades() {
         Game.Upgrades["Dragon fang"].buy();
     }
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon teddy bear"].unlocked == 1 &&
         !Game.Upgrades["Dragon teddy bear"].bought &&
         Game.cookies > Game.Upgrades["Dragon teddy bear"].getPrice()
@@ -3856,8 +3855,8 @@ function recommendedSettingsAction() {
         FrozenCookies.autoDragonAura0 = 3; // Elder Batallion
         FrozenCookies.autoDragonAura1 = 15; // Radiant Appetite
         FrozenCookies.autoDragonOrbs = 0;
-        FrozenCookies.cortexLimit = 0;
-        FrozenCookies.cortexMax = 200;
+        FrozenCookies.youLimit = 0;
+        FrozenCookies.youMax = 200;
         // Season options
         FrozenCookies.defaultSeason = 1;
         FrozenCookies.freeSeason = 1;
@@ -4278,13 +4277,13 @@ function estimatedTimeRemaining(cookies) {
 }
 
 function canCastSE() {
-    if (M.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) return 1;
+    if (M.magicM >= 80 && Game.Objects["You"].amount > 0) return 1;
     return 0;
 }
 
 function edificeBank() {
     if (!canCastSE) return 0;
-    var cmCost = Game.Objects["Cortex baker"].price;
+    var cmCost = Game.Objects["You"].price;
     return Game.hasBuff("everything must go") ? (cmCost * (100 / 95)) / 2 : cmCost / 2;
 }
 
@@ -4348,7 +4347,9 @@ function harvestBank() {
             Game.Objects["Fractal engine"].amount,
             Game.Objects["Javascript console"].amount,
             Game.Objects["Idleverse"].amount,
-            Game.Objects["Cortex baker"].amount,
+            Game.Objects["
+            baker"].amount,
+            Game.Objects["You"].amount,
         ];
         harvestBuildingArray.sort(function (a, b) {
             return b - a;
@@ -4692,12 +4693,8 @@ function buildingStats(recalculate) {
             var buildingBlacklist = Array.from(
                 blacklist[FrozenCookies.blacklist].buildings
             );
-            //If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
-            if (
-                M &&
-                FrozenCookies.autoCasting == 3 &&
-                Game.Objects["Cortex baker"].amount >= 399
-            )
+            //If autocasting Spontaneous Edifice, don't buy any You after 399
+            if (M && FrozenCookies.autoSpell == 3 && Game.Objects["You"].amount >= 399)
                 buildingBlacklist.push(18);
             //Stop buying wizard towers at max Mana if enabled
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
@@ -4714,11 +4711,11 @@ function buildingStats(recalculate) {
                 Game.Objects["Factory"].amount >= FrozenCookies.factoryMax
             )
                 buildingBlacklist.push(4);
-            //Stop buying Cortex bakers if at set limit
+            //Stop buying Yous if at set limit
             if (
                 FrozenCookies.autoDragonOrbs &&
-                FrozenCookies.cortexLimit &&
-                Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax
+                FrozenCookies.youLimit &&
+                Game.Objects["You"].amount >= FrozenCookies.youMax
             )
                 buildingBlacklist.push(18);
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
@@ -5827,9 +5824,9 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 100 &&
-                ((FrozenCookies.autoCasting == 3 &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 299) ||
+                ((FrozenCookies.autoSpell == 3 &&
+                    recommendation.purchase.name == "You" &&
+                    Game.Objects["You"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 10) ||
@@ -5841,10 +5838,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 100) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.cortexLimit &&
-                        recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 100))
+                        FrozenCookies.youLimit &&
+                        recommendation.purchase.name == "You" &&
+                        Game.Objects["You"].amount >= FrozenCookies.youMax - 100))
             ) {
                 document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
@@ -5852,9 +5848,9 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 10 &&
-                ((FrozenCookies.autoCasting == 3 &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 389) ||
+                ((FrozenCookies.autoSpell == 3 &&
+                    recommendation.purchase.name == "You" &&
+                    Game.Objects["You"].amount >= 389) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 2) ||
@@ -5866,10 +5862,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 10) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.cortexLimit &&
-                        recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 10))
+                        FrozenCookies.youLimit &&
+                        recommendation.purchase.name == "You" &&
+                        Game.Objects["You"].amount >= FrozenCookies.youMax - 10))
             ) {
                 document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);

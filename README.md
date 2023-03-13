@@ -4,13 +4,10 @@
 
 An automated Cookie Clicker tool.
 
-## Warning
+## Compatiblity
 
-NOT currently compatible with **CCSE**:
-https://github.com/klattmose/klattmose.github.io/issues/47
-
-CCSE changes base game functions that break the switches like the season switch and the
-elder pledge. This problem exists in version **2.033** of CCSE and later.
+Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are used.
+Most other mods will also be compatible.
 
 ## How to use
 
@@ -96,6 +93,7 @@ that I currently know of.
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
     options in Preferences **WARNING**: as part of this change, the spell options have
     been changed. Existing settings should transfer 1:1.
+-   Updated for version 2.05 beta (final building)
 
 2022 Dec 30
 
