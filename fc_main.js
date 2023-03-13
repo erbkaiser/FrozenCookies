@@ -273,7 +273,37 @@ function setOverrides(gameSaveData) {
         FrozenCookies.mineMax = preferenceParse("mineMax", 0);
         FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
-        FrozenCookies.cortexMax = preferenceParse("cortexMax", 0);
+        FrozenCookies.youMax = preferenceParse("youMax", 0);
+
+        // Temporary, for switch from autoSpell to autoCasting
+        switch (FrozenCookies.autoSpell) {
+            case 0:
+                return;
+                
+            case 1: // CBG
+                FrozenCookies.autoCasting = 1;
+                FrozenCookies.autoSpell = 0;
+                return;
+
+            case 2: // Smart FTHOF
+                FrozenCookies.autoCasting = 3;
+                FrozenCookies.autoSpell = 0;
+                return;
+
+            case 3: // SE
+                FrozenCookies.autoCasting = 5;
+                FrozenCookies.autoSpell = 0;
+                return;
+
+            case 4: // HC
+                FrozenCookies.autoCasting = 6;
+                FrozenCookies.autoSpell = 0;
+                return;
+
+            case 5: // Limited FTHOF
+                FrozenCookies.autoCasting = 4;
+                FrozenCookies.autoSpell = 0;
+        }
 
         // Restore some possibly broken settings
         if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
@@ -601,7 +631,7 @@ function saveFCData() {
     saveString.lastHCTime = FrozenCookies.lastHCTime;
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
-    saveString.cortexMax = FrozenCookies.cortexMax;
+    saveString.youMax = FrozenCookies.youMax;
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
@@ -772,10 +802,10 @@ function updateFactoryMax(base) {
     );
 }
 
-function updateCortexMax(base) {
+function updateYouMax(base) {
     userInputPrompt(
-        "Cortex baker Cap!",
-        "How many Cortex bakers should autoBuy stop at?",
+        "You Cap!",
+        "How many Yous should autoBuy stop at?",
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
@@ -962,7 +992,7 @@ function autoDragonsCurve() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == 18 && //RB
         !Game.dragonAura2 == 17 // DC
     ) {
@@ -979,7 +1009,7 @@ function autoDragonsCurve() {
 
     if (
         FrozenCookies.dragonsCurve == 2 &&
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         !Game.hasAura("Reality Bending")
     ) {
         Game.specialTab = "dragon";
@@ -1023,13 +1053,14 @@ function BuffTimeFactor() {
 
 function autoCast() {
     if (!M) return;
+    if (FrozenCookies.autoCasting == 0) return;
 
     if (
         FrozenCookies.autoFTHOFCombo == 1 ||
         FrozenCookies.auto100ConsistencyCombo == 1 ||
         FrozenCookies.autoSweet == 1
     ) {
-        FrozenCookies.autoSpell = 0;
+        FrozenCookies.autoCasting = 0;
     }
 
     if (
@@ -1045,7 +1076,7 @@ function autoCast() {
             nextSpellName(0) == "Sugar Lump"
         ) {
             M.castSpell(M.spellsById[1]);
-            logEvent("AutoSpell", "Cast Force the Hand of Fate for a free lump");
+            logEvent("autoCasting", "Cast Force the Hand of Fate for a free lump");
             return;
         }
 
@@ -1063,7 +1094,7 @@ function autoCast() {
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
             M.castSpell(M.spellsById[2]);
-            logEvent("AutoSpell", "Cast Stretch Time to shorten debuff");
+            logEvent("autoCasting", "Cast Stretch Time to shorten debuff");
             return;
         }
 
@@ -1077,11 +1108,11 @@ function autoCast() {
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
             M.castSpell(M.spellsById[4]);
-            logEvent("AutoSpell", "Cast Haggler's Charm to avoid backfire");
+            logEvent("autoCasting", "Cast Haggler's Charm to avoid backfire");
             return;
         }
 
-        switch (FrozenCookies.autoSpell) {
+        switch (FrozenCookies.autoCasting) {
             case 1:
                 if (
                     M.magicM <
@@ -1092,10 +1123,26 @@ function autoCast() {
                     return;
                 }
                 M.castSpell(M.spellsById[0]);
-                logEvent("AutoSpell", "Cast Conjure Baked Goods");
+                logEvent("autoCasting", "Cast Conjure Baked Goods");
                 return;
 
             case 2:
+                if (
+                    M.magicM <
+                    Math.floor(
+                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                    )
+                ) {
+                    return;
+                }
+
+                if (cpsBonus() >= FrozenCookies.minCpSMult) {
+                    M.castSpell(M.spellsById[1]);
+                    logEvent("autoCasting", "Cast Force the Hand of Fate");
+                }
+                return;
+
+            case 3:
                 if (
                     M.magicM <
                     Math.floor(
@@ -1112,7 +1159,7 @@ function autoCast() {
                 ) {
                     M.castSpell(M.spellsById[4]);
                     logEvent(
-                        "AutoSpell",
+                        "autoCasting",
                         "Cast Haggler's Charm instead of Force the Hand of Fate"
                     );
                     return;
@@ -1121,7 +1168,7 @@ function autoCast() {
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                     }
 
                     if (
@@ -1131,7 +1178,7 @@ function autoCast() {
                         nextSpellName(0) == "Building Special"
                     ) {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
 
@@ -1156,7 +1203,7 @@ function autoCast() {
                         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
                     ) {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
 
@@ -1171,7 +1218,7 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                                logEvent("autoCasting", "Cast Force the Hand of Fate");
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
@@ -1198,7 +1245,7 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                                logEvent("autoCasting", "Cast Force the Hand of Fate");
                             }
                         }
                         return;
@@ -1213,60 +1260,13 @@ function autoCast() {
                                 Math.ceil(6 * BuffTimeFactor()) - 1)
                     ) {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
                 }
                 return;
 
-            case 3:
-                // If you don't have any Cortex baker yet, or can't cast SE, just give up.
-                if (
-                    Game.Objects["Cortex baker"].amount == 0 ||
-                    M.magicM <
-                        Math.floor(
-                            M.spellsById[3].costMin +
-                                M.spellsById[3].costPercent * M.magicM
-                        )
-                ) {
-                    return;
-                }
-
-                // If we have over 400 Cortex bakers, always going to sell down to 399.
-                // If you don't have half a Cortex baker's worth of cookies in bank, sell one or more until you do
-                while (
-                    Game.Objects["Cortex baker"].amount >= 400 ||
-                    Game.cookies < Game.Objects["Cortex baker"].price / 2
-                ) {
-                    Game.Objects["Cortex baker"].sell(1);
-                    logEvent(
-                        "Store",
-                        "Sold 1 Cortex baker for " +
-                            (Beautify(
-                                Game.Objects["Cortex baker"].price *
-                                    Game.Objects["Cortex baker"].getSellMultiplier()
-                            ) +
-                                " cookies")
-                    );
-                }
-                M.castSpell(M.spellsById[3]);
-                logEvent("AutoSpell", "Cast Spontaneous Edifice");
-                return;
-
             case 4:
-                if (
-                    M.magicM <
-                    Math.floor(
-                        M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
-                    )
-                ) {
-                    return;
-                }
-                M.castSpell(M.spellsById[4]);
-                logEvent("AutoSpell", "Cast Haggler's Charm");
-                return;
-
-            case 5:
                 if (
                     M.magicM <
                     Math.floor(
@@ -1287,7 +1287,7 @@ function autoCast() {
                 ) {
                     M.castSpell(M.spellsById[4]);
                     logEvent(
-                        "AutoSpell",
+                        "autoCasting",
                         "Cast Haggler's Charm instead of Force the Hand of Fate"
                     );
                 }
@@ -1295,7 +1295,7 @@ function autoCast() {
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
                     if (nextSpellName(0) == "Building Special") {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
 
@@ -1320,7 +1320,7 @@ function autoCast() {
                         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
                     ) {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
 
@@ -1335,7 +1335,7 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                                logEvent("autoCasting", "Cast Force the Hand of Fate");
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
@@ -1362,7 +1362,7 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                                logEvent("autoCasting", "Cast Force the Hand of Fate");
                             }
                         }
                         return;
@@ -1377,10 +1377,57 @@ function autoCast() {
                                 Math.ceil(6 * BuffTimeFactor()) - 1)
                     ) {
                         M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+                        logEvent("autoCasting", "Cast Force the Hand of Fate");
                         return;
                     }
                 }
+                return;
+
+            case 5:
+                // If you don't have any You yet, or can't cast SE, just give up.
+                if (
+                    Game.Objects["You"].amount == 0 ||
+                    M.magicM <
+                        Math.floor(
+                            M.spellsById[3].costMin +
+                                M.spellsById[3].costPercent * M.magicM
+                        )
+                ) {
+                    return;
+                }
+
+                // If we have over 400 Yous, always going to sell down to 399.
+                // If you don't have half a You's worth of cookies in bank, sell one or more until you do
+                while (
+                    Game.Objects["You"].amount >= 400 ||
+                    Game.cookies < Game.Objects["You"].price / 2
+                ) {
+                    Game.Objects["You"].sell(1);
+                    logEvent(
+                        "Store",
+                        "Sold 1 You for " +
+                            (Beautify(
+                                Game.Objects["You"].price *
+                                    Game.Objects["You"].getSellMultiplier()
+                            ) +
+                                " cookies")
+                    );
+                }
+                M.castSpell(M.spellsById[3]);
+                logEvent("autoCasting", "Cast Spontaneous Edifice");
+                return;
+
+            case 6:
+                if (
+                    M.magicM <
+                    Math.floor(
+                        M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                    )
+                ) {
+                    return;
+                }
+                M.castSpell(M.spellsById[4]);
+                logEvent("autoCasting", "Cast Haggler's Charm");
                 return;
         }
     }
@@ -1388,11 +1435,14 @@ function autoCast() {
 
 // Thank goodness for static variables otherwise this function would not have worked as intended.
 function autoFTHOFComboAction() {
+    if (!M) return;
+    if (FrozenCookies.autoFTHOFCombo == 0) return;
+
     // Prereqs check
-    if (!M || Game.Objects["Wizard tower"].level > 10) {
+    if (Game.Objects["Wizard tower"].level > 10) {
         // Will not work with wizard tower level > 10
         FrozenCookies.autoFTHOFCombo = 0;
-        logEvent("autoFTHOFCombo", "Combo disabled, impossible");
+        logEvent("autoFTHOFCombo", "Combo disabled, wizard tower level too high");
         return;
     }
 
@@ -1824,11 +1874,13 @@ function autoFTHOFComboAction() {
 }
 
 function auto100ConsistencyComboAction() {
+    if (!M) return;
+    if (!G) return;
+    if (FrozenCookies.auto100ConsistencyCombo == 0) return;
+
     // Prereqs check
     if (
-        !M ||
-        Game.Objects["Wizard tower"].level != 10 || // Only works with wizard towers level 10
-        !G // Garden must be unlocked
+        Game.Objects["Wizard tower"].level != 10 // Only works with wizard towers level 10
     ) {
         FrozenCookies.auto100ConsistencyCombo = 0;
         logEvent("auto100ConsistencyCombo", "Combo disabled, impossible");
@@ -1840,7 +1892,7 @@ function auto100ConsistencyComboAction() {
 
     // Not currently possible to do the combo
     if (
-        Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
+        Game.dragonLevel < 27 || // Fully upgraded dragon needed for two auras
         !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
     ) {
         return;
@@ -2663,7 +2715,7 @@ function autoLoanBuy() {
 }
 
 function autoDragonAction() {
-    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 25 || hasClickBuff()) {
+    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 26 || hasClickBuff()) {
         return;
     }
 
@@ -2729,7 +2781,7 @@ function autoDragonAura0Action() {
     }
 
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.dragonAura == FrozenCookies.autoDragonAura1 &&
         Game.dragonAura2 != FrozenCookies.autoDragonAura0
     ) {
@@ -2751,7 +2803,7 @@ function autoDragonAura0Action() {
 function autoDragonAura1Action() {
     if (
         !Game.Has("A crumbly egg") ||
-        Game.dragonLevel < 26 ||
+        Game.dragonLevel < 27 ||
         !FrozenCookies.autoDragonAura0 ||
         !FrozenCookies.autoDragonAura1 ||
         !FrozenCookies.autoDragonToggle ||
@@ -2788,7 +2840,7 @@ function autoDragonOrbsAction() {
         FrozenCookies.autoDragonOrbs == 1 &&
         (!Game.hasAura("Dragon Orbs") ||
             Game.hasGod("ruin") ||
-            Game.Objects["Cortex baker"].amount < 1)
+            Game.Objects["You"].amount < 1)
     ) {
         FrozenCookies.autoDragonOrbs = 0;
         logEvent("autoDragonOrbs", "Not currently possible to use Dragon Orbs");
@@ -2799,13 +2851,12 @@ function autoDragonOrbsAction() {
         buffsN++;
     }
     if (!goldenCookieLife() && Game.hasAura("Dragon Orbs") && !buffsN) {
-        Game.Objects["Cortex baker"].sell(1);
+        Game.Objects["You"].sell(1);
         logEvent(
             "autoDragonOrbs",
-            "Sold 1 Cortex baker for " +
+            "Sold 1 You for " +
                 (Beautify(
-                    Game.Objects["Cortex baker"].price *
-                        Game.Objects["Cortex baker"].getSellMultiplier()
+                    Game.Objects["You"].price * Game.Objects["You"].getSellMultiplier()
                 ) +
                     " cookies and a wish")
         );
@@ -2962,7 +3013,7 @@ function buyOtherUpgrades() {
 
     //Buy dragon drops
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon fang"].unlocked == 1 &&
         !Game.Upgrades["Dragon fang"].bought &&
         Game.cookies > Game.Upgrades["Dragon fang"].getPrice()
@@ -2970,7 +3021,7 @@ function buyOtherUpgrades() {
         Game.Upgrades["Dragon fang"].buy();
     }
     if (
-        Game.dragonLevel > 25 &&
+        Game.dragonLevel > 26 &&
         Game.Upgrades["Dragon teddy bear"].unlocked == 1 &&
         !Game.Upgrades["Dragon teddy bear"].bought &&
         Game.cookies > Game.Upgrades["Dragon teddy bear"].getPrice()
@@ -3791,7 +3842,7 @@ function recommendedSettingsAction() {
         // Spell options
         FrozenCookies.towerLimit = 1;
         FrozenCookies.manaMax = 37;
-        FrozenCookies.autoSpell = 2;
+        FrozenCookies.autoCasting = 2;
         FrozenCookies.minCpSMult = 7;
         FrozenCookies.autoFTHOFCombo = 0;
         FrozenCookies.auto100ConsistencyCombo = 0;
@@ -3805,8 +3856,8 @@ function recommendedSettingsAction() {
         FrozenCookies.autoDragonAura0 = 3; // Elder Batallion
         FrozenCookies.autoDragonAura1 = 15; // Radiant Appetite
         FrozenCookies.autoDragonOrbs = 0;
-        FrozenCookies.cortexLimit = 0;
-        FrozenCookies.cortexMax = 200;
+        FrozenCookies.youLimit = 0;
+        FrozenCookies.youMax = 200;
         // Season options
         FrozenCookies.defaultSeason = 1;
         FrozenCookies.freeSeason = 1;
@@ -4227,13 +4278,13 @@ function estimatedTimeRemaining(cookies) {
 }
 
 function canCastSE() {
-    if (M.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) return 1;
+    if (M.magicM >= 80 && Game.Objects["You"].amount > 0) return 1;
     return 0;
 }
 
 function edificeBank() {
     if (!canCastSE) return 0;
-    var cmCost = Game.Objects["Cortex baker"].price;
+    var cmCost = Game.Objects["You"].price;
     return Game.hasBuff("everything must go") ? (cmCost * (100 / 95)) / 2 : cmCost / 2;
 }
 
@@ -4297,7 +4348,9 @@ function harvestBank() {
             Game.Objects["Fractal engine"].amount,
             Game.Objects["Javascript console"].amount,
             Game.Objects["Idleverse"].amount,
-            Game.Objects["Cortex baker"].amount,
+            Game.Objects["
+            baker"].amount,
+            Game.Objects["You"].amount,
         ];
         harvestBuildingArray.sort(function (a, b) {
             return b - a;
@@ -4391,7 +4444,7 @@ function cookieEfficiency(startingPoint, bankAmount) {
 function bestBank(minEfficiency) {
     var results = {};
     var edifice =
-        FrozenCookies.autoSpell == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
+        FrozenCookies.autoCasting == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
     var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;
@@ -4641,12 +4694,8 @@ function buildingStats(recalculate) {
             var buildingBlacklist = Array.from(
                 blacklist[FrozenCookies.blacklist].buildings
             );
-            //If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
-            if (
-                M &&
-                FrozenCookies.autoSpell == 3 &&
-                Game.Objects["Cortex baker"].amount >= 399
-            )
+            //If autocasting Spontaneous Edifice, don't buy any You after 399
+            if (M && FrozenCookies.autoSpell == 3 && Game.Objects["You"].amount >= 399)
                 buildingBlacklist.push(18);
             //Stop buying wizard towers at max Mana if enabled
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
@@ -4663,11 +4712,11 @@ function buildingStats(recalculate) {
                 Game.Objects["Factory"].amount >= FrozenCookies.factoryMax
             )
                 buildingBlacklist.push(4);
-            //Stop buying Cortex bakers if at set limit
+            //Stop buying Yous if at set limit
             if (
                 FrozenCookies.autoDragonOrbs &&
-                FrozenCookies.cortexLimit &&
-                Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax
+                FrozenCookies.youLimit &&
+                Game.Objects["You"].amount >= FrozenCookies.youMax
             )
                 buildingBlacklist.push(18);
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
@@ -5591,8 +5640,7 @@ function autoGodzamokAction() {
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
         // Need at least 10 of each to be useful
-        if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10)
-            return;
+        //if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10) return;
         var countMine = Game.Objects["Mine"].amount;
         var countFactory = Game.Objects["Factory"].amount;
 
@@ -5602,12 +5650,9 @@ function autoGodzamokAction() {
             Game.Objects["Factory"].sell(countFactory);
             //Rebuy mines
             if (FrozenCookies.mineLimit) {
-                var countMineL = FrozenCookies.mineMax - countMine;
-                if (countMineL > 0) {
-                    safeBuy(Game.Objects["Mine"], countMineL);
-                    FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countMineL + " mines");
-                }
+                safeBuy(Game.Objects["Mine"], FrozenCookies.mineMax);
+                FrozenCookies.autobuyCount += 1;
+                logEvent("AutoGodzamok", "Bought " + FrozenCookies.mineMax + " mines");
             } else {
                 safeBuy(Game.Objects["Mine"], countMine);
                 FrozenCookies.autobuyCount += 1;
@@ -5615,12 +5660,12 @@ function autoGodzamokAction() {
             }
             //Rebuy factories
             if (FrozenCookies.factoryLimit) {
-                var countFactoryL = FrozenCookies.factoryMax - countFactory;
-                if (countFactoryL > 0) {
-                    safeBuy(Game.Objects["Factory"], countFactoryL);
-                    FrozenCookies.autobuyCount += 1;
-                    logEvent("AutoGodzamok", "Bought " + countFactoryL + " factories");
-                }
+                safeBuy(Game.Objects["Factory"], FrozenCookies.factoryMax);
+                FrozenCookies.autobuyCount += 1;
+                logEvent(
+                    "AutoGodzamok",
+                    "Bought " + FrozenCookies.factoryMax + " factories"
+                );
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);
                 FrozenCookies.autobuyCount += 1;
@@ -5742,7 +5787,7 @@ function autoCookie() {
 
         var itemBought = false;
 
-        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
+        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoCasting == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
         if (
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
@@ -5781,8 +5826,8 @@ function autoCookie() {
                 recommendation.type == "building" &&
                 Game.buyBulk == 100 &&
                 ((FrozenCookies.autoSpell == 3 &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 299) ||
+                    recommendation.purchase.name == "You" &&
+                    Game.Objects["You"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 10) ||
@@ -5794,10 +5839,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 100) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.cortexLimit &&
-                        recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 100))
+                        FrozenCookies.youLimit &&
+                        recommendation.purchase.name == "You" &&
+                        Game.Objects["You"].amount >= FrozenCookies.youMax - 100))
             ) {
                 document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
@@ -5806,8 +5850,8 @@ function autoCookie() {
                 recommendation.type == "building" &&
                 Game.buyBulk == 10 &&
                 ((FrozenCookies.autoSpell == 3 &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 389) ||
+                    recommendation.purchase.name == "You" &&
+                    Game.Objects["You"].amount >= 389) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 2) ||
@@ -5819,10 +5863,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 10) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.cortexLimit &&
-                        recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 10))
+                        FrozenCookies.youLimit &&
+                        recommendation.purchase.name == "You" &&
+                        Game.Objects["You"].amount >= FrozenCookies.youMax - 10))
             ) {
                 document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);
@@ -6003,9 +6046,9 @@ function FCStart() {
         clearInterval(FrozenCookies.autoGodzamokBot);
         FrozenCookies.autoGodzamokBot = 0;
     }
-    if (FrozenCookies.autoSpellBot) {
-        clearInterval(FrozenCookies.autoSpellBot);
-        FrozenCookies.autoSpellBot = 0;
+    if (FrozenCookies.autoCastingBot) {
+        clearInterval(FrozenCookies.autoCastingBot);
+        FrozenCookies.autoCastingBot = 0;
     }
     if (FrozenCookies.autoFortuneBot) {
         clearInterval(FrozenCookies.autoFortuneBot);
@@ -6151,8 +6194,11 @@ function FCStart() {
         );
     }
 
-    if (FrozenCookies.autoSpell) {
-        FrozenCookies.autoSpellBot = setInterval(autoCast, FrozenCookies.frequency * 10);
+    if (FrozenCookies.autoCasting) {
+        FrozenCookies.autoCastingBot = setInterval(
+            autoCast,
+            FrozenCookies.frequency * 10
+        );
     }
 
     if (FrozenCookies.autoFortune) {

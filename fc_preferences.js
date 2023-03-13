@@ -251,15 +251,16 @@ FrozenCookies.preferenceValues = {
         default: 0,
         extras: '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>',
     },
-    autoSpell: {
+    autoCasting: {
         hint: "Automatically cast selected spell when your mana is full",
         display: [
             "Auto Cast OFF",
             "Auto Cast CONJURE BAKED GOODS",
-            "Auto Cast FORCE THE HAND OF FATE",
-            "Auto Cast SPONTANEOUS EDIFICE",
-            "Auto Cast HAGGLER'S CHARM (cheapest)",
+            "Auto Cast FORCE THE HAND OF FATE (simple)",
+            "Auto Cast FORCE THE HAND OF FATE (smart)",
             "Auto Cast FTHOF (Click and Building Specials only)",
+            "Auto Cast SPONTANEOUS EDIFICE",
+            "Auto Cast HAGGLER'S CHARM",
         ],
         default: 0,
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
@@ -342,6 +343,7 @@ FrozenCookies.preferenceValues = {
             "Reality Bending",
             "Dragon Orbs",
             "Supreme Intellect",
+            "Dragon Guts",
         ],
         default: 0,
     },
@@ -369,19 +371,20 @@ FrozenCookies.preferenceValues = {
             "Reality Bending",
             "Dragon Orbs",
             "Supreme Intellect",
+            "Dragon Guts",
         ],
         default: 0,
     },
     autoDragonOrbs: {
-        hint: "Automatically sell Cortex bakers to summon a Golden Cookie, if Dragon Orbs is an aura and Godzamok is not slotted",
+        hint: "Automatically sell Yous to summon a Golden Cookie, if Dragon Orbs is an aura and Godzamok is not slotted",
         display: ["Auto-Dragon Orbs OFF", "Auto-Dragon Orbs ON"],
         default: 0,
     },
-    cortexLimit: {
-        hint: "Limit max number of Cortex bakers to keep Dragon Orbs useful",
-        display: ["Cortex bakers Limit OFF", "Cortex bakers Limit ON"],
+    youLimit: {
+        hint: "Limit max number of Yous to keep Dragon Orbs useful",
+        display: ["You Limit OFF", "You Limit ON"],
         default: 0,
-        extras: '<a class="option" id="cortexMax" onclick="updateCortexMax(\'cortexMax\');">${cortexMax} Cortex bakers</a>',
+        extras: '<a class="option" id="youMax" onclick="updateYouMax(\'youMax\');">${youMax} Yous</a>',
     },
 
     // Season options
