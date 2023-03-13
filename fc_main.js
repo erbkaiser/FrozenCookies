@@ -2253,7 +2253,7 @@ function auto100ConsistencyComboAction() {
 
         case 16: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden" && !Game.shimmer.wrath == 1) {
+                if (Game.shimmers[i].type == "golden" && Game.shimmer.wrath != 1) {
                     Game.shimmers[i].pop();
                 }
             }
@@ -5946,7 +5946,7 @@ function autoCookie() {
             for (var i in Game.shimmers) {
                 if (
                     Game.shimmers[i].type == "golden" &&
-                    (!Game.shimmer.wrath == 1 || FrozenCookies.autoWC)
+                    (Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
                 )
                     Game.shimmers[i].pop();
             }
