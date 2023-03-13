@@ -778,9 +778,9 @@ that I currently know of.
 -   **Dragon Auras** Will set the desired aura. Aura 1 will be set in the first slot and
     Aura 2 will set in the second slot, even if Aura 2 could theoretically be set earlier.
 -   **Auto Dragon Orbs** If Dragon Orbs is one of the active auras and Godzamok is not a
-    slotted god, this will repeatedly sell Cortex bakers to try to spawn Golden Cookies.
+    slotted god, this will repeatedly sell Yous to try to spawn Golden Cookies.
     Works together with:
--   **Cortex bakers Limit** This will cap the number of Cortex bakers that can be bought
+-   **You Limit** This will cap the number of Yous that can be bought
     to a given number to make sure ADO doesn't wipe out all your cookies.
 
 ## Season options
@@ -944,7 +944,7 @@ other spells will be replacved with _Haggler's Charm_
 
 ## Auto Cast SPONTANEOUS EDIFICE
 
-Will sell one Cortex Baker and then cast _Spontaneous Edifice_, to try to get a free
+Will sell one You and then cast _Spontaneous Edifice_, to try to get a free
 building. This spell becomes useless once you have over 400 of all buildings.
 
 ## Auto Cast HAGGLER'S CHARM
