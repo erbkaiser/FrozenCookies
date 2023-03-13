@@ -9,6 +9,7 @@ An automated Cookie Clicker tool.
 Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are
 used. Most other mods will also be compatible.
 
+
 ## How to use
 
 If you have the **FrozenCookies** button on the top right of your Cookie Clicker,
