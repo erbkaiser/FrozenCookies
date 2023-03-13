@@ -2253,7 +2253,7 @@ function auto100ConsistencyComboAction() {
 
         case 16: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden" && !Game.shimmer.wrath) {
+                if (Game.shimmers[i].type == "golden" && Game.shimmer.wrath == 0) {
                     Game.shimmers[i].pop();
                 }
             }
@@ -3804,6 +3804,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoFrenzy = 1;
         FrozenCookies.frenzyClickSpeed = 1000;
         FrozenCookies.autoGC = 1;
+        FrozenCookies.autoWC = 1;
         FrozenCookies.autoReindeer = 1;
         FrozenCookies.autoFortune = 1;
         // autobuy options
@@ -5944,7 +5945,11 @@ function autoCookie() {
         // This apparently *has* to stay here, or else fast purchases will multi-click it.
         if (goldenCookieLife() && FrozenCookies.autoGC) {
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden") Game.shimmers[i].pop();
+                if (
+                    Game.shimmers[i].type == "golden" &&
+                    (Game.shimmer.wrath == 0 || FrozenCookies.autoWC)
+                )
+                    Game.shimmers[i].pop();
             }
         }
         if (reindeerLife() > 0 && FrozenCookies.autoReindeer) {
