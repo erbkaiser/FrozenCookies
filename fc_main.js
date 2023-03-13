@@ -3842,7 +3842,7 @@ function recommendedSettingsAction() {
         // Spell options
         FrozenCookies.towerLimit = 1;
         FrozenCookies.manaMax = 37;
-        FrozenCookies.autoCasting = 2;
+        FrozenCookies.autoCasting = 3;
         FrozenCookies.minCpSMult = 7;
         FrozenCookies.autoFTHOFCombo = 0;
         FrozenCookies.auto100ConsistencyCombo = 0;
