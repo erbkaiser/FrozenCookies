@@ -90,7 +90,7 @@ that I currently know of.
 
 2023 mm dd
 
--   Updated for version 2.05 beta (final building)
+-   Updated for version 2.05 (final building)
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
     options in Preferences **WARNING**: as part of this change, the spell options have
     been changed. Existing settings should transfer 1:1.
