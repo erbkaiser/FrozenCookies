@@ -6,9 +6,9 @@ An automated Cookie Clicker tool.
 
 ## Warning
 
-NOT currently compatible with **CCSE**: https://github.com/klattmose/klattmose.github.io/issues/47
+The version for 2.048 is NOT currently compatible with **CCSE**: https://github.com/klattmose/klattmose.github.io/issues/47
 
-CCSE changes base game functions that break the switches like the season switch and the elder pledge. This problem exists in version **2.033** of CCSE and older, when used with Cookie Clicker version 2.048.
+This will be fixed for version 2.05 if CCSE and FC are updated.
 
 ## How to use
 
