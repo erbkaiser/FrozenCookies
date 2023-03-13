@@ -4,14 +4,10 @@
 
 An automated Cookie Clicker tool.
 
-## Warning
+## Compatiblity
 
-NOT currently compatible with **CCSE**:
-https://github.com/klattmose/klattmose.github.io/issues/47
-
-CCSE changes base game functions that break the switches like the season switch and the
-elder pledge. This problem exists in version **2.033** of CCSE and older, when used with
-Cookie Clicker version 2.048.
+Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are used.
+Most other mods will also be compatible.
 
 ## How to use
 
