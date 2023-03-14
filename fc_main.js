@@ -5792,7 +5792,7 @@ function autoCookie() {
 
         var itemBought = false;
 
-        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoCasting == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
+        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoCasting == 5) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
         if (
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
