@@ -222,7 +222,7 @@ function setOverrides(gameSaveData) {
         Game.Reset = fcReset;
     }
     Game.Win = fcWin;
-    // Remove the following when turning on tooltop code
+    // Remove the following when turning on tooltip code
     nextPurchase(true);
     Game.RefreshStore();
     Game.RebuildUpgrades();
@@ -4443,7 +4443,7 @@ function cookieEfficiency(startingPoint, bankAmount) {
 function bestBank(minEfficiency) {
     var results = {};
     var edifice =
-        FrozenCookies.autoCasting == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
+        FrozenCookies.autoCasting == 5 || FrozenCookies.holdSEBank ? edificeBank() : 0;
     var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;
