@@ -28,6 +28,13 @@ If you are on Beta 2.05 and want to experiment, you can use the FC beta by using
 https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the default
 script. This will be _removed_ once the beta Cookie Clicker goes live.
 
+The updated readme for the beta is at
+https://github.com/erbkaiser/FrozenCookies/tree/main#readme
+
+**Warning**: The beta branch is a work in progress. If you moved your save and Frozen
+Cookies to beta and go back to the release version, your selected Autocast option may be
+messed up and there might be other issues.
+
 ## Steam Install
 
 Get it from the Workshop:
