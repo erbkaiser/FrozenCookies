@@ -380,11 +380,11 @@ FrozenCookies.preferenceValues = {
         display: ["Auto-Dragon Orbs OFF", "Auto-Dragon Orbs ON"],
         default: 0,
     },
-    youLimit: {
+    orbLimit: {
         hint: "Limit max number of Yous to keep Dragon Orbs useful",
         display: ["You Limit OFF", "You Limit ON"],
         default: 0,
-        extras: '<a class="option" id="youMax" onclick="updateYouMax(\'youMax\');">${youMax} Yous</a>',
+        extras: '<a class="option" id="orbMax" onclick="updateOrbMax(\'orbMax\');">${orbMax} Yous</a>',
     },
 
     // Season options
