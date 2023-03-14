@@ -4694,8 +4694,8 @@ function buildingStats(recalculate) {
                 blacklist[FrozenCookies.blacklist].buildings
             );
             //If autocasting Spontaneous Edifice, don't buy any You after 399
-            if (M && FrozenCookies.autoSpell == 3 && Game.Objects["You"].amount >= 399)
-                buildingBlacklist.push(18);
+            if (M && FrozenCookies.autoCasting == 5 && Game.Objects["You"].amount >= 399)
+                buildingBlacklist.push(19);
             //Stop buying wizard towers at max Mana if enabled
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
                 buildingBlacklist.push(7);
@@ -4717,7 +4717,7 @@ function buildingStats(recalculate) {
                 FrozenCookies.youLimit &&
                 Game.Objects["You"].amount >= FrozenCookies.youMax
             )
-                buildingBlacklist.push(18);
+                buildingBlacklist.push(19);
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
                 current,
                 index

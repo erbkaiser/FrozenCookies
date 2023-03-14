@@ -1535,6 +1535,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [643],
     }, // Fortune #019
+    861: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
+        upgrades: [643],
+    }, // Fortune #020
 
     // Reward cookies - Unlocked when all buildings reach a certain number
     334: {
