@@ -273,7 +273,13 @@ function setOverrides(gameSaveData) {
         FrozenCookies.mineMax = preferenceParse("mineMax", 0);
         FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
-        FrozenCookies.youMax = preferenceParse("youMax", 0);
+        FrozenCookies.orbMax = preferenceParse("orbMax", 0);
+        
+        // Temporary, switch from Cortex Bakers to You for Dragon Orbs
+        if (FrozenCookies.cortexMax) {
+            FrozenCookies.orbMax = FrozenCookies.cortexMax;
+            FrozenCookies.cortexMax = 0;
+        }
 
         // Temporary, for switch from autoSpell to autoCasting
         switch (FrozenCookies.autoSpell) {
@@ -631,7 +637,7 @@ function saveFCData() {
     saveString.lastHCTime = FrozenCookies.lastHCTime;
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
-    saveString.youMax = FrozenCookies.youMax;
+    saveString.orbMax = FrozenCookies.orbMax;
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
@@ -802,7 +808,7 @@ function updateFactoryMax(base) {
     );
 }
 
-function updateYouMax(base) {
+function updateOrbMax(base) {
     userInputPrompt(
         "You Cap!",
         "How many Yous should autoBuy stop at?",
@@ -3856,8 +3862,8 @@ function recommendedSettingsAction() {
         FrozenCookies.autoDragonAura0 = 3; // Elder Batallion
         FrozenCookies.autoDragonAura1 = 15; // Radiant Appetite
         FrozenCookies.autoDragonOrbs = 0;
-        FrozenCookies.youLimit = 0;
-        FrozenCookies.youMax = 200;
+        FrozenCookies.orbLimit = 0;
+        FrozenCookies.orbMax = 200;
         // Season options
         FrozenCookies.defaultSeason = 1;
         FrozenCookies.freeSeason = 1;
@@ -4714,8 +4720,8 @@ function buildingStats(recalculate) {
             //Stop buying Yous if at set limit
             if (
                 FrozenCookies.autoDragonOrbs &&
-                FrozenCookies.youLimit &&
-                Game.Objects["You"].amount >= FrozenCookies.youMax
+                FrozenCookies.orbLimit &&
+                Game.Objects["You"].amount >= FrozenCookies.orbMax
             )
                 buildingBlacklist.push(19);
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
@@ -5838,9 +5844,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 100) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.youLimit &&
+                        FrozenCookies.orbLimit &&
                         recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.youMax - 100))
+                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 100))
             ) {
                 document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
@@ -5862,9 +5868,9 @@ function autoCookie() {
                         Game.Objects["Factory"].amount >=
                             FrozenCookies.factoryMax - 10) ||
                     (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.youLimit &&
+                        FrozenCookies.orbLimit &&
                         recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.youMax - 10))
+                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 10))
             ) {
                 document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);
