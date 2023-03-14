@@ -29,7 +29,7 @@ https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the
 script. This will be _removed_ once the beta Cookie Clicker goes live.
 
 The updated readme for the beta is at
-https://github.com/erbkaiser/FrozenCookies/tree/main#readme
+https://github.com/erbkaiser/FrozenCookies/tree/2023-beta#readme
 
 **Warning**: The beta branch is a work in progress. If you moved your save and Frozen
 Cookies to beta and go back to the release version, your selected Autocast option may be
