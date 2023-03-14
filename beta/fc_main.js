@@ -2253,7 +2253,7 @@ function auto100ConsistencyComboAction() {
 
         case 16: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden" && !Game.shimmer.wrath == 1) {
+                if (Game.shimmers[i].type == "golden" && Game.shimmer.wrath != 1) {
                     Game.shimmers[i].pop();
                 }
             }
@@ -4694,7 +4694,7 @@ function buildingStats(recalculate) {
                 blacklist[FrozenCookies.blacklist].buildings
             );
             //If autocasting Spontaneous Edifice, don't buy any You after 399
-            if (M && FrozenCookies.autoSpell == 3 && Game.Objects["You"].amount >= 399)
+            if (M && FrozenCookies.autoCasting == 5 && Game.Objects["You"].amount >= 399)
                 buildingBlacklist.push(18);
             //Stop buying wizard towers at max Mana if enabled
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
@@ -5946,7 +5946,7 @@ function autoCookie() {
             for (var i in Game.shimmers) {
                 if (
                     Game.shimmers[i].type == "golden" &&
-                    (!Game.shimmer.wrath == 1 || FrozenCookies.autoWC)
+                    (Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
                 )
                     Game.shimmers[i].pop();
             }
