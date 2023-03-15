@@ -2910,7 +2910,7 @@ function autoWorship0Action() {
         !T ||
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
-        FrozenCookies.autoWorship0 == 11 ||
+        !FrozenCookies.autoWorship0 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[0] == FrozenCookies.autoWorship0
     ) {
@@ -2925,7 +2925,7 @@ function autoWorship1Action() {
         !T ||
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
-        FrozenCookies.autoWorship1 == 11 ||
+        !FrozenCookies.autoWorship1 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[1] == FrozenCookies.autoWorship1
     ) {
@@ -2933,7 +2933,7 @@ function autoWorship1Action() {
     }
 
     if (T.slot[0] == FrozenCookies.autoWorship1) {
-        FrozenCookies.autoworship1 = 11;
+        FrozenCookies.autoworship1 = 0;
         logEvent("autoWorship", "Can't worship the same god in Diamond and Ruby slots!");
         return;
     }
@@ -2946,7 +2946,7 @@ function autoWorship2Action() {
         !T ||
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
-        FrozenCookies.autoWorship2 == 11 ||
+        !FrozenCookies.autoWorship2 ||
         FrozenCookies.autoCyclius != 0 ||
         T.slot[2] == FrozenCookies.autoWorship2
     ) {
@@ -2954,12 +2954,12 @@ function autoWorship2Action() {
     }
 
     if (T.slot[0] == FrozenCookies.autoWorship2) {
-        FrozenCookies.autoworship2 = 11;
+        FrozenCookies.autoworship2 = 0;
         logEvent("autoWorship", "Can't worship the same god in Diamond and Jade slots!");
         return;
     }
     if (T.slot[1] == FrozenCookies.autoWorship2) {
-        FrozenCookies.autoworship2 = 11;
+        FrozenCookies.autoworship2 = 0;
         logEvent("autoWorship", "Can't worship the same god in Ruby and Jade slots!");
         return;
     }
