@@ -173,14 +173,14 @@ FrozenCookies.preferenceValues = {
         hint: "Pantheon options:",
     },
     autoWorshipToggle: {
-        hint: "Automatically slot selected gods (Cannot slot the same god in multiple slots)",
+        hint: "Automatically slot selected gods (Cannot slot the same god in multiple slots, Holobore cannot be set by FC)",
         display: ["Auto Pantheon OFF", "Auto Pantheon ON"],
         default: 0,
     },
     autoWorship0: {
         hint: "Automatically slots desired god in DIAMOND slot",
         display: [
-            "Holobore",
+            "No god",
             "Vomitrax",
             "Godzamok",
             "Cyclius",
@@ -191,14 +191,13 @@ FrozenCookies.preferenceValues = {
             "Mokalsium",
             "Skruuia",
             "Rigidel",
-            "No god",
         ],
-        default: 11,
+        default: 0,
     },
     autoWorship1: {
         hint: "Automatically slots desired god in RUBY slot",
         display: [
-            "Holobore",
+            "No god",
             "Vomitrax",
             "Godzamok",
             "Cyclius",
@@ -209,14 +208,13 @@ FrozenCookies.preferenceValues = {
             "Mokalsium",
             "Skruuia",
             "Rigidel",
-            "No god",
         ],
-        default: 11,
+        default: 0,
     },
     autoWorship2: {
         hint: "Automatically slots desired god in JADE slot",
         display: [
-            "Holobore",
+            "No god",
             "Vomitrax",
             "Godzamok",
             "Cyclius",
@@ -227,9 +225,8 @@ FrozenCookies.preferenceValues = {
             "Mokalsium",
             "Skruuia",
             "Rigidel",
-            "No God",
         ],
-        default: 11,
+        default: 0,
     },
     autoCyclius: {
         hint: "Continually swap Cyclius throughout the day for max CpS bonus. Works best if all gods for the auto-Pantheon are set, with Cyclius not set to any slot. If Supreme Intellect is active, only two slots are used",
