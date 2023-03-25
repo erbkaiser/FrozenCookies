@@ -59,6 +59,10 @@ var upgradeJson = {
         buildings: [500],
         upgrades: [],
     }, // Decillion fingers
+    873: {
+        buildings: [550],
+        upgrades: [],
+    }, // Undecillion fingers
 
     // Grandma tiered upgrades
     7: {
