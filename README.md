@@ -6,9 +6,8 @@ An automated Cookie Clicker tool.
 
 ## Compatiblity
 
-Compatible again with **CCSE**, provided the version for 2.05 of both CCSE and FC are
+Compatible again with **CCSE**, provided the version for 2.05.x of both CCSE and FC are
 used. Most other mods will also be compatible.
-
 
 ## How to use
 
@@ -91,7 +90,7 @@ that I currently know of.
 
 2023 mm dd
 
--   Updated for version 2.051 (final building)
+-   Updated for version 2.05x (final building)
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
     options in Preferences **WARNING**: as part of this change, the spell options have
     been changed. Existing settings should transfer 1:1.
@@ -1145,13 +1144,16 @@ considering buying.
     estimated Golden Cookie CPS changes, meaning that it may be negative (especially for
     Elder Covenant.)
 
-# Contact info and credits
+-----
 
-Below info is for the official Frozen Cookies.
+# Original Contact info and credits
+
+The below info is from icehawk78's Frozen Cookies.
 
 ## Discord
 
-For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT
+For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT 
+_(link invalid as of 2023)_
 
 ## Contact Us!
 
