@@ -24,8 +24,8 @@ method are below.
 
 ### Beta
 
-If you are on Beta 2.05 and want to experiment, you can use the FC beta by using
-https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the default
+If you are on Beta 2.05.x 'Final building' and want to experiment, you can use the FC beta by 
+using https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the default
 script. This will be _removed_ once the beta Cookie Clicker goes live.
 
 The updated readme for the beta is at
@@ -1123,14 +1123,17 @@ considering buying.
 -   **Δ CPS**: The full CPS change that buying this purchase would have. Includes
     estimated Golden Cookie CPS changes, meaning that it may be negative (especially for
     Elder Covenant.)
+    
+-----
 
-# Contact info and credits
+# Original Contact info and credits
 
-Below info is for the official Frozen Cookies.
+The below info is from icehawk78's Frozen Cookies.
 
 ## Discord
 
-For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT
+For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT 
+_(link invalid as of 2023)_
 
 ## Contact Us!
 
