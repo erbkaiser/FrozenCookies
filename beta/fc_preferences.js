@@ -20,11 +20,12 @@ FrozenCookies.preferenceValues = {
         display: ["Autoclick GC OFF", "Autoclick GC ON"],
         default: 0,
     },
-    autoWC: {
-        hint: "Automatically click Wrath Cookies when they appear (does nothing if autoGC is OFF)",
-        display: ["Autoclick Wrath Cookies OFF", "Autoclick Wrath Cookies ON"],
-        default: 1,
-    },
+    // Not working right
+    // autoWC: {
+    //    hint: "Automatically click Wrath Cookies when they appear (does nothing if autoGC is OFF)",
+    //    display: ["Autoclick Wrath Cookies OFF", "Autoclick Wrath Cookies ON"],
+    //    default: 1,
+    // },
     autoReindeer: {
         hint: "Automatically click reindeer",
         display: ["Autoclick Reindeer OFF", "Autoclick Reindeer ON"],
