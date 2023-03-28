@@ -3810,7 +3810,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoFrenzy = 1;
         FrozenCookies.frenzyClickSpeed = 1000;
         FrozenCookies.autoGC = 1;
-        FrozenCookies.autoWC = 1;
+        // FrozenCookies.autoWC = 1;
         FrozenCookies.autoReindeer = 1;
         FrozenCookies.autoFortune = 1;
         // autobuy options
@@ -5952,7 +5952,8 @@ function autoCookie() {
             for (var i in Game.shimmers) {
                 if (
                     Game.shimmers[i].type == "golden" &&
-                    (Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
+                    //(Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
+                    Game.shimmer.wrath != 1
                 )
                     Game.shimmers[i].pop();
             }

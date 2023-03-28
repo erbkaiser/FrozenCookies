@@ -94,8 +94,6 @@ that I currently know of.
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
     options in Preferences **WARNING**: as part of this change, the spell options have
     been changed. Existing settings should transfer 1:1.
--   Added option to avoid clicking Wrath Cookies (recommended not to use as not all wraths
-    are negative)
 
 2022 Dec 30
 
@@ -661,9 +659,6 @@ that I currently know of.
     Autoclick at top speed.
 -   **Autoclick GC** All golden cookes, including wrath cookies, will be collected as soon
     as they appear if enabled.
--   **Autoclick Wrath Cookies** If DISABLED along with the above, this will allow wrath
-    cookies to time out. Not recommended, as some wrath cookies actually have positive
-    effects.
 -   **Autoclick Reindeer** This will click Reindeer the moment they appear.
 -   **Auto Fortune** The moment a fortune appears in the newsticker, it will be collected.
     It may be a good idea to disable this during active play, as you will only collect
