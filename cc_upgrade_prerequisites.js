@@ -1176,99 +1176,99 @@ var upgradeJson = {
 
     // Synergies
     369: {
-        buildings: [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0],
+        buildings: [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Future almanacs
     370: {
-        buildings: [0, 0, 75, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 75, 0, 0, 0, 75],
         upgrades: [394],
     }, // Rain prayer
     371: {
-        buildings: [0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 15, 0, 0, 0, 15],
         upgrades: [393],
     }, // Seismic magic
     372: {
-        buildings: [0, 0, 0, 75, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 75, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // Asteroid mining
     373: {
-        buildings: [0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0],
+        buildings: [0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Quantum electronics
     374: {
-        buildings: [0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // Temporal overclocking
     375: {
-        buildings: [0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 15, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Contracts from beyond
     376: {
-        buildings: [0, 0, 0, 0, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 75, 75],
         upgrades: [394],
     }, // Printing presses
     377: {
-        buildings: [0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 15],
         upgrades: [393],
     }, // Paganism
     378: {
-        buildings: [0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 75, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // God particle
     379: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 15, 0, 15, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 15, 0, 15],
         upgrades: [393],
     }, // Arcane knowledge
     380: {
-        buildings: [0, 0, 75, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 75, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // Magical botany
     381: {
-        buildings: [0, 0, 0, 15, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 15, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Fossil fuels
     382: {
-        buildings: [0, 0, 0, 0, 75, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 75, 0, 0, 0, 75],
         upgrades: [394],
     }, // Shipyards
     383: {
-        buildings: [0, 0, 0, 15, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 15, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Primordial ores
     384: {
-        buildings: [0, 0, 0, 0, 0, 75, 0, 0, 0, 75, 0, 0, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 75, 0, 0, 0, 75],
         upgrades: [394],
     }, // Gold fund
     385: {
-        buildings: [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0],
+        buildings: [0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Infernal crops
     386: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 75, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 75],
         upgrades: [394],
     }, // Abysmal glimmer
     387: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 15, 0, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 15],
         upgrades: [393],
     }, // Relativistic parsec-skipping
     388: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 75, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 75],
         upgrades: [394],
     }, // Primeval glow
     389: {
-        buildings: [0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 15, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Extra physics funding
     390: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 75, 0, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 75],
         upgrades: [394],
     }, // Chemical proficiency
     391: {
-        buildings: [0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 15, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 15],
         upgrades: [393],
     }, // Light magic
     392: {
-        buildings: [0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 75, 0],
+        buildings: [0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // Mystical energies
     424: {
