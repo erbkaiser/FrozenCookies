@@ -5951,9 +5951,8 @@ function autoCookie() {
         if (goldenCookieLife() && FrozenCookies.autoGC) {
             for (var i in Game.shimmers) {
                 if (
-                    Game.shimmers[i].type == "golden" &&
-                    //(Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
-                    Game.shimmer.wrath != 1
+                    Game.shimmers[i].type == "golden"
+                    // && (Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
                 )
                     Game.shimmers[i].pop();
             }
