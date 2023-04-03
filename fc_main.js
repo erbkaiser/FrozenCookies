@@ -4816,7 +4816,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
             upgrade.id == 184 ||
             upgrade.id == 185 ||
             upgrade.id == 209) &&
-        Game.season &&
+        Game.baseSeason &&
         Game.UpgradesById[181].unlocked &&
         upgrade.id == 182 &&
         haveAll("christmas") &&
@@ -4828,8 +4828,8 @@ function isUnavailable(upgrade, upgradeBlacklist) {
         haveAll("easter") &&
         (FrozenCookies.freeSeason == 2 ||
             (FrozenCookies.freeSeason == 1 &&
-                ((Game.season == "christmas" && upgrade.id == 182) ||
-                    (Game.season == "fools" && upgrade.id == 185))))
+                ((Game.baseSeason == "christmas" && upgrade.id == 182) ||
+                    (Game.baseSeason == "fools" && upgrade.id == 185))))
     )
         return true;
 
