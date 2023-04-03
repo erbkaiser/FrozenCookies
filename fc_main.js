@@ -2911,7 +2911,7 @@ function autoWorship0Action() {
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         !FrozenCookies.autoWorship0 ||
-        FrozenCookies.autoCyclius != 0 ||
+        FrozenCookies.autoCyclius ||
         T.slot[0] == FrozenCookies.autoWorship0
     ) {
         return;
@@ -2926,7 +2926,7 @@ function autoWorship1Action() {
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         !FrozenCookies.autoWorship1 ||
-        FrozenCookies.autoCyclius != 0 ||
+        FrozenCookies.autoCyclius ||
         T.slot[1] == FrozenCookies.autoWorship1
     ) {
         return;
@@ -2947,7 +2947,7 @@ function autoWorship2Action() {
         T.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         !FrozenCookies.autoWorship2 ||
-        FrozenCookies.autoCyclius != 0 ||
+        FrozenCookies.autoCyclius ||
         T.slot[2] == FrozenCookies.autoWorship2
     ) {
         return;
@@ -4860,15 +4860,25 @@ function isUnavailable(upgrade, upgradeBlacklist) {
 
     // Don't leave base season if it's desired
     if (
-        Game.baseSeason != 0 &&
+        (upgrade.id == 182 ||
+            upgrade.id == 183 ||
+            upgrade.id == 184 ||
+            upgrade.id == 185 ||
+            upgrade.id == 209) &&
+        Game.season &&
         Game.UpgradesById[181].unlocked &&
-        FrozenCookies.freeSeason != 0 &&
+        upgrade.id == 182 &&
         haveAll("christmas") &&
+        upgrade.id == 183 &&
         haveAll("halloween") &&
+        upgrade.id == 184 &&
         haveAll("valentines") &&
+        upgrade.id == 209 &&
         haveAll("easter") &&
-        ((FrozenCookies.freeSeason == 1 && (upgrade.id == 182 || upgrade.id == 185)) ||
-            (FrozenCookies.freeSeason == 2 && upgrade.season))
+        (FrozenCookies.freeSeason == 2 ||
+            (FrozenCookies.freeSeason == 1 &&
+                ((Game.season == "christmas" && upgrade.id == 182) ||
+                    (Game.season == "fools" && upgrade.id == 185))))
     )
         return true;
 
