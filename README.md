@@ -1139,7 +1139,7 @@ considering buying.
 -   **Δ CPS**: The full CPS change that buying this purchase would have. Includes
     estimated Golden Cookie CPS changes, meaning that it may be negative (especially for
     Elder Covenant.)
-
+    
 -----
 
 # Original Contact info and credits
