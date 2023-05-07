@@ -7,7 +7,8 @@ An automated Cookie Clicker tool.
 ## Compatiblity
 
 Compatible again with **CCSE**, provided the version for 2.052 of both CCSE and FC are
-used. Most other mods will also be compatible.
+used. Most other mods will also be compatible. Some users report a load conflict with 
+Cookie Monster. Make sure CM loads before FC if you want to use both.
 
 ## How to use
 
@@ -88,7 +89,7 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
-2023 mm dd
+2023 May 07
 
 -   Updated for version 2.052 (final building)
 -   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
