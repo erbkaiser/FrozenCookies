@@ -1,1 +1,0 @@
-javascript:(function(){Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js");}());
