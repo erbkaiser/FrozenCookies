@@ -59,6 +59,10 @@ var upgradeJson = {
         buildings: [500],
         upgrades: [],
     }, // Decillion fingers
+    873: {
+        buildings: [550],
+        upgrades: [],
+    }, // Undecillion fingers
 
     // Grandma tiered upgrades
     7: {
@@ -117,6 +121,10 @@ var upgradeJson = {
         buildings: [0, 550],
         upgrades: [],
     }, // Kitchen cabinets
+    840: {
+        buildings: [0, 600],
+        upgrades: [],
+    }, // Foam-tipped canes
 
     // Farm tiered upgrades
     10: {
@@ -175,6 +183,10 @@ var upgradeJson = {
         buildings: [0, 0, 550],
         upgrades: [],
     }, // Cookie mulch
+    841: {
+        buildings: [0, 0, 600],
+        upgrades: [],
+    }, // Self-driving tractors
 
     // Mine tiered upgrades
     16: {
@@ -233,6 +245,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 550],
         upgrades: [],
     }, // Delicious mineralogy
+    842: {
+        buildings: [0, 0, 0, 600],
+        upgrades: [],
+    }, // Mineshaft supports
 
     // Factory tiered upgrades
     13: {
@@ -291,6 +307,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 550],
         upgrades: [],
     }, // N-dimensional assembly lines
+    843: {
+        buildings: [0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Universal automation
 
     // Bank tiered upgrades
     232: {
@@ -349,6 +369,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Cookie Points
+    844: {
+        buildings: [0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // The big shortcake
 
     // Temple tiered upgrades
     238: {
@@ -407,6 +431,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Negatheism
+    845: {
+        buildings: [0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Temple traps
 
     // Wizard Tower tiered upgrades
     244: {
@@ -465,6 +493,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Magical realism
+    846: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Polymorphism
 
     // Shipment tiered upgrades
     19: {
@@ -523,6 +555,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Cosmic foreground radiation
+    847: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // At your doorstep in 30 minutes or your money back
 
     // Alchemy lab tiered upgrades
     22: {
@@ -581,6 +617,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Arcanized glassware
+    848: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // The dose makes the poison
 
     // Portal tiered upgrades
     25: {
@@ -639,6 +679,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Portal guns
+    849: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // A way home
 
     // Time machine tiered upgrades
     28: {
@@ -697,6 +741,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Timeproof upholstery
+    850: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Rectifying a mistake
 
     // Antimatter condenser tiered upgrades
     99: {
@@ -755,6 +803,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Employee minification
+    851: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Candied atoms
 
     // Prism tiered upgrades
     175: {
@@ -813,6 +865,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Hyperblack paint
+    852: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Lab goggles but like cool shades
 
     // Chancemaker tiered upgrades
     416: {
@@ -871,6 +927,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Silver lining maximization
+    853: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Gambler's fallacy fallacy
 
     // Fractal engine tiered upgrades
     522: {
@@ -929,6 +989,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Multiscale profiling
+    854: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // The more they stay the same
 
     // Javascript console tiered upgrades
     594: {
@@ -987,6 +1051,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // PHP containment vats
+    855: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Simulation failsafes
 
     // Idleverse tiered upgrades
     684: {
@@ -1045,6 +1113,10 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // Opposite universe
+    856: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // The other routes to Rome
 
     // Cortex bakery tiered upgrades
     730: {
@@ -1103,6 +1175,72 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
         upgrades: [],
     }, // The land of dreams
+    857: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Intellectual property theft
+
+    // 'You' upgrades
+    826: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        upgrades: [],
+    }, // Cloning vats
+    827: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5],
+        upgrades: [],
+    }, // Energized nutrients
+    828: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25],
+        upgrades: [],
+    }, // Stunt doubles
+    829: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50],
+        upgrades: [],
+    }, // Clone recycling plant
+    830: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100],
+        upgrades: [],
+    }, // Free-range clones
+    831: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 150],
+        upgrades: [],
+    }, // Genetic tailoring
+    832: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200],
+        upgrades: [],
+    }, // Power in diversity
+    833: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250],
+        upgrades: [],
+    }, // Self-betterment
+    834: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300],
+        upgrades: [],
+    }, // Source control
+    835: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 350],
+        upgrades: [],
+    }, // United workforce
+    836: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 400],
+        upgrades: [],
+    }, // Safety patrols
+    837: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450],
+        upgrades: [],
+    }, // Clone rights
+    838: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500],
+        upgrades: [],
+    }, // One big family
+    839: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 550],
+        upgrades: [],
+    }, // Fine-tuned body plans
+    858: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600],
+        upgrades: [],
+    }, // Reading your clones bedtime stories
 
     // Grandma upgrades
     57: {
@@ -1173,6 +1311,10 @@ var upgradeJson = {
         buildings: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [],
     }, // Brainy grandmas
+    825: {
+        buildings: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
+        upgrades: [],
+    }, // Clone grandmas
 
     // Synergies
     369: {
@@ -1311,6 +1453,14 @@ var upgradeJson = {
         buildings: [0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75],
         upgrades: [394],
     }, // Fertile minds
+    859: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15],
+        upgrades: [393],
+    }, // Accelerated development
+    860: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 75],
+        upgrades: [394],
+    }, // Peer review
 
     // Fortune upgrades - Requires "Fortune cookies" heavenly upgrade (643)
     621: {
@@ -1389,92 +1539,103 @@ var upgradeJson = {
         buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
         upgrades: [643],
     }, // Fortune #019
+    861: {
+        buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
+        upgrades: [643],
+    }, // Fortune #020
 
     // Reward cookies - Unlocked when all buildings reach a certain number
     334: {
         buildings: [
             100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
-            100, 100, 100, 100,
+            100, 100, 100, 100, 100,
         ],
         upgrades: [],
     }, // Milk chocolate butter biscuit
     335: {
         buildings: [
             150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150,
-            150, 150, 150, 150,
+            150, 150, 150, 150, 150,
         ],
         upgrades: [],
     }, // Dark chocolate butter biscuit
     336: {
         buildings: [
             200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-            200, 200, 200, 200,
+            200, 200, 200, 200, 200,
         ],
         upgrades: [],
     }, // White chocolate butter biscuit
     337: {
         buildings: [
             250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250,
-            250, 250, 250, 250,
+            250, 250, 250, 250, 250,
         ],
         upgrades: [],
     }, // Ruby chocolate butter biscuit
     400: {
         buildings: [
             300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
-            300, 300, 300, 300,
+            300, 300, 300, 300, 300,
         ],
         upgrades: [],
     }, // Lavender chocolate butter biscuit
     477: {
         buildings: [
             350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350,
-            350, 350, 350, 350,
+            350, 350, 350, 350, 350,
         ],
         upgrades: [],
     }, // Synthetic chocolate green honey butter biscuit
     478: {
         buildings: [
             400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
-            400, 400, 400, 400,
+            400, 400, 400, 400, 400,
         ],
         upgrades: [],
     }, // Royal raspberry chocolate butter biscuit
     479: {
         buildings: [
             450, 450, 450, 450, 450, 450, 450, 450, 450, 450, 450, 450, 450, 450, 450,
-            450, 450, 450, 450,
+            450, 450, 450, 450, 450,
         ],
         upgrades: [],
     }, // Ultra-concentrated high-energy chocolate butter biscuit
     497: {
         buildings: [
             500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500,
-            500, 500, 500, 500,
+            500, 500, 500, 500, 500,
         ],
         upgrades: [],
     }, // Pure pitch-black chocolate butter biscuit
     659: {
         buildings: [
             550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 550,
-            550, 550, 550, 550,
+            550, 550, 550, 550, 550,
         ],
         upgrades: [],
     }, // Cosmic chocolate butter biscuit
     699: {
         buildings: [
             600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600,
-            600, 600, 600, 600,
+            600, 600, 600, 600, 600,
         ],
         upgrades: [],
     }, // Butter biscuit (with butter)
     767: {
         buildings: [
             650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
-            650, 650, 650, 650,
+            650, 650, 650, 650, 650,
         ],
         upgrades: [],
     }, // Everybutter biscuit
+    862: {
+        buildings: [
+            700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700,
+            700, 700, 700, 700, 700,
+        ],
+        upgrades: [],
+    }, // Personal biscuit
 
     // Grandmapocalypse research
     64: {

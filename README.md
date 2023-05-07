@@ -4,12 +4,11 @@
 
 An automated Cookie Clicker tool.
 
-## Warning
+## Compatiblity
 
-The version for 2.048 is NOT currently compatible with **CCSE**:
-https://github.com/klattmose/klattmose.github.io/issues/47
-
-This will be fixed for version 2.05 if CCSE and FC are updated.
+Compatible again with **CCSE**, provided the version for 2.052 of both CCSE and FC are
+used. Most other mods will also be compatible. Some users report a load conflict with 
+Cookie Monster. Make sure CM loads before FC if you want to use both.
 
 ## How to use
 
@@ -21,19 +20,6 @@ the menu for a quick start. Read on for details on what each option does.
 
 If you do not have the button, confirm FC is installed. Instructions for each platform and
 method are below.
-
-### Beta
-
-If you are on Beta 2.05.x 'Final building' and want to experiment, you can use the FC beta by 
-using https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the default
-script. This will be _removed_ once the beta Cookie Clicker goes live.
-
-The updated readme for the beta is at
-https://github.com/erbkaiser/FrozenCookies/tree/2023-beta#readme
-
-**Warning**: The beta branch is a work in progress. If you moved your save and Frozen
-Cookies to beta and go back to the release version, your selected Autocast option may be
-messed up and there might be other issues.
 
 ## Steam Install
 
@@ -102,6 +88,13 @@ that I currently know of.
 
 <details>
 <summary>Click to expand!</summary>
+
+2023 May 07
+
+-   Updated for version 2.052 (final building)
+-   Re-implemented 'simple' FTHOF autocasting method by request. Re-ordered autoCasting
+    options in Preferences **WARNING**: as part of this change, the spell options have
+    been changed. Existing settings should transfer 1:1.
 
 2022 Dec 30
 
@@ -765,9 +758,9 @@ that I currently know of.
     set. 37 is the best value for the auto cast FTHOF or manual casting option, for double
     casting higher values are needed (between 81 and 100). Setting this to any value over
     100 is wasting mana and ruins spell casting speed.
--   **Auto Cast FTHOF**, **Double Cast FTHOF**, **Auto Cast 100% Consistency Combo**
-    Select one of the auto casting methods. More details further on. Cannot use multiple
-    options at once, the lowest enabled entry in the list will be active.
+-   **Auto Cast**, **Double Cast FTHOF**, **Auto Cast 100% Consistency Combo** Select one
+    of the auto casting methods. More details further on. Cannot use multiple options at
+    once, the lowest enabled entry in the list will be active.
 -   **Auto Sugar Frenzy** Will buy Sugar Frenzy with a sugar lump during the first 100%
     Consistency and/or Double Cast combo (depending on what is set) of that ascension. If
     Sugar Baking Guard is active, it will only buy ASF if you have 101 lumps or more. You
@@ -786,10 +779,10 @@ that I currently know of.
 -   **Dragon Auras** Will set the desired aura. Aura 1 will be set in the first slot and
     Aura 2 will set in the second slot, even if Aura 2 could theoretically be set earlier.
 -   **Auto Dragon Orbs** If Dragon Orbs is one of the active auras and Godzamok is not a
-    slotted god, this will repeatedly sell Cortex bakers to try to spawn Golden Cookies.
-    Works together with:
--   **Cortex bakers Limit** This will cap the number of Cortex bakers that can be bought
-    to a given number to make sure ADO doesn't wipe out all your cookies.
+    slotted god, this will repeatedly sell Yous to try to spawn Golden Cookies. Works
+    together with:
+-   **You Limit** This will cap the number of Yous that can be bought to a given number to
+    make sure ADO doesn't wipe out all your cookies.
 
 ## Season options
 
@@ -907,26 +900,34 @@ algorithm will build (and maintain) a CPS base faster than the current one. Addi
 there is uncompleted code that will simplify these numbers to a simple percentage-based
 system for easier user reference.
 
-# Special casting combos
+# Auto Cast and Combos
 
-This fork includes some different auto casting combo mechanics. Brief documentation and
-setup guides follow.
-
-## Smart Auto cast
-
-Auto cast will cast the selected spell when max mana is reached, with some exceptions:
+Auto cast will cast the selected spell if you have enough mana. If a Combo method is used,
+this overrides earlier listed spells, including Auto Cast.
 
 -   If the next detected spell is _'Sweet'_ (free Sugar lump), it will always cast _Force
-    the Hand of Fate_ (FTHOF) next, if it has enough mana
+    the Hand of Fate_ (FTHOF) next, if it has enough mana for FTHOF
 -   If the next detected spell is either _Clot_ or _Ruin cookies_ AND you are currently
     under a timed debuff like a clot, it will cast _Stretch Time_ to shorten the timer
 -   If the next detected spell is either _Clot_ or _Ruin cookies_ and you are not
     currently under a timed debuff, it will cast _Haggler's Charm_ instead of the selected
     spell, to avoid a backfire
--   If there is an unclicked cookie on screen and the next FTHOF spell is a backfire, it
-    will wait until the unclicked cookie has been or has expired
+-   If there is an unclicked cookie on screen, the automatic spell is FTHOF, and the next
+    FTHOF spell is a backfire, it will wait until the unclicked cookie has been or has
+    expired
 
-If the selected spell is FTHOF, there are some additional checks:
+## Auto Cast CONJURE BAKED GOODS
+
+Will cast CBG
+
+## Auto Cast FORCE THE HAND OF FATE (simple)
+
+Will cast FTHOF without any further logic. If **minimum Frenzy** is set, it will wait for
+that Frenzy value before casting.
+
+## Auto Cast FORCE THE HAND OF FATE (smart)
+
+Works like the simple method, with the following changes:
 
 -   If the next detected spell is _Click Frenzy_, it will not cast the spell unless either
     a _Frenzy_ or _Dragon Harvest_ plus a _Building Special_ are active for long enough to
@@ -937,12 +938,27 @@ If the selected spell is FTHOF, there are some additional checks:
     cast this spell unless a _Click Frenzy_ or _Dragonflight_ is active for long enough to
     last the entire spell
 
+## Auto Cast FTHOF (Click and Building Specials only)
+
+Works like the smart method, but will only cast Click Specials and Building Specials. All
+other spells will be replacved with _Haggler's Charm_
+
+## Auto Cast SPONTANEOUS EDIFICE
+
+Will sell one You and then cast _Spontaneous Edifice_, to try to get a free building. This
+spell becomes useless once you have over 400 of all buildings.
+
+## Auto Cast HAGGLER'S CHARM
+
+Will simply cast Haggler's Charm, regardless of a predicted positive or negative outcome.
+Mostly useful if you just want to cast spells as much as possible.
+
 ## Double Cast FTHOF
 
-Double Cast FTHOF replaces Auto Cast. If the combo is enabled, it will look for a clicking
-frenzy and two building specials before casting, for a massive boost. Any other spell will
-be replaced by _Haggler's Charm_, with the same exceptions as the Smart Auto cast system
-above.
+Double Cast FTHOF replaces all forms of Auto Cast. If the combo is enabled, it will look
+for a clicking frenzy and two building specials before casting, for a massive boost. Any
+other spell will be replaced by _Haggler's Charm_, with the same exceptions as the Smart
+Auto cast system above.
 
 The possible combos are:
 
