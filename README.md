@@ -654,7 +654,8 @@ that I currently know of.
     like 100 and increase it until the 'Next' upgrade in the options or infobox begins to
     go wrong, either by losing the seconds value or by showing a clearly incorrect count.
     If it does, lower the Autoclick count again until you find the optimal speed. Or, just
-    set it 250 and forget about it.
+    set it 250 and forget about it. 
+    NOTE: Having Autoclick enabled may prevent you from manually poking Wrinklers.
 -   **Autofrenzy** This is Autoclick but during click frenzies. The same rules as
     Autoclick apply, but you can use a higher value here if you cannot normally run
     Autoclick at top speed.
