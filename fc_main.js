@@ -274,7 +274,7 @@ function setOverrides(gameSaveData) {
         FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
         FrozenCookies.orbMax = preferenceParse("orbMax", 0);
-        
+
         // Temporary, switch from Cortex Bakers to You for Dragon Orbs
         if (FrozenCookies.cortexMax) {
             FrozenCookies.orbMax = FrozenCookies.cortexMax;
@@ -5598,7 +5598,7 @@ function shouldPopWrinklers() {
 }
 
 function autoFrenzyClick() {
-    if (hasClickBuff() && !FrozenCookies.autoFrenzyBot) {
+    if (hasClickBuff() | Game.hasBuff("Cursed finger") && !FrozenCookies.autoFrenzyBot) {
         if (FrozenCookies.autoclickBot) {
             clearInterval(FrozenCookies.autoclickBot);
             FrozenCookies.autoclickBot = 0;
@@ -5607,7 +5607,11 @@ function autoFrenzyClick() {
             fcClickCookie,
             1000 / FrozenCookies.frenzyClickSpeed
         );
-    } else if (!hasClickBuff() && FrozenCookies.autoFrenzyBot) {
+    } else if (
+        !hasClickBuff() &&
+        !Game.hasBuff("Cursed finger") &&
+        FrozenCookies.autoFrenzyBot
+    ) {
         clearInterval(FrozenCookies.autoFrenzyBot);
         FrozenCookies.autoFrenzyBot = 0;
         if (FrozenCookies.autoClick && FrozenCookies.cookieClickSpeed) {
