@@ -2267,7 +2267,11 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 17: // Perform custom autogodzamok
-            if (!Game.hasBuff("Devastation") && hasClickBuff()) {
+            if (
+                !Game.hasBuff("Devastation") &&
+                !Game.hasBuff("Cursed finger") &&
+                hasClickBuff()
+            ) {
                 if (Game.Objects["Farm"].amount >= 10) {
                     Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
                     Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
@@ -2713,7 +2717,11 @@ function autoBrokerAction() {
 function autoLoanBuy() {
     if (!B || B.officelevel < 2) return;
 
-    if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
+    if (
+        hasClickBuff() &&
+        !Game.hasBuff("Cursed finger") &&
+        cpsBonus() >= FrozenCookies.minLoanMult
+    ) {
         if (B.officeLevel >= 2) B.takeLoan(1);
         if (B.officeLevel >= 4) B.takeLoan(2);
         if (B.officeLevel >= 5 && FrozenCookies.autoLoan == 2) B.takeLoan(3);
@@ -3977,8 +3985,7 @@ function cpsBonus() {
 }
 
 function hasClickBuff() {
-    //return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
-    return clickBuffBonus() > 1;
+    return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
 }
 
 function baseCps() {
@@ -5598,7 +5605,7 @@ function shouldPopWrinklers() {
 }
 
 function autoFrenzyClick() {
-    if (hasClickBuff() | Game.hasBuff("Cursed finger") && !FrozenCookies.autoFrenzyBot) {
+    if (hasClickBuff() && !FrozenCookies.autoFrenzyBot) {
         if (FrozenCookies.autoclickBot) {
             clearInterval(FrozenCookies.autoclickBot);
             FrozenCookies.autoclickBot = 0;
@@ -5607,11 +5614,7 @@ function autoFrenzyClick() {
             fcClickCookie,
             1000 / FrozenCookies.frenzyClickSpeed
         );
-    } else if (
-        !hasClickBuff() &&
-        !Game.hasBuff("Cursed finger") &&
-        FrozenCookies.autoFrenzyBot
-    ) {
+    } else if (!hasClickBuff() && FrozenCookies.autoFrenzyBot) {
         clearInterval(FrozenCookies.autoFrenzyBot);
         FrozenCookies.autoFrenzyBot = 0;
         if (FrozenCookies.autoClick && FrozenCookies.cookieClickSpeed) {
@@ -5624,7 +5627,7 @@ function autoFrenzyClick() {
 }
 
 function autoGSBuy() {
-    if (hasClickBuff()) {
+    if (hasClickBuff() && !Game.hasBuff("Cursed finger")) {
         if (
             Game.Upgrades["Golden switch [off]"].unlocked &&
             !Game.Upgrades["Golden switch [off]"].bought
@@ -5664,7 +5667,11 @@ function autoGodzamokAction() {
         var countFactory = Game.Objects["Factory"].amount;
 
         //Automatically sell all mines and factories
-        if (!Game.hasBuff("Devastation") && hasClickBuff()) {
+        if (
+            !Game.hasBuff("Devastation") &&
+            !Game.hasBuff("Cursed finger") &&
+            hasClickBuff()
+        ) {
             Game.Objects["Mine"].sell(countMine);
             Game.Objects["Factory"].sell(countFactory);
             //Rebuy mines
