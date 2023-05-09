@@ -23,8 +23,8 @@ var baseUrl =
         : "https://github.erbkaiser.com/FrozenCookies/";
 var FrozenCookies = {
     baseUrl: baseUrl,
-    branch: "Main-",
-    version: "2.0.52",
+    branch: "erb-",
+    version: "2.052.1",
 };
 
 // Load external libraries
