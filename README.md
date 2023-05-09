@@ -89,6 +89,10 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2023 May 09
+
+-   Autofrenzy will now kick in for Cursed Finger as well (#135)
+
 2023 May 07
 
 -   Updated for version 2.052 (final building)
