@@ -3834,6 +3834,7 @@ function recommendedSettingsAction() {
         FrozenCookies.pastemode = 0;
         // other auto options
         FrozenCookies.autoAscend = 0;
+        FrozenCookies.comboAscend = 0;
         FrozenCookies.HCAscendAmount = 0;
         FrozenCookies.autoBulk = 2;
         FrozenCookies.autoBuyAll = 1;
@@ -5967,7 +5968,7 @@ function autoCookie() {
                     wrinklerValue() +
                     chocolateValue()
             );
-            if (resetPrestige - currPrestige > 0) {
+            if (resetPrestige >= currPrestige * 2) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
