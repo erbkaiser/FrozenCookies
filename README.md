@@ -89,7 +89,7 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
-2023 mmm dd
+2023 May 15
 
 -   Add new auto-ascend option to ascend when prestige is doubled (([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137)))
 -   Add option to block ascending during active combo (#137)
