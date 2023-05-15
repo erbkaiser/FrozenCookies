@@ -91,12 +91,12 @@ that I currently know of.
 
 2023 May 15
 
--   Add new auto-ascend option to ascend when prestige is doubled (([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137)))
+-   Add new auto-ascend option to ascend when prestige is doubled ([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137))
 -   Add option to block ascending during active combo (#137)
 
 2023 May 09
 
--   Autofrenzy will now kick in for Cursed Finger as well (([Issue #135](https://github.com/erbkaiser/FrozenCookies/issues/135)))
+-   Autofrenzy will now kick in for Cursed Finger as well ([Issue #135](https://github.com/erbkaiser/FrozenCookies/issues/135))
 
 2023 May 07
 
@@ -135,7 +135,7 @@ that I currently know of.
 
 2022 Oct 04
 
--   Implement ([Issue #55](https://github.com/erbkaiser/FrozenCookies/issues/55)) 'Add a buy all upgrades
+-   Implement [Issue #55](https://github.com/erbkaiser/FrozenCookies/issues/55) 'Add a buy all upgrades
     function'
 -   Fixed a bug that hid the Auto Bulk Buy option
 
