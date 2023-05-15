@@ -101,9 +101,19 @@ FrozenCookies.preferenceValues = {
     },
     autoAscend: {
         hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
-        display: ["Autoascend OFF", "Autoascend ON"],
+        display: [
+            "Auto-ascend OFF",
+            "Auto-ascend at amount",
+            "Auto-ascend on double prestige",
+        ],
         default: 0,
         extras: '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>',
+    },
+    comboAscend: {
+        hint: "Do not Auto-ascend if the active combo is larger than the minimum Frenzy",
+        display: ["Ascend during combo OFF", "Ascend during combo ON"],
+        default: 0,
+        extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
     },
     autoWrinkler: {
         hint: "Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly",

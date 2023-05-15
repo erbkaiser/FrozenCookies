@@ -89,9 +89,14 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2023 May 15
+
+-   Add new auto-ascend option to ascend when prestige is doubled (([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137)))
+-   Add option to block ascending during active combo (#137)
+
 2023 May 09
 
--   Autofrenzy will now kick in for Cursed Finger as well (#135)
+-   Autofrenzy will now kick in for Cursed Finger as well (([Issue #135](https://github.com/erbkaiser/FrozenCookies/issues/135)))
 
 2023 May 07
 
@@ -130,7 +135,7 @@ that I currently know of.
 
 2022 Oct 04
 
--   Implement https://github.com/erbkaiser/FrozenCookies/issues/55 'Add a buy all upgrades
+-   Implement ([Issue #55](https://github.com/erbkaiser/FrozenCookies/issues/55)) 'Add a buy all upgrades
     function'
 -   Fixed a bug that hid the Auto Bulk Buy option
 
@@ -701,9 +706,13 @@ that I currently know of.
     bulk buy for those if they are near the cap.
 -   **Auto Buy All Upgrades** This will effectively hit the 'buy all upgrades' button as
     many times as it can until at least one prestige level (heavenly chip) is earned.
--   **Autoascend** This is mainly useful if you're grinding out ascensions for Endless
+-   **Auto-ascend** This is mainly useful if you're grinding out ascensions for Endless
     Cycle, or want to build up your HC boost. Note that it can take a few seconds before
     the upgrade screen disappears each ascension, the transition isn't instantaneous.
+    With the first option, the game will ascend when the given number of new HCs is reached. 
+    With the second option, the game will ascend when your current prestige is doubled.
+-   **Ascending during combo** If enabled, the game will not ascend while a combo larger 
+    than the **minimum Frenzy** (see also below) is active.
 -   **Autopop Wrinklers** Pop any wrinklers, either the moment they appear, or when they
     have eaten enough to provide a decent bonus toward the next purchase. This is ignored
     during the Halloween and Easter seasons as long as some halloween cookies and eggs are
