@@ -1899,7 +1899,8 @@ function auto100ConsistencyComboAction() {
     // Not currently possible to do the combo
     if (
         Game.dragonLevel < 27 || // Fully upgraded dragon needed for two auras
-        !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
+        !G.canPlant(G.plantsById[14]) || // Can currently plant whiskerbloom (cost)
+        G.plantsById[14].unlocked == 0 // Whiskerbloom seed unlocked
     ) {
         return;
     }
