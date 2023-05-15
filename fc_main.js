@@ -5930,7 +5930,12 @@ function autoCookie() {
             itemBought = true;
         }
 
-        if (FrozenCookies.autoAscend && !Game.OnAscend && !Game.AscendTimer) {
+        if (
+            FrozenCookies.autoAscend == 1 &&
+            !Game.OnAscend &&
+            !Game.AscendTimer &&
+            (comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+        ) {
             var currPrestige = Game.prestige;
             var resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +
@@ -5940,6 +5945,29 @@ function autoCookie() {
             );
             var ascendChips = FrozenCookies.HCAscendAmount;
             if (resetPrestige - currPrestige >= ascendChips && ascendChips > 0) {
+                Game.ClosePrompt();
+                Game.Ascend(1);
+                setTimeout(function () {
+                    Game.ClosePrompt();
+                    Game.Reincarnate(1);
+                }, 10000);
+            }
+        }
+
+        if (
+            FrozenCookies.autoAscend == 2 &&
+            !Game.OnAscend &&
+            !Game.AscendTimer &&
+            (comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+        ) {
+            var currPrestige = Game.prestige;
+            var resetPrestige = Game.HowMuchPrestige(
+                Game.cookiesReset +
+                    Game.cookiesEarned +
+                    wrinklerValue() +
+                    chocolateValue()
+            );
+            if (currPrestige - resetPrestige > 0) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
