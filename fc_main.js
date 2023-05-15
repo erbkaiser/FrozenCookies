@@ -5934,7 +5934,7 @@ function autoCookie() {
             FrozenCookies.autoAscend == 1 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&
-            (comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
         ) {
             var currPrestige = Game.prestige;
             var resetPrestige = Game.HowMuchPrestige(
@@ -5958,7 +5958,7 @@ function autoCookie() {
             FrozenCookies.autoAscend == 2 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&
-            (comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
         ) {
             var currPrestige = Game.prestige;
             var resetPrestige = Game.HowMuchPrestige(
