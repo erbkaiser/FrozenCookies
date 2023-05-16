@@ -5968,7 +5968,7 @@ function autoCookie() {
                     wrinklerValue() +
                     chocolateValue()
             );
-            if (resetPrestige >= currPrestige * 2) {
+            if (resetPrestige > 0 && resetPrestige >= currPrestige * 2) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
