@@ -5968,7 +5968,8 @@ function autoCookie() {
                     wrinklerValue() +
                     chocolateValue()
             );
-            if (resetPrestige > 0 && resetPrestige >= currPrestige * 2) {
+            var ascendChips = FrozenCookies.HCAscendAmount;
+            if (resetPrestige >= currPrestige * 2 && ascendChips > 0) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
