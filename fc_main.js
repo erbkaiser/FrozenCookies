@@ -5935,17 +5935,20 @@ function autoCookie() {
             FrozenCookies.autoAscend == 1 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&
+            Game.prestige > 0 &&
+            FrozenCookies.HCAscendAmount > 1 &&
             (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
         ) {
-            var currPrestige = Game.prestige;
             var resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +
                     Game.cookiesEarned +
                     wrinklerValue() +
                     chocolateValue()
             );
-            var ascendChips = FrozenCookies.HCAscendAmount;
-            if (resetPrestige - currPrestige >= ascendChips && ascendChips > 0) {
+            if (
+                resetPrestige - Game.prestige >= FrozenCookies.HCAscendAmount &&
+                FrozenCookies.HCAscendAmount > 0
+            ) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
@@ -5959,17 +5962,17 @@ function autoCookie() {
             FrozenCookies.autoAscend == 2 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&
+            Game.prestige > 0 &&
+            FrozenCookies.HCAscendAmount > 1 &&
             (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
         ) {
-            var currPrestige = Game.prestige;
             var resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +
                     Game.cookiesEarned +
                     wrinklerValue() +
                     chocolateValue()
             );
-            var ascendChips = FrozenCookies.HCAscendAmount;
-            if (resetPrestige >= currPrestige * 2 && ascendChips > 0) {
+            if (resetPrestige >= Game.prestige * 2 && FrozenCookies.HCAscendAmount > 0) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
