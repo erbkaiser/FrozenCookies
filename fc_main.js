@@ -945,7 +945,7 @@ function autoRigidel() {
                 }
             }
         case 1: //Rigidel is already in diamond slot
-            if (timeToRipe < 60 && Game.BuildingsOwned % 10) {
+            if (timeToRipe < 55 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
@@ -958,7 +958,7 @@ function autoRigidel() {
                 }
             }
         case 2: //Rigidel in Ruby slot,
-            if (timeToRipe < 40 && Game.BuildingsOwned % 10) {
+            if (timeToRipe < 35 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
@@ -971,7 +971,7 @@ function autoRigidel() {
                 }
             }
         case 3: //Rigidel in Jade slot
-            if (timeToRipe < 20 && Game.BuildingsOwned % 10) {
+            if (timeToRipe < 15 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
