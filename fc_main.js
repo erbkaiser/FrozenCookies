@@ -276,41 +276,11 @@ function setOverrides(gameSaveData) {
         FrozenCookies.orbMax = preferenceParse("orbMax", 0);
 
         // Temporary, enable toggles for people using the features
-        if (FrozenCookies.defaultSeason) {
+        if (!FrozenCookies.defaultSeasonToggle && FrozenCookies.defaultSeason) {
             FrozenCookies.defaultSeasonToggle = 1;
         }
-        if (FrozenCookies.autoAscend) {
+        if (!FrozenCookies.autoAscendToggle && FrozenCookies.autoAscend) {
             FrozenCookies.autoAscendToggle = 1;
-        }
-
-        // Temporary, for switch from autoSpell to autoCasting
-        switch (FrozenCookies.autoSpell) {
-            case 0:
-                return;
-
-            case 1: // CBG
-                FrozenCookies.autoCasting = 1;
-                FrozenCookies.autoSpell = 0;
-                return;
-
-            case 2: // Smart FTHOF
-                FrozenCookies.autoCasting = 3;
-                FrozenCookies.autoSpell = 0;
-                return;
-
-            case 3: // SE
-                FrozenCookies.autoCasting = 5;
-                FrozenCookies.autoSpell = 0;
-                return;
-
-            case 4: // HC
-                FrozenCookies.autoCasting = 6;
-                FrozenCookies.autoSpell = 0;
-                return;
-
-            case 5: // Limited FTHOF
-                FrozenCookies.autoCasting = 4;
-                FrozenCookies.autoSpell = 0;
         }
 
         // Restore some possibly broken settings
