@@ -3833,7 +3833,8 @@ function recommendedSettingsAction() {
         FrozenCookies.factoryMax = 500;
         FrozenCookies.pastemode = 0;
         // other auto options
-        FrozenCookies.autoAscend = 0;
+        FrozenCookies.autoAscendToggle = 0;
+        FrozenCookies.autoAscend = 2;
         FrozenCookies.comboAscend = 0;
         FrozenCookies.HCAscendAmount = 0;
         FrozenCookies.autoBulk = 2;
@@ -3875,6 +3876,7 @@ function recommendedSettingsAction() {
         FrozenCookies.orbLimit = 0;
         FrozenCookies.orbMax = 200;
         // Season options
+        FrozenCookies.defaultSeasonToggle = 1;
         FrozenCookies.defaultSeason = 1;
         FrozenCookies.freeSeason = 1;
         FrozenCookies.autoEaster = 1;
@@ -4809,6 +4811,7 @@ function upgradeStats(recalculate) {
                         var baseDeltaCps = baseCpsNew - baseCpsOrig;
                         var efficiency =
                             current.season &&
+                            FrozenCookies.defaultSeasonToggle == 1 &&
                             current.season == seasons[FrozenCookies.defaultSeason]
                                 ? cost / baseCpsOrig
                                 : priceReduction > cost
@@ -5932,6 +5935,7 @@ function autoCookie() {
         }
 
         if (
+            FrozenCookies.autoAscendToggle == 1 &&
             FrozenCookies.autoAscend == 1 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&
@@ -5959,6 +5963,7 @@ function autoCookie() {
         }
 
         if (
+            FrozenCookies.autoAscendToggle == 1 &&
             FrozenCookies.autoAscend == 2 &&
             !Game.OnAscend &&
             !Game.AscendTimer &&

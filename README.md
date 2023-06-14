@@ -89,6 +89,10 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2023 Jun 15
+
+-   Add toggles in preferences for Auto-ascend and default season to make switching these more convenient
+
 2023 May 15
 
 -   Add new auto-ascend option to ascend when prestige is doubled ([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137))

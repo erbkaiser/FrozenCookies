@@ -99,12 +99,17 @@ FrozenCookies.preferenceValues = {
         display: ["Auto Buy All Upgrades OFF", "Auto Buy All Upgrades ON"],
         default: 0,
     },
-    autoAscend: {
+    autoAscendToggle: {
         hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
+        display: ["Auto Pantheon OFF", "Auto Pantheon ON"],
+        default: 0,
+    },
+    autoAscend: {
+        hint: "Choose Auto-ascend option",
         display: [
             "Auto-ascend OFF",
-            "Auto-ascend at amount",
-            "Auto-ascend on double prestige",
+            "Auto-ascend at set amount",
+            "Auto-ascend when prestige amount will be doubled",
         ],
         default: 0,
         extras: '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>',
@@ -399,8 +404,13 @@ FrozenCookies.preferenceValues = {
     seasonOptions: {
         hint: "Season options:",
     },
+    defaultSeasonToggle: {
+        hint: "Autobuy a selected season when no others have needed upgrades.",
+        display: ["Autobuy Seasons OFF", "Autobuy Seasons ON"],
+        default: 0,
+    },
     defaultSeason: {
-        hint: "Autobuy a selected season when no others have needed upgrades. Turn off autobuy while selecting to prevent buy spam",
+        hint: "Select autobuy season",
         display: [
             "Default Season OFF",
             "Default Season BUSINESS DAY",
