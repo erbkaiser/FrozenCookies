@@ -101,7 +101,7 @@ FrozenCookies.preferenceValues = {
     },
     autoAscendToggle: {
         hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
-        display: ["Auto Pantheon OFF", "Auto Pantheon ON"],
+        display: ["Auto Ascend OFF", "Auto Ascend ON"],
         default: 0,
     },
     autoAscend: {

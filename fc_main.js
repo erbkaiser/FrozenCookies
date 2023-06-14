@@ -275,10 +275,12 @@ function setOverrides(gameSaveData) {
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
         FrozenCookies.orbMax = preferenceParse("orbMax", 0);
 
-        // Temporary, switch from Cortex Bakers to You for Dragon Orbs
-        if (FrozenCookies.cortexMax) {
-            FrozenCookies.orbMax = FrozenCookies.cortexMax;
-            FrozenCookies.cortexMax = 0;
+        // Temporary, enable toggles for people using the features
+        if (FrozenCookies.defaultSeason) {
+            FrozenCookies.defaultSeasonToggle = 1;
+        }
+        if (FrozenCookies.autoAscend) {
+            FrozenCookies.autoAscendToggle = 1;
         }
 
         // Temporary, for switch from autoSpell to autoCasting
