@@ -900,18 +900,18 @@ function autoRigidel() {
     var tryHarvest = false;
     switch (orderLvl) {
         case 0: //Rigidel isn't in a slot
-            if (T.swaps < 2 || (T.swaps == 1 && T.slot[0] == -1)) break; //Don't do anything if we can't swap Rigidel in
+            if (T.swaps < (T.slot[0] == -1 ? 1 : 2)) break; //Don't do anything if we can't swap Rigidel in
             if (timeToRipe < 60) {
                 prevGod = T.slot[0]; //cache whatever god you have equipped
                 swapIn(10, 0); //swap in rigidel
                 tryHarvest = true;
             }
         case 1: //Rigidel is already in diamond slot
-            if (timeToRipe < 55) tryHarvest = true;
+            if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
         case 2: //Rigidel in Ruby slot,
-            if (timeToRipe < 35) tryHarvest = true;
+            if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
         case 3: //Rigidel in Jade slot
-            if (timeToRipe < 15) tryHarvest = true;
+            if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
     }
     if (tryHarvest) {
         rigiSell();
