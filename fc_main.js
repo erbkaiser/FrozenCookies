@@ -893,69 +893,41 @@ function swapIn(godId, targetSlot) {
 
 function autoRigidel() {
     if (!T) return; //Exit if pantheon doesnt even exist
-    var timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - Game.lumpT)) / 60000; //Minutes until sugar lump ripens
     var started = Game.lumpT;
-    var ripeAge = Math.ceil(Game.lumpRipeAge);
+    var timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - started)) / 60000; //Minutes until sugar lump ripens
     var orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
+    var prevGod = -1;
+    var tryHarvest = false;
     switch (orderLvl) {
         case 0: //Rigidel isn't in a slot
-            if (T.swaps < 2 || (T.swaps == 1 && T.slot[0] == -1)) return; //Don't do anything if we can't swap Rigidel in
+            if (T.swaps < (T.slot[0] == -1 ? 1 : 2)) break; //Don't do anything if we can't swap Rigidel in
             if (timeToRipe < 60) {
-                var prev = T.slot[0]; //cache whatever god you have equipped
+                prevGod = T.slot[0]; //cache whatever god you have equipped
                 swapIn(10, 0); //swap in rigidel
-                Game.computeLumpTimes();
-                rigiSell(); //Meet the %10 condition
-                Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
-                        autoDragonsCurve();
-                    } else {
-                        Game.clickLump();
-                    }
-                    if (prev != -1) swapIn(prev, 0); //put the old one back
-                    logEvent("autoRigidel", "Sugar lump harvested early");
-                }
+                tryHarvest = true;
             }
         case 1: //Rigidel is already in diamond slot
-            if (timeToRipe < 55 && Game.BuildingsOwned % 10) {
-                rigiSell();
-                Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
-                        autoDragonsCurve();
-                    } else {
-                        Game.clickLump();
-                    }
-                    logEvent("autoRigidel", "Sugar lump harvested early");
-                }
-            }
+            if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
         case 2: //Rigidel in Ruby slot,
-            if (timeToRipe < 35 && Game.BuildingsOwned % 10) {
-                rigiSell();
-                Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
-                        autoDragonsCurve();
-                    } else {
-                        Game.clickLump();
-                    }
-                    logEvent("autoRigidel", "Sugar lump harvested early");
-                }
-            }
+            if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
         case 3: //Rigidel in Jade slot
-            if (timeToRipe < 15 && Game.BuildingsOwned % 10) {
-                rigiSell();
-                Game.computeLumpTimes();
-                if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
-                        autoDragonsCurve();
-                    } else {
-                        Game.clickLump();
-                    }
-                    logEvent("autoRigidel", "Sugar lump harvested early");
-                }
-            }
+            if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
     }
+    if (tryHarvest) {
+        rigiSell();
+        Game.computeLumpTimes();
+        if (Date.now() - started >= Math.ceil(Game.lumpRipeAge)) {
+            if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
+                autoDragonsCurve();
+            } else {
+                Game.clickLump();
+            }
+            logEvent("autoRigidel", "Sugar lump harvested early");
+        } else {
+            logEvent("autoRigidel", "Suppressed early harvest of unripe sugar lump");
+        }
+    }
+    if (prevGod != -1) swapIn(prevGod, 0); //put the old one back
 }
 
 function autoDragonsCurve() {
