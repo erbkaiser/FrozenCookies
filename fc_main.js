@@ -275,14 +275,6 @@ function setOverrides(gameSaveData) {
         FrozenCookies.manaMax = preferenceParse("manaMax", 0);
         FrozenCookies.orbMax = preferenceParse("orbMax", 0);
 
-        // Temporary, enable toggles for people using the features
-        if (!FrozenCookies.defaultSeasonToggle && FrozenCookies.defaultSeason) {
-            FrozenCookies.defaultSeasonToggle = 1;
-        }
-        if (!FrozenCookies.autoAscendToggle && FrozenCookies.autoAscend) {
-            FrozenCookies.autoAscendToggle = 1;
-        }
-
         // Restore some possibly broken settings
         if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
             FrozenCookies.autoBuy = 1;
