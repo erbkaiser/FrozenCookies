@@ -698,10 +698,11 @@ that I currently know of.
 -   **Mine limit** Auto-Godzamok uses mines and factories so it makes sense to put a
     maximum cap on these, as otherwise rebuying will cost more than was gained. The actual
     tipping point depends on your max CpS so this cannot be predetermined. For mid game
-    (when you can earn enough HCs at a good pace), try a value around 500. For very late
-    game (all upgrades bought), try values around 800.
--   **Factory limit** See Mine limit
--   **Pastemode** Turning this on is a very stupid idea.
+    (when you can earn enough HCs at a good pace), try a value around 500. For late game
+    (all upgrades bought), try values around 800 or higher.
+-   **Factory limit** See Mine limit, try values about 50 to 100 lower than Mine limit.
+-   **Pastemode** Turning this on is a very stupid idea. It will buy as many buildings
+    as it can afford, ignoring all efficieny.
 
 ## Other automatic options
 
