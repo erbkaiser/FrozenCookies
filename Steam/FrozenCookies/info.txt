@@ -3,9 +3,9 @@
 	"ID": "frozen_cookies",
 	"Author": "erbkaiser",
 	"Description": "Optimize and Automate Everything",
-	"ModVersion": "2.052.3",
+	"ModVersion": "2.052.4",
 	"GameVersion": 2.052,
-	"Date": "2023/06/14",
+	"Date": "2023/08/16",
 	"Dependencies": [],
 	"Disabled": 1,
 	"AllowSteamAchievs": 1
