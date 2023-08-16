@@ -89,6 +89,10 @@ that I currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2023 Aug 16
+
+-   Some improvements to auto Rigidel by @mithrandi
+
 2023 Jun 15
 
 -   Add toggles in preferences for Auto-ascend and default season to make switching these more convenient
