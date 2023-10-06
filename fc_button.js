@@ -309,7 +309,11 @@ function FCMenu() {
             ),
             currentFrenzy = cpsBonus() * clickBuffBonus(),
             bankLevel = bestBank(chainRecommendation.efficiency),
-            actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed,
+            actualCps =
+                Game.cookiesPs +
+                Game.mouseCps() *
+                    FrozenCookies.cookieClickSpeed *
+                    FrozenCookies.autoClick,
             chocolateRecoup =
                 (recommendation.type == "upgrade"
                     ? recommendation.cost
