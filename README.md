@@ -6,8 +6,7 @@ An automated Cookie Clicker tool.
 
 ## Compatiblity
 
-Compatible again with **CCSE**, provided the version for 2.052 of both CCSE and FC are
-used. Most other mods will also be compatible. Some users report a load conflict with 
+Compatible with most other mods including CCSE. Some users report a load conflict with 
 Cookie Monster. Make sure CM loads before FC if you want to use both.
 
 ## How to use
@@ -21,7 +20,7 @@ the menu for a quick start. Read on for details on what each option does.
 If you do not have the button, confirm FC is installed. Instructions for each platform and
 method are below.
 
-## Steam Install
+### Steam Install
 
 Get it from the Workshop:
 https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538
@@ -35,7 +34,7 @@ If you want to manually install it:
 3. Load up Cookie Clicker via Steam
 4. Enable Frozen Cookies at 'Manage mods' on the Options page
 
-## Web version
+### Web version
 
 1. Open the browser dev tools by whatever works for your browser. F12 might do it.
 2. Go to the Console tab.
@@ -45,14 +44,14 @@ If you want to manually install it:
    browser console, or keep it open. If you keep it open, you'll get some detailed info
    whenever FC does its thing.
 
-## Bookmarklet install
+### Bookmarklet install
 
 1. Paste the **contents** (not the url) of
    https://github.erbkaiser.com/FrozenCookies/fc_bookmarklet_loader.js into a bookmark.
 2. Load up Cookie Clicker.
 3. Load the recently created bookmark.
 
-## Userscript install
+### Userscript install
 
 0. If you don't already have it, install the required browser add-on.
    [Tampermonkey (Chrome)](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en)
@@ -82,7 +81,7 @@ If you want to manually install it:
 -   Might not eat all of your cookies.
 
 \*Note: Not guaranteed to actually be the most efficient purchase. Just the most efficient
-that I currently know of.
+that the script can currently know of.
 
 ## What's new?
 
@@ -658,7 +657,9 @@ that I currently know of.
 
 ## Planned Features and Known Issues
 
--   See the Github issues
+-   Lag: sadly, yes FC causes some lag. The code is incredibly huge and complex. I
+    welcome any patches, if you feel up to trying to improve the code.
+-   For other issues or plans, see the Github issues
 
 # What do these options actually mean, in detail?
 
