@@ -4555,8 +4555,8 @@ function recommendationList(recalculate) {
                     return a.efficiency != b.efficiency
                         ? a.efficiency - b.efficiency
                         : a.delta_cps != b.delta_cps
-                        ? b.delta_cps - a.delta_cps
-                        : a.cost - b.cost;
+                          ? b.delta_cps - a.delta_cps
+                          : a.cost - b.cost;
                 })
         );
         if (FrozenCookies.pastemode) FrozenCookies.caches.recommendationList.reverse();
@@ -4671,41 +4671,40 @@ function buildingStats(recalculate) {
                 Game.Objects["You"].amount >= FrozenCookies.orbMax
             )
                 buildingBlacklist.push(19);
-            FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
-                current,
-                index
-            ) {
-                if (_.contains(buildingBlacklist, current.id)) return null;
-                var currentBank = bestBank(0).cost;
-                var baseCpsOrig = baseCps();
-                var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                var existingAchievements = Object.values(Game.AchievementsById).map(
-                    function (item, i) {
-                        return item.won;
-                    }
-                );
-                buildingToggle(current);
-                var baseCpsNew = baseCps();
-                var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                buildingToggle(current, existingAchievements);
-                var deltaCps = cpsNew - cpsOrig;
-                var baseDeltaCps = baseCpsNew - baseCpsOrig;
-                var efficiency = purchaseEfficiency(
-                    current.getPrice(),
-                    deltaCps,
-                    baseDeltaCps,
-                    cpsOrig
-                );
-                return {
-                    id: current.id,
-                    efficiency: efficiency,
-                    base_delta_cps: baseDeltaCps,
-                    delta_cps: deltaCps,
-                    cost: current.getPrice(),
-                    purchase: current,
-                    type: "building",
-                };
-            }).filter(function (a) {
+            FrozenCookies.caches.buildings = Game.ObjectsById.map(
+                function (current, index) {
+                    if (_.contains(buildingBlacklist, current.id)) return null;
+                    var currentBank = bestBank(0).cost;
+                    var baseCpsOrig = baseCps();
+                    var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                    var existingAchievements = Object.values(Game.AchievementsById).map(
+                        function (item, i) {
+                            return item.won;
+                        }
+                    );
+                    buildingToggle(current);
+                    var baseCpsNew = baseCps();
+                    var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                    buildingToggle(current, existingAchievements);
+                    var deltaCps = cpsNew - cpsOrig;
+                    var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                    var efficiency = purchaseEfficiency(
+                        current.getPrice(),
+                        deltaCps,
+                        baseDeltaCps,
+                        cpsOrig
+                    );
+                    return {
+                        id: current.id,
+                        efficiency: efficiency,
+                        base_delta_cps: baseDeltaCps,
+                        delta_cps: deltaCps,
+                        cost: current.getPrice(),
+                        purchase: current,
+                        type: "building",
+                    };
+                }
+            ).filter(function (a) {
                 return a;
             });
         }
@@ -4751,13 +4750,13 @@ function upgradeStats(recalculate) {
                             current.season == seasons[FrozenCookies.defaultSeason]
                                 ? cost / baseCpsOrig
                                 : priceReduction > cost
-                                ? 1
-                                : purchaseEfficiency(
-                                      cost,
-                                      deltaCps,
-                                      baseDeltaCps,
-                                      cpsOrig
-                                  );
+                                  ? 1
+                                  : purchaseEfficiency(
+                                        cost,
+                                        deltaCps,
+                                        baseDeltaCps,
+                                        cpsOrig
+                                    );
                         return {
                             id: current.id,
                             efficiency: efficiency,
@@ -5460,8 +5459,8 @@ function smartTrackingStats(delay) {
             FrozenCookies.delayPurchaseCount == 0
                 ? 1 / 1.5
                 : delay > FrozenCookies.minDelay
-                ? 2
-                : 1;
+                  ? 2
+                  : 1;
         FrozenCookies.smartTrackingBot = setTimeout(function () {
             smartTrackingStats(delay);
         }, delay);
@@ -5795,7 +5794,8 @@ function autoCookie() {
                 ((FrozenCookies.autoSpell == 3 &&
                     recommendation.purchase.name == "You" &&
                     Game.Objects["You"].amount >= 299) ||
-                    (FrozenCookies.towerLimit &&
+                    (M &&
+                        FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 10) ||
                     (FrozenCookies.mineLimit &&
@@ -5819,7 +5819,8 @@ function autoCookie() {
                 ((FrozenCookies.autoSpell == 3 &&
                     recommendation.purchase.name == "You" &&
                     Game.Objects["You"].amount >= 389) ||
-                    (FrozenCookies.towerLimit &&
+                    (M &&
+                        FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
                         M.magic >= FrozenCookies.manaMax - 2) ||
                     (FrozenCookies.mineLimit &&
