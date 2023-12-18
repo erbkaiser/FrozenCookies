@@ -657,9 +657,13 @@ that the script can currently know of.
 
 ## Planned Features and Known Issues
 
--   Lag: sadly, yes FC causes some lag. The code is incredibly huge and complex. I
-    welcome any patches, if you feel up to trying to improve the code.
+-   Lag: sadly, yes FC causes some lag. The code is incredibly huge and complex.
+-   Raw cookies per second is set to an absurdly high value on ascending. This messes badly 
+    with stock prices. The cause is currently unknown and I suspect it is deep in the FC 
+    prediction code.
+-   Golden Cookie timers sometimes disappear. This will fix itself on the next GC spawn
 -   For other issues or plans, see the Github issues
+-   I welcome any pull requests or comments, if you feel up to trying to improve the code
 
 # What do these options actually mean, in detail?
 
