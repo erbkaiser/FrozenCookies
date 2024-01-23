@@ -6,7 +6,7 @@ An automated Cookie Clicker tool.
 
 ## Compatiblity
 
-Compatible with most other mods including CCSE. Some users report a load conflict with 
+Compatible with most other mods including CCSE. Some users report a load conflict with
 Cookie Monster. Make sure CM loads before FC if you want to use both.
 
 ## How to use
@@ -88,22 +88,30 @@ that the script can currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2024 Jan 23
+
+-   Prevent Auto Dragon Orbs from running before temple is unlocked
+-   Document issue with autoCast
+
 2023 Aug 16
 
 -   Some improvements to auto Rigidel by @mithrandi
 
 2023 Jun 15
 
--   Add toggles in preferences for Auto-ascend and default season to make switching these more convenient
+-   Add toggles in preferences for Auto-ascend and default season to make switching these
+    more convenient
 
 2023 May 15
 
--   Add new auto-ascend option to ascend when prestige is doubled ([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137))
+-   Add new auto-ascend option to ascend when prestige is doubled
+    ([Issue #137](https://github.com/erbkaiser/FrozenCookies/issues/137))
 -   Add option to block ascending during active combo (#137)
 
 2023 May 09
 
--   Autofrenzy will now kick in for Cursed Finger as well ([Issue #135](https://github.com/erbkaiser/FrozenCookies/issues/135))
+-   Autofrenzy will now kick in for Cursed Finger as well
+    ([Issue #135](https://github.com/erbkaiser/FrozenCookies/issues/135))
 
 2023 May 07
 
@@ -142,8 +150,8 @@ that the script can currently know of.
 
 2022 Oct 04
 
--   Implement [Issue #55](https://github.com/erbkaiser/FrozenCookies/issues/55) 'Add a buy all upgrades
-    function'
+-   Implement [Issue #55](https://github.com/erbkaiser/FrozenCookies/issues/55) 'Add a buy
+    all upgrades function'
 -   Fixed a bug that hid the Auto Bulk Buy option
 
 2022 Sep 22
@@ -658,10 +666,13 @@ that the script can currently know of.
 ## Planned Features and Known Issues
 
 -   Lag: sadly, yes FC causes some lag. The code is incredibly huge and complex.
--   Raw cookies per second is set to an absurdly high value on ascending. This messes badly 
-    with stock prices. The cause is currently unknown and I suspect it is deep in the FC 
-    prediction code.
+-   Raw cookies per second is set to an absurdly high value on ascending. This messes
+    badly with stock prices. The cause is currently unknown and I suspect it is deep in
+    the FC prediction code.
 -   Golden Cookie timers sometimes disappear. This will fix itself on the next GC spawn
+-   Autocasting may not automatically start working if Frozen Cookies is loaded before the
+    WTs are unlocked, even if these are unlocked later in the same session. To use
+    autocast, reload the game and mod.
 -   For other issues or plans, see the Github issues
 -   I welcome any pull requests or comments, if you feel up to trying to improve the code
 
@@ -676,8 +687,8 @@ that the script can currently know of.
     like 100 and increase it until the 'Next' upgrade in the options or infobox begins to
     go wrong, either by losing the seconds value or by showing a clearly incorrect count.
     If it does, lower the Autoclick count again until you find the optimal speed. Or, just
-    set it 250 and forget about it. 
-    NOTE: Having Autoclick enabled may prevent you from manually poking Wrinklers.
+    set it 250 and forget about it. NOTE: Having Autoclick enabled may prevent you from
+    manually poking Wrinklers.
 -   **Autofrenzy** This is Autoclick but during click frenzies. The same rules as
     Autoclick apply, but you can use a higher value here if you cannot normally run
     Autoclick at top speed.
@@ -710,8 +721,8 @@ that the script can currently know of.
     (when you can earn enough HCs at a good pace), try a value around 500. For late game
     (all upgrades bought), try values around 800 or higher.
 -   **Factory limit** See Mine limit, try values about 50 to 100 lower than Mine limit.
--   **Pastemode** Turning this on is a very stupid idea. It will buy as many buildings
-    as it can afford, ignoring all efficieny.
+-   **Pastemode** Turning this on is a very stupid idea. It will buy as many buildings as
+    it can afford, ignoring all efficieny.
 
 ## Other automatic options
 
@@ -722,10 +733,10 @@ that the script can currently know of.
     many times as it can until at least one prestige level (heavenly chip) is earned.
 -   **Auto-ascend** This is mainly useful if you're grinding out ascensions for Endless
     Cycle, or want to build up your HC boost. Note that it can take a few seconds before
-    the upgrade screen disappears each ascension, the transition isn't instantaneous.
-    With the first option, the game will ascend when the given number of new HCs is reached. 
+    the upgrade screen disappears each ascension, the transition isn't instantaneous. With
+    the first option, the game will ascend when the given number of new HCs is reached.
     With the second option, the game will ascend when your current prestige is doubled.
--   **Ascending during combo** If enabled, the game will not ascend while a combo larger 
+-   **Ascending during combo** If enabled, the game will not ascend while a combo larger
     than the **minimum Frenzy** (see also below) is active.
 -   **Autopop Wrinklers** Pop any wrinklers, either the moment they appear, or when they
     have eaten enough to provide a decent bonus toward the next purchase. This is ignored
@@ -1167,8 +1178,8 @@ considering buying.
 -   **Δ CPS**: The full CPS change that buying this purchase would have. Includes
     estimated Golden Cookie CPS changes, meaning that it may be negative (especially for
     Elder Covenant.)
-    
------
+
+---
 
 # Original Contact info and credits
 
@@ -1176,7 +1187,7 @@ The below info is from icehawk78's Frozen Cookies.
 
 ## Discord
 
-For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT 
+For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT
 _(link invalid as of 2023)_
 
 ## Contact Us!
