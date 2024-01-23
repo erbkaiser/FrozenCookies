@@ -2787,6 +2787,7 @@ function autoDragonAura1Action() {
 }
 
 function autoDragonOrbsAction() {
+    if (!T) return;
     if (
         FrozenCookies.autoDragonOrbs == 1 &&
         (!Game.hasAura("Dragon Orbs") ||
