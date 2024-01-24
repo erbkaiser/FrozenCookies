@@ -2914,7 +2914,7 @@ function autoWorship2Action() {
 }
 
 function buyOtherUpgrades() {
-    if (upgradeBlacklist === true) return true;
+    if (blacklist[FrozenCookies.blacklist].upgrades === true) return true;
     
     // I'm sure there's a better way to do this
     //Buy eggs
