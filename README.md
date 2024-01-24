@@ -56,7 +56,7 @@ If you want to manually install it:
 0. If you don't already have it, install the required browser add-on.
    [Tampermonkey (Chrome)](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en)
    or
-   [Greasemonkey (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+   [Tampermonkey (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
 1. Go to https://github.erbkaiser.com/FrozenCookies/fc_userscript_loader.user.js
 2. Click the 'install' button in the upper right corner.
 3. Load up Cookie Clicker.
@@ -87,6 +87,9 @@ that the script can currently know of.
 
 <details>
 <summary>Click to expand!</summary>
+
+2024 Jan 24
+-   Stop buying other upgrades if a no-upgrades blacklist (hardcore) is used
 
 2024 Jan 23
 

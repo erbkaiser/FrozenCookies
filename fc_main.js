@@ -2914,6 +2914,8 @@ function autoWorship2Action() {
 }
 
 function buyOtherUpgrades() {
+    if (upgradeBlacklist === true) return true;
+    
     // I'm sure there's a better way to do this
     //Buy eggs
     if (
