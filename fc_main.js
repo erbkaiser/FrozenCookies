@@ -2517,12 +2517,7 @@ function autoSweetAction() {
 
         if (!autoSweetAction.state && !Game.OnAscend && !Game.AscendTimer) {
             logEvent("autoSweet", 'No "Sweet" detected, ascending');
-            Game.ClosePrompt();
-            Game.Ascend(1);
-            setTimeout(function () {
-                Game.ClosePrompt();
-                Game.Reincarnate(1);
-            }, 10000);
+            Game.Reincarnate(1);
         }
 
         switch (autoSweetAction.state) {
