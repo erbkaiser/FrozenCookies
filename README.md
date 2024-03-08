@@ -88,6 +88,9 @@ that the script can currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2024 Mar 08
+-   Significantly speed up Autosweet, thanks to dsf3449 for the PR
+
 2024 Jan 24
 -   Stop buying other upgrades if a no-upgrades blacklist (hardcore) is used
 
