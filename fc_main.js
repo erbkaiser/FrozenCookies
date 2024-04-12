@@ -2563,7 +2563,7 @@ function autoEasterAction() {
         return;
     }
 
-    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter")) {
+    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter") && Game.UpgradesById[181].unlocked) {
         Game.UpgradesById[209].buy();
     }
 }
