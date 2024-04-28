@@ -43,6 +43,10 @@ If you want to manually install it:
 4. Frozen Cookies should tell you it's loaded in the console now. Feel free to close the
    browser console, or keep it open. If you keep it open, you'll get some detailed info
    whenever FC does its thing.
+5. Some net nanny programs may block my website. In that case, try to load from
+   **Game.LoadMod("https://erbkaiser.github.io/FrozenCookies/frozen_cookies.js");**. If
+   that also fails, contact your internet administrator and ask them to unblock
+   github.erbkaiser.com
 
 ### Bookmarklet install
 
@@ -89,9 +93,11 @@ that the script can currently know of.
 <summary>Click to expand!</summary>
 
 2024 Mar 08
+
 -   Significantly speed up Autosweet, thanks to dsf3449 for the PR
 
 2024 Jan 24
+
 -   Stop buying other upgrades if a no-upgrades blacklist (hardcore) is used
 
 2024 Jan 23
