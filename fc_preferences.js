@@ -7,13 +7,13 @@ FrozenCookies.preferenceValues = {
         hint: "Click the large cookie",
         display: ["Autoclick OFF", "Autoclick ON"],
         default: 0,
-        extras: `<a class="option" id="cookieClickSpeed" onclick="updateNumberSetting({title:'Autoclicking!',description:'How many times per second do you want to click the big cookie? (Recommended: 250, Max: 1000)',base:'cookieClickSpeed',min:1,max:1000});">${cookieClickSpeed} clicks/sec</a>`,
+        extras: `<a class="option" id="cookieClickSpeed" onclick="updateNumberSetting({title:'Autoclicking!',description:'How many times per second do you want to click the big cookie? (Recommended: 250, Max: 1000)',base:'cookieClickSpeed',min:1,max:1000});">${FrozenCookies.cookieClickSpeed} clicks/sec</a>`,
     },
     autoFrenzy: {
         hint: "Click the large cookie during Clicking Frenzies",
         display: ["Autofrenzy OFF", "Autofrenzy ON"],
         default: 0,
-        extras: `<a class="option" id="frenzyClickSpeed" onclick="updateNumberSetting({title:'Frenzy Clicking!',description:'How many times per second do you want to click during a Clicking Frenzy? (Recommended: 250, Max: 1000)',base:'frenzyClickSpeed',min:1,max:1000});">${frenzyClickSpeed} clicks/sec</a>`,
+        extras: `<a class="option" id="frenzyClickSpeed" onclick="updateNumberSetting({title:'Frenzy Clicking!',description:'How many times per second do you want to click during a Clicking Frenzy? (Recommended: 250, Max: 1000)',base:'frenzyClickSpeed',min:1,max:1000});">${FrozenCookies.frenzyClickSpeed} clicks/sec</a>`,
     },
     autoGC: {
         hint: "Automatically click Golden Cookies when they appear",
@@ -71,13 +71,13 @@ FrozenCookies.preferenceValues = {
         hint: "Limit max number of mines to keep Godzamok useful",
         display: ["Mine Limit OFF", "Mine Limit ON"],
         default: 0,
-        extras: '<a class="option" id="mineMax" onclick="updateNumberSetting({title: "Mine Cap!",description: "Set the maximum number of Mines for autoBuy / Godzamok.",base: "MineMax",min: 0});">${mineMax} Mines</a>',
+        extras: '<a class="option" id="mineMax" onclick="updateNumberSetting({title: "Mine Cap!",description: "Set the maximum number of Mines for autoBuy / Godzamok.",base: "MineMax",min: 0});">${FrozenCookies.mineMax} Mines</a>',
     },
     factoryLimit: {
         hint: "Limit max number of factories to keep Godzamok useful",
         display: ["Factory Limit OFF", "Factory Limit ON"],
         default: 0,
-        extras: '<a class="option" id="factoryMax" onclick="updateNumberSetting({title: "Factory Cap!",description: "Set the maximum number of Factories for autoBuy / Godzamok.",base: "FactoryMax",min: 0});">${factoryMax} Factories</a>',
+        extras: '<a class="option" id="factoryMax" onclick="updateNumberSetting({title: "Factory Cap!",description: "Set the maximum number of Factories for autoBuy / Godzamok.",base: "FactoryMax",min: 0});">${FrozenCookies.factoryMax} Factories</a>',
     },
     pastemode: {
         hint: "Always autobuy the least efficient purchase. This is a stupid idea, you should never turn this on",
@@ -112,13 +112,13 @@ FrozenCookies.preferenceValues = {
             "Auto-ascend when prestige amount will be doubled",
         ],
         default: 0,
-        extras: '<a class="option" id="chipsToAscend" onclick="updateNumberSetting({title: "Auto-ascending!",description: "Enter the number of heavenly chips required to auto-ascend (minimum: 1).",base: "HCAscendAmount",min: 0});">${HCAscendAmount} heavenly chips</a>',
+        extras: '<a class="option" id="chipsToAscend" onclick="updateNumberSetting({title: "Auto-ascending!",description: "Enter the number of heavenly chips required to auto-ascend (minimum: 1).",base: "HCAscendAmount",min: 0});">${FrozenCookies.HCAscendAmount} heavenly chips</a>',
     },
     comboAscend: {
         hint: "Do not Auto-ascend if the active combo is larger than the minimum Frenzy",
         display: ["Ascend during combo OFF", "Ascend during combo ON"],
         default: 0,
-        extras: `<a class="option" id="minCpSMult" onclick="updateNumberSetting({title:'Autocasting!',description:'Set the minimum CpS multiplier to trigger Auto Casting (e.g., "7" for Frenzy, "1" to avoid casting during Clot).',base:'minCpSMult',min:0});">x${minCpSMult} minimum Frenzy</a>`,
+        extras: `<a class="option" id="minCpSMult" onclick="updateNumberSetting({title:'Autocasting!',description:'Set the minimum CpS multiplier to trigger Auto Casting (e.g., "7" for Frenzy, "1" to avoid casting during Clot).',base:'minCpSMult',min:0});">x${FrozenCookies.minCpSMult} minimum Frenzy</a>`,
     },
     autoWrinkler: {
         hint: "Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly",
@@ -181,7 +181,7 @@ FrozenCookies.preferenceValues = {
         hint: "Automatically take loans during click buffs with frenzies",
         display: ["Auto-Loans OFF", "Take loans 1 and 2", "Take all 3 loans"],
         default: 0,
-        extras: '<a class="option" id="minLoanMult" onclick="updateNumberSetting({title: "Loans!",description: "Set the CpS multiplier to trigger taking loans (e.g., 7 for Frenzy, 500 for large combos).",base: "LoanMultMin",min: 0});">x${minLoanMult} minimum Frenzy</a>',
+        extras: '<a class="option" id="minLoanMult" onclick="updateNumberSetting({title: "Loans!",description: "Set the CpS multiplier to trigger taking loans (e.g., 7 for Frenzy, 500 for large combos).",base: "LoanMultMin",min: 0});">x${FrozenCookies.minLoanMult} minimum Frenzy</a>',
     },
 
     // Pantheon options
@@ -262,7 +262,7 @@ FrozenCookies.preferenceValues = {
         hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for optimal single casting FTHOF. Not recommended to set over 100",
         display: ["Wizard Tower Cap OFF", "Wizard Tower Cap ON"],
         default: 0,
-        extras: '<a class="option" id="manaMax" onclick="updateNumberSetting({title: "Mana Cap!",description: "Set the maximum mana amount (Recommended: 100 or less).",base: "ManaMax",min: 0});">${manaMax} max Mana</a>',
+        extras: '<a class="option" id="manaMax" onclick="updateNumberSetting({title: "Mana Cap!",description: "Set the maximum mana amount (Recommended: 100 or less).",base: "ManaMax",min: 0});">${FrozenCookies.manaMax} max Mana</a>',
     },
     autoCasting: {
         hint: "Automatically cast selected spell when your mana is full",
@@ -276,7 +276,7 @@ FrozenCookies.preferenceValues = {
             "Auto Cast HAGGLER'S CHARM",
         ],
         default: 0,
-        extras: `<a class="option" id="minCpSMult" onclick="updateNumberSetting({title:'Autocasting!',description:'Set the minimum CpS multiplier to trigger Auto Casting (e.g., "7" for Frenzy, "1" to avoid casting during Clot).',base:'minCpSMult',min:0});">x${minCpSMult} minimum Frenzy</a>`,
+        extras: `<a class="option" id="minCpSMult" onclick="updateNumberSetting({title:'Autocasting!',description:'Set the minimum CpS multiplier to trigger Auto Casting (e.g., "7" for Frenzy, "1" to avoid casting during Clot).',base:'minCpSMult',min:0});">x${FrozenCookies.minCpSMult} minimum Frenzy</a>`,
     },
     spellNotes: {
         hint: "(Only one combo is active at the same time, with the last one winning. See the readme for more info)",
@@ -302,7 +302,7 @@ FrozenCookies.preferenceValues = {
             "ASF also for Double Cast Combo",
         ],
         default: 0,
-        extras: '<a class="option" id="minASFMult" onclick="updateNumberSetting({title: "Sugar Frenzy!",description: "Set the CpS multiplier to trigger Sugar Frenzy (e.g., 100 for early combos, 1000 for large combos).",base: "ASFMultMin",min: 0});">x${minASFMult} minimum Frenzy</a>',
+        extras: '<a class="option" id="minASFMult" onclick="updateNumberSetting({title: "Sugar Frenzy!",description: "Set the CpS multiplier to trigger Sugar Frenzy (e.g., 100 for early combos, 1000 for large combos).",base: "ASFMultMin",min: 0});">x${FrozenCookies.minASFMult} minimum Frenzy</a>',
     },
     autoSweet: {
         hint: "EXPERIMENTAL: Automatically ascend until 'Sweet' is in the next ten spells. Disables other combos. No manual shutdown!",
@@ -397,7 +397,7 @@ FrozenCookies.preferenceValues = {
         hint: "Limit max number of Yous to keep Dragon Orbs useful",
         display: ["You Limit OFF", "You Limit ON"],
         default: 0,
-        extras: '<a class="option" id="orbMax" onclick="updateNumberSetting({title: "You Cap!",description: "Set the maximum number of Yous for autoBuy / Dragon Orbs.",base: "OrbMax",min: 0});">${orbMax} Yous</a>',
+        extras: '<a class="option" id="orbMax" onclick="updateNumberSetting({title: "You Cap!",description: "Set the maximum number of Yous for autoBuy / Dragon Orbs.",base: "OrbMax",min: 0});">${FrozenCookies.orbMax} Yous</a>',
     },
 
     // Season options
@@ -473,7 +473,7 @@ FrozenCookies.preferenceValues = {
             "Harvesting during FRENZY + BUILDING SPECIAL",
         ],
         default: 0,
-        extras: '<a class="option" id="maxSpecials" onclick="updateNumberSetting({title: "Harvest Bank!",description: "Set the number of stacked Building Specials for Harvest Bank.",base: "MaxSpecials",min: 0});">${maxSpecials} Building specials</a>',
+        extras: '<a class="option" id="maxSpecials" onclick="updateNumberSetting({title: "Harvest Bank!",description: "Set the number of stacked Building Specials for Harvest Bank.",base: "MaxSpecials",min: 0});">${FrozenCookies.maxSpecials} Building specials</a>',
     },
 
     // Other options
