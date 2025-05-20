@@ -2018,6 +2018,7 @@ function unfinishedUpgradePrereqs(upgrade) {
 
 // Simulates buying/unbuying an upgrade for efficiency calculation
 function upgradeToggle(upgrade, achievements, reverseFunctions) {
+    const oldHighest = Game.cookiesPsRawHighest;
     if (!achievements) {
         reverseFunctions = {};
         if (!upgrade.unlocked) {
@@ -2080,7 +2081,8 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
         });
     }
     Game.recalculateGains = 1;
-    Game.CalculateGains();
+    Game.CalculateGains();    
+    Game.cookiesPsRawHighest = oldHighest; // Restore after simulation
     return reverseFunctions;
 }
 
