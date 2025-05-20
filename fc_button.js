@@ -324,7 +324,7 @@ function FCMenu() {
                         )
                 )
                 // Add the log/info panel button just after the version section
-                .append(
+                /* .append(
                     $("<div>")
                         .addClass("listing")
                         .append(
@@ -333,7 +333,7 @@ function FCMenu() {
                                 .text("Open Game Log/Info Panel")
                                 .click(openGameLogPanel)
                         )
-                );
+                ); */
             //Autobuy
             subsection = $("<div>")
                 .addClass("subsection")
