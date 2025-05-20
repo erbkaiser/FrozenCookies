@@ -88,7 +88,12 @@ that the script can currently know of.
 <details>
 <summary>Click to expand!</summary>
 
+2025 May 20
+
+-   Code overhaul and bug fixes throughout. Should speed things up a bit.
+
 2024 Jan 24
+
 -   Stop buying other upgrades if a no-upgrades blacklist (hardcore) is used
 
 2024 Jan 23
