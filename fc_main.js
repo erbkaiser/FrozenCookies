@@ -5029,7 +5029,7 @@ function unfinishedUpgradePrereqs(upgrade) {
 }
 
 function upgradeToggle(upgrade, achievements, reverseFunctions) {
-    const oldHighest = Game.cookiesPsRawHighest; // Save for simulation
+    const oldHighest = Game.cookiesPsRawHighest; // Save current value before simulating
     if (!achievements) {
         reverseFunctions = {};
         if (!upgrade.unlocked) {
