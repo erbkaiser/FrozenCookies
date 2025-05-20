@@ -19,7 +19,7 @@ An automated Cookie Clicker tool.
 ## Compatibility
 
 Compatible with most other mods including CCSE. Some users report a load conflict with
-Cookie Monster. Make sure CM loads before FC if you want to use both.
+Cookie Monster. Loading CM before FC *might* fix this, but no support will be given.
 
 ## How to use
 
@@ -53,8 +53,12 @@ If you want to manually install it:
 3. Type the following on the command line and press enter after:  
     **Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js");**
 4. Frozen Cookies should tell you it's loaded in the console now. Feel free to close the
-    browser console, or keep it open. If you keep it open, you'll get some detailed info
-    whenever FC does its thing.
+   browser console, or keep it open. If you keep it open, you'll get some detailed info
+   whenever FC does its thing.
+5. Some net nanny programs may block my website. In that case, try to load from
+   **Game.LoadMod("https://erbkaiser.github.io/FrozenCookies/frozen_cookies.js");**. If
+   that also fails, contact your internet administrator and ask them to unblock
+   github.erbkaiser.com
 
 ### Bookmarklet install
 
@@ -105,6 +109,10 @@ that the script can currently know of.
 -   Possibly, finally, fixed issue #19: Raw cookies per second is set to a very high value on initial load
 -   FC Button now opens the original game Info Button and the FC Readme with buttons at the top of the page
 -   Begun a full code rewrite which may or may not materialize. Goal is to optimize everything and reduce lag
+
+2024 Mar 08
+
+-   Significantly speed up Autosweet, thanks to dsf3449 for the PR
 
 2024 Jan 24
 

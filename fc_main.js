@@ -2517,12 +2517,7 @@ function autoSweetAction() {
 
         if (!autoSweetAction.state && !Game.OnAscend && !Game.AscendTimer) {
             logEvent("autoSweet", 'No "Sweet" detected, ascending');
-            Game.ClosePrompt();
-            Game.Ascend(1);
-            setTimeout(function () {
-                Game.ClosePrompt();
-                Game.Reincarnate(1);
-            }, 10000);
+            Game.Reincarnate(1);
         }
 
         switch (autoSweetAction.state) {
@@ -2568,7 +2563,7 @@ function autoEasterAction() {
         return;
     }
 
-    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter")) {
+    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter") && Game.UpgradesById[181].unlocked) {
         Game.UpgradesById[209].buy();
     }
 }
