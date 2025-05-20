@@ -106,7 +106,7 @@ that the script can currently know of.
 
 2025 May 20
 
--   Possibly, finally, fixed issue #19: Raw cookies per second is set to a very high value on initial load
+-   Yet another failed attempt to fix issue #19: Raw cookies per second is set to a very high value on initial load
 -   FC Button now opens the original game Info Button and the FC Readme with buttons at the top of the page
 -   Begun a full code rewrite which may or may not materialize. Goal is to optimize everything and reduce lag
 
