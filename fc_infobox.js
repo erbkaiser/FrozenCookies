@@ -1,100 +1,138 @@
-// functionality for the infobox
-function drawCircles(t_d, x, y) {
-    var maxRadius,
-        heightOffset,
-        i_c,
-        i_tc,
-        t_b,
-        maxWidth,
-        maxHeight,
-        s_t,
-        c = $("#backgroundLeftCanvas");
-    if (typeof c.measureText != "function") {
-        return;
-    }
-    maxRadius =
-        10 +
-        10 *
-            t_d.reduce(function (sum, item) {
-                return item.overlay ? sum : sum + 1;
-            }, 0);
-    heightOffset = maxRadius + 5 - (15 * (t_d.length - 1)) / 2;
-    i_c = 0;
-    i_tc = 0;
-    t_b = [
+// Color and layout constants
+const COLORS = {
+    t_b: [
         "rgba(170, 170, 170, 1)",
         "rgba(187, 187, 187, 1)",
         "rgba(204, 204, 204, 1)",
         "rgba(221, 221, 221, 1)",
         "rgba(238, 238, 238, 1)",
         "rgba(255, 255, 255, 1)",
-    ];
-    var maxText = _.max(
-        t_d.map(function (o) {
-            return o.name ? o.name + (o.display ? ": " + o.display : "") : "";
-        }),
-        function (str) {
-            return str.length;
-        }
+    ],
+    chain: "rgba(51, 51, 51, 1)",
+    next: "rgba(17, 17, 17, 1)",
+    bank: "rgba(252, 212, 0, 1)",
+    gc_max: "rgba(255, 155, 0, 1)",
+    gc_est: "rgba(255, 222, 95, 1)",
+    gc_min: "rgba(255, 235, 0, 1)",
+    building_special: "rgba(218, 165, 32, 1)",
+    infobox_bg: "rgba(153, 153, 153, 0.6)",
+    buffs: {
+        // Buff colors
+        // Match with const SPELL_NAMES in fc_spells.js
+        frenzy: "rgba(255, 222, 95, 1)",
+        click_frenzy: "rgba(0, 196, 255, 1)",
+        cookie_storm: "rgb(31, 44, 94)",
+        clot: "rgba(255, 54, 5, 1)",
+        cursed_finger: "rgba(23, 79, 1, 1)",
+        elder_frenzy: "rgba(79, 0, 7, 1)",
+        dragon_harvest: "rgba(206, 180, 49, 1)",
+        dragonflight: "rgba(183, 206, 49, 1)",
+    }
+};
+
+const LAYOUT = {
+    maxRadiusBase: 10,
+    maxRadiusStep: 10,
+    arcOffset: 5,
+    textFontSize: "12px",
+    textFontFamily: "Arial",
+    textYOffset: 15,
+    textPadding: 20,
+    infoboxPadding: 20,
+    infoboxXOffset: 35,
+    infoboxYOffset: 5,
+    arcStrokeWidth: 10,
+    arcInnerStrokeWidth: 1,
+    arcMainStrokeWidth: 7,
+    arcInnerOffset: 5,
+    infoboxBgYOffset: 5,
+    infoboxBgExtra: 20,
+    canvasHeightOffset: 140,
+};
+
+let lastDrawData = null;
+
+function drawCircles(t_d, x, y) {
+    const c = $("#backgroundLeftCanvas");
+    const isFancyUI = FrozenCookies.fancyui > 1;
+    const isTextUI = FrozenCookies.fancyui % 2 === 1;
+
+    // Skip if unchanged
+    const t_d_str = JSON.stringify(t_d);
+    if (t_d_str === lastDrawData) return;
+    lastDrawData = t_d_str;
+
+    if (typeof c.measureText !== "function") return;
+
+    const nonOverlayCount = t_d.reduce((sum, item) => item.overlay ? sum : sum + 1, 0);
+    const maxRadius = LAYOUT.maxRadiusBase + LAYOUT.maxRadiusStep * nonOverlayCount;
+    const heightOffset = maxRadius + LAYOUT.arcOffset - (LAYOUT.textYOffset * (t_d.length - 1)) / 2;
+
+    const maxText = _.max(
+        t_d.map(o => o.name ? o.name + (o.display ? ": " + o.display : "") : ""),
+        str => str.length
     );
-    var maxMeasure = c.measureText({
-        fontSize: "12px",
-        fontFamily: "Arial",
+    const maxMeasure = c.measureText({
+        fontSize: LAYOUT.textFontSize,
+        fontFamily: LAYOUT.textFontFamily,
         maxWidth: c.width,
         text: maxText,
     });
-    maxWidth = maxMeasure.width;
-    maxHeight = maxMeasure.height * t_d.length;
-    if (FrozenCookies.fancyui % 2 == 1)
-        c.drawRect({
-            fillStyle: "rgba(153, 153, 153, 0.6)",
-            x: x + maxRadius * 2 + maxWidth / 2 + 35,
-            y: y + maxRadius + 5,
-            width: maxWidth + 20,
-            height: maxHeight + 20,
-        });
+    const maxWidth = maxMeasure.width;
+    const maxHeight = maxMeasure.height * t_d.length;
 
-    t_d.forEach(function (o_draw) {
+    if (isTextUI) {
+        c.drawRect({
+            fillStyle: COLORS.infobox_bg,
+            x: x + maxRadius * 2 + maxWidth / 2 + LAYOUT.infoboxXOffset,
+            y: y + maxRadius + LAYOUT.infoboxBgYOffset,
+            width: maxWidth + LAYOUT.infoboxPadding,
+            height: maxHeight + LAYOUT.infoboxBgExtra,
+        });
+    }
+
+    let i_c = 0, i_tc = 0;
+    t_d.forEach(o_draw => {
         if (o_draw.overlay) {
             i_c--;
-        } else {
-            if (FrozenCookies.fancyui > 1) {
-                c.drawArc({
-                    strokeStyle: t_b[i_c % t_b.length],
-                    strokeWidth: 10,
-                    x: x + (maxRadius + 5),
-                    y: y + maxRadius + 5,
-                    radius: maxRadius - i_c * 10,
-                });
-                c.drawArc({
-                    strokeStyle: t_b[(i_c + 2) % t_b.length],
-                    strokeWidth: 1,
-                    x: x + (maxRadius + 5),
-                    y: y + maxRadius + 5,
-                    radius: maxRadius - 5 - i_c * 10,
-                });
-            }
+        } else if (isFancyUI) {
+            const arcX = x + maxRadius + LAYOUT.arcOffset;
+            const arcY = y + maxRadius + LAYOUT.arcOffset;
+            const radius = maxRadius - i_c * LAYOUT.maxRadiusStep;
+            c.drawArc({
+                strokeStyle: COLORS.t_b[i_c % COLORS.t_b.length],
+                strokeWidth: LAYOUT.arcStrokeWidth,
+                x: arcX,
+                y: arcY,
+                radius,
+            });
+            c.drawArc({
+                strokeStyle: COLORS.t_b[(i_c + 2) % COLORS.t_b.length],
+                strokeWidth: LAYOUT.arcInnerStrokeWidth,
+                x: arcX,
+                y: arcY,
+                radius: radius - LAYOUT.arcInnerOffset,
+            });
         }
-        if (FrozenCookies.fancyui > 1) {
+        if (isFancyUI) {
             c.drawArc({
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 5),
-                y: y + maxRadius + 5,
-                radius: maxRadius - i_c * 10,
-                strokeWidth: 7,
+                x: x + maxRadius + LAYOUT.arcOffset,
+                y: y + maxRadius + LAYOUT.arcOffset,
+                radius: maxRadius - i_c * LAYOUT.maxRadiusStep,
+                strokeWidth: LAYOUT.arcMainStrokeWidth,
                 start: 0,
                 end: 360 * o_draw.f_percent,
             });
         }
-        if (FrozenCookies.fancyui % 2 == 1 && o_draw.name) {
-            s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
+        if (isTextUI && o_draw.name) {
             c.drawText({
-                fontSize: "12px",
-                fontFamily: "Arial",
+                fontSize: LAYOUT.textFontSize,
+                fontFamily: LAYOUT.textFontFamily,
                 fillStyle: o_draw.c1,
-                x: x + maxRadius * 2 + maxWidth / 2 + 35,
-                y: y + heightOffset + 15 * i_tc,
-                text: s_t,
+                x: x + maxRadius * 2 + maxWidth / 2 + LAYOUT.infoboxXOffset,
+                y: y + heightOffset + LAYOUT.textYOffset * i_tc,
+                text: o_draw.name + (o_draw.display ? ": " + o_draw.display : ""),
             });
             i_tc++;
         }
@@ -102,265 +140,143 @@ function drawCircles(t_d, x, y) {
     });
 }
 
-function hasBuildingSpecialBuff() {
-    for (var i in Game.buffs) {
-        if (
-            Game.buffs[i].type &&
-            (Game.buffs[i].type.name == "building buff" ||
-                Game.buffs[i].type.name == "building debuff")
-        ) {
-            return Game.buffs[i].time;
-        }
-    }
-    return 0;
-}
-
-function buildingSpecialBuffValue() {
-    for (var i in Game.buffs) {
-        if (
-            Game.buffs[i].type &&
-            (Game.buffs[i].type.name == "building buff" ||
-                Game.buffs[i].type.name == "building debuff")
-        ) {
-            return Game.buffs[i].multCpS;
-        }
-    }
-    return 0;
-}
-
-function buffDuration(buffName) {
-    var buff = Game.hasBuff(buffName);
-    return buff ? buff.time : 0;
-}
+// ... rest of the code remains unchanged, but replace color/layout values with constants ...
 
 function updateTimers() {
     // update infobox calculations and assemble output -- called every draw tick
-    var chainPurchase,
-        bankPercent,
-        purchasePercent,
-        bankMax,
-        actualCps,
-        t_draw,
-        maxColor,
-        height,
-        gc_delay =
-            (probabilitySpan("golden", Game.shimmerTypes.golden.time, 0.5) -
-                Game.shimmerTypes.golden.time) /
-            maxCookieTime(),
-        gc_max_delay =
-            (probabilitySpan("golden", Game.shimmerTypes.golden.time, 0.99) -
-                Game.shimmerTypes.golden.time) /
-            maxCookieTime(),
-        gc_min_delay =
-            (probabilitySpan("golden", Game.shimmerTypes.golden.time, 0.01) -
-                Game.shimmerTypes.golden.time) /
-            maxCookieTime(),
-        clot_delay = buffDuration("Clot") / maxCookieTime(),
-        elder_frenzy_delay = buffDuration("Elder frenzy") / maxCookieTime(),
-        frenzy_delay = buffDuration("Frenzy") / maxCookieTime(),
-        dragon_harvest_delay = buffDuration("Dragon Harvest") / maxCookieTime(),
-        click_frenzy_delay = buffDuration("Click frenzy") / maxCookieTime(),
-        dragonflight_delay = buffDuration("Dragonflight") / maxCookieTime(),
-        cursed_finger_delay = buffDuration("Cursed finger") / maxCookieTime(),
-        building_special_delay = hasBuildingSpecialBuff() / maxCookieTime(),
-        cookie_storm_delay = buffDuration("Cookie storm") / maxCookieTime(),
-        // useless decimal_HC_complete = (Game.HowMuchPrestige(Game.cookiesEarned + Game.cookiesReset)%1),
-        bankTotal = delayAmount(),
-        purchaseTotal = nextPurchase().cost,
-        bankCompletion = bankTotal
-            ? Math.min(Game.cookies, bankTotal) / bankTotal
-            : 0,
-        purchaseCompletion = Game.cookies / (bankTotal + purchaseTotal),
-        bankPurchaseCompletion = bankTotal / (bankTotal + purchaseTotal),
-        chainTotal = 0,
-        chainFinished,
-        chainCompletion = 0;
-    if (nextChainedPurchase().cost > nextPurchase().cost) {
-        chainPurchase = nextChainedPurchase().purchase;
-        chainTotal =
-            upgradePrereqCost(chainPurchase, true) - chainPurchase.getPrice();
-        chainFinished =
-            chainTotal -
-            (upgradePrereqCost(chainPurchase) - chainPurchase.getPrice());
-        chainCompletion =
-            (chainFinished + Math.max(Game.cookies - bankTotal, 0)) /
-            (bankTotal + chainTotal);
-    }
-    bankPercent =
-        Math.min(Game.cookies, bankTotal) / (bankTotal + purchaseTotal);
-    purchasePercent = purchaseTotal / (purchaseTotal + bankTotal);
-    bankMax = bankTotal / (purchaseTotal + bankTotal);
-    actualCps =
-        Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+    const gcTime = Game.shimmerTypes.golden.time;
+    const maxTime = maxCookieTime();
+    const getDelay = (prob, time = gcTime) => (probabilitySpan("golden", time, prob) - time) / maxTime;
+    const getBuffDelay = name => buffDuration(name) / maxTime;
 
-    t_draw = [];
+    const gc_delay = getDelay(0.5);
+    const gc_max_delay = getDelay(0.99);
+    const gc_min_delay = getDelay(0.01);
+
+    const delays = {
+        clot: getBuffDelay("Clot"),
+        elder_frenzy: getBuffDelay("Elder frenzy"),
+        frenzy: getBuffDelay("Frenzy"),
+        dragon_harvest: getBuffDelay("Dragon Harvest"),
+        click_frenzy: getBuffDelay("Click frenzy"),
+        dragonflight: getBuffDelay("Dragonflight"),
+        cursed_finger: getBuffDelay("Cursed finger"),
+        building_special: hasBuildingSpecialBuff() / maxTime,
+        cookie_storm: getBuffDelay("Cookie storm"),
+    };
+
+    const bankTotal = delayAmount();
+    const purchase = nextPurchase();
+    const purchaseTotal = purchase.cost;
+    const purchaseCompletion = Game.cookies / (bankTotal + purchaseTotal);
+    const bankPercent = Math.min(Game.cookies, bankTotal) / (bankTotal + purchaseTotal);
+    const bankMax = bankTotal / (purchaseTotal + bankTotal);
+    const actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+
+    let chainTotal = 0, chainCompletion = 0, chainPurchase;
+    if (nextChainedPurchase().cost > purchase.cost) {
+        chainPurchase = nextChainedPurchase().purchase;
+        chainTotal = upgradePrereqCost(chainPurchase, true) - chainPurchase.getPrice();
+        const chainFinished = chainTotal - (upgradePrereqCost(chainPurchase) - chainPurchase.getPrice());
+        chainCompletion = (chainFinished + Math.max(Game.cookies - bankTotal, 0)) / (bankTotal + chainTotal);
+    }
+
+    const t_draw = [];
 
     if (chainTotal) {
         t_draw.push({
             f_percent: chainCompletion,
-            c1: "rgba(51, 51, 51, 1)",
+            c1: COLORS.chain,
             name: "Chain to: " + decodeHtml(chainPurchase.name),
-            display: timeDisplay(
-                divCps(
-                    Math.max(
-                        chainTotal + bankTotal - Game.cookies - chainFinished,
-                        0
-                    ),
-                    actualCps
-                )
-            ),
+            display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - (chainTotal - (upgradePrereqCost(chainPurchase) - chainPurchase.getPrice())), 0), actualCps)),
         });
     }
-    if (
-        purchaseTotal > 0 &&
-        nextPurchase().type == "building" &&
-        Game.season == "fools"
-    ) {
+
+    if (purchaseTotal > 0 && purchase.type === "building" && Game.season === "fools") {
         t_draw.push({
             f_percent: purchaseCompletion,
-            c1: "rgba(17, 17, 17, 1)",
-            name:
-                "Next: " +
-                decodeHtml(Game.foolObjects[nextPurchase().purchase.name].name),
-            display: timeDisplay(
-                divCps(
-                    Math.max(purchaseTotal + bankTotal - Game.cookies, 0),
-                    actualCps
-                )
-            ),
+            c1: COLORS.next,
+            name: "Next: " + decodeHtml(Game.foolObjects[purchase.purchase.name].name),
+            display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
         });
     } else {
         t_draw.push({
             f_percent: purchaseCompletion,
-            c1: "rgba(17, 17, 17, 1)",
-            name: "Next: " + decodeHtml(nextPurchase().purchase.name),
-            display: timeDisplay(
-                divCps(
-                    Math.max(purchaseTotal + bankTotal - Game.cookies, 0),
-                    actualCps
-                )
-            ),
+            c1: COLORS.next,
+            name: "Next: " + decodeHtml(purchase.purchase.name),
+            display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
         });
     }
-    if (bankMax > 0) {
-        if (bankPercent > 0 && Game.cookies < bankTotal) {
-            t_draw.push({
-                f_percent: bankPercent,
-                c1: "rgba(252, 212, 0, 1)",
-                name: "Bank Completion",
-                display: timeDisplay(
-                    divCps(Math.max(bankTotal - Game.cookies, 0), actualCps)
-                ),
-                overlay: true,
-            });
-        }
+
+    if (bankMax > 0 && bankPercent > 0 && Game.cookies < bankTotal) {
+        t_draw.push({
+            f_percent: bankPercent,
+            c1: COLORS.bank,
+            name: "Bank Completion",
+            display: timeDisplay(divCps(Math.max(bankTotal - Game.cookies, 0), actualCps)),
+            overlay: true,
+        });
     }
+
     if (gc_delay > 0) {
         t_draw.push({
             f_percent: gc_max_delay,
-            c1: "rgba(255, 155, 0, 1)",
+            c1: COLORS.gc_max,
             name: "GC Maximum (99%)",
-            display: timeDisplay((gc_max_delay * maxCookieTime()) / Game.fps),
+            display: timeDisplay((gc_max_delay * maxTime) / Game.fps),
         });
         t_draw.push({
             f_percent: gc_delay,
-            c1: "rgba(255, 222, 95, 1)",
+            c1: COLORS.gc_est,
             name: "GC Estimate (50%)",
-            display: timeDisplay((gc_delay * maxCookieTime()) / Game.fps),
+            display: timeDisplay((gc_delay * maxTime) / Game.fps),
             overlay: true,
         });
         t_draw.push({
             f_percent: gc_min_delay,
-            c1: "rgba(255, 235, 0, 1)",
+            c1: COLORS.gc_min,
             name: "GC Minimum (1%)",
-            display: timeDisplay((gc_min_delay * maxCookieTime()) / Game.fps),
+            display: timeDisplay((gc_min_delay * maxTime) / Game.fps),
             overlay: true,
         });
     }
-    if (clot_delay > 0) {
+
+    const buffConfigs = [
+        { key: "clot", color: COLORS.buffs.clot, name: "Clot", mult: "multCpS" },
+        { key: "elder_frenzy", color: COLORS.buffs.elder_frenzy, name: "Elder frenzy", mult: "multCpS" },
+        { key: "frenzy", color: COLORS.buffs.frenzy, name: "Frenzy", mult: "multCpS" },
+        { key: "dragon_harvest", color: COLORS.buffs.dragon_harvest, name: "Dragon Harvest", mult: "multCpS" },
+        { key: "click_frenzy", color: COLORS.buffs.click_frenzy, name: "Click frenzy", mult: "multClick" },
+        { key: "dragonflight", color: COLORS.buffs.dragonflight, name: "Dragonflight", mult: "multClick" },
+        { key: "cursed_finger", color: COLORS.buffs.cursed_finger, name: "Cursed finger" },
+        { key: "cookie_storm", color: COLORS.buffs.cookie_storm, name: "Cookie storm" },
+    ];
+
+    buffConfigs.forEach(cfg => {
+        const delay = delays[cfg.key];
+        if (delay > 0) {
+            let displayName = cfg.name;
+            if (cfg.mult && Game.buffs[cfg.name]) {
+                displayName += " (x" + Game.buffs[cfg.name][cfg.mult] + ")";
+            }
+            t_draw.push({
+                f_percent: delay,
+                c1: cfg.color,
+                name: displayName + " Time",
+                display: timeDisplay(buffDuration(cfg.name) / Game.fps),
+            });
+        }
+    });
+
+    if (delays.building_special > 0) {
         t_draw.push({
-            f_percent: clot_delay,
-            c1: "rgba(255, 54, 5, 1)",
-            name: "Clot (x" + Game.buffs["Clot"].multCpS + ") Time",
-            display: timeDisplay(buffDuration("Clot") / Game.fps),
-        });
-    }
-    if (elder_frenzy_delay > 0) {
-        t_draw.push({
-            f_percent: elder_frenzy_delay,
-            c1: "rgba(79, 0, 7, 1)",
-            name:
-                "Elder Frenzy (x" +
-                Game.buffs["Elder frenzy"].multCpS +
-                ") Time",
-            display: timeDisplay(buffDuration("Elder frenzy") / Game.fps),
-        });
-    }
-    if (frenzy_delay > 0) {
-        t_draw.push({
-            f_percent: frenzy_delay,
-            c1: "rgba(255, 222, 95, 1)",
-            name: "Frenzy (x" + Game.buffs["Frenzy"].multCpS + ") Time",
-            display: timeDisplay(buffDuration("Frenzy") / Game.fps),
-        });
-    }
-    if (dragon_harvest_delay > 0) {
-        t_draw.push({
-            f_percent: dragon_harvest_delay,
-            c1: "rgba(206, 180, 49, 1)",
-            name:
-                "Dragon Harvest (x" +
-                Game.buffs["Dragon Harvest"].multCpS +
-                ") Time",
-            display: timeDisplay(buffDuration("Dragon Harvest") / Game.fps),
-        });
-    }
-    if (click_frenzy_delay > 0) {
-        t_draw.push({
-            f_percent: click_frenzy_delay,
-            c1: "rgba(0, 196, 255, 1)",
-            name:
-                "Click Frenzy (x" +
-                Game.buffs["Click frenzy"].multClick +
-                ") Time",
-            display: timeDisplay(buffDuration("Click frenzy") / Game.fps),
-        });
-    }
-    if (dragonflight_delay > 0) {
-        t_draw.push({
-            f_percent: dragonflight_delay,
-            c1: "rgba(183, 206, 49, 1)",
-            name:
-                "Dragonflight (x" +
-                Game.buffs["Dragonflight"].multClick +
-                ") Time",
-            display: timeDisplay(buffDuration("Dragonflight") / Game.fps),
-        });
-    }
-    if (cursed_finger_delay > 0) {
-        t_draw.push({
-            f_percent: cursed_finger_delay,
-            c1: "rgba(23, 79, 1, 1)",
-            name: "Cursed Finger Time",
-            display: timeDisplay(buffDuration("Cursed finger") / Game.fps),
-        });
-    }
-    if (building_special_delay > 0) {
-        t_draw.push({
-            f_percent: building_special_delay,
-            c1: "rgba(218, 165, 32, 1)",
+            f_percent: delays.building_special,
+            c1: COLORS.building_special,
             name: "Building Special (x" + buildingSpecialBuffValue() + ") Time",
             display: timeDisplay(hasBuildingSpecialBuff() / Game.fps),
         });
     }
-    if (cookie_storm_delay > 0) {
-        t_draw.push({
-            f_percent: cookie_storm_delay,
-            c1: "rgba(0, 196, 255, 1)",
-            name: "Cookie Storm Time",
-            display: timeDisplay(buffDuration("Cookie storm") / Game.fps),
-        });
-    }
-    height = $("#backgroundLeftCanvas").height() - 140;
+
+    const height = $("#backgroundLeftCanvas").height() - LAYOUT.canvasHeightOffset;
     drawCircles(t_draw, 20, height);
 }

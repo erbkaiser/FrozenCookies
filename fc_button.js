@@ -1,3 +1,6 @@
+// This file replaces the Info button with the Frozen Cookies button
+// which adds a new menu for Frozen Cookies
+
 $("#logButton").before(
     $("<div>")
         .attr("id", "fcButton")
@@ -202,7 +205,7 @@ function rebuildStore(recalculate) {
                             "style",
                             "background-image:url(img/" + me.icon + ".png);"
                         )
-                ),
+                )
             content = $("<div>").addClass("content");
 
         content.append($("<div>").addClass("title").html(me.displayName));
@@ -319,7 +322,18 @@ function FCMenu() {
                                 "." +
                                 FrozenCookies.version
                         )
-                ),
+                )
+                // Add the log/info panel button just after the version section
+                .append(
+                    $("<div>")
+                        .addClass("listing")
+                        .append(
+                            $("<button>")
+                                .attr("id", "fcOpenLogPanel")
+                                .text("Open Game Log/Info Panel")
+                                .click(openGameLogPanel)
+                        )
+                );
             //Autobuy
             subsection = $("<div>")
                 .addClass("subsection")
@@ -445,8 +459,8 @@ function FCMenu() {
                 $(
                     '<a href="https://github.com/erbkaiser/FrozenCookies#what-can-frozen-cookies-do" target="new">Online documentation</a>'
                 )
-            )),
-            menu.append(subsection);
+            ));
+        menu.append(subsection);
 
         // build preference menu items
         if (FrozenCookies.preferenceValues) {
@@ -960,4 +974,10 @@ function FCMenu() {
                 )
             );
     };
+}
+/**
+ * Opens the built-in Cookie Clicker log/info panel.
+ */
+function openGameLogPanel() {
+    Game.ShowMenu('log');
 }

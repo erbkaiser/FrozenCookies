@@ -562,7 +562,7 @@ var recommendationBlacklist = [
     806, // jukebox
 ];
 
-// Why is this here and not in fc_main.js?
+// Used in function upgradeStats in fc_main.js
 var seasons = ["", "fools", "christmas", "easter", "halloween", "valentines"];
 
 var holidayCookies = {
