@@ -2363,7 +2363,7 @@ function auto100ConsistencyComboAction() {
                     Game.Upgrades["Golden switch [on]"].unlocked &&
                     !Game.Upgrades["Golden switch [on]"].bought
                 ) {
-                    Game.CalculateGains(); // Ensure price is updated since Frenzy ended
+                    Game.recalculateGains = 1; // Ensure price is updated since Frenzy ended
                     Game.Upgrades["Golden switch [on]"].buy();
                 }
                 if (auto100ConsistencyComboAction.autogcyes == 1) {
@@ -5095,6 +5095,7 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
 }
 
 function buildingToggle(building, achievements) {
+    const oldHighest = Game.cookiesPsRawHighest; // Save current value before simulating
     if (!achievements) {
         building.amount += 1;
         building.bought += 1;
@@ -5112,6 +5113,7 @@ function buildingToggle(building, achievements) {
     }
     Game.recalculateGains = 1;
     Game.CalculateGains();
+    Game.cookiesPsRawHighest = oldHighest; // Restore after simulation
 }
 
 function buyFunctionToggle(upgrade) {
@@ -5579,7 +5581,7 @@ function autoGSBuy() {
             Game.Upgrades["Golden switch [on]"].unlocked &&
             !Game.Upgrades["Golden switch [on]"].bought
         ) {
-            Game.CalculateGains(); // Ensure price is updated since Frenzy ended
+            Game.recalculateGains = 1; // Ensure price is updated since Frenzy ended
             Game.Upgrades["Golden switch [on]"].buy();
         }
     }
