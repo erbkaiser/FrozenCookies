@@ -323,15 +323,26 @@ function FCMenu() {
                                 FrozenCookies.version
                         )
                 )
-                // Add the log/info panel button just after the version section
+                // Add the log/info panel button
                 .append(
                     $("<div>")
                         .addClass("listing")
                         .append(
                             $("<button>")
                                 .attr("id", "fcOpenLogPanel")
-                                .text("Open Game Log/Info Panel")
+                                .text("CC Info")
                                 .click(openGameLogPanel)
+                        )
+                )
+                // Add a documentations page button
+                .append(
+                    $("<div>")
+                        .addClass("listing")
+                        .append(
+                            $("<button>")
+                                .attr("id", "fcOpenDocPage")
+                                .text("FC Readme")
+                                .click(openDocumentationPage)
                         )
                 );
             //Autobuy
@@ -450,16 +461,6 @@ function FCMenu() {
                 )
             );
         }
-        menu.append(subsection);
-
-        //Readme
-        (subsection = $("<div>")
-            .addClass("subsection")
-            .append(
-                $(
-                    '<a href="https://github.com/erbkaiser/FrozenCookies#what-can-frozen-cookies-do" target="new">Online documentation</a>'
-                )
-            ));
         menu.append(subsection);
 
         // build preference menu items
@@ -980,4 +981,10 @@ function FCMenu() {
  */
 function openGameLogPanel() {
     Game.ShowMenu('log');
+}
+/**
+ * Opens the Frozen Cookies online documentation page.
+ */
+function openDocumentationPage() {
+    window.open('https://github.com/erbkaiser/FrozenCookies#what-can-frozen-cookies-do', '_blank');
 }
