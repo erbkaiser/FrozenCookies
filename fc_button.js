@@ -330,7 +330,8 @@ function FCMenu() {
                         .append(
                             $("<button>")
                                 .attr("id", "fcOpenLogPanel")
-                                .text("CC Info")
+                                .attr("title", "Open the Cookie Clicker about/version info panel")
+                                .text("Cookie Clicker Info")
                                 .click(openGameLogPanel)
                         )
                 )
@@ -341,7 +342,8 @@ function FCMenu() {
                         .append(
                             $("<button>")
                                 .attr("id", "fcOpenDocPage")
-                                .text("FC Readme")
+                                .attr("title", "Open the Frozen Cookies readme/documentation page")
+                                .text("Frozen Cookies Readme")
                                 .click(openDocumentationPage)
                         )
                 );
