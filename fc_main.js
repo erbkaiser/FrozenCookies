@@ -3130,7 +3130,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[1] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3349,7 +3349,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[1] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3404,7 +3404,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[0] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3509,7 +3509,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[0] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3564,7 +3564,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[0] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3665,7 +3665,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[0] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -3720,7 +3720,7 @@ function autoCycliusAction() {
             if (
                 FrozenCookies.autoWorship0 != 11 &&
                 FrozenCookies.autoWorship0 != 3 &&
-                T.slot[01] != FrozenCookies.autoWorship0 &&
+                T.slot[0] != FrozenCookies.autoWorship0 &&
                 T.swaps > 0
             ) {
                 swapIn(FrozenCookies.autoWorship0, 0);
@@ -5029,6 +5029,7 @@ function unfinishedUpgradePrereqs(upgrade) {
 }
 
 function upgradeToggle(upgrade, achievements, reverseFunctions) {
+    const oldHighest = Game.cookiesPsRawHighest; // Save for simulation
     if (!achievements) {
         reverseFunctions = {};
         if (!upgrade.unlocked) {
@@ -5094,6 +5095,7 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
     }
     Game.recalculateGains = 1;
     Game.CalculateGains();
+    Game.cookiesPsRawHighest = oldHighest; // Restore after simulation
     return reverseFunctions;
 }
 
