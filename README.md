@@ -697,9 +697,6 @@ that the script can currently know of.
 ## Planned Features and Known Issues
 
 -   Lag: sadly, yes, FC causes some lag. The code is incredibly huge and complex.
--   Raw cookies per second is set to an absurdly high value on ascending. This messes
-    badly with stock prices. The cause is currently unknown and I suspect it is deep in
-    the FC prediction code.
 -   Golden Cookie timers sometimes disappear. This will fix itself on the next GC spawn.
 -   Autocasting may not automatically start working if Frozen Cookies is loaded before the
     WTs are unlocked, even if these are unlocked later in the same session. To use
