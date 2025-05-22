@@ -275,7 +275,7 @@ if (typeof Game.oldUpdateMenu != "function") {
     Game.oldUpdateMenu = Game.UpdateMenu;
 }
 
-// Add custom style for selected multi-choice buttons
+// Add custom style
 (function () {
     var style = document.createElement("style");
     style.innerHTML = `
@@ -531,6 +531,21 @@ function FCMenu() {
         menu.append(subsection);
 
         // --- OPTIONS SECTION ---
+        // --- NEW FRENZY INFO SECTION ---
+        subsection = $("<div>").addClass("subsection");
+        subsection.append($("<div>").addClass("title").text("Frenzy Info"));
+        subsection.append(
+            buildListing("Current Frenzy", Beautify(currentFrenzy))
+        );
+        subsection.append(
+            buildListing(
+                "Last Golden Cookie Effect",
+                Game.shimmerTypes.golden.last
+            )
+        );
+        menu.append(subsection);
+
+        // --- OPTIONS SECTION ---
         if (FrozenCookies.preferenceValues) {
             subsection = $("<div>").addClass("subsection");
             subsection.append(
@@ -560,12 +575,38 @@ function FCMenu() {
                                 .addClass("option")
                                 .prop("id", preferenceButtonId)
                                 .click(function () {
-                                    // Are you sure? for specific options
-                                    if (
-                                        prefVal.confirmOnChange &&
-                                        !confirm(prefVal.confirmOnChange)
-                                    )
-                                        return;
+                                    cyclePreference(preference);
+                                })
+                                .text(display[current])
+                        );
+                    } else {
+                        // Render a group of buttons for direct selection
+                        var buttonGroup = $("<span>").addClass(
+                            "fc-multichoice-group"
+                        );
+                        display.forEach(function (label, idx) {
+                            buttonGroup.append(
+                                $("<button>")
+                                    .addClass("option")
+                                    .toggleClass("selected", idx === current)
+                                    .prop("id", preferenceButtonId + "_" + idx)
+                                    .click(function () {
+                                        setPreferenceDirect(preference, idx);
+                                    })
+                                    .text(label)
+                            );
+                        });
+                        listing.append(buttonGroup);
+                    }
+                    // --- NEW LOGIC END ---
+                    // --- NEW LOGIC START ---
+                    if (display.length === 2) {
+                        // Toggle button for two options
+                        listing.append(
+                            $("<button>")
+                                .addClass("option")
+                                .prop("id", preferenceButtonId)
+                                .click(function () {
                                     cyclePreference(preference);
                                 })
                                 .text(display[current])
@@ -598,12 +639,6 @@ function FCMenu() {
                                     .toggleClass("selected", idx === current)
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
-                                        // Are you sure? for specific options
-                                        if (
-                                            prefVal.confirmOnChange &&
-                                            !confirm(prefVal.confirmOnChange)
-                                        )
-                                            return;
                                         setPreferenceDirect(preference, idx);
                                     })
                                     .text(label)
@@ -622,6 +657,17 @@ function FCMenu() {
                         );
                     }
                     if (extras) {
+                        // If extras is a function, call it with FrozenCookies, else treat as string
+                        var extrasHtml =
+                            typeof extras === "function"
+                                ? extras(FrozenCookies)
+                                : extras.replace(
+                                      /\$\{(.+)\}/g,
+                                      function (s, id) {
+                                          return fcBeautify(FrozenCookies[id]);
+                                      }
+                                  );
+                        listing.append($(extrasHtml));
                         // If extras is a function, call it with FrozenCookies, else treat as string
                         var extrasHtml =
                             typeof extras === "function"
