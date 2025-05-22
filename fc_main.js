@@ -46,7 +46,9 @@ function registerMod(mod_id = "frozen_cookies") {
                 ) {
                     return [
                         "You wonder if those " +
-                            Beautify(bestBank(nextChainedPurchase().efficiency).cost) +
+                            Beautify(
+                                bestBank(nextChainedPurchase().efficiency).cost
+                            ) +
                             " banked cookies are still fresh.",
                     ];
                 }
@@ -55,7 +57,11 @@ function registerMod(mod_id = "frozen_cookies") {
                     Math.random() < 0.3 &&
                     Game.season != "fools"
                 ) {
-                    return ["You should buy " + nextPurchase().purchase.name + " next."];
+                    return [
+                        "You should buy " +
+                            nextPurchase().purchase.name +
+                            " next.",
+                    ];
                 }
                 if (Math.random() < 0.3 && Game.season == "fools") {
                     return [
@@ -72,7 +78,8 @@ function registerMod(mod_id = "frozen_cookies") {
                     return [
                         "You have " +
                             Beautify(
-                                bestBank(nextChainedPurchase().efficiency).cost * 0.08
+                                bestBank(nextChainedPurchase().efficiency)
+                                    .cost * 0.08
                             ) +
                             " cookie dollars just sitting in your wallet.",
                     ];
@@ -84,7 +91,9 @@ function registerMod(mod_id = "frozen_cookies") {
                     Game.season == "fools"
                 ) {
                     return [
-                        "Your next investment: " + nextPurchase().purchase.name + ".",
+                        "Your next investment: " +
+                            nextPurchase().purchase.name +
+                            ".",
                     ];
                 }
                 if (
@@ -95,7 +104,8 @@ function registerMod(mod_id = "frozen_cookies") {
                 ) {
                     return [
                         "Your next investment: " +
-                            Game.foolObjects[nextPurchase().purchase.name].name +
+                            Game.foolObjects[nextPurchase().purchase.name]
+                                .name +
                             ".",
                     ];
                 }
@@ -165,7 +175,8 @@ function setOverrides(gameSaveData) {
     FrozenCookies.hc_gain = 0;
     FrozenCookies.hc_gain_time = Date.now();
     FrozenCookies.last_gc_state =
-        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
+        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) *
+        clickBuffBonus();
     FrozenCookies.last_gc_time = Date.now();
     FrozenCookies.lastCPS = Game.cookiesPs;
     FrozenCookies.lastBaseCPS = Game.cookiesPs;
@@ -280,7 +291,10 @@ function setOverrides(gameSaveData) {
             FrozenCookies.autoBuy = 1;
             autoSweetAction.autobuyyes = 0;
         }
-        if (!FrozenCookies.autoFTHOFCombo && autoFTHOFComboAction.autobuyyes == 1) {
+        if (
+            !FrozenCookies.autoFTHOFCombo &&
+            autoFTHOFComboAction.autobuyyes == 1
+        ) {
             FrozenCookies.autoBuy = 1;
             autoFTHOFComboAction.autobuyyes = 0;
         }
@@ -333,7 +347,10 @@ function setOverrides(gameSaveData) {
         FrozenCookies.prevLastHCTime = preferenceParse("prevLastHCTime", 0);
         FrozenCookies.maxHCPercent = preferenceParse("maxHCPercent", 0);
         if (Object.keys(FrozenCookies.loadedData).length > 0) {
-            logEvent("Load", "Restored Frozen Cookies settings from previous save");
+            logEvent(
+                "Load",
+                "Restored Frozen Cookies settings from previous save"
+            );
         }
     }
 
@@ -469,7 +486,18 @@ var numberFormatters = [
         " NoT",
     ]),
 
-    formatEveryThirdPower(["", " M", " G", " T", " P", " E", " Z", " Y", " R", " Q"]),
+    formatEveryThirdPower([
+        "",
+        " M",
+        " G",
+        " T",
+        " P",
+        " E",
+        " Z",
+        " Y",
+        " R",
+        " Q",
+    ]),
     scientificNotation,
 ];
 
@@ -529,7 +557,11 @@ function fcDraw(from, text, origin) {
         if (text.includes("Devastation")) {
             text = text.replace(
                 /\+\d+\%/,
-                "+" + Math.round((Game.hasBuff("Devastation").multClick - 1) * 100) + "%"
+                "+" +
+                    Math.round(
+                        (Game.hasBuff("Devastation").multClick - 1) * 100
+                    ) +
+                    "%"
             );
         }
     }
@@ -557,7 +589,10 @@ function fcReset() {
             b.sell(-1);
         });
         Game.Upgrades["Chocolate egg"].buy();
-    } else if (Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg")) {
+    } else if (
+        Game.HasUnlocked("Chocolate egg") &&
+        !Game.Has("Chocolate egg")
+    ) {
         Game.ObjectsById.forEach(function (b) {
             b.sell(-1);
         });
@@ -566,7 +601,8 @@ function fcReset() {
     Game.oldReset();
     FrozenCookies.frenzyTimes = {};
     FrozenCookies.last_gc_state =
-        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
+        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) *
+        clickBuffBonus();
     FrozenCookies.last_gc_time = Date.now();
     FrozenCookies.lastHCAmount = Game.HowMuchPrestige(
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
@@ -651,12 +687,22 @@ function getBuildingSpread() {
 document.addEventListener("keydown", function (event) {
     if (!Game.promptOn && FrozenCookies.FCshortcuts) {
         if (event.keyCode == 65) {
-            Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
+            Game.Toggle(
+                "autoBuy",
+                "autobuyButton",
+                "Autobuy OFF",
+                "Autobuy ON"
+            );
             toggleFrozen("autoBuy");
         }
         if (event.keyCode == 66) copyToClipboard(getBuildingSpread());
         if (event.keyCode == 67) {
-            Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
+            Game.Toggle(
+                "autoGC",
+                "autogcButton",
+                "Autoclick GC OFF",
+                "Autoclick GC ON"
+            );
             toggleFrozen("autoGC");
         }
         if (event.keyCode == 69) copyToClipboard(Game.WriteSave(true));
@@ -880,14 +926,18 @@ function swapIn(godId, targetSlot) {
     PlaySound("snd/spirit.mp3");
 
     var rect = l("templeGod" + godId).getBoundingClientRect();
-    Game.SparkleAt((rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2 - 24);
+    Game.SparkleAt(
+        (rect.left + rect.right) / 2,
+        (rect.top + rect.bottom) / 2 - 24
+    );
 }
 
 function autoRigidel() {
     if (!T) return; // Exit if Pantheon doesn't exist
 
     const started = Game.lumpT;
-    const timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - started)) / 60000; // Minutes until sugar lump ripens
+    const timeToRipe =
+        (Math.ceil(Game.lumpRipeAge) - (Date.now() - started)) / 60000; // Minutes until sugar lump ripens
     const orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
     let prevGod = -1;
     let tryHarvest = false;
@@ -928,7 +978,10 @@ function autoRigidel() {
             }
             logEvent("autoRigidel", "Sugar lump harvested early");
         } else {
-            logEvent("autoRigidel", "Suppressed early harvest of unripe sugar lump");
+            logEvent(
+                "autoRigidel",
+                "Suppressed early harvest of unripe sugar lump"
+            );
         }
     }
 
@@ -955,12 +1008,18 @@ function autoDragonsCurve() {
         Game.specialTab = "dragon";
         Game.SetDragonAura(17, 1);
         Game.ConfirmPrompt();
-        logEvent("autoDragonsCurve", "Dragon auras swapped to manipulate new Sugar Lump");
+        logEvent(
+            "autoDragonsCurve",
+            "Dragon auras swapped to manipulate new Sugar Lump"
+        );
     } else if (!Game.hasAura("Dragon's Curve")) {
         Game.specialTab = "dragon";
         Game.SetDragonAura(17, 0);
         Game.ConfirmPrompt();
-        logEvent("autoDragonsCurve", "Dragon auras swapped to manipulate new Sugar Lump");
+        logEvent(
+            "autoDragonsCurve",
+            "Dragon auras swapped to manipulate new Sugar Lump"
+        );
     }
 
     if (
@@ -983,7 +1042,8 @@ function autoDragonsCurve() {
 }
 
 function autoTicker() {
-    if (Game.TickerEffect && Game.TickerEffect.type == "fortune") Game.tickerL.click();
+    if (Game.TickerEffect && Game.TickerEffect.type == "fortune")
+        Game.tickerL.click();
 }
 
 // Used in autoCast() for some maths in the smart Force The Hand of Fate subroutine
@@ -1027,12 +1087,16 @@ function autoCast() {
         if (
             M.magicM >=
                 Math.floor(
-                    M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                    M.spellsById[1].costMin +
+                        M.spellsById[1].costPercent * M.magicM
                 ) &&
             nextSpellName(0) == "Sugar Lump"
         ) {
             M.castSpell(M.spellsById[1]);
-            logEvent("autoCasting", "Cast Force the Hand of Fate for a free lump");
+            logEvent(
+                "autoCasting",
+                "Cast Force the Hand of Fate for a free lump"
+            );
             return;
         }
 
@@ -1040,7 +1104,8 @@ function autoCast() {
         if (
             M.magicM >=
                 Math.floor(
-                    M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+                    M.spellsById[2].costMin +
+                        M.spellsById[2].costPercent * M.magicM
                 ) &&
             ((cpsBonus() < 7 &&
                 (Game.hasBuff("Loan 1 (interest)") ||
@@ -1058,7 +1123,8 @@ function autoCast() {
         if (
             M.magicM >=
                 Math.floor(
-                    M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                    M.spellsById[4].costMin +
+                        M.spellsById[4].costPercent * M.magicM
                 ) &&
             cpsBonus() >= FrozenCookies.minCpSMult &&
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
@@ -1073,7 +1139,8 @@ function autoCast() {
                 if (
                     M.magicM <
                     Math.floor(
-                        M.spellsById[0].costMin + M.spellsById[0].costPercent * M.magicM
+                        M.spellsById[0].costMin +
+                            M.spellsById[0].costPercent * M.magicM
                     )
                 ) {
                     return;
@@ -1086,7 +1153,8 @@ function autoCast() {
                 if (
                     M.magicM <
                     Math.floor(
-                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                        M.spellsById[1].costMin +
+                            M.spellsById[1].costPercent * M.magicM
                     )
                 ) {
                     return;
@@ -1102,7 +1170,8 @@ function autoCast() {
                 if (
                     M.magicM <
                     Math.floor(
-                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                        M.spellsById[1].costMin +
+                            M.spellsById[1].costPercent * M.magicM
                     )
                 ) {
                     return;
@@ -1122,7 +1191,10 @@ function autoCast() {
                 }
 
                 if (cpsBonus() >= FrozenCookies.minCpSMult) {
-                    if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
+                    if (
+                        !Game.hasBuff("Dragonflight") &&
+                        nextSpellName(0) == "Lucky"
+                    ) {
                         M.castSpell(M.spellsById[1]);
                         logEvent("autoCasting", "Cast Force the Hand of Fate");
                     }
@@ -1154,7 +1226,8 @@ function autoCast() {
                                 (Game.hasBuff("Dragon Harvest").time / 30 >=
                                     Math.ceil(13 * BuffTimeFactor()) - 1 ||
                                     Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                                        Math.ceil(13 * BuffTimeFactor()) -
+                                            1))) &&
                         BuildingSpecialBuff() == 1 &&
                         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
                     ) {
@@ -1174,7 +1247,10 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("autoCasting", "Cast Force the Hand of Fate");
+                                logEvent(
+                                    "autoCasting",
+                                    "Cast Force the Hand of Fate"
+                                );
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
@@ -1189,10 +1265,15 @@ function autoCast() {
                                     (!Game.hasAura("Reaper of Fields") &&
                                         (Game.hasBuff("Dragon Harvest") ||
                                             Game.hasBuff("Frenzy")) &&
-                                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                        (Game.hasBuff("Dragon Harvest").time /
+                                            30 >=
+                                            Math.ceil(13 * BuffTimeFactor()) -
+                                                1 ||
                                             Game.hasBuff("Frenzy").time / 30 >=
-                                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                                                Math.ceil(
+                                                    13 * BuffTimeFactor()
+                                                ) -
+                                                    1))) &&
                                 (Game.hasBuff("Click frenzy") ||
                                     Game.hasBuff("Dragonflight")) &&
                                 (Game.hasBuff("Click frenzy").time / 30 >=
@@ -1201,7 +1282,10 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("autoCasting", "Cast Force the Hand of Fate");
+                                logEvent(
+                                    "autoCasting",
+                                    "Cast Force the Hand of Fate"
+                                );
                             }
                         }
                         return;
@@ -1209,7 +1293,8 @@ function autoCast() {
 
                     if (
                         nextSpellName(0) == "Cursed Finger" &&
-                        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                        (Game.hasBuff("Click frenzy") ||
+                            Game.hasBuff("Dragonflight")) &&
                         (Game.hasBuff("Click frenzy").time / 30 >=
                             Math.ceil(10 * BuffTimeFactor()) - 1 ||
                             Game.hasBuff("Dragonflight").time / 30 >=
@@ -1226,7 +1311,8 @@ function autoCast() {
                 if (
                     M.magicM <
                     Math.floor(
-                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                        M.spellsById[1].costMin +
+                            M.spellsById[1].costPercent * M.magicM
                     )
                 ) {
                     return;
@@ -1271,7 +1357,8 @@ function autoCast() {
                                 (Game.hasBuff("Dragon Harvest").time / 30 >=
                                     Math.ceil(13 * BuffTimeFactor()) - 1 ||
                                     Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                                        Math.ceil(13 * BuffTimeFactor()) -
+                                            1))) &&
                         BuildingSpecialBuff() == 1 &&
                         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
                     ) {
@@ -1291,7 +1378,10 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("autoCasting", "Cast Force the Hand of Fate");
+                                logEvent(
+                                    "autoCasting",
+                                    "Cast Force the Hand of Fate"
+                                );
                             }
                         } else if (Game.Upgrades["Elder Pact"].bought == 0) {
                             if (
@@ -1306,10 +1396,15 @@ function autoCast() {
                                     (!Game.hasAura("Reaper of Fields") &&
                                         (Game.hasBuff("Dragon Harvest") ||
                                             Game.hasBuff("Frenzy")) &&
-                                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                                        (Game.hasBuff("Dragon Harvest").time /
+                                            30 >=
+                                            Math.ceil(13 * BuffTimeFactor()) -
+                                                1 ||
                                             Game.hasBuff("Frenzy").time / 30 >=
-                                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                                                Math.ceil(
+                                                    13 * BuffTimeFactor()
+                                                ) -
+                                                    1))) &&
                                 (Game.hasBuff("Click frenzy") ||
                                     Game.hasBuff("Dragonflight")) &&
                                 (Game.hasBuff("Click frenzy").time / 30 >=
@@ -1318,7 +1413,10 @@ function autoCast() {
                                         Math.ceil(6 * BuffTimeFactor()) - 1)
                             ) {
                                 M.castSpell(M.spellsById[1]);
-                                logEvent("autoCasting", "Cast Force the Hand of Fate");
+                                logEvent(
+                                    "autoCasting",
+                                    "Cast Force the Hand of Fate"
+                                );
                             }
                         }
                         return;
@@ -1326,7 +1424,8 @@ function autoCast() {
 
                     if (
                         nextSpellName(0) == "Cursed Finger" &&
-                        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                        (Game.hasBuff("Click frenzy") ||
+                            Game.hasBuff("Dragonflight")) &&
                         (Game.hasBuff("Click frenzy").time / 30 >=
                             Math.ceil(10 * BuffTimeFactor()) - 1 ||
                             Game.hasBuff("Dragonflight").time / 30 >=
@@ -1377,7 +1476,8 @@ function autoCast() {
                 if (
                     M.magicM <
                     Math.floor(
-                        M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                        M.spellsById[4].costMin +
+                            M.spellsById[4].costPercent * M.magicM
                     )
                 ) {
                     return;
@@ -1398,7 +1498,10 @@ function autoFTHOFComboAction() {
     if (Game.Objects["Wizard tower"].level > 10) {
         // Will not work with wizard tower level > 10
         FrozenCookies.autoFTHOFCombo = 0;
-        logEvent("autoFTHOFCombo", "Combo disabled, wizard tower level too high");
+        logEvent(
+            "autoFTHOFCombo",
+            "Combo disabled, wizard tower level too high"
+        );
         return;
     }
 
@@ -1410,8 +1513,10 @@ function autoFTHOFComboAction() {
         FrozenCookies.autoFTHOFCombo = 0;
     }
 
-    if (typeof autoFTHOFComboAction.state == "undefined") autoFTHOFComboAction.state = 0;
-    if (typeof autoFTHOFComboAction.count == "undefined") autoFTHOFComboAction.count = 0;
+    if (typeof autoFTHOFComboAction.state == "undefined")
+        autoFTHOFComboAction.state = 0;
+    if (typeof autoFTHOFComboAction.count == "undefined")
+        autoFTHOFComboAction.count = 0;
 
     if (
         autoFTHOFComboAction.state > 3 ||
@@ -1433,11 +1538,14 @@ function autoFTHOFComboAction() {
 
     if (
         !autoFTHOFComboAction.state &&
-        ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
+        ((nextSpellName(0) == "Click Frenzy" &&
+            nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
-            (nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Elder Frenzy") ||
-            (nextSpellName(1) == "Click Frenzy" && nextSpellName(0) == "Elder Frenzy"))
+            (nextSpellName(0) == "Click Frenzy" &&
+                nextSpellName(1) == "Elder Frenzy") ||
+            (nextSpellName(1) == "Click Frenzy" &&
+                nextSpellName(0) == "Elder Frenzy"))
     ) {
         autoFTHOFComboAction.state = 1;
     }
@@ -1487,7 +1595,8 @@ function autoFTHOFComboAction() {
                 ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
                     (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                (((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
@@ -1495,7 +1604,8 @@ function autoFTHOFComboAction() {
                     Game.hasBuff("Frenzy").time / 30 >=
                         Math.ceil(13 * BuffTimeFactor()) - 1) ||
                     (!Game.hasAura("Reaper of Fields") &&
-                        (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                        (Game.hasBuff("Dragon Harvest") ||
+                            Game.hasBuff("Frenzy")) &&
                         (Game.hasBuff("Dragon Harvest").time / 30 >=
                             Math.ceil(13 * BuffTimeFactor()) - 1 ||
                             Game.hasBuff("Frenzy").time / 30 >=
@@ -1642,7 +1752,8 @@ function autoFTHOFComboAction() {
                 ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
                     (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                (((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
@@ -1650,12 +1761,14 @@ function autoFTHOFComboAction() {
                     Game.hasBuff("Frenzy").time / 30 >=
                         Math.ceil(13 * BuffTimeFactor()) - 1) ||
                     (!Game.hasAura("Reaper of Fields") &&
-                        (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                        (Game.hasBuff("Dragon Harvest") ||
+                            Game.hasBuff("Frenzy")) &&
                         (Game.hasBuff("Dragon Harvest").time / 30 >=
                             Math.ceil(13 * BuffTimeFactor()) - 1 ||
                             Game.hasBuff("Frenzy").time / 30 >=
                                 Math.ceil(13 * BuffTimeFactor()) - 1))) &&
-                (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                (Game.hasBuff("Click frenzy") ||
+                    Game.hasBuff("Dragonflight")) &&
                 (Game.hasBuff("Click frenzy").time / 30 >=
                     Math.ceil(10 * BuffTimeFactor()) - 1 ||
                     Game.hasBuff("Dragonflight").time / 30 >=
@@ -1806,7 +1919,10 @@ function autoFTHOFComboAction() {
                 FrozenCookies.manaMax <= 100 &&
                 autoFTHOFComboAction.count <= 497
             ) {
-                safeBuy(Game.Objects["Wizard tower"], autoFTHOFComboAction.count);
+                safeBuy(
+                    Game.Objects["Wizard tower"],
+                    autoFTHOFComboAction.count
+                );
             } else if (
                 FrozenCookies.towerLimit &&
                 FrozenCookies.manaMax <= 100 &&
@@ -1814,7 +1930,10 @@ function autoFTHOFComboAction() {
             ) {
                 safeBuy(Game.Objects["Wizard tower"], 486);
             } else {
-                safeBuy(Game.Objects["Wizard tower"], autoFTHOFComboAction.count);
+                safeBuy(
+                    Game.Objects["Wizard tower"],
+                    autoFTHOFComboAction.count
+                );
             }
             FrozenCookies.autobuyCount += 1;
             // Turn autoBuy back on if it was on before
@@ -1923,11 +2042,14 @@ function auto100ConsistencyComboAction() {
     if (
         !auto100ConsistencyComboAction.state &&
         M.magicM >= 98 &&
-        ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
+        ((nextSpellName(0) == "Click Frenzy" &&
+            nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
-            (nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Elder Frenzy") ||
-            (nextSpellName(1) == "Click Frenzy" && nextSpellName(0) == "Elder Frenzy"))
+            (nextSpellName(0) == "Click Frenzy" &&
+                nextSpellName(1) == "Elder Frenzy") ||
+            (nextSpellName(1) == "Click Frenzy" &&
+                nextSpellName(0) == "Elder Frenzy"))
     ) {
         auto100ConsistencyComboAction.state = 1;
     }
@@ -1936,11 +2058,16 @@ function auto100ConsistencyComboAction() {
     auto100ConsistencyComboAction.countMine = Game.Objects["Mine"].amount;
     auto100ConsistencyComboAction.countFactory = Game.Objects["Factory"].amount;
     auto100ConsistencyComboAction.countBank = Game.Objects["Bank"].amount - 1;
-    auto100ConsistencyComboAction.countTemple = Game.Objects["Temple"].amount - 1;
-    auto100ConsistencyComboAction.countWizard = Game.Objects["Wizard tower"].amount - 1;
-    auto100ConsistencyComboAction.countShipment = Game.Objects["Shipment"].amount;
-    auto100ConsistencyComboAction.countAlchemy = Game.Objects["Alchemy lab"].amount;
-    auto100ConsistencyComboAction.countTimeMach = Game.Objects["Time machine"].amount;
+    auto100ConsistencyComboAction.countTemple =
+        Game.Objects["Temple"].amount - 1;
+    auto100ConsistencyComboAction.countWizard =
+        Game.Objects["Wizard tower"].amount - 1;
+    auto100ConsistencyComboAction.countShipment =
+        Game.Objects["Shipment"].amount;
+    auto100ConsistencyComboAction.countAlchemy =
+        Game.Objects["Alchemy lab"].amount;
+    auto100ConsistencyComboAction.countTimeMach =
+        Game.Objects["Time machine"].amount;
 
     //Continue casting Haggler's Charm - unless it's something we need right now
     if (
@@ -1956,10 +2083,16 @@ function auto100ConsistencyComboAction() {
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
             M.castSpell(M.spellsById[2]);
-            logEvent("auto100ConsistencyCombo", "Cast Stretch Time instead of FTHOF");
+            logEvent(
+                "auto100ConsistencyCombo",
+                "Cast Stretch Time instead of FTHOF"
+            );
         } else {
             M.castSpell(M.spellsById[4]);
-            logEvent("auto100ConsistencyCombo", "Cast Haggler's Charm instead of FTHOF");
+            logEvent(
+                "auto100ConsistencyCombo",
+                "Cast Haggler's Charm instead of FTHOF"
+            );
         }
     }
 
@@ -1972,7 +2105,8 @@ function auto100ConsistencyComboAction() {
                 ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
                     (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                (((Game.hasAura("Reaper of Fields") ||
+                    Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
                     Game.hasBuff("Frenzy") &&
                     Game.hasBuff("Dragon Harvest").time / 30 >=
@@ -1980,7 +2114,8 @@ function auto100ConsistencyComboAction() {
                     Game.hasBuff("Frenzy").time / 30 >=
                         Math.ceil(13 * BuffTimeFactor()) - 1) ||
                     (!Game.hasAura("Reaper of Fields") &&
-                        (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                        (Game.hasBuff("Dragon Harvest") ||
+                            Game.hasBuff("Frenzy")) &&
                         (Game.hasBuff("Dragon Harvest").time / 30 >=
                             Math.ceil(13 * BuffTimeFactor()) - 1 ||
                             Game.hasBuff("Frenzy").time / 30 >=
@@ -2104,7 +2239,9 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 7: // Cast FTHOF 2 then buy
-            Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
+            Game.Objects["Wizard tower"].sell(
+                auto100ConsistencyComboAction.countWizard
+            );
             M.computeMagicM(); //Recalc max after selling
             if (M.magic >= 30) {
                 M.castSpell(M.spellsById[1]);
@@ -2135,7 +2272,9 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 10: // Cast FTHOF 4 then buy
-            Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
+            Game.Objects["Wizard tower"].sell(
+                auto100ConsistencyComboAction.countWizard
+            );
             M.computeMagicM(); //Recalc max after selling
             if (M.magic >= 30) {
                 M.castSpell(M.spellsById[1]);
@@ -2170,11 +2309,19 @@ function auto100ConsistencyComboAction() {
             if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
             Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
-            Game.Objects["Factory"].sell(auto100ConsistencyComboAction.countFactory);
+            Game.Objects["Factory"].sell(
+                auto100ConsistencyComboAction.countFactory
+            );
             Game.Objects["Bank"].sell(auto100ConsistencyComboAction.countBank);
-            Game.Objects["Temple"].sell(auto100ConsistencyComboAction.countTemple);
-            Game.Objects["Shipment"].sell(auto100ConsistencyComboAction.countShipment);
-            Game.Objects["Alchemy lab"].sell(auto100ConsistencyComboAction.countAlchemy);
+            Game.Objects["Temple"].sell(
+                auto100ConsistencyComboAction.countTemple
+            );
+            Game.Objects["Shipment"].sell(
+                auto100ConsistencyComboAction.countShipment
+            );
+            Game.Objects["Alchemy lab"].sell(
+                auto100ConsistencyComboAction.countAlchemy
+            );
             Game.Objects["Time machine"].sell(
                 auto100ConsistencyComboAction.countTimeMach
             );
@@ -2187,11 +2334,26 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 15: // buy back buildings
-            safeBuy(Game.Objects["Farm"], auto100ConsistencyComboAction.countFarm);
-            safeBuy(Game.Objects["Mine"], auto100ConsistencyComboAction.countMine);
-            safeBuy(Game.Objects["Factory"], auto100ConsistencyComboAction.countFactory);
-            safeBuy(Game.Objects["Bank"], auto100ConsistencyComboAction.countBank);
-            safeBuy(Game.Objects["Temple"], auto100ConsistencyComboAction.countTemple);
+            safeBuy(
+                Game.Objects["Farm"],
+                auto100ConsistencyComboAction.countFarm
+            );
+            safeBuy(
+                Game.Objects["Mine"],
+                auto100ConsistencyComboAction.countMine
+            );
+            safeBuy(
+                Game.Objects["Factory"],
+                auto100ConsistencyComboAction.countFactory
+            );
+            safeBuy(
+                Game.Objects["Bank"],
+                auto100ConsistencyComboAction.countBank
+            );
+            safeBuy(
+                Game.Objects["Temple"],
+                auto100ConsistencyComboAction.countTemple
+            );
             safeBuy(
                 Game.Objects["Shipment"],
                 auto100ConsistencyComboAction.countShipment
@@ -2210,7 +2372,10 @@ function auto100ConsistencyComboAction() {
 
         case 16: // Pop any other golden cookies as long as they're not wrath
             for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden" && Game.shimmer.wrath != 1) {
+                if (
+                    Game.shimmers[i].type == "golden" &&
+                    Game.shimmer.wrath != 1
+                ) {
                     Game.shimmers[i].pop();
                 }
             }
@@ -2224,12 +2389,18 @@ function auto100ConsistencyComboAction() {
                 hasClickBuff()
             ) {
                 if (Game.Objects["Farm"].amount >= 10) {
-                    Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
-                    Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
+                    Game.Objects["Farm"].sell(
+                        auto100ConsistencyComboAction.countFarm
+                    );
+                    Game.Objects["Mine"].sell(
+                        auto100ConsistencyComboAction.countMine
+                    );
                     Game.Objects["Factory"].sell(
                         auto100ConsistencyComboAction.countFactory
                     );
-                    Game.Objects["Bank"].sell(auto100ConsistencyComboAction.countBank);
+                    Game.Objects["Bank"].sell(
+                        auto100ConsistencyComboAction.countBank
+                    );
                     Game.Objects["Temple"].sell(
                         auto100ConsistencyComboAction.countTemple
                     );
@@ -2289,7 +2460,8 @@ function auto100ConsistencyComboAction() {
             }
             if (Game.hasBuff("Devastation") && hasClickBuff()) {
                 if (
-                    Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm
+                    Game.Objects["Farm"].amount <
+                    auto100ConsistencyComboAction.countFarm
                 ) {
                     safeBuy(
                         Game.Objects["Farm"],
@@ -2298,7 +2470,8 @@ function auto100ConsistencyComboAction() {
                     );
                 }
                 if (
-                    Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine
+                    Game.Objects["Mine"].amount <
+                    auto100ConsistencyComboAction.countMine
                 ) {
                     safeBuy(
                         Game.Objects["Mine"],
@@ -2317,7 +2490,8 @@ function auto100ConsistencyComboAction() {
                     );
                 }
                 if (
-                    Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank
+                    Game.Objects["Bank"].amount <
+                    auto100ConsistencyComboAction.countBank
                 ) {
                     safeBuy(
                         Game.Objects["Bank"],
@@ -2393,16 +2567,24 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 19: // Buy back
-            if (Game.Objects["Farm"].amount < auto100ConsistencyComboAction.countFarm) {
+            if (
+                Game.Objects["Farm"].amount <
+                auto100ConsistencyComboAction.countFarm
+            ) {
                 safeBuy(
                     Game.Objects["Farm"],
-                    auto100ConsistencyComboAction.countFarm - Game.Objects["Farm"].amount
+                    auto100ConsistencyComboAction.countFarm -
+                        Game.Objects["Farm"].amount
                 );
             }
-            if (Game.Objects["Mine"].amount < auto100ConsistencyComboAction.countMine) {
+            if (
+                Game.Objects["Mine"].amount <
+                auto100ConsistencyComboAction.countMine
+            ) {
                 safeBuy(
                     Game.Objects["Mine"],
-                    auto100ConsistencyComboAction.countMine - Game.Objects["Mine"].amount
+                    auto100ConsistencyComboAction.countMine -
+                        Game.Objects["Mine"].amount
                 );
             }
             if (
@@ -2415,14 +2597,19 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Factory"].amount
                 );
             }
-            if (Game.Objects["Bank"].amount < auto100ConsistencyComboAction.countBank) {
+            if (
+                Game.Objects["Bank"].amount <
+                auto100ConsistencyComboAction.countBank
+            ) {
                 safeBuy(
                     Game.Objects["Bank"],
-                    auto100ConsistencyComboAction.countBank - Game.Objects["Bank"].amount
+                    auto100ConsistencyComboAction.countBank -
+                        Game.Objects["Bank"].amount
                 );
             }
             if (
-                Game.Objects["Temple"].amount < auto100ConsistencyComboAction.countTemple
+                Game.Objects["Temple"].amount <
+                auto100ConsistencyComboAction.countTemple
             ) {
                 safeBuy(
                     Game.Objects["Temple"],
@@ -2509,7 +2696,8 @@ function autoSweetAction() {
     }
 
     if (typeof Game.ready !== "undefined" && Game.ready) {
-        if (typeof autoSweetAction.state == "undefined") autoSweetAction.state = 0;
+        if (typeof autoSweetAction.state == "undefined")
+            autoSweetAction.state = 0;
 
         if (!autoSweetAction.state) {
             if (
@@ -2561,7 +2749,10 @@ function autoSweetAction() {
                     if (nextSpellName(0) == "Sugar Lump") {
                         M.castSpell(M.spellsById[1]);
                         autoSweetAction.state = 0;
-                        logEvent("autoSweet", "Sugar Lump Get! Disabling Auto Sweet");
+                        logEvent(
+                            "autoSweet",
+                            "Sugar Lump Get! Disabling Auto Sweet"
+                        );
                         if (autoSweetAction.manaPrev != -1)
                             FrozenCookies.manaMax = autoSweetAction.manaPrev;
                         if (autoSweetAction.autobuyyes == 1) {
@@ -2578,11 +2769,19 @@ function autoSweetAction() {
 }
 
 function autoEasterAction() {
-    if (!FrozenCookies.autoEaster || Game.season == "easter" || haveAll("easter")) {
+    if (
+        !FrozenCookies.autoEaster ||
+        Game.season == "easter" ||
+        haveAll("easter")
+    ) {
         return;
     }
 
-    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter")) {
+    if (
+        Game.hasBuff("Cookie storm") &&
+        Game.season != "easter" &&
+        !haveAll("easter")
+    ) {
         Game.UpgradesById[209].buy();
     }
 }
@@ -2606,7 +2805,10 @@ function autoHalloweenAction() {
         !haveAll("halloween")
     ) {
         Game.UpgradesById[183].buy();
-        logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
+        logEvent(
+            "autoHalloween",
+            "Swapping to Halloween season to use wrinklers"
+        );
     }
 }
 
@@ -2619,7 +2821,8 @@ function autoBlacklistOff() {
             FrozenCookies.blacklist = Game.cookiesEarned >= 1000000000 ? 0 : 2;
             break;
         case 3:
-            FrozenCookies.blacklist = haveAll("halloween") && haveAll("easter") ? 0 : 3;
+            FrozenCookies.blacklist =
+                haveAll("halloween") && haveAll("easter") ? 0 : 3;
             break;
     }
 }
@@ -2638,7 +2841,10 @@ function autoBankAction() {
         l("bankOfficeUpgrade").click();
         safeBuy(Game.Objects["Cursor"], countBankCursor);
         FrozenCookies.autobuyCount += 1;
-        logEvent("AutoBank", "Upgrade bank level for " + countBankCursor + " cursors");
+        logEvent(
+            "AutoBank",
+            "Upgrade bank level for " + countBankCursor + " cursors"
+        );
         Game.recalculateGains = 1;
         Game.upgradesToRebuild = 1;
     }
@@ -2680,7 +2886,11 @@ function autoLoanBuy() {
 }
 
 function autoDragonAction() {
-    if (!Game.HasUnlocked("A crumbly egg") || Game.dragonLevel > 26 || hasClickBuff()) {
+    if (
+        !Game.HasUnlocked("A crumbly egg") ||
+        Game.dragonLevel > 26 ||
+        hasClickBuff()
+    ) {
         return;
     }
 
@@ -2695,8 +2905,12 @@ function autoDragonAction() {
     ) {
         Game.specialTab = "dragon";
         Game.UpgradeDragon();
-        if (Game.dragonLevel + 1 >= Game.dragonLevels.length) Game.ToggleSpecialMenu();
-        logEvent("autoDragon", "Upgraded the dragon to level " + Game.dragonLevel);
+        if (Game.dragonLevel + 1 >= Game.dragonLevels.length)
+            Game.ToggleSpecialMenu();
+        logEvent(
+            "autoDragon",
+            "Upgraded the dragon to level " + Game.dragonLevel
+        );
     }
 }
 
@@ -2712,10 +2926,16 @@ function petDragonAction() {
 
     //Calculate current pet drop and if we have it
     Math.seedrandom(Game.seed + "/dragonTime");
-    let drops = ["Dragon scale", "Dragon claw", "Dragon fang", "Dragon teddy bear"];
+    let drops = [
+        "Dragon scale",
+        "Dragon claw",
+        "Dragon fang",
+        "Dragon teddy bear",
+    ];
     drops = shuffle(drops);
     Math.seedrandom();
-    let currentDrop = drops[Math.floor((new Date().getMinutes() / 60) * drops.length)];
+    let currentDrop =
+        drops[Math.floor((new Date().getMinutes() / 60) * drops.length)];
 
     //Pet the dragon
     if (!Game.Has(currentDrop) && !Game.HasUnlocked(currentDrop)) {
@@ -2822,7 +3042,8 @@ function autoDragonOrbsAction() {
             "autoDragonOrbs",
             "Sold 1 You for " +
                 (Beautify(
-                    Game.Objects["You"].price * Game.Objects["You"].getSellMultiplier()
+                    Game.Objects["You"].price *
+                        Game.Objects["You"].getSellMultiplier()
                 ) +
                     " cookies and a wish")
         );
@@ -2832,7 +3053,8 @@ function autoDragonOrbsAction() {
 function autoSugarFrenzyAction() {
     if (
         FrozenCookies.autoSugarFrenzy == 1 &&
-        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) ||
+            Game.lumps > 100) &&
         cpsBonus() >= FrozenCookies.minASFMult &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
@@ -2849,11 +3071,13 @@ function autoSugarFrenzyAction() {
 
     if (
         FrozenCookies.autoSugarFrenzy == 2 &&
-        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) ||
+            Game.lumps > 100) &&
         cpsBonus() >= FrozenCookies.minASFMult &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
-        (autoFTHOFComboAction.state == 3 || auto100ConsistencyComboAction.state == 2) &&
+        (autoFTHOFComboAction.state == 3 ||
+            auto100ConsistencyComboAction.state == 2) &&
         ((!Game.hasBuff("Loan 1 (interest)") &&
             !Game.hasBuff("Loan 2 (interest)") &&
             !Game.hasBuff("Loan 3 (interest)")) ||
@@ -2894,7 +3118,10 @@ function autoWorship1Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship1) {
         FrozenCookies.autoworship1 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Diamond and Ruby slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Diamond and Ruby slots!"
+        );
         return;
     }
 
@@ -2915,12 +3142,18 @@ function autoWorship2Action() {
 
     if (T.slot[0] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Diamond and Jade slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Diamond and Jade slots!"
+        );
         return;
     }
     if (T.slot[1] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 0;
-        logEvent("autoWorship", "Can't worship the same god in Ruby and Jade slots!");
+        logEvent(
+            "autoWorship",
+            "Can't worship the same god in Ruby and Jade slots!"
+        );
         return;
     }
 
@@ -2982,727 +3215,333 @@ function buyOtherUpgrades() {
 function autoCycliusAction() {
     if (!T || T.swaps < 1 || !FrozenCookies.autoCyclius) return;
 
-    if (FrozenCookies.autoWorshipToggle == 1) {
+    // Only run once per minute to reduce CPU usage
+    // This massively reduces lag for free since times are set for minute intervals anyway
+    if (
+        typeof autoCycliusAction._lastMinute !== "undefined" &&
+        autoCycliusAction._lastMinute === new Date().getUTCMinutes()
+    ) {
+        return;
+    }
+    autoCycliusAction._lastMinute = new Date().getUTCMinutes();
+
+    // Disable auto-Pantheon if enabled
+    if (FrozenCookies.autoWorshipToggle === 1) {
         FrozenCookies.autoWorshipToggle = 0;
         logEvent("autoCyclius", "Turning off Auto-Pantheon");
     }
 
-    if (FrozenCookies.autoCyclius == 2 && Game.hasAura("Supreme Intellect")) {
+    // Switch to special two-slots mode if Supreme Intellect is detected
+    // Third slot is not used by Cyclius in this mode
+    // autoCyclius == 1 is two-slots mode
+    // autoCyclius == 2 is three-slots mode
+    if (FrozenCookies.autoCyclius === 2 && Game.hasAura("Supreme Intellect")) {
         FrozenCookies.autoCyclius = 1;
-        logevent(
+        logEvent(
             "autoCyclius",
             "Supreme Intellect detected! Swapping Cyclius to two slot mode"
         );
     }
 
-    //const Diamond1 = 0;
-    const Ruby1 = 1 * 60 + 12;
-    const Jade1 = 4 * 60;
-    const Diamond2 = 9 * 60 + 19;
-    const Jade2 = 10 * 60 + 20;
-    const Diamond3 = 12 * 60;
-    const Ruby2 = 13 * 60 + 12;
-    const Diamond4 = 18 * 60;
-    const CycNone1 = 19 * 60 + 30;
-    const Diamond5 = 21 * 60;
-    const CycNone2 = 22 * 60 + 30;
-    const SI6 = 6 * 60;
-    const SI730 = 7 * 60 + 30;
+    // Time constants (in minutes)
+    // See https://cookieclicker.fandom.com/wiki/Pantheon#Cyclius,_Spirit_of_Ages
+    // SI ignores Diamond slot since it doesn't matter
+    const times = {
+        Ruby1: 1 * 60 + 12, //1:12 UTC: Ruby
+        Jade1: 4 * 60, // 4:00 UTC: Jade
+        SIJade: 6 * 60, // 6:00 UTC: SI Ruby-as-Diamond
+        SIRuby: 7 * 60 + 30, // 7:30 UTC: SI Jade-as-Ruby
+        Diamond2: 9 * 60 + 19, // 9:19 UTC: Diamond
+        Jade2: 10 * 60 + 20, // 10:20 UTC: Jade
+        Diamond3: 12 * 60, // 12:00 UTC: Diamond
+        Ruby2: 13 * 60 + 12, // 13:12 UTC: Ruby
+        Diamond4: 18 * 60, // 18:00 UTC: Diamond
+        CycNone1: 19 * 60 + 30, // 19:30 UTC: No Cyclius
+        Diamond5: 21 * 60, // 21:00 UTC: Diamond
+        CycNone2: 22 * 60 + 30, // 22:30 UTC: No Cyclius
+    };
 
-    var now = new Date();
-    var currentTime = now.getUTCHours() * 60 + now.getUTCMinutes(); // Time in UTC
+    // Get current UTC time in minutes
+    const now = new Date();
+    const currentTime = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-    if (FrozenCookies.autoCyclius == 1 && !Game.hasAura("Supreme Intellect")) {
-        if (T.slot[1] != 3 && currentTime < Jade1) {
-            // 0:00 - 4:00
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
+    // Helper to swap gods if needed
+    function swapIfNeeded(godId, slot, label) {
+        if (
+            godId !== 11 &&
+            godId !== 3 &&
+            T.slot[slot] !== godId &&
+            T.swaps > 0
+        ) {
+            swapIn(godId, slot);
+            logEvent("autoCyclius", `set desired god to ${label}`);
         }
-        if (T.slot[2] != 3 && currentTime >= Jade1 && currentTime < Diamond3) {
-            // 4:00 - 12:00
-            swapIn(3, 2);
-            logEvent("autoCyclius", "Putting Cyclius in JADE");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-        }
-        if (T.slot[1] != 3 && currentTime >= Diamond3 && currentTime < Diamond4) {
-            // 12:00 - 18:00
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= Diamond4) {
-            // 18:00 - 0:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
+    }
+
+    // Helper to remove Cyclius if present
+    function removeCyclius() {
+        if (Game.hasGod("ages")) {
             Game.forceUnslotGod("ages");
             logEvent("autoCyclius", "Removing Cyclius");
         }
     }
 
-    if (FrozenCookies.autoCyclius == 2 && !Game.hasAura("Supreme Intellect")) {
-        if (T.slot[0] != 3 && currentTime < Ruby1) {
-            // 0:00 - 1:12
-            swapIn(3, 0);
-            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[1] != 3 && currentTime >= Ruby1 && currentTime < Jade1) {
-            // 1:12 - 4:00
+    // Main logic for two slots mode - never uses Diamond slot
+    if (FrozenCookies.autoCyclius === 1 && !Game.hasAura("Supreme Intellect")) {
+        if (T.slot[1] !== 3 && currentTime < times.Jade1) {
+            // 1:12 UTC to 4:00 UTC, RUBY
             swapIn(3, 1);
             logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[2] != 3 && currentTime >= Jade1 && currentTime < Diamond2) {
-            // 4:00 - 9:19
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            T.slot[2] !== 3 &&
+            currentTime >= times.Jade1 &&
+            currentTime < times.Diamond3
+        ) {
+            // 4:00 UTC to 12:00 UTC, JADE
             swapIn(3, 2);
             logEvent("autoCyclius", "Putting Cyclius in JADE");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-        }
-        if (T.slot[0] != 3 && currentTime >= Diamond2 && currentTime < Jade2) {
-            // 9:19 - 10:20
-            swapIn(3, 0);
-            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[2] != 3 && currentTime >= Jade2 && currentTime < Diamond3) {
-            // 10:20 - 12:00
-            swapIn(3, 2);
-            logEvent("autoCyclius", "Putting Cyclius in JADE");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-        }
-        if (T.slot[0] != 3 && currentTime >= Diamond3 && currentTime < Ruby2) {
-            // 12 - 13
-            swapIn(3, 0);
-            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[1] != 3 && currentTime >= Ruby2 && currentTime < Diamond4) {
-            // 13:00 - 18:00
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+        } else if (
+            // 12:00 UTC to 19:30 UTC, RUBY
+            T.slot[1] !== 3 &&
+            currentTime >= times.Diamond3 &&
+            currentTime < times.Diamond4
+        ) {
             swapIn(3, 1);
             logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[0] != 3 && currentTime >= Diamond4 && currentTime < CycNone1) {
-            // 18:00 - 19:30
-            swapIn(3, 0);
-            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= CycNone1 && currentTime < Diamond5) {
-            // 19:30 - 21:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removed Cyclius");
-        }
-        if (T.slot[0] != 3 && currentTime >= Diamond5 && currentTime < CycNone2) {
-            // 21:00 - 22:30
-            swapIn(3, 0);
-            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= CycNone2) {
-            // 22:30 - 0:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removing Cyclius");
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (currentTime >= times.Diamond4) {
+            // 19:30 UTC to 1:12 UTC, no Cyclius
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+            removeCyclius();
         }
     }
 
-    // Supreme Intellect turns RUBY to DIAMOND and JADE to RUBY
-    if (FrozenCookies.autoCyclius == 1 && Game.hasAura("Supreme Intellect")) {
-        if (T.slot[1] != 3 && currentTime < Ruby1) {
-            // 0:00 - 1:12
+    // Main logic for three slots mode)
+    if (FrozenCookies.autoCyclius === 2 && !Game.hasAura("Supreme Intellect")) {
+        if (T.slot[0] !== 3 && currentTime < times.Ruby1) {
+            // 1:12 UTC to 4:00 UTC, DIAMOND
+            swapIn(3, 0);
+            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship0, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 4:00 UTC to 9:19 UTC, RUBY
+            T.slot[1] !== 3 &&
+            currentTime >= times.Ruby1 &&
+            currentTime < times.Jade1
+        ) {
             swapIn(3, 1);
             logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[2] != 3 && currentTime >= Ruby1 && currentTime < SI6) {
-            // 1:12 - 6:00
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 9:19 UTC to 10:20 UTC, JADE
+            T.slot[2] !== 3 &&
+            currentTime >= times.Jade1 &&
+            currentTime < times.Diamond2
+        ) {
             swapIn(3, 2);
             logEvent("autoCyclius", "Putting Cyclius in JADE");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-        }
-        if (T.slot[1] != 3 && currentTime >= SI6 && currentTime < SI730) {
-            // 6:00 - 7:30
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= SI730 && currentTime < Diamond2) {
-            // 7:30 - 9:19
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removing Cyclius");
-        }
-        if (T.slot[1] != 3 && currentTime >= Diamond2 && currentTime < Jade2) {
-            // 9:19 - 10:20
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= Jade2 && currentTime < Diamond3) {
-            // 10:20 - 12:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removing Cyclius");
-        }
-        if (T.slot[1] != 3 && currentTime >= Diamond3 && currentTime < Ruby2) {
-            // 12 - 13
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (T.slot[2] != 3 && currentTime >= Ruby2 && currentTime < Diamond4) {
-            // 13:00 - 18:00
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+        } else if (
+            // 10:20 UTC to 12:00 UTC, DIAMOND
+            T.slot[0] !== 3 &&
+            currentTime >= times.Diamond2 &&
+            currentTime < times.Jade2
+        ) {
+            swapIn(3, 0);
+            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship0, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 12:00 UTC to 13:12 UTC, RUBY
+            T.slot[2] !== 3 &&
+            currentTime >= times.Jade2 &&
+            currentTime < times.Diamond3
+        ) {
             swapIn(3, 2);
             logEvent("autoCyclius", "Putting Cyclius in JADE");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[0] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship2 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-        }
-        if (T.slot[1] != 3 && currentTime >= Diamond4 && currentTime < CycNone1) {
-            // 18:00 - 19:30
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+        } else if (
+            //  13:12 UTC to 18:00 UTC, DIAMOND
+            T.slot[0] !== 3 &&
+            currentTime >= times.Diamond3 &&
+            currentTime < times.Ruby2
+        ) {
+            swapIn(3, 0);
+            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship0, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 13:12 UTC to 18:00 UTC, RUBY
+            T.slot[1] !== 3 &&
+            currentTime >= times.Ruby2 &&
+            currentTime < times.Diamond4
+        ) {
             swapIn(3, 1);
             logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
-            ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 18:00 UTC to 19:30 UTC, DIAMOND
+            T.slot[0] !== 3 &&
+            currentTime >= times.Diamond4 &&
+            currentTime < times.CycNone1
+        ) {
+            swapIn(3, 0);
+            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship0, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (
+            // 19:30 UTC to 21:00 UTC, no Cyclius
+            currentTime >= times.CycNone1 &&
+            currentTime < times.Diamond5
+        ) {
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+            removeCyclius();
+        } else if (
+            // 21:00 UTC to 22:30 UTC, DIAMOND
+            T.slot[0] !== 3 &&
+            currentTime >= times.Diamond5 &&
+            currentTime < times.CycNone2
+        ) {
+            swapIn(3, 0);
+            logEvent("autoCyclius", "Putting Cyclius in DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship0, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+        } else if (currentTime >= times.CycNone2) {
+            // // 22:30 UTC to 1:12 UTC, no Cyclius
+            swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+            swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+            swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+            removeCyclius();
         }
-        if (Game.hasGod("ages") && currentTime >= CycNone1 && currentTime < Diamond5) {
-            // 19:30 - 21:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
+    }
+
+    // Supreme Intellect: Ruby acts as Diamond, Jade as Ruby
+    if (Game.hasAura("Supreme Intellect")) {
+        if (FrozenCookies.autoCyclius === 1) {
+            if (T.slot[1] !== 3 && currentTime < times.Ruby1) {
+                // 1:12 UTC to 4:00 UTC, RUBY
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (
+                // 4:00 UTC to 6:00 UTC, JADE
+                T.slot[2] !== 3 &&
+                currentTime >= times.Ruby1 &&
+                currentTime < times.SIJade
             ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
+                swapIn(3, 2);
+                logEvent("autoCyclius", "Putting Cyclius in JADE");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+            } else if (
+                // 6:00 UTC to 7:30 UTC, RUBY
+                T.slot[1] !== 3 &&
+                currentTime >= times.SIJade &&
+                currentTime < times.SIRuby
             ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (
+                // 7:30 UTC to 12:00 UTC, no Cyclius
+                currentTime >= times.SI730 &&
+                currentTime < times.Diamond2
             ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removed Cyclius");
-        }
-        if (T.slot[1] != 3 && currentTime >= Diamond5 && currentTime < CycNone2) {
-            // 21:00 - 22:30
-            swapIn(3, 1);
-            logEvent("autoCyclius", "Putting Cyclius in RUBY");
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+                removeCyclius();
+            } else if (
+                // 12:00 UTC to 13:12 UTC, RUBY
+                T.slot[1] !== 3 &&
+                currentTime >= times.Diamond2 &&
+                currentTime < times.Jade2
             ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (
+                // 13:12 UTC to 18:00 UTC, no Cyclius
+                currentTime >= times.Jade2 &&
+                currentTime < times.Diamond3
             ) {
-                swapIn(FrozenCookies.autoWorship1, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
-            }
-        }
-        if (Game.hasGod("ages") && currentTime >= CycNone2) {
-            // 22:30 - 0:00
-            if (
-                FrozenCookies.autoWorship0 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship0 &&
-                T.swaps > 0
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+                removeCyclius();
+            } else if (
+                // 18:00 UTC to 19:30 UTC, RUBY
+                T.slot[1] !== 3 &&
+                currentTime >= times.Diamond3 &&
+                currentTime < times.Ruby2
             ) {
-                swapIn(FrozenCookies.autoWorship0, 0);
-                logEvent("autoCyclius", "set desired god to DIAMOND");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[1] != FrozenCookies.autoWorship1 &&
-                T.swaps > 0
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (
+                // 13:12 UTC to 18:00 UTC, JADE
+                T.slot[2] !== 3 &&
+                currentTime >= times.Ruby2 &&
+                currentTime < times.Diamond4
             ) {
-                swapIn(FrozenCookies.autoWorship1, 1);
-                logEvent("autoCyclius", "set desired god to RUBY");
-            }
-            if (
-                FrozenCookies.autoWorship1 != 11 &&
-                FrozenCookies.autoWorship0 != 3 &&
-                T.slot[2] != FrozenCookies.autoWorship2 &&
-                T.swaps > 0
+                swapIn(3, 2);
+                logEvent("autoCyclius", "Putting Cyclius in JADE");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+            } else if (
+                // 18:00 UTC to 19:30 UTC, RUBY
+                T.slot[1] !== 3 &&
+                currentTime >= times.Diamond4 &&
+                currentTime < times.CycNone1
             ) {
-                swapIn(FrozenCookies.autoWorship2, 2);
-                logEvent("autoCyclius", "set desired god to JADE");
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (
+                // 19:30 UTC to 21:00 UTC, no Cyclius
+                currentTime >= times.CycNone1 &&
+                currentTime < times.Diamond5
+            ) {
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+                removeCyclius();
+            } else if (
+                // 21:00 UTC to 22:30 UTC, RUBY
+                T.slot[1] !== 3 &&
+                currentTime >= times.Diamond5 &&
+                currentTime < times.CycNone2
+            ) {
+                swapIn(3, 1);
+                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
+            } else if (currentTime >= times.CycNone2) {
+                // // 22:30 UTC to 1:12 UTC, no Cyclius
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
+                swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
+                removeCyclius();
             }
-            Game.forceUnslotGod("ages");
-            logEvent("autoCyclius", "Removing Cyclius");
         }
     }
 }
@@ -3793,7 +3632,10 @@ function recommendedSettingsAction() {
         FrozenCookies.purchaseLog = 0;
         FrozenCookies.fpsModifier = 2;
         FrozenCookies.trackStats = 0;
-        logEvent("recommendedSettings", "Set all options to recommended values");
+        logEvent(
+            "recommendedSettings",
+            "Set all options to recommended values"
+        );
         FrozenCookies.recommendedSettings = 0;
         Game.toSave = true;
         Game.toReload = true;
@@ -3808,7 +3650,8 @@ function generateProbabilities(upgradeMult, minBase, maxMult) {
     var spanTime = maxTime - minTime;
     for (var i = 0; i < maxTime; i++) {
         var thisFrame =
-            remainingProbability * Math.pow(Math.max(0, (i - minTime) / spanTime), 5);
+            remainingProbability *
+            Math.pow(Math.max(0, (i - minTime) / spanTime), 5);
         remainingProbability -= thisFrame;
         cumProb.push(1 - remainingProbability);
     }
@@ -3827,7 +3670,9 @@ var cumulativeProbabilityList = {
 };
 
 function getProbabilityList(listType) {
-    return cumulativeProbabilityList[listType][getProbabilityModifiers(listType)];
+    return cumulativeProbabilityList[listType][
+        getProbabilityModifiers(listType)
+    ];
 }
 
 function getProbabilityModifiers(listType) {
@@ -3879,7 +3724,8 @@ function clickBuffBonus() {
 function cpsBonus() {
     var ret = 1;
     for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") ret *= Game.buffs[i].multCpS;
+        if (typeof Game.buffs[i].multCpS != "undefined")
+            ret *= Game.buffs[i].multCpS;
     }
     return ret;
 }
@@ -3891,7 +3737,8 @@ function hasClickBuff() {
 function baseCps() {
     var buffMod = 1;
     for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") buffMod *= Game.buffs[i].multCpS;
+        if (typeof Game.buffs[i].multCpS != "undefined")
+            buffMod *= Game.buffs[i].multCpS;
     }
     if (buffMod === 0) return FrozenCookies.lastBaseCPS;
     var baseCPS = Game.cookiesPs / buffMod;
@@ -3914,7 +3761,9 @@ function effectiveCps(delay, wrathValue, wrinklerCount) {
     return (
         baseCps() * wrinkler +
         gcPs(cookieValue(delay, wrathValue, wrinklerCount)) +
-        baseClickingCps(FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick) +
+        baseClickingCps(
+            FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick
+        ) +
         reindeerCps(wrathValue)
     );
 }
@@ -3940,7 +3789,9 @@ function cookieValue(bankAmount, wrathValue, wrinklerCount) {
         FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed
     );
     var frenzyCps = FrozenCookies.autoFrenzy
-        ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)
+        ? baseClickingCps(
+              FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed
+          )
         : clickCps;
     var luckyMod = Game.Has("Get lucky") ? 2 : 1;
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
@@ -3998,13 +3849,24 @@ function cookieValue(bankAmount, wrathValue, wrinklerCount) {
         cookieInfo.clotLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 0.5) + 13);
     // Click
-    value += cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
+    value +=
+        cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
     // Frenzy + Click
     value +=
-        cookieInfo.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
+        cookieInfo.frenzyClick.odds[wrathValue] *
+        frenzyCps *
+        luckyMod *
+        13 *
+        777 *
+        7;
     // Clot + Click
     value +=
-        cookieInfo.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
+        cookieInfo.clotClick.odds[wrathValue] *
+        frenzyCps *
+        luckyMod *
+        13 *
+        777 *
+        0.5;
     // Blah
     value += 0;
     return value;
@@ -4016,7 +3878,9 @@ function cookieStats(bankAmount, wrathValue, wrinklerCount) {
         FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed
     );
     var frenzyCps = FrozenCookies.autoFrenzy
-        ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)
+        ? baseClickingCps(
+              FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed
+          )
         : clickCps;
     var luckyMod = Game.Has("Get lucky") ? 2 : 1;
     var clickFrenzyMod = clickBuffBonus();
@@ -4079,13 +3943,24 @@ function cookieStats(bankAmount, wrathValue, wrinklerCount) {
         cookieInfo.clotLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 0.5) + 13);
     // Click
-    result.click = cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
+    result.click =
+        cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
     // Frenzy + Click
     result.frenzyClick =
-        cookieInfo.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
+        cookieInfo.frenzyClick.odds[wrathValue] *
+        frenzyCps *
+        luckyMod *
+        13 *
+        777 *
+        7;
     // Clot + Click
     result.clotClick =
-        cookieInfo.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
+        cookieInfo.clotClick.odds[wrathValue] *
+        frenzyCps *
+        luckyMod *
+        13 *
+        777 *
+        0.5;
     // Blah
     result.blah = 0;
     return result;
@@ -4102,11 +3977,14 @@ function reindeerValue(wrathValue) {
         var outputMod = Game.Has("Ho ho ho-flavored frosting") ? 2 : 1;
 
         value +=
-            Math.max(25, baseCps() * outputMod * 60 * 7) * frenzyProbability(wrathValue);
+            Math.max(25, baseCps() * outputMod * 60 * 7) *
+            frenzyProbability(wrathValue);
         value +=
-            Math.max(25, baseCps() * outputMod * 60 * 0.5) * clotProbability(wrathValue);
+            Math.max(25, baseCps() * outputMod * 60 * 0.5) *
+            clotProbability(wrathValue);
         value +=
-            Math.max(25, baseCps() * outputMod * 60 * 666) * bloodProbability(wrathValue);
+            Math.max(25, baseCps() * outputMod * 60 * 666) *
+            bloodProbability(wrathValue);
         value += Math.max(25, baseCps() * outputMod * 60) * remaining;
     }
     return value;
@@ -4114,7 +3992,10 @@ function reindeerValue(wrathValue) {
 
 function reindeerCps(wrathValue) {
     var averageTime = probabilitySpan("reindeer", 0, 0.5) / Game.fps;
-    return (reindeerValue(wrathValue) / averageTime) * FrozenCookies.simulatedGCPercent;
+    return (
+        (reindeerValue(wrathValue) / averageTime) *
+        FrozenCookies.simulatedGCPercent
+    );
 }
 
 function calculateChainValue(bankAmount, cps, digit) {
@@ -4126,7 +4007,8 @@ function calculateChainValue(bankAmount, cps, digit) {
 function chocolateValue(bankAmount, earthShatter) {
     var value = 0;
     if (Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg")) {
-        bankAmount = bankAmount != null && bankAmount !== 0 ? bankAmount : Game.cookies;
+        bankAmount =
+            bankAmount != null && bankAmount !== 0 ? bankAmount : Game.cookies;
         var sellRatio = 0.25;
         var highestBuilding = 0;
         if (earthShatter == null) {
@@ -4135,7 +4017,8 @@ function chocolateValue(bankAmount, earthShatter) {
             sellRatio = 0.5;
             if (!Game.hasAura("Earth Shatterer")) {
                 for (var i in Game.Objects) {
-                    if (Game.Objects[i].amount > 0) highestBuilding = Game.Objects[i];
+                    if (Game.Objects[i].amount > 0)
+                        highestBuilding = Game.Objects[i];
                 }
             }
         }
@@ -4149,7 +4032,8 @@ function chocolateValue(bankAmount, earthShatter) {
                         cumulativeBuildingCost(
                             b.basePrice,
                             1,
-                            (b == highestBuilding ? b.amount : b.amount + 1) - b.free
+                            (b == highestBuilding ? b.amount : b.amount + 1) -
+                                b.free
                         ) *
                             sellRatio
                     );
@@ -4165,7 +4049,11 @@ function wrinklerValue() {
 }
 
 function buildingRemaining(building, amount) {
-    var cost = cumulativeBuildingCost(building.basePrice, building.amount, amount);
+    var cost = cumulativeBuildingCost(
+        building.basePrice,
+        building.amount,
+        amount
+    );
     var availableCookies =
         Game.cookies +
         wrinklerValue() +
@@ -4178,12 +4066,17 @@ function buildingRemaining(building, amount) {
             );
         }, 0);
     availableCookies *=
-        Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg") ? 1.05 : 1;
+        Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg")
+            ? 1.05
+            : 1;
     return Math.max(0, cost - availableCookies);
 }
 
 function earnedRemaining(total) {
-    return Math.max(0, total - (Game.cookiesEarned + wrinklerValue() + chocolateValue()));
+    return Math.max(
+        0,
+        total - (Game.cookiesEarned + wrinklerValue() + chocolateValue())
+    );
 }
 
 function estimatedTimeRemaining(cookies) {
@@ -4198,7 +4091,9 @@ function canCastSE() {
 function edificeBank() {
     if (!canCastSE) return 0;
     var cmCost = Game.Objects["You"].price;
-    return Game.hasBuff("everything must go") ? (cmCost * (100 / 95)) / 2 : cmCost / 2;
+    return Game.hasBuff("everything must go")
+        ? (cmCost * (100 / 95)) / 2
+        : cmCost / 2;
 }
 
 function luckyBank() {
@@ -4222,7 +4117,9 @@ function chainBank() {
             (digit / 9) *
                 Math.pow(
                     10,
-                    Math.floor(Math.log((194400 * baseCps()) / digit) / Math.LN10)
+                    Math.floor(
+                        Math.log((194400 * baseCps()) / digit) / Math.LN10
+                    )
                 )
         )
     );
@@ -4238,10 +4135,16 @@ function harvestBank() {
     FrozenCookies.harvestBuilding = 1;
     FrozenCookies.harvestPlant = "";
 
-    if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3)
+    if (
+        FrozenCookies.setHarvestBankType == 1 ||
+        FrozenCookies.setHarvestBankType == 3
+    )
         FrozenCookies.harvestFrenzy = 7;
 
-    if (FrozenCookies.setHarvestBankType == 2 || FrozenCookies.setHarvestBankType == 3) {
+    if (
+        FrozenCookies.setHarvestBankType == 2 ||
+        FrozenCookies.setHarvestBankType == 3
+    ) {
         var harvestBuildingArray = [
             Game.Objects["Cursor"].amount,
             Game.Objects["Grandma"].amount,
@@ -4356,7 +4259,9 @@ function cookieEfficiency(startingPoint, bankAmount) {
 function bestBank(minEfficiency) {
     var results = {};
     var edifice =
-        FrozenCookies.autoCasting == 5 || FrozenCookies.holdSEBank ? edificeBank() : 0;
+        FrozenCookies.autoCasting == 5 || FrozenCookies.holdSEBank
+            ? edificeBank()
+            : 0;
     var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;
@@ -4408,7 +4313,9 @@ function weightedCookieValue(useCurrent) {
     if (useCurrent && Game.cookies < maxLuckyBank()) {
         if (lucky_mod) {
             base_golden -=
-                (900 * cps - Math.min(900 * cps, Game.cookies * 0.15)) * 0.49 * 0.5 +
+                (900 * cps - Math.min(900 * cps, Game.cookies * 0.15)) *
+                    0.49 *
+                    0.5 +
                 (maxLuckyValue() - Game.cookies * 0.15) * 0.49 * 0.5;
         } else {
             base_golden -= (maxLuckyValue() - Game.cookies * 0.15) * 0.49;
@@ -4416,7 +4323,8 @@ function weightedCookieValue(useCurrent) {
         }
     }
     return (
-        (Game.elderWrath / 3.0) * base_wrath + ((3 - Game.elderWrath) / 3.0) * base_golden
+        (Game.elderWrath / 3.0) * base_wrath +
+        ((3 - Game.elderWrath) / 3.0) * base_golden
     );
 }
 
@@ -4469,11 +4377,15 @@ function haveAll(holiday) {
 function checkPrices(currentUpgrade) {
     var value = 0;
     if (FrozenCookies.caches.recommendationList.length > 0) {
-        var nextRec = FrozenCookies.caches.recommendationList.filter(function (i) {
+        var nextRec = FrozenCookies.caches.recommendationList.filter(function (
+            i
+        ) {
             return i.id != currentUpgrade.id;
         })[0];
         var nextPrereq =
-            nextRec.type == "upgrade" ? unfinishedUpgradePrereqs(nextRec.purchase) : null;
+            nextRec.type == "upgrade"
+                ? unfinishedUpgradePrereqs(nextRec.purchase)
+                : null;
         nextRec =
             nextPrereq == null ||
             nextPrereq.filter(function (u) {
@@ -4488,7 +4400,8 @@ function checkPrices(currentUpgrade) {
         value =
             nextRec.cost == null
                 ? 0
-                : nextRec.cost / totalDiscount(nextRec.type == "building") - nextRec.cost;
+                : nextRec.cost / totalDiscount(nextRec.type == "building") -
+                  nextRec.cost;
     }
     return value;
 }
@@ -4515,11 +4428,12 @@ function recommendationList(recalculate) {
                     return a.efficiency != b.efficiency
                         ? a.efficiency - b.efficiency
                         : a.delta_cps != b.delta_cps
-                          ? b.delta_cps - a.delta_cps
-                          : a.cost - b.cost;
+                        ? b.delta_cps - a.delta_cps
+                        : a.cost - b.cost;
                 })
         );
-        if (FrozenCookies.pastemode) FrozenCookies.caches.recommendationList.reverse();
+        if (FrozenCookies.pastemode)
+            FrozenCookies.caches.recommendationList.reverse();
         FrozenCookies.showAchievements = true;
     }
     return FrozenCookies.caches.recommendationList;
@@ -4534,7 +4448,9 @@ function addScores(recommendations) {
     });
     if (filteredList.length > 0) {
         var minValue = Math.log(recommendations[0].efficiency);
-        var maxValue = Math.log(recommendations[filteredList.length - 1].efficiency);
+        var maxValue = Math.log(
+            recommendations[filteredList.length - 1].efficiency
+        );
         var spread = maxValue - minValue;
         recommendations.forEach(function (purchaseRec, index) {
             if (
@@ -4543,7 +4459,8 @@ function addScores(recommendations) {
             ) {
                 var purchaseValue = Math.log(purchaseRec.efficiency);
                 var purchaseSpread = purchaseValue - minValue;
-                recommendations[index].efficiencyScore = 1 - purchaseSpread / spread;
+                recommendations[index].efficiencyScore =
+                    1 - purchaseSpread / spread;
             } else {
                 recommendations[index].efficiencyScore = 0;
             }
@@ -4568,7 +4485,9 @@ function nextPurchase(recalculate) {
                 target.type == "upgrade" &&
                 unfinishedUpgradePrereqs(Game.UpgradesById[target.id])
             ) {
-                var prereqList = unfinishedUpgradePrereqs(Game.UpgradesById[target.id]);
+                var prereqList = unfinishedUpgradePrereqs(
+                    Game.UpgradesById[target.id]
+                );
                 purchase = recList.filter(function (a) {
                     return prereqList.some(function (b) {
                         return b.id == a.id && b.type == a.type;
@@ -4607,10 +4526,18 @@ function buildingStats(recalculate) {
                 blacklist[FrozenCookies.blacklist].buildings
             );
             //If autocasting Spontaneous Edifice, don't buy any You after 399
-            if (M && FrozenCookies.autoCasting == 5 && Game.Objects["You"].amount >= 399)
+            if (
+                M &&
+                FrozenCookies.autoCasting == 5 &&
+                Game.Objects["You"].amount >= 399
+            )
                 buildingBlacklist.push(19);
             //Stop buying wizard towers at max Mana if enabled
-            if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
+            if (
+                M &&
+                FrozenCookies.towerLimit &&
+                M.magicM >= FrozenCookies.manaMax
+            )
                 buildingBlacklist.push(7);
             //Stop buying Mines if at set limit
             if (
@@ -4631,40 +4558,41 @@ function buildingStats(recalculate) {
                 Game.Objects["You"].amount >= FrozenCookies.orbMax
             )
                 buildingBlacklist.push(19);
-            FrozenCookies.caches.buildings = Game.ObjectsById.map(
-                function (current, index) {
-                    if (_.contains(buildingBlacklist, current.id)) return null;
-                    var currentBank = bestBank(0).cost;
-                    var baseCpsOrig = baseCps();
-                    var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                    var existingAchievements = Object.values(Game.AchievementsById).map(
-                        function (item, i) {
-                            return item.won;
-                        }
-                    );
-                    buildingToggle(current);
-                    var baseCpsNew = baseCps();
-                    var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                    buildingToggle(current, existingAchievements);
-                    var deltaCps = cpsNew - cpsOrig;
-                    var baseDeltaCps = baseCpsNew - baseCpsOrig;
-                    var efficiency = purchaseEfficiency(
-                        current.getPrice(),
-                        deltaCps,
-                        baseDeltaCps,
-                        cpsOrig
-                    );
-                    return {
-                        id: current.id,
-                        efficiency: efficiency,
-                        base_delta_cps: baseDeltaCps,
-                        delta_cps: deltaCps,
-                        cost: current.getPrice(),
-                        purchase: current,
-                        type: "building",
-                    };
-                }
-            ).filter(function (a) {
+            FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
+                current,
+                index
+            ) {
+                if (_.contains(buildingBlacklist, current.id)) return null;
+                var currentBank = bestBank(0).cost;
+                var baseCpsOrig = baseCps();
+                var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                var existingAchievements = Object.values(
+                    Game.AchievementsById
+                ).map(function (item, i) {
+                    return item.won;
+                });
+                buildingToggle(current);
+                var baseCpsNew = baseCps();
+                var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                buildingToggle(current, existingAchievements);
+                var deltaCps = cpsNew - cpsOrig;
+                var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                var efficiency = purchaseEfficiency(
+                    current.getPrice(),
+                    deltaCps,
+                    baseDeltaCps,
+                    cpsOrig
+                );
+                return {
+                    id: current.id,
+                    efficiency: efficiency,
+                    base_delta_cps: baseDeltaCps,
+                    delta_cps: deltaCps,
+                    cost: current.getPrice(),
+                    purchase: current,
+                    type: "building",
+                };
+            }).filter(function (a) {
                 return a;
             });
         }
@@ -4681,11 +4609,14 @@ function upgradeStats(recalculate) {
             FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
                 .map(function (current) {
                     if (!current.bought) {
-                        if (isUnavailable(current, upgradeBlacklist)) return null;
+                        if (isUnavailable(current, upgradeBlacklist))
+                            return null;
                         var currentBank = bestBank(0).cost;
                         var cost = upgradePrereqCost(current);
                         var baseCpsOrig = baseCps();
-                        var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
+                        var cpsOrig = effectiveCps(
+                            Math.min(Game.cookies, currentBank)
+                        );
                         var existingAchievements = Object.values(
                             Game.AchievementsById
                         ).map(function (item) {
@@ -4700,23 +4631,28 @@ function upgradeStats(recalculate) {
                             discounts == totalDiscount() + totalDiscount(true)
                                 ? 0
                                 : checkPrices(current);
-                        upgradeToggle(current, existingAchievements, reverseFunctions);
+                        upgradeToggle(
+                            current,
+                            existingAchievements,
+                            reverseFunctions
+                        );
                         Game.elderWrath = existingWrath;
                         var deltaCps = cpsNew - cpsOrig;
                         var baseDeltaCps = baseCpsNew - baseCpsOrig;
                         var efficiency =
                             current.season &&
                             FrozenCookies.defaultSeasonToggle == 1 &&
-                            current.season == seasons[FrozenCookies.defaultSeason]
+                            current.season ==
+                                seasons[FrozenCookies.defaultSeason]
                                 ? cost / baseCpsOrig
                                 : priceReduction > cost
-                                  ? 1
-                                  : purchaseEfficiency(
-                                        cost,
-                                        deltaCps,
-                                        baseDeltaCps,
-                                        cpsOrig
-                                    );
+                                ? 1
+                                : purchaseEfficiency(
+                                      cost,
+                                      deltaCps,
+                                      baseDeltaCps,
+                                      cpsOrig
+                                  );
                         return {
                             id: current.id,
                             efficiency: efficiency,
@@ -4745,7 +4681,8 @@ function isUnavailable(upgrade, upgradeBlacklist) {
         return true;
 
     // Is it vaulted?
-    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id)) return true;
+    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id))
+        return true;
 
     // Don't pledge if Easter or Halloween not complete
     if (
@@ -4818,7 +4755,8 @@ function isUnavailable(upgrade, upgradeBlacklist) {
 }
 
 function santaStats() {
-    return Game.Has("A festive hat") && Game.santaLevel + 1 < Game.santaLevels.length
+    return Game.Has("A festive hat") &&
+        Game.santaLevel + 1 < Game.santaLevels.length
         ? {
               id: 0,
               efficiency: Infinity,
@@ -4830,7 +4768,9 @@ function santaStats() {
                   id: 0,
                   name:
                       "Santa Stage Upgrade (" +
-                      Game.santaLevels[(Game.santaLevel + 1) % Game.santaLevels.length] +
+                      Game.santaLevels[
+                          (Game.santaLevel + 1) % Game.santaLevels.length
+                      ] +
                       ")",
                   buy: buySanta,
                   getCost: function () {
@@ -4918,13 +4858,18 @@ function upgradePrereqCost(upgrade, full) {
             if (item && full) {
                 sum += cumulativeBuildingCost(building.basePrice, 0, item);
             } else if (item && building.amount < item) {
-                sum += cumulativeBuildingCost(building.basePrice, building.amount, item);
+                sum += cumulativeBuildingCost(
+                    building.basePrice,
+                    building.amount,
+                    item
+                );
             }
             return sum;
         }, 0);
         cost += prereqs.upgrades.reduce(function (sum, item) {
             var reqUpgrade = Game.UpgradesById[item];
-            if (!upgrade.bought || full) sum += upgradePrereqCost(reqUpgrade, full);
+            if (!upgrade.bought || full)
+                sum += upgradePrereqCost(reqUpgrade, full);
             return sum;
         }, 0);
         cost += cumulativeSantaCost(prereqs.santa);
@@ -4948,7 +4893,8 @@ function unfinishedUpgradePrereqs(upgrade) {
         prereqs.upgrades.forEach(function (a) {
             if (!Game.UpgradesById[a].bought) {
                 var recursiveUpgrade = Game.UpgradesById[a];
-                var recursivePrereqs = unfinishedUpgradePrereqs(recursiveUpgrade);
+                var recursivePrereqs =
+                    unfinishedUpgradePrereqs(recursiveUpgrade);
                 if (recursiveUpgrade.unlocked) {
                     needed.push({
                         type: "upgrade",
@@ -5069,7 +5015,8 @@ function buildingToggle(building, achievements) {
         achievements.forEach(function (won, index) {
             var achievement = Game.AchievementsById[index];
             achievement.won = won;
-            if (won && achievement.pool != "shadow") Game.AchievementsOwned += 1;
+            if (won && achievement.pool != "shadow")
+                Game.AchievementsOwned += 1;
         });
     }
     Game.recalculateGains = 1;
@@ -5138,7 +5085,8 @@ function buyFunctionToggle(upgrade) {
                 achievementMatch &&
                 Game.Achievements[achievementMatch[1]].won == 0
             ) {
-                reversed = "Game.Achievements['" + achievementMatch[1] + "'].won=0";
+                reversed =
+                    "Game.Achievements['" + achievementMatch[1] + "'].won=0";
             } else if (a.indexOf("=") > -1) {
                 var expression = a.split("=");
                 var expressionResult = eval(expression[0]);
@@ -5167,7 +5115,8 @@ function buyFunctionToggle(upgrade) {
 function buySanta() {
     Game.specialTab = "santa";
     Game.UpgradeSanta();
-    if (Game.santaLevel + 1 >= Game.santaLevels.length) Game.ToggleSpecialMenu();
+    if (Game.santaLevel + 1 >= Game.santaLevels.length)
+        Game.ToggleSpecialMenu();
 }
 
 function statSpeed() {
@@ -5299,7 +5248,11 @@ function viewStatGraphs() {
 }
 
 function updateCaches() {
-    var recommendation, currentBank, targetBank, currentCookieCPS, currentUpgradeCount;
+    var recommendation,
+        currentBank,
+        targetBank,
+        currentCookieCPS,
+        currentUpgradeCount;
     var recalcCount = 0;
     do {
         recommendation = nextPurchase(FrozenCookies.recalculateCaches);
@@ -5372,7 +5325,8 @@ function fcWin(what) {
                     if (App && Game.Achievements[what].vanilla)
                         App.gotAchiev(Game.Achievements[what].id);
                 }
-                if (Game.Achievements[what].pool != "shadow") Game.AchievementsOwned++;
+                if (Game.Achievements[what].pool != "shadow")
+                    Game.AchievementsOwned++;
                 Game.recalculateGains = 1;
             }
         }
@@ -5402,7 +5356,10 @@ function inRect(x, y, rect) {
     var x2 = Math.cos(newA) * h1;
     var y2 = Math.sin(newA) * h1;
     return (
-        x2 > -0.5 * rect.w && x2 < 0.5 * rect.w && y2 > -0.5 * rect.h && y2 < 0.5 * rect.h
+        x2 > -0.5 * rect.w &&
+        x2 < 0.5 * rect.w &&
+        y2 > -0.5 * rect.h &&
+        y2 < 0.5 * rect.h
     );
 }
 
@@ -5421,8 +5378,8 @@ function smartTrackingStats(delay) {
             FrozenCookies.delayPurchaseCount == 0
                 ? 1 / 1.5
                 : delay > FrozenCookies.minDelay
-                  ? 2
-                  : 1;
+                ? 2
+                : 1;
         FrozenCookies.smartTrackingBot = setTimeout(function () {
             smartTrackingStats(delay);
         }, delay);
@@ -5448,7 +5405,8 @@ function liveWrinklers() {
 
 function wrinklerMod(num) {
     return (
-        1.1 * num * num * 0.05 * (Game.Has("Wrinklerspawn") ? 1.05 : 1) + (1 - 0.05 * num)
+        1.1 * num * num * 0.05 * (Game.Has("Wrinklerspawn") ? 1.05 : 1) +
+        (1 - 0.05 * num)
     );
 }
 
@@ -5483,10 +5441,15 @@ function shouldPopWrinklers() {
                 })
                 .reduce(
                     function (current, w) {
-                        var futureWrinklers = living.length - (current.ids.length + 1);
+                        var futureWrinklers =
+                            living.length - (current.ids.length + 1);
                         if (
                             current.total < nextRecNeeded &&
-                            effectiveCps(delay, Game.elderWrath, futureWrinklers) +
+                            effectiveCps(
+                                delay,
+                                Game.elderWrath,
+                                futureWrinklers
+                            ) +
                                 nextRecCps >
                                 effectiveCps()
                         ) {
@@ -5500,7 +5463,10 @@ function shouldPopWrinklers() {
                         ids: [],
                     }
                 );
-            toPop = wrinklersNeeded.total > nextRecNeeded ? wrinklersNeeded.ids : toPop;
+            toPop =
+                wrinklersNeeded.total > nextRecNeeded
+                    ? wrinklersNeeded.ids
+                    : toPop;
         }
     }
     return toPop;
@@ -5580,7 +5546,10 @@ function autoGodzamokAction() {
             if (FrozenCookies.mineLimit) {
                 safeBuy(Game.Objects["Mine"], FrozenCookies.mineMax);
                 FrozenCookies.autobuyCount += 1;
-                logEvent("AutoGodzamok", "Bought " + FrozenCookies.mineMax + " mines");
+                logEvent(
+                    "AutoGodzamok",
+                    "Bought " + FrozenCookies.mineMax + " mines"
+                );
             } else {
                 safeBuy(Game.Objects["Mine"], countMine);
                 FrozenCookies.autobuyCount += 1;
@@ -5597,7 +5566,10 @@ function autoGodzamokAction() {
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);
                 FrozenCookies.autobuyCount += 1;
-                logEvent("AutoGodzamok", "Bought " + countFactory + " factories");
+                logEvent(
+                    "AutoGodzamok",
+                    "Bought " + countFactory + " factories"
+                );
             }
         }
     }
@@ -5630,7 +5602,9 @@ function autoCookie() {
             Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
         );
 
-        if (Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHCAmount)) {
+        if (
+            Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHCAmount)
+        ) {
             var changeAmount = currentHCAmount - FrozenCookies.lastHCAmount;
             FrozenCookies.lastHCAmount = currentHCAmount;
             FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
@@ -5720,7 +5694,8 @@ function autoCookie() {
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
                 recommendation.purchase.name == "Elder Pledge") &&
-            (FrozenCookies.pastemode || isFinite(nextChainedPurchase().efficiency))
+            (FrozenCookies.pastemode ||
+                isFinite(nextChainedPurchase().efficiency))
         ) {
             //    if (FrozenCookies.autoBuy && (Game.cookies >= delay + recommendation.cost)) {
             //console.log('something should get bought');
@@ -5730,14 +5705,17 @@ function autoCookie() {
             disabledPopups = false;
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
             if (
-                Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)) -
+                Math.floor(
+                    Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)
+                ) -
                     Math.floor(Game.HowMuchPrestige(Game.cookiesReset)) <
                     1 &&
                 Game.Has("Inspired checklist") &&
                 FrozenCookies.autoBuyAll &&
                 nextPurchase().type == "upgrade" &&
                 Game.cookies >= nextPurchase().cost &&
-                nextPurchase().purchase.name != "Bingo center/Research facility" &&
+                nextPurchase().purchase.name !=
+                    "Bingo center/Research facility" &&
                 nextPurchase().purchase.name != "Specialized chocolate chips" &&
                 nextPurchase().purchase.name != "Designer cocoa beans" &&
                 nextPurchase().purchase.name != "Ritual rolling pins" &&
@@ -5762,7 +5740,8 @@ function autoCookie() {
                         M.magic >= FrozenCookies.manaMax - 10) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 100) ||
+                        Game.Objects["Mine"].amount >=
+                            FrozenCookies.mineMax - 100) ||
                     (FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >=
@@ -5770,7 +5749,8 @@ function autoCookie() {
                     (FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.orbLimit &&
                         recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 100))
+                        Game.Objects["You"].amount >=
+                            FrozenCookies.orbMax - 100))
             ) {
                 document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
@@ -5787,7 +5767,8 @@ function autoCookie() {
                         M.magic >= FrozenCookies.manaMax - 2) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 10) ||
+                        Game.Objects["Mine"].amount >=
+                            FrozenCookies.mineMax - 10) ||
                     (FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >=
@@ -5795,7 +5776,8 @@ function autoCookie() {
                     (FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.orbLimit &&
                         recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 10))
+                        Game.Objects["You"].amount >=
+                            FrozenCookies.orbMax - 10))
             ) {
                 document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);
@@ -5806,7 +5788,10 @@ function autoCookie() {
                 recommendation.purchase.buy();
             }
             FrozenCookies.autobuyCount += 1;
-            if (FrozenCookies.trackStats == 5 && recommendation.type == "upgrade") {
+            if (
+                FrozenCookies.trackStats == 5 &&
+                recommendation.type == "upgrade"
+            ) {
                 saveStats();
             } else if (FrozenCookies.trackStats == 6) {
                 FrozenCookies.delayPurchaseCount += 1;
@@ -5840,7 +5825,8 @@ function autoCookie() {
             !Game.AscendTimer &&
             Game.prestige > 0 &&
             FrozenCookies.HCAscendAmount > 0 &&
-            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+            (FrozenCookies.comboAscend == 1 ||
+                cpsBonus() < FrozenCookies.minCpSMult)
         ) {
             var resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +
@@ -5868,7 +5854,8 @@ function autoCookie() {
             !Game.AscendTimer &&
             Game.prestige > 0 &&
             FrozenCookies.HCAscendAmount > 0 &&
-            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
+            (FrozenCookies.comboAscend == 1 ||
+                cpsBonus() < FrozenCookies.minCpSMult)
         ) {
             var resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +
@@ -5876,7 +5863,10 @@ function autoCookie() {
                     wrinklerValue() +
                     chocolateValue()
             );
-            if (resetPrestige >= Game.prestige * 2 && FrozenCookies.HCAscendAmount > 0) {
+            if (
+                resetPrestige >= Game.prestige * 2 &&
+                FrozenCookies.HCAscendAmount > 0
+            ) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
                 setTimeout(function () {
@@ -5943,7 +5933,9 @@ function autoCookie() {
                 if (FrozenCookies.last_gc_state != 1) {
                     logEvent(
                         "GC",
-                        "Previous Frenzy x" + FrozenCookies.last_gc_state + "interrupted."
+                        "Previous Frenzy x" +
+                            FrozenCookies.last_gc_state +
+                            "interrupted."
                     );
                 } else if (FrozenCookies.hc_gain) {
                     logEvent(
@@ -5981,7 +5973,10 @@ function autoCookie() {
             );
         }
     } else if (!FrozenCookies.processing && FrozenCookies.frequency) {
-        FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
+        FrozenCookies.cookieBot = setTimeout(
+            autoCookie,
+            FrozenCookies.frequency
+        );
     }
 }
 
@@ -6123,7 +6118,10 @@ function FCStart() {
     // Now create new intervals with their specified frequencies.
 
     if (FrozenCookies.frequency) {
-        FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
+        FrozenCookies.cookieBot = setTimeout(
+            autoCookie,
+            FrozenCookies.frequency
+        );
     }
 
     /*if (FrozenCookies.autoGC) {
@@ -6148,7 +6146,10 @@ function FCStart() {
     }
 
     if (FrozenCookies.autoGS) {
-        FrozenCookies.autoGSBot = setInterval(autoGSBuy, FrozenCookies.frequency);
+        FrozenCookies.autoGSBot = setInterval(
+            autoGSBuy,
+            FrozenCookies.frequency
+        );
     }
 
     if (FrozenCookies.autoGodzamok) {
@@ -6208,7 +6209,10 @@ function FCStart() {
     }
 
     if (FrozenCookies.autoBank) {
-        FrozenCookies.autoBankBot = setInterval(autoBankAction, FrozenCookies.frequency);
+        FrozenCookies.autoBankBot = setInterval(
+            autoBankAction,
+            FrozenCookies.frequency
+        );
     }
 
     if (FrozenCookies.autoBroker) {
@@ -6219,7 +6223,10 @@ function FCStart() {
     }
 
     if (FrozenCookies.autoLoan) {
-        FrozenCookies.autoLoanBot = setInterval(autoLoanBuy, FrozenCookies.frequency);
+        FrozenCookies.autoLoanBot = setInterval(
+            autoLoanBuy,
+            FrozenCookies.frequency
+        );
     }
 
     if (FrozenCookies.autoDragon) {
@@ -6311,7 +6318,10 @@ function FCStart() {
             saveStats,
             statSpeed(FrozenCookies.trackStats)
         );
-    } else if (FrozenCookies.trackStats == 6 && !FrozenCookies.smartTrackingBot) {
+    } else if (
+        FrozenCookies.trackStats == 6 &&
+        !FrozenCookies.smartTrackingBot
+    ) {
         FrozenCookies.smartTrackingBot = setTimeout(function () {
             smartTrackingStats(FrozenCookies.minDelay * 8);
         }, FrozenCookies.minDelay);
