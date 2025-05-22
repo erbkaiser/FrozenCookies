@@ -43,9 +43,12 @@ nextSpell = function (i) {
         M = Game.ObjectsById[7].minigame;
         spell = M.spellsById[1];
         var failChance = M.getFailChance(spell);
-        if (typeof obj.failChanceSet !== "undefined") failChance = obj.failChanceSet;
-        if (typeof obj.failChanceAdd !== "undefined") failChance += obj.failChanceAdd;
-        if (typeof obj.failChanceMult !== "undefined") failChance *= obj.failChanceMult;
+        if (typeof obj.failChanceSet !== "undefined")
+            failChance = obj.failChanceSet;
+        if (typeof obj.failChanceAdd !== "undefined")
+            failChance += obj.failChanceAdd;
+        if (typeof obj.failChanceMult !== "undefined")
+            failChance *= obj.failChanceMult;
         if (typeof obj.failChanceMax !== "undefined")
             failChance = Math.max(failChance, obj.failChanceMax);
         Math.seedrandom(Game.seed + "/" + (M.spellsCastTotal + i));
@@ -102,28 +105,37 @@ nextSpell = function (i) {
 nextSpellName = function (i) {
     if (Game.ObjectsById[7].minigameLoaded) {
         for (var v = i; v <= i; v++) {
-            if (nextSpell(v) == '<small><b style="color:#FFDE5F">Lucky</b></small>') {
+            if (
+                nextSpell(v) ==
+                '<small><b style="color:#FFDE5F">Lucky</b></small>'
+            ) {
                 return "Lucky";
             }
 
-            if (nextSpell(v) == '<small><b style="color:#FFDE5F">Frenzy</b></small>') {
+            if (
+                nextSpell(v) ==
+                '<small><b style="color:#FFDE5F">Frenzy</b></small>'
+            ) {
                 return "Frenzy";
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#00C4FF">Click Frenzy</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#00C4FF">Click Frenzy</b></small>'
             ) {
                 return "Click Frenzy";
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#FFDE5F">Cookie Chain</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#FFDE5F">Cookie Chain</b></small>'
             ) {
                 return "Cookie Chain";
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#00C4FF">Cookie Storm</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#00C4FF">Cookie Storm</b></small>'
             ) {
                 return "Cookie Storm";
             }
@@ -144,12 +156,16 @@ nextSpellName = function (i) {
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#FF3605">Ruin Cookies</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#FF3605">Ruin Cookies</b></small>'
             ) {
                 return "Ruin Cookies";
             }
 
-            if (nextSpell(v) == '<small><b style="color:#FF3605">Clot</b></small>') {
+            if (
+                nextSpell(v) ==
+                '<small><b style="color:#FF3605">Clot</b></small>'
+            ) {
                 return "Clot";
             }
 
@@ -161,13 +177,15 @@ nextSpellName = function (i) {
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#4F0007">Elder Frenzy</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#4F0007">Elder Frenzy</b></small>'
             ) {
                 return "Elder Frenzy";
             }
 
             if (
-                nextSpell(v) == '<small><b style="color:#5FFFFC">Sugar Lump</b></small>'
+                nextSpell(v) ==
+                '<small><b style="color:#5FFFFC">Sugar Lump</b></small>'
             ) {
                 return "Sugar Lump";
             }

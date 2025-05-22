@@ -567,7 +567,7 @@ function FCMenu() {
                 // Add warning below the title
                 $("<div>")
                     .addClass("fc-warning")
-                    .text("⚠️ All options take effect immediately.")
+                    .text(" ⚠️ All options take effect immediately.")
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference

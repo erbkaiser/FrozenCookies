@@ -1,57 +1,57 @@
 FrozenCookies.preferenceValues = {
     // clicking options
     clickingOptions: {
-        hint: "Auto clicking options:",
+        hint: "Auto clicking:",
     },
     autoClick: {
-        hint: "Click the large cookie",
+        hint: "Auto-click big cookie and set speed.",
         display: ["Autoclick OFF", "Autoclick ON"],
         default: 0,
         extras: '<a class="option" id="cookieClickSpeed" onclick="updateSpeed(\'cookieClickSpeed\');">${cookieClickSpeed} clicks/sec</a>',
     },
     autoFrenzy: {
-        hint: "Click the large cookie during Clicking Frenzies",
+        hint: "Auto-click for click frenzies.",
         display: ["Autofrenzy OFF", "Autofrenzy ON"],
         default: 0,
         extras: '<a class="option" id="frenzyClickSpeed" onclick="updateSpeed(\'frenzyClickSpeed\');">${frenzyClickSpeed} clicks/sec</a>',
     },
     autoGC: {
-        hint: "Automatically click Golden Cookies when they appear",
+        hint: "Auto-click golden/wrath cookies.",
         display: ["Autoclick GC OFF", "Autoclick GC ON"],
         default: 0,
     },
     autoReindeer: {
-        hint: "Automatically click reindeer",
+        hint: "Auto-click reindeer.",
         display: ["Autoclick Reindeer OFF", "Autoclick Reindeer ON"],
         default: 0,
     },
     autoFortune: {
-        hint: "Automatically click the news ticker when Fortune News appears",
+        hint: "Auto-click fortunes in news ticker.",
         display: ["Auto Fortune OFF", "Auto Fortune ON"],
         default: 0,
     },
 
     // autobuy options
     buyingOptions: {
-        hint: "Auto buying options:",
+        hint: "Auto-buying:",
     },
     autoBuy: {
-        hint: "Automatically buy the most efficient building when you've met its cost",
+        hint: "Auto-buy most efficient building/upgrade.",
         display: ["AutoBuy OFF", "AutoBuy ON"],
         default: 0,
     },
     otherUpgrades: {
-        hint: "Automatically buy upgrades that don't provide a direct CpS boost. This includes eggs and idle upgrades",
+        hint: "Buy upgrades that don't boost CpS directly.",
         display: ["Other Upgrades OFF", "Other Upgrades ON"],
         default: 1,
     },
     autoBlacklistOff: {
-        hint: "Automatically turn off a blacklist once the goal for that blacklist is achieved",
+        hint: "Turn off blacklist when goal is met.",
         display: ["Auto Blacklist OFF", "Auto Blacklist ON"],
         default: 0,
     },
     blacklist: {
-        hint: "Blacklist purchases from the efficiency calculations",
+        hint: "Blacklist: Restrict purchases for achievements or challenges.",
         display: [
             "Blacklist OFF",
             "Blacklist Mode SPEEDRUN",
@@ -62,60 +62,60 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     mineLimit: {
-        hint: "Limit max number of mines to keep Godzamok useful",
+        hint: "Limit mines for Godzamok combos.",
         display: ["Mine Limit OFF", "Mine Limit ON"],
         default: 0,
         extras: '<a class="option" id="mineMax" onclick="updateMineMax(\'mineMax\');">${mineMax} Mines</a>',
     },
     factoryLimit: {
-        hint: "Limit max number of factories to keep Godzamok useful",
+        hint: "Limit factories for Godzamok combos.",
         display: ["Factory Limit OFF", "Factory Limit ON"],
         default: 0,
         extras: '<a class="option" id="factoryMax" onclick="updateFactoryMax(\'factoryMax\');">${factoryMax} Factories</a>',
     },
     pastemode: {
-        hint: "Always autobuy the least efficient purchase. This is a stupid idea, you should never turn this on",
+        hint: "Buy least efficient option (⚠️ not recommended).",
         display: ["Pastemode OFF", "Pastemode ON"],
         default: 0,
     },
 
     // other auto options
     autoOtherOptions: {
-        hint: "Other automatic actions:",
+        hint: "Other automation:",
     },
     autoBulk: {
-        hint: "Automatically set buildings to be bought in bulk after reincarnation",
+        hint: "Set bulk buy after ascension.",
         display: ["Auto Bulkbuy OFF", "Auto Bulkbuy x10", "Auto Bulkbuy x100"],
         default: 0,
     },
     autoBuyAll: {
-        hint: "Automatically hit the 'buy all upgrades button' until a heavenly chip is earned",
+        hint: "Auto-buy all upgrades until a chip is earned.",
         display: ["Auto Buy All Upgrades OFF", "Auto Buy All Upgrades ON"],
         default: 0,
     },
     autoAscendToggle: {
-        hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
+        hint: "Auto-ascend at target chips (⚠️ skips upgrade screen).",
         display: ["Auto Ascend OFF", "Auto Ascend ON"],
         default: 0,
     },
     autoAscend: {
-        hint: "Choose Auto-ascend option",
+        hint: "Choose auto-ascend method.",
         display: [
             "Auto-ascend OFF",
-            "Auto-ascend at set amount",
-            "Auto-ascend when prestige amount will be doubled",
+            "Auto-ascend at SET amount",
+            "Auto-ascend when prestige is DOUBLED",
         ],
         default: 0,
         extras: '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>',
     },
     comboAscend: {
-        hint: "Do not Auto-ascend if the active combo is larger than the minimum Frenzy",
+        hint: "Block auto-ascend when you have X Frenzy or higher.",
         display: ["Ascend during combo OFF", "Ascend during combo ON"],
         default: 0,
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
     },
     autoWrinkler: {
-        hint: "Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly",
+        hint: "Auto-pop wrinklers.",
         display: [
             "Autopop Wrinklers OFF",
             "Autopop Wrinklers EFFICIENTLY",
@@ -124,12 +124,12 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     shinyPop: {
-        hint: "Protect the endangered Shiny Wrinkler from being automatically popped. Note: this disables buying the Elder Pledge",
+        hint: "Protect shiny wrinklers (⚠️ disables Elder Pledge).",
         display: ["Save Shiny Wrinklers OFF", "Save Shiny Wrinklers ON"],
         default: 0,
     },
     autoSL: {
-        hint: "Automatically harvest sugar lumps when ripe, with option to automatically swap in Rigidel",
+        hint: "Auto-harvest sugar lumps (optionally with Rigidel).",
         display: [
             "Autoharvest SL OFF",
             "Autoharvest SL ON",
@@ -138,7 +138,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     dragonsCurve: {
-        hint: "Automatically swap in Dragon's Curve aura when sugar lumps are harvested, with option to also apply Reality Bending",
+        hint: "Swap in Dragon's Curve (and Reality Bending) for lump harvest.",
         display: [
             "Auto-Dragon's Curve OFF",
             "Auto-Dragon's Curve ON",
@@ -147,32 +147,32 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     sugarBakingGuard: {
-        hint: "Ignore options that spend a sugar lump until you have 101 stored, to keep max Sugar Baking boost",
+        hint: "Don't spend lumps below 101 (keep Sugar Baking bonus).",
         display: ["Sugar Baking Guard OFF", "Sugar Baking Guard ON"],
         default: 0,
     },
     autoGS: {
-        hint: "Automatically turn on the Golden Switch during Dragonflight and Click Frenzy (and turn back off at the end)",
+        hint: "Auto-toggle Golden Switch for click buffs.",
         display: ["Auto-Golden Switch OFF", "Auto-Golden Switch ON"],
         default: 0,
     },
     autoGodzamok: {
-        hint: "Automatically sell mines and factories during Dragonflight and Click Frenzy if you worship Godzamok",
+        hint: "Auto-sell mines/factories for Godzamok during click buffs.",
         display: ["Auto-Godzamok OFF", "Auto-Godzamok ON"],
         default: 0,
     },
     autoBank: {
-        hint: "Automatically upgrade the bank office level to unlock loans and more storage",
+        hint: "Auto-upgrade bank office.",
         display: ["Auto-Banking OFF", "Auto-Banking ON"],
         default: 0,
     },
     autoBroker: {
-        hint: "Automatically hire stock brokers",
+        hint: "Auto-hire stock brokers.",
         display: ["Auto-Broker OFF", "Auto-Broker ON"],
         default: 0,
     },
     autoLoan: {
-        hint: "Automatically take loans during click buffs with frenzies",
+        hint: "Auto-take loans during click frenzies.",
         display: ["Auto-Loans OFF", "Take loans 1 and 2", "Take all 3 loans"],
         default: 0,
         extras: '<a class="option" id="minLoanMult" onclick="updateLoanMultMin(\'minLoanMult\');">x${minLoanMult} minimum Frenzy</a>',
@@ -180,15 +180,15 @@ FrozenCookies.preferenceValues = {
 
     // Pantheon options
     worshipOptions: {
-        hint: "Pantheon options:",
+        hint: "Pantheon:",
     },
     autoWorshipToggle: {
-        hint: "Automatically slot selected gods (Cannot slot the same god in multiple slots, Holobore cannot be set by FC)",
+        hint: "Auto-slot selected gods (can't select same god twice).",
         display: ["Auto Pantheon OFF", "Auto Pantheon ON"],
         default: 0,
     },
     autoWorship0: {
-        hint: "Automatically slots desired god in DIAMOND slot",
+        hint: "Auto-slot god in DIAMOND slot.",
         display: [
             "No god",
             "Vomitrax",
@@ -205,7 +205,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoWorship1: {
-        hint: "Automatically slots desired god in RUBY slot",
+        hint: "Auto-slot god in RUBY slot.",
         display: [
             "No god",
             "Vomitrax",
@@ -222,7 +222,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoWorship2: {
-        hint: "Automatically slots desired god in JADE slot",
+        hint: "Auto-slot god in JADE slot.",
         display: [
             "No god",
             "Vomitrax",
@@ -239,7 +239,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoCyclius: {
-        hint: "Continually swap Cyclius throughout the day for max CpS bonus. Works best if all gods for the auto-Pantheon are set, with Cyclius not set to any slot. If Supreme Intellect is active, only two slots are used",
+        hint: "Auto-swap Cyclius for max CpS (set gods above, do not use Cyclius).",
         display: [
             "Auto-Cyclius OFF",
             "Auto-Cyclius in RUBY and JADE",
@@ -250,16 +250,16 @@ FrozenCookies.preferenceValues = {
 
     // Spell options
     spellOptions: {
-        hint: "Grimoire options:",
+        hint: "Grimoire:",
     },
     towerLimit: {
-        hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for optimal single casting FTHOF. Not recommended to set over 100",
+        hint: "Stop buying Wizard Towers at set max mana.",
         display: ["Wizard Tower Cap OFF", "Wizard Tower Cap ON"],
         default: 0,
         extras: '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>',
     },
     autoCasting: {
-        hint: "Automatically cast selected spell when your mana is full",
+        hint: "Auto-cast selected spell when mana is full.",
         display: [
             "Auto Cast OFF",
             "Auto Cast CONJURE BAKED GOODS",
@@ -273,15 +273,15 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
     },
     spellNotes: {
-        hint: "(Only one combo is active at the same time, with the last one winning. See the readme for more info)",
+        hint: "Only one combo can be active at a time. See readme.",
     },
     autoFTHOFCombo: {
-        hint: "Perform FTHOF double cast combos - needs enough mana! Replaces Auto Cast",
+        hint: "Auto double-cast FTHOF combos (needs enough mana).",
         display: ["Double Cast FTHOF OFF", "Double Cast FTHOF ON"],
         default: 0,
     },
     auto100ConsistencyCombo: {
-        hint: "EXPERIMENTAL: Does the 100% Consistency Combo. Replaces Auto Cast and FTHOF Double Casting",
+        hint: "⚠️ EXPERIMENTAL: Auto-cast 100% Consistency Combo.",
         display: [
             "Auto Cast 100% Consistency Combo OFF",
             "Auto Cast 100% Consistency Combo ON",
@@ -289,7 +289,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoSugarFrenzy: {
-        hint: "Buy Sugar Frenzy during the first 100% Consistency and/or Double Cast combo",
+        hint: "Auto-buy Sugar Frenzy during first combo of X Frenzy.",
         display: [
             "Auto Sugar Frenzy OFF",
             "ASF for 100% Consistency Combo",
@@ -299,35 +299,35 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="minASFMult" onclick="updateASFMultMin(\'minASFMult\');">x${minASFMult} minimum Frenzy</a>',
     },
     autoSweet: {
-        hint: "EXPERIMENTAL: Automatically ascend until 'Sweet' is in the next ten spells. Disables other combos. No manual shutdown!",
+        hint: "⚠️ EXPERIMENTAL: Ascend until 'Sweet' spell appears. No manual shutdown.",
         display: ["Auto Sweet OFF", "Auto Sweet ON"],
         default: 0,
     },
 
     //Dragon options
     dragonOptions: {
-        hint: "Dragon options:",
+        hint: "Dragon:",
     },
     autoDragon: {
-        hint: "Automatically upgrade the dragon",
+        hint: "Auto-upgrade dragon.",
         display: ["Dragon Upgrading OFF", "Dragon Upgrading ON"],
         default: 0,
     },
     petDragon: {
-        hint: "Automatically pet the dragon",
+        hint: "Auto-pet dragon for drops.",
         display: ["Dragon Petting OFF", "Dragon Petting ON"],
         default: 0,
     },
     autoDragonToggle: {
-        hint: "Automatically set dragon aura(s)",
+        hint: "Auto-set dragon auras.",
         display: ["Dragon Auras OFF", "Dragon Auras ON"],
         default: 0,
     },
     dragonNotes: {
-        hint: "(Select your desired aura from the list. Cannot set the same aura to both slots)",
+        hint: "Set desired auras. Can't set same aura twice.",
     },
     autoDragonAura0: {
-        hint: "Automatically set FIRST dragon aura",
+        hint: "Auto-set FIRST dragon aura.",
         display: [
             "No Aura",
             "Breath of Milk",
@@ -355,7 +355,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoDragonAura1: {
-        hint: "Automatically set SECOND dragon aura",
+        hint: "Auto-set SECOND dragon aura.",
         display: [
             "No Aura",
             "Breath of Milk",
@@ -383,12 +383,12 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     autoDragonOrbs: {
-        hint: "Automatically sell Yous to summon a Golden Cookie, if Dragon Orbs is an aura and Godzamok is not slotted",
+        hint: "Auto-sell Yous for GC if Dragon Orbs aura is set and Godzamok is not.",
         display: ["Auto-Dragon Orbs OFF", "Auto-Dragon Orbs ON"],
         default: 0,
     },
     orbLimit: {
-        hint: "Limit max number of Yous to keep Dragon Orbs useful",
+        hint: "Limit Yous for Dragon Orbs combos.",
         display: ["You Limit OFF", "You Limit ON"],
         default: 0,
         extras: '<a class="option" id="orbMax" onclick="updateOrbMax(\'orbMax\');">${orbMax} Yous</a>',
@@ -396,15 +396,15 @@ FrozenCookies.preferenceValues = {
 
     // Season options
     seasonOptions: {
-        hint: "Season options:",
+        hint: "Season:",
     },
     defaultSeasonToggle: {
-        hint: "Autobuy a selected season when no others have needed upgrades.",
+        hint: "Auto-switch to selected season if no upgrades needed.",
         display: ["Autobuy Seasons OFF", "Autobuy Seasons ON"],
         default: 0,
     },
     defaultSeason: {
-        hint: "Select autobuy season",
+        hint: "Select default season.",
         display: [
             "Default Season OFF",
             "Default Season BUSINESS DAY",
@@ -416,7 +416,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     freeSeason: {
-        hint: "Stay in the current base (free) season as long as no others have upgrades. Overrides the Default Season option",
+        hint: "Stay in free base season if no upgrades needed.",
         display: [
             "Free Season OFF",
             "Free Season for CHRISTMAS and BUSINESS DAY",
@@ -425,27 +425,27 @@ FrozenCookies.preferenceValues = {
         default: 1,
     },
     autoEaster: {
-        hint: "Switch to Easter season if Cookie Storm is active and you do not have all eggs yet",
+        hint: "Switch to Easter during Cookie Storm if eggs missing.",
         display: ["Auto-Easter Switch OFF", "Auto-Easter Switch ON"],
         default: 0,
     },
     autoHalloween: {
-        hint: "Switch to Halloween season if you have wrinklers and you do not have all spooky biscuits yet",
+        hint: "Switch to Halloween if wrinklers present and cookies missing.",
         display: ["Auto-Halloween Switch OFF", "Auto-Halloween Switch ON"],
         default: 0,
     },
 
     //Bank options
     bankOptions: {
-        hint: "Bank options: (Setting a bank delays autobuy until the bank is complete)",
+        hint: "Bank: (delays autobuy until bank is full)",
     },
     holdSEBank: {
-        hint: "Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)",
+        hint: "Keep bank for Spontaneous Edifice.",
         display: ["SE Bank OFF", "SE Bank ON"],
         default: 0,
     },
     setHarvestBankPlant: {
-        hint: "Maintain a bank for a specific plant you are going to harvest/let explode",
+        hint: "Keep bank for harvesting selected plant.",
         display: [
             "Harvesting Bank OFF",
             "Harvesting Bank BAKEBERRY",
@@ -459,7 +459,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     setHarvestBankType: {
-        hint: "Increase the harvesting bank for the above plant, based on whether a CpS multiplier is in effect during harvest",
+        hint: "Increase bank for plant harvest during CpS buffs.",
         display: [
             "Harvesting during NO CpS MULTIPLIER",
             "Harvesting during FRENZY",
@@ -472,30 +472,30 @@ FrozenCookies.preferenceValues = {
 
     // Other options
     otherOptions: {
-        hint: "Other options:",
+        hint: "Other:",
     },
     FCshortcuts: {
-        hint: "Use a variety of helpful keyboard shortcuts. See the readme for info",
+        hint: "Enable keyboard shortcuts (see readme).",
         display: ["Shortcuts OFF", "Shortcuts ON"],
         default: 1,
     },
     simulatedGCPercent: {
-        hint: 'Assume a percentage of Golden Cookies as "clicked" for GC efficiency calculations (100% recommended)',
+        hint: "Assume % of GCs clicked for efficiency (100% recommended).",
         display: ["GC clicked 0%", "GC clicked 100%"],
         default: 1,
     },
 
     //Display options
     displayOptions: {
-        hint: "Display options:",
+        hint: "Display:",
     },
     showMissedCookies: {
-        hint: "Display the number of missed Golden Cookie clicks under Golden Cookie Information",
+        hint: "Show missed golden cookies in info panel.",
         display: ["Show Missed GCs OFF", "Show Missed GCs ON"],
         default: 0,
     },
     numberDisplay: {
-        hint: "Change how numbers are shortened",
+        hint: "Change number formatting style.",
         display: [
             "Number Display RAW",
             "Number Display FULL (million, billion)",
@@ -506,7 +506,7 @@ FrozenCookies.preferenceValues = {
         default: 1,
     },
     fancyui: {
-        hint: "Infobox type (can be slow)",
+        hint: "Infobox style (text, wheel, or both).",
         display: [
             "Infobox OFF",
             "Infobox TEXT ONLY",
@@ -516,21 +516,21 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     logging: {
-        hint: "Display detailed logs in the javascript console",
+        hint: "Log actions to console.",
         display: ["Logging OFF", "Logging ON"],
         default: 1,
     },
     purchaseLog: {
-        hint: "Log all automatic purchases as well",
+        hint: "Log all auto-purchases.",
         display: ["Purchase Log OFF", "Purchase Log ON"],
         default: 0,
     },
 
     slowOptions: {
-        hint: "(The following options can drastically slow down the game. Do not touch unless you know what you're doing)",
+        hint: "Warning: These options may slow the game.",
     },
     fpsModifier: {
-        hint: "Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc.",
+        hint: "Set game frame rate (default 30).",
         display: [
             "Frame Rate 15 fps",
             "Frame Rate 24 fps",
@@ -551,7 +551,7 @@ FrozenCookies.preferenceValues = {
         default: 2,
     },
     trackStats: {
-        hint: "Track your CpS / HC earned over time during a single session to enable graphing",
+        hint: "Track CpS/HC for graphs (may slow game).",
         display: [
             "Tracking OFF",
             "Tracking EVERY 60s",
@@ -565,7 +565,7 @@ FrozenCookies.preferenceValues = {
         extras: '<a class="option" id="viewStats" onclick="viewStatGraphs();">View Stat Graphs</a>',
     },
     recommendedSettings: {
-        hint: "Enable all recommended settings. WARNING: the game will save and reload, possibly unloading Frozen Cookies. This will override any current setting!",
+        hint: "Set all recommended options (⚠️ reloads game instantly).",
         display: ["Recommended OFF", "Recommended ON"],
         default: 0,
     },
