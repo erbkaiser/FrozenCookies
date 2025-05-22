@@ -275,41 +275,60 @@ if (typeof Game.oldUpdateMenu != "function") {
     Game.oldUpdateMenu = Game.UpdateMenu;
 }
 
-// Add custom style for selected multi-choice buttons
+// Stylesheet
+const frozenCookiesCSS = `
+    .fc-multichoice-group-vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin: 4px 0;
+    }
+    .fc-multichoice-btn,
+    .option {
+        background: #111;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 4px;
+        padding: 4px 10px;
+        margin: 0;
+        cursor: pointer;
+        font-size: 1em;
+        text-align: left;
+        transition: background 0.2s, color 0.2s;
+    }
+    .fc-multichoice-group-vertical .selected,
+    .option.selected {
+        background: #cfc;
+        color: #111;
+        font-weight: bold;
+    }
+    .fc-multichoice-btn:hover,
+    .option:hover {
+        background: #222;
+        color: #fff;
+    }
+    .fc-choose-one-label {
+        font-size: smaller;
+        color: #aaa;
+        margin-bottom: 2px;
+    }
+    .fc-warning {
+        font-size: smaller;
+        color: #a00;
+        margin-bottom: 6px;
+    }
+    .fc-section-heading {
+        font-variant: small-caps;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 1.1em;
+    }
+`;
+
+// Inject the CSS once
 (function () {
     var style = document.createElement("style");
-    style.innerHTML = `
-        .fc-multichoice-group-vertical {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin: 4px 0;
-        }
-        .fc-multichoice-btn,
-        .option {
-            background: #111;
-            color: #fff;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 4px 10px;
-            margin: 0;
-            cursor: pointer;
-            font-size: 1em;
-            text-align: left;
-            transition: background 0.2s, color 0.2s;
-        }
-        .fc-multichoice-group-vertical .selected,
-        .option.selected {
-            background: #cfc;
-            color: #111;
-            font-weight: bold;
-        }
-        .fc-multichoice-btn:hover,
-        .option:hover {
-            background: #222;
-            color: #fff;
-        }
-    `;
+    style.innerHTML = frozenCookiesCSS;
     document.head.appendChild(style);
 })();
 
@@ -521,11 +540,7 @@ function FCMenu() {
                 $("<div>").addClass("title").text("Frozen Cookie Controls"),
                 // Add warning below the title
                 $("<div>")
-                    .css({
-                        fontSize: "smaller",
-                        color: "#a00",
-                        marginBottom: "6px",
-                    })
+                    .addClass("fc-warning")
                     .text("⚠️ All options take effect immediately.")
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
@@ -548,13 +563,37 @@ function FCMenu() {
                                 .addClass("option")
                                 .prop("id", preferenceButtonId)
                                 .click(function () {
+                                    // Are you sure? for specific options
+                                    if (
+                                        prefVal.confirmOnChange &&
+                                        !confirm(prefVal.confirmOnChange)
+                                    )
+                                        return;
                                     cyclePreference(preference);
                                 })
                                 .text(display[current])
                         );
                     } else {
+                        // Add "choose one" label automatically
+                        listing.append(
+                            $("<div>")
+                                .addClass("fc-choose-one-label")
+                                .text("Choose one:")
+                        );
+                        //
+                        if (prefVal.showChooseUnique) {
+                            listing.append(
+                                $("<div>")
+                                    .addClass("fc-choose-one-label")
+                                    .text(
+                                        " (Do not select same in more than one option) "
+                                    )
+                            );
+                        }
                         // Render a group of buttons for direct selection, stacked vertically
-                        var buttonGroup = $("<div>").addClass("fc-multichoice-group-vertical");
+                        var buttonGroup = $("<div>").addClass(
+                            "fc-multichoice-group-vertical"
+                        );
                         display.forEach(function (label, idx) {
                             buttonGroup.append(
                                 $("<button>")
@@ -562,6 +601,12 @@ function FCMenu() {
                                     .toggleClass("selected", idx === current)
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
+                                        // Are you sure? for specific options
+                                        if (
+                                            prefVal.confirmOnChange &&
+                                            !confirm(prefVal.confirmOnChange)
+                                        )
+                                            return;
                                         setPreferenceDirect(preference, idx);
                                     })
                                     .text(label)
@@ -600,11 +645,16 @@ function FCMenu() {
                     if (hint) {
                         listing.append(
                             $("<br>"),
-                            $("<label>").text(
-                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
-                                    return FrozenCookies[id];
-                                })
-                            )
+                            $("<label>")
+                                .addClass("fc-section-heading")
+                                .text(
+                                    hint.replace(
+                                        /\$\{(.+)\}/g,
+                                        function (s, id) {
+                                            return FrozenCookies[id];
+                                        }
+                                    )
+                                )
                         );
                     }
                     subsection.append(listing);
