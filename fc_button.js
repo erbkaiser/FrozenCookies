@@ -279,9 +279,35 @@ if (typeof Game.oldUpdateMenu != "function") {
 (function () {
     var style = document.createElement("style");
     style.innerHTML = `
-        .fc-multichoice-group .selected {
+        .fc-multichoice-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .fc-multichoice-btn,
+        .option {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;
+            transition: background 0.2s, color 0.2s;
+        }
+        .fc-multichoice-group-vertical .selected,
+        .option.selected {
             background: #cfc;
+            color: #111;
             font-weight: bold;
+        }
+        .fc-multichoice-btn:hover,
+        .option:hover {
+            background: #222;
+            color: #fff;
         }
     `;
     document.head.appendChild(style);
@@ -527,14 +553,12 @@ function FCMenu() {
                                 .text(display[current])
                         );
                     } else {
-                        // Render a group of buttons for direct selection
-                        var buttonGroup = $("<span>").addClass(
-                            "fc-multichoice-group"
-                        );
+                        // Render a group of buttons for direct selection, stacked vertically
+                        var buttonGroup = $("<div>").addClass("fc-multichoice-group-vertical");
                         display.forEach(function (label, idx) {
                             buttonGroup.append(
                                 $("<button>")
-                                    .addClass("option")
+                                    .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
