@@ -1,7 +1,5 @@
 ![A single round cookie with a soft, slightly crumbly texture, topped with blue candy pieces and silver sprinkles. The cookie rests on a bed of shredded coconut, creating a wintry, festive atmosphere. No text is present. The overall tone alludes to winter, a frozen atmosphere.](https://user-images.githubusercontent.com/6014923/165900996-4726d38f-3c7c-4932-8d2e-f98bed93a836.png)
 
-### Badges
-
 ![Version](https://img.shields.io/badge/version-2.052.6-blue)
 ![License](https://img.shields.io/github/license/erbkaiser/FrozenCookies)
 [![GitHub issues](https://img.shields.io/github/issues/erbkaiser/FrozenCookies?label=issues)](https://github.com/erbkaiser/FrozenCookies/issues)
@@ -887,7 +885,7 @@ Once Auto Sweet is enabled, it can only be turned off in the browser console wit
 ```js
 FrozenCookies.autosweet = 0
 ```
-, otherwise it will auto-disable after casting _Sweet_.
+It will auto-disable after casting _Sweet_.
 **Note:** On Steam, there is no way to disable Auto Sweet once enabled except by waiting for it to finish.
 
 # Efficiency: What Does It Mean?
