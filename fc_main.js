@@ -3215,15 +3215,14 @@ function buyOtherUpgrades() {
 function autoCycliusAction() {
     if (!T || T.swaps < 1 || !FrozenCookies.autoCyclius) return;
 
+    // Get current UTC time in minutes
+    const now = new Date();
+    const currentMinute = now.getUTCMinutes();
+    const currentTime = now.getUTCHours() * 60 + currentMinute;
+
     // Only run once per minute to reduce CPU usage
-    // This massively reduces lag for free since times are set for minute intervals anyway
-    if (
-        typeof autoCycliusAction._lastMinute !== "undefined" &&
-        autoCycliusAction._lastMinute === new Date().getUTCMinutes()
-    ) {
-        return;
-    }
-    autoCycliusAction._lastMinute = new Date().getUTCMinutes();
+    if (autoCycliusAction._lastMinute === currentMinute) return;
+    autoCycliusAction._lastMinute = currentMinute;
 
     // Disable auto-Pantheon if enabled
     if (FrozenCookies.autoWorshipToggle === 1) {
@@ -3261,15 +3260,11 @@ function autoCycliusAction() {
         CycNone2: 22 * 60 + 30, // 22:30 UTC: No Cyclius
     };
 
-    // Get current UTC time in minutes
-    const now = new Date();
-    const currentTime = now.getUTCHours() * 60 + now.getUTCMinutes();
-
     // Helper to swap gods if needed
     function swapIfNeeded(godId, slot, label) {
         if (
-            godId !== 11 &&
-            godId !== 3 &&
+            godId !== 11 && // Not set (actually 0)
+            godId !== 3 && // Cyclius
             T.slot[slot] !== godId &&
             T.swaps > 0
         ) {
