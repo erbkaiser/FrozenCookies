@@ -302,14 +302,14 @@ if (typeof Game.oldUpdateMenu != "function") {
         }
         .fc-multichoice-group-vertical .selected,
         .option.selected {
-            background: #cfc;
-            color: #111;
+            background: #222;
+            color: #fff;
             font-weight: bold;
-            opacity: 1; /* Fully opaque */
+            opacity: 1;
             filter: none;
-            /* Add shiny effect (same as hover) */
-            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #cfc inset;
-        }
+            /* Add shiny effect */
+            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
+            }
         .fc-multichoice-btn:hover,
         .option:hover {
             background: #222;
@@ -635,7 +635,7 @@ function FCMenu() {
                 }
                 // if no options, still display the hint as a subsection head
                 if (!display) {
-                    listing = $("<div>").addClass("listing");
+                    listing = $("<div>").addClass("fc-section-heading");
                     if (hint) {
                         listing.append(
                             $("<br>"),
