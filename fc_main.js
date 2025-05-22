@@ -2929,111 +2929,54 @@ function autoWorship2Action() {
 
 function buyOtherUpgrades() {
     if (blacklist[FrozenCookies.blacklist].upgrades === true) return true;
-    
-    // I'm sure there's a better way to do this
-    //Buy eggs
-    if (
-        Game.Upgrades["Faberge egg"].unlocked == 1 &&
-        !Game.Upgrades["Faberge egg"].bought &&
-        Game.cookies > Game.Upgrades["Faberge egg"].getPrice()
-    ) {
-        Game.Upgrades["Faberge egg"].buy();
-    }
-    if (
-        Game.Upgrades["Wrinklerspawn"].unlocked == 1 &&
-        !Game.Upgrades["Wrinklerspawn"].bought &&
-        Game.cookies > Game.Upgrades["Wrinklerspawn"].getPrice()
-    ) {
-        Game.Upgrades["Wrinklerspawn"].buy();
-    }
-    if (
-        Game.Upgrades["Omelette"].unlocked == 1 &&
-        !Game.Upgrades["Omelette"].bought &&
-        Game.cookies > Game.Upgrades["Omelette"].getPrice()
-    ) {
-        Game.Upgrades["Omelette"].buy();
-    }
-    if (
-        Game.Upgrades['"egg"'].unlocked == 1 &&
-        !Game.Upgrades['"egg"'].bought &&
-        Game.cookies > Game.Upgrades['"egg"'].getPrice()
-    ) {
-        Game.Upgrades['"egg"'].buy();
-    }
 
-    //Buy Santa stuff
-    if (
-        Game.season == "christmas" &&
-        Game.Upgrades["Weighted sleighs"].unlocked == 1 &&
-        !Game.Upgrades["Weighted sleighs"].bought &&
-        Game.cookies > Game.Upgrades["Weighted sleighs"].getPrice()
-    ) {
-        Game.Upgrades["Weighted sleighs"].buy();
-    }
-    if (
-        Game.season == "christmas" &&
-        Game.Upgrades["Santa's bottomless bag"].unlocked == 1 &&
-        !Game.Upgrades["Santa's bottomless bag"].bought &&
-        Game.cookies > Game.Upgrades["Santa's bottomless bag"].getPrice()
-    ) {
-        Game.Upgrades["Santa's bottomless bag"].buy();
-    }
+    // List of upgrades not covered by efficiency calculations
+    var upgradesToBuy = [
+        "Faberge egg",
+        "Wrinklerspawn",
+        "Omelette",
+        '"egg"',
+        "Weighted sleighs",
+        "Santa's bottomless bag",
+        "Dragon fang",
+        "Dragon teddy bear",
+        "Sacrificial rolling pins",
+        "Green yeast digestives",
+        "Fern tea",
+        "Ichor syrup",
+        "Fortune #102",
+    ];
 
-    //Buy dragon drops
-    if (
-        Game.dragonLevel > 26 &&
-        Game.Upgrades["Dragon fang"].unlocked == 1 &&
-        !Game.Upgrades["Dragon fang"].bought &&
-        Game.cookies > Game.Upgrades["Dragon fang"].getPrice()
-    ) {
-        Game.Upgrades["Dragon fang"].buy();
-    }
-    if (
-        Game.dragonLevel > 26 &&
-        Game.Upgrades["Dragon teddy bear"].unlocked == 1 &&
-        !Game.Upgrades["Dragon teddy bear"].bought &&
-        Game.cookies > Game.Upgrades["Dragon teddy bear"].getPrice()
-    ) {
-        Game.Upgrades["Dragon teddy bear"].buy();
-    }
+    upgradesToBuy.forEach((name) => {
+        var upg = Game.Upgrades[name];
+        if (!upg) return;
 
-    //Buy other essential upgrades
-    if (
-        Game.Upgrades["Elder Pact"].bought == 1 &&
-        Game.Upgrades["Sacrificial rolling pins"].unlocked == 1 &&
-        !Game.Upgrades["Sacrificial rolling pins"].bought &&
-        Game.cookies > Game.Upgrades["Sacrificial rolling pins"].getPrice()
-    ) {
-        Game.Upgrades["Sacrificial rolling pins"].buy();
-    }
-    if (
-        Game.Upgrades["Green yeast digestives"].unlocked == 1 &&
-        !Game.Upgrades["Green yeast digestives"].bought &&
-        Game.cookies > Game.Upgrades["Green yeast digestives"].getPrice()
-    ) {
-        Game.Upgrades["Green yeast digestives"].buy();
-    }
-    if (
-        Game.Upgrades["Fern tea"].unlocked == 1 &&
-        !Game.Upgrades["Fern tea"].bought &&
-        Game.cookies > Game.Upgrades["Fern tea"].getPrice()
-    ) {
-        Game.Upgrades["Fern tea"].buy();
-    }
-    if (
-        Game.Upgrades["Ichor syrup"].unlocked == 1 &&
-        !Game.Upgrades["Ichor syrup"].bought &&
-        Game.cookies > Game.Upgrades["Ichor syrup"].getPrice()
-    ) {
-        Game.Upgrades["Ichor syrup"].buy();
-    }
-    if (
-        Game.Upgrades["Fortune #102"].unlocked == 1 &&
-        !Game.Upgrades["Fortune #102"].bought &&
-        Game.cookies > Game.Upgrades["Fortune #102"].getPrice()
-    ) {
-        Game.Upgrades["Fortune #102"].buy();
-    }
+        // Special conditions for some upgrades
+        if (
+            (name === "Weighted sleighs" ||
+                name === "Santa's bottomless bag") &&
+            Game.season !== "christmas"
+        )
+            return;
+        if (
+            (name === "Dragon fang" || name === "Dragon teddy bear") &&
+            Game.dragonLevel <= 26
+        )
+            return;
+        if (
+            name === "Sacrificial rolling pins" &&
+            Game.Upgrades["Elder Pact"].bought !== 1
+        )
+            return;
+
+        if (
+            upg.unlocked === 1 &&
+            !upg.bought &&
+            Game.cookies > upg.getPrice()
+        ) {
+            upg.buy();
+        }
+    });
 }
 
 function autoCycliusAction() {
