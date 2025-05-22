@@ -296,18 +296,27 @@ if (typeof Game.oldUpdateMenu != "function") {
             cursor: pointer;
             font-size: 1em;
             text-align: left;
-            transition: background 0.2s, color 0.2s;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            opacity: 0.7; /* Default: greyed out */
+            filter: grayscale(30%);
         }
         .fc-multichoice-group-vertical .selected,
         .option.selected {
             background: #cfc;
             color: #111;
             font-weight: bold;
+            opacity: 1; /* Fully opaque */
+            filter: none;
+            /* Add shiny effect (same as hover) */
+            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #cfc inset;
         }
         .fc-multichoice-btn:hover,
         .option:hover {
             background: #222;
             color: #fff;
+            opacity: 1;
+            filter: none;
+            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #cfc inset;
         }
         .fc-section-heading {
             font-variant: small-caps;
@@ -315,6 +324,11 @@ if (typeof Game.oldUpdateMenu != "function") {
             letter-spacing: 1px;
             font-size: 1.1em;
             display: block;
+            margin-bottom: 2px;
+        }
+        .fc-hint-label {
+            font-size: smaller;
+            color: #aaa;
             margin-bottom: 2px;
         }
         .fc-choose-one-label {
@@ -557,7 +571,7 @@ function FCMenu() {
                     if (hint) {
                         listing.append(
                             $("<label>")
-                                .addClass("fc-section-heading")
+                                .addClass("fc-hint-label")
                                 .text(
                                     hint.replace(
                                         /\$\{(.+)\}/g,
@@ -603,15 +617,6 @@ function FCMenu() {
                             );
                         });
                         listing.append(buttonGroup);
-                    }
-                    if (hint) {
-                        listing.append(
-                            $("<label>").text(
-                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
-                                    return FrozenCookies[id];
-                                })
-                            )
-                        );
                     }
                     if (extras) {
                         // If extras is a function, call it with FrozenCookies, else treat as string
