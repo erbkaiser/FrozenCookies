@@ -275,60 +275,57 @@ if (typeof Game.oldUpdateMenu != "function") {
     Game.oldUpdateMenu = Game.UpdateMenu;
 }
 
-// Stylesheet
-const frozenCookiesCSS = `
-    .fc-multichoice-group-vertical {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin: 4px 0;
-    }
-    .fc-multichoice-btn,
-    .option {
-        background: #111;
-        color: #fff;
-        border: 1px solid #444;
-        border-radius: 4px;
-        padding: 4px 10px;
-        margin: 0;
-        cursor: pointer;
-        font-size: 1em;
-        text-align: left;
-        transition: background 0.2s, color 0.2s;
-    }
-    .fc-multichoice-group-vertical .selected,
-    .option.selected {
-        background: #cfc;
-        color: #111;
-        font-weight: bold;
-    }
-    .fc-multichoice-btn:hover,
-    .option:hover {
-        background: #222;
-        color: #fff;
-    }
-    .fc-choose-one-label {
-        font-size: smaller;
-        color: #aaa;
-        margin-bottom: 2px;
-    }
-    .fc-warning {
-        font-size: smaller;
-        color: #a00;
-        margin-bottom: 6px;
-    }
-    .fc-section-heading {
-        font-variant: small-caps;
-        font-weight: bold;
-        letter-spacing: 1px;
-        font-size: 1.1em;
-    }
-`;
-
-// Inject the CSS once
+// Add custom style for selected multi-choice buttons
 (function () {
     var style = document.createElement("style");
-    style.innerHTML = frozenCookiesCSS;
+    style.innerHTML = `
+        .fc-multichoice-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .fc-multichoice-btn,
+        .option {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;
+            transition: background 0.2s, color 0.2s;
+        }
+        .fc-multichoice-group-vertical .selected,
+        .option.selected {
+            background: #cfc;
+            color: #111;
+            font-weight: bold;
+        }
+        .fc-multichoice-btn:hover,
+        .option:hover {
+            background: #222;
+            color: #fff;
+        }
+        .fc-choose-one-label {
+            font-size: smaller;
+            color: #aaa;
+            margin-bottom: 2px;
+        }
+        .fc-warning {
+            font-size: smaller;
+            color: #a00;
+            margin-bottom: 6px;
+        }
+        .fc-section-heading {
+            font-variant: small-caps;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+        }
+    `;
     document.head.appendChild(style);
 })();
 
