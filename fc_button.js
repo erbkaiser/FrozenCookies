@@ -309,7 +309,19 @@ if (typeof Game.oldUpdateMenu != "function") {
             filter: none;
             /* Add shiny effect */
             box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
-            }
+        }
+        .fc-multichoice-group-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .fc-multichoice-group-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            margin: 4px 0;
+        }
         .fc-multichoice-btn:hover,
         .option:hover {
             background: #222;
@@ -335,6 +347,7 @@ if (typeof Game.oldUpdateMenu != "function") {
             font-size: smaller;
             color: #aaa;
             margin-bottom: 2px;
+            margin-top: 10px; /* Add space above to separate from hint */
         }
     `;
     document.head.appendChild(style);
@@ -600,10 +613,15 @@ function FCMenu() {
                                 .addClass("fc-choose-one-label")
                                 .text("Choose one:")
                         );
-                        // Render a group of buttons for direct selection, stacked vertically
-                        var buttonGroup = $("<div>").addClass(
-                            "fc-multichoice-group-vertical"
-                        );
+                        // Determine column class based on number of options
+                        let groupClass = "fc-multichoice-group-vertical";
+                        if (display.length > 8) {
+                            groupClass = "fc-multichoice-group-3col";
+                        } else if (display.length > 4) {
+                            groupClass = "fc-multichoice-group-2col";
+                        }
+                        // Render a group of buttons for direct selection, stacked or in columns
+                        var buttonGroup = $("<div>").addClass(groupClass);
                         display.forEach(function (label, idx) {
                             buttonGroup.append(
                                 $("<button>")
