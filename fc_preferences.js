@@ -1,6 +1,8 @@
 FrozenCookies.preferenceValues = {
     // Clicking options
-    clickingOptions: { hint: "Auto clicking options:" },
+    clickingOptions: {
+        hint: "Auto clicking options:",
+    },
     autoClick: {
         hint: "Auto-click the big cookie.",
         display: ["Autoclick OFF", "Autoclick ON"],
@@ -30,7 +32,9 @@ FrozenCookies.preferenceValues = {
     },
 
     // Autobuy options
-    buyingOptions: { hint: "Auto buying options:" },
+    buyingOptions: {
+        hint: "Auto buying options:",
+    },
     autoBuy: {
         hint: "Auto-buy the most efficient building.",
         display: ["AutoBuy OFF", "AutoBuy ON"],
@@ -76,7 +80,9 @@ FrozenCookies.preferenceValues = {
     },
 
     // Other auto options
-    autoOtherOptions: { hint: "Other automation options:" },
+    autoOtherOptions: {
+        hint: "Other automation options:",
+    },
     autoBulk: {
         hint: "Set bulk buy mode after ascension.",
         display: ["Auto Bulkbuy OFF", "Auto Bulkbuy x10", "Auto Bulkbuy x100"],
@@ -274,7 +280,7 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
     auto100ConsistencyCombo: {
-        hint: "Auto 100% Consistency Combo (experimental).",
+        hint: "Auto 100% Consistency Combo (⚠️ Experimental!).",
         display: [
             "Auto Cast 100% Consistency Combo OFF",
             "Auto Cast 100% Consistency Combo ON",
@@ -294,7 +300,7 @@ FrozenCookies.preferenceValues = {
         extras: `<a class="option" id="minASFMult" onclick="updateASFMultMin('minASFMult');">x${minASFMult} minimum Frenzy</a>`,
     },
     autoSweet: {
-        hint: "Auto-ascend for Sweet spell (experimental).",
+        hint: "Auto-ascend for Sweet spell (⚠️ Experimental!).",
         display: ["Auto Sweet OFF", "Auto Sweet ON"],
         default: 0,
         confirmOnChange:
@@ -302,7 +308,9 @@ FrozenCookies.preferenceValues = {
     },
 
     // Dragon options
-    dragonOptions: { hint: "Dragon options:" },
+    dragonOptions: {
+        hint: "Dragon options:",
+    },
     autoDragon: {
         hint: "Auto-upgrade the dragon.",
         display: ["Dragon Upgrading OFF", "Dragon Upgrading ON"],
@@ -431,7 +439,9 @@ FrozenCookies.preferenceValues = {
     },
 
     // Bank options
-    bankOptions: { hint: "Bank options (delay autobuy until bank is ready):" },
+    bankOptions: {
+        hint: "Bank options (delay autobuy until bank is ready):",
+    },
     holdSEBank: {
         hint: "Keep bank for Spontaneous Edifice.",
         display: ["SE Bank OFF", "SE Bank ON"],
@@ -477,7 +487,9 @@ FrozenCookies.preferenceValues = {
     },
 
     // Display options
-    displayOptions: { hint: "Display options:" },
+    displayOptions: {
+        hint: "Display options:",
+    },
     showMissedCookies: {
         hint: "Show missed golden cookie clicks.",
         display: ["Show Missed GCs OFF", "Show Missed GCs ON"],
@@ -515,8 +527,9 @@ FrozenCookies.preferenceValues = {
         default: 0,
     },
 
-    // Slow options
-    slowOptions: { hint: "Options that may slow the game:" },
+    slowOptions: {
+        hint: "Options that may slow the game:",
+    },
     fpsModifier: {
         hint: "Set game frame rate.",
         display: [
@@ -557,7 +570,7 @@ FrozenCookies.preferenceValues = {
             "Are you sure you want to start tracking? This can cause massive slowdown.",
     },
     recommendedSettings: {
-        hint: "Set all options to recommended defaults.",
+        hint: "Set all options to recommended defaults. (⚠️ Reloads the game!)",
         display: ["Recommended OFF", "Recommended ON"],
         default: 0,
         confirmOnChange:
