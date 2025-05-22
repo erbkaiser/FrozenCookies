@@ -884,31 +884,43 @@ function swapIn(godId, targetSlot) {
 }
 
 function autoRigidel() {
-    if (!T) return; //Exit if pantheon doesnt even exist
-    var started = Game.lumpT;
-    var timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - started)) / 60000; //Minutes until sugar lump ripens
-    var orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
-    var prevGod = -1;
-    var tryHarvest = false;
-    switch (orderLvl) {
-        case 0: //Rigidel isn't in a slot
-            if (T.swaps < (T.slot[0] == -1 ? 1 : 2)) break; //Don't do anything if we can't swap Rigidel in
-            if (timeToRipe < 60) {
-                prevGod = T.slot[0]; //cache whatever god you have equipped
-                swapIn(10, 0); //swap in rigidel
-                tryHarvest = true;
-            }
-        case 1: //Rigidel is already in diamond slot
-            if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
-        case 2: //Rigidel in Ruby slot,
-            if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
-        case 3: //Rigidel in Jade slot
-            if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
+    if (!T) return; // Exit if Pantheon doesn't exist
+
+    const started = Game.lumpT;
+    const timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - started)) / 60000; // Minutes until sugar lump ripens
+    const orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
+    let prevGod = -1;
+    let tryHarvest = false;
+
+    // Only proceed if we have swaps available
+    if (T.swaps < 1) return;
+
+    // Determine if Rigidel is in a slot and act accordingly
+    if (orderLvl === 0) {
+        // Rigidel isn't in a slot
+        if (T.swaps < (T.slot[0] === -1 ? 1 : 2)) return; // Not enough swaps to proceed
+        if (timeToRipe < 60) {
+            prevGod = T.slot[0]; // Cache current god in diamond slot
+            swapIn(10, 0); // Swap in Rigidel to diamond slot
+            tryHarvest = true;
+        }
+    } else if (orderLvl === 1) {
+        // Rigidel is in diamond slot
+        if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
+    } else if (orderLvl === 2) {
+        // Rigidel is in ruby slot
+        if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
+    } else if (orderLvl === 3) {
+        // Rigidel is in jade slot
+        if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
     }
+
     if (tryHarvest) {
         rigiSell();
         Game.computeLumpTimes();
-        if (Date.now() - started >= Math.ceil(Game.lumpRipeAge)) {
+        // Use a variable for ripe check for clarity
+        const lumpIsRipe = Date.now() - started >= Math.ceil(Game.lumpRipeAge);
+        if (lumpIsRipe) {
             if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
                 autoDragonsCurve();
             } else {
@@ -919,7 +931,9 @@ function autoRigidel() {
             logEvent("autoRigidel", "Suppressed early harvest of unripe sugar lump");
         }
     }
-    if (prevGod != -1) swapIn(prevGod, 0); //put the old one back
+
+    // Restore previous god if we swapped Rigidel in
+    if (prevGod !== -1) swapIn(prevGod, 0);
 }
 
 function autoDragonsCurve() {
@@ -5692,7 +5706,7 @@ function autoCookie() {
         updateCaches();
         var recommendation = nextPurchase();
         var delay = delayAmount();
-        if (FrozenCookies.autoSL) {
+        if (FrozenCookies.autoSL == 1) {
             var started = Game.lumpT;
             var ripeAge = Math.ceil(Game.lumpRipeAge);
             if (
