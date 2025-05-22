@@ -7,6 +7,11 @@
 [![GitHub issues](https://img.shields.io/github/issues/erbkaiser/FrozenCookies?label=issues)](https://github.com/erbkaiser/FrozenCookies/issues)
 [![Last commit](https://img.shields.io/github/last-commit/erbkaiser/FrozenCookies?label=last%20commit)](https://github.com/erbkaiser/FrozenCookies/commits/main)
 
+> ⚠️ **WARNING:**  
+> **Auto Sweet** and **Auto Cast 100% Consistency Combo** are _experimental_ features.  
+> Enabling them can ruin your game or cause irreversible changes.  
+> Use at your own risk!
+> 
 # FrozenCookies
 
 An automated Cookie Clicker tool.
@@ -18,11 +23,6 @@ An automated Cookie Clicker tool.
     `Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js");`
 -   **Bookmarklet/Userscript:** See 'How to use' below for details.
 
-> ⚠️ **WARNING:**  
-> **Auto Sweet** and **Auto Cast 100% Consistency Combo** are _experimental_ features.  
-> Enabling them can ruin your game or cause irreversible changes.  
-> Use at your own risk!
-
 ## Table of Contents
 
 -   [Compatibility](#compatibility)
@@ -32,7 +32,7 @@ An automated Cookie Clicker tool.
 -   [Planned Features and Known Issues](#planned-features-and-known-issues)
 -   [All Options Explained](#what-do-these-options-actually-do-in-detail)
 -   [Auto Cast and Combos](#auto-cast-and-combos)
--   [Efficiency Explained](#efficiency-whats-that)
+-   [Efficiency Explained](#efficiency-what-does-it-mean)
 -   [Frozen Cookies Data](#information-about-frozen-cookies-data)
 -   [Original FC Credits](#original-contact-info-and-credits)
 
@@ -69,13 +69,10 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 2. Go to the Console tab.
 3. Paste and run:
     ```js
-    Game.LoadMod(
-        "https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js"
-    );
+    Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js");
     ```
-
-````
 4. You should see a confirmation message in the console.
+5. You might need to enable pasting in the browser console first, it will tell you if that is the case
 
 ### Bookmarklet
 
@@ -886,9 +883,11 @@ Frozen Cookies offers several ways to automate spell casting in the Grimoire min
 Not a spell combo, but an experimental feature. When enabled, Auto Sweet will repeatedly ascend until a grimoire seed with _'Sweet'_ (free Sugar Lump) appears in the first 10 spells, then cast _Haggler's Charm_ until _Sweet_ is cast. It then disables itself.
 
 **Warning:**
-Once Auto Sweet is enabled, it can only be turned off in the browser console with ```js
-_FrozenCookies.autosweet = 0
-```, otherwise it will auto-disable after casting _Sweet_.
+Once Auto Sweet is enabled, it can only be turned off in the browser console with the following code:
+```js
+FrozenCookies.autosweet = 0
+```
+, otherwise it will auto-disable after casting _Sweet_.
 **Note:** On Steam, there is no way to disable Auto Sweet once enabled except by waiting for it to finish.
 
 # Efficiency: What Does It Mean?
@@ -897,12 +896,11 @@ Frozen Cookies uses a custom efficiency formula to decide what your next optimal
 
 The current efficiency formula is:
 
-````
+```
 
-                         cost         cost
-
-Efficiency = 1.15 \* ----- + -------
-CpS ΔCpS
+                     cost    cost
+Efficiency = 1.15 \* ----- + -----
+                     CpS     ΔCpS
 
 ```
 
@@ -916,9 +914,9 @@ This formula is based on the idea that, given two possible purchases (A and B), 
 
 ```
 
-a.cost b.cost b.cost a.cost
+a.cost    b.cost        b.cost    a.cost
 ------- + ----------- < ------- + -----------
-CpS a.CpS+CpS CpS b.CpS+CpS
+CpS       a.CpS+CpS     CpS       b.CpS+CpS
 
 ```
 
