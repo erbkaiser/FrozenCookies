@@ -3215,16 +3215,6 @@ function buyOtherUpgrades() {
 function autoCycliusAction() {
     if (!T || T.swaps < 1 || !FrozenCookies.autoCyclius) return;
 
-    // Only run once per minute to reduce CPU usage
-    // This massively reduces lag for free since times are set for minute intervals anyway
-    if (
-        typeof autoCycliusAction._lastMinute !== "undefined" &&
-        autoCycliusAction._lastMinute === new Date().getUTCMinutes()
-    ) {
-        return;
-    }
-    autoCycliusAction._lastMinute = new Date().getUTCMinutes();
-
     // Disable auto-Pantheon if enabled
     if (FrozenCookies.autoWorshipToggle === 1) {
         FrozenCookies.autoWorshipToggle = 0;
@@ -3435,7 +3425,7 @@ function autoCycliusAction() {
             if (T.slot[1] !== 3 && currentTime < times.Ruby1) {
                 // 1:12 UTC to 4:00 UTC, RUBY
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (
@@ -3445,7 +3435,7 @@ function autoCycliusAction() {
                 currentTime < times.SIJade
             ) {
                 swapIn(3, 2);
-                logEvent("autoCyclius", "Putting Cyclius in JADE");
+                logEvent("autoCyclius", "Putting Cyclius in JADE (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
             } else if (
@@ -3455,7 +3445,7 @@ function autoCycliusAction() {
                 currentTime < times.SIRuby
             ) {
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (
@@ -3463,7 +3453,7 @@ function autoCycliusAction() {
                 currentTime >= times.SI730 &&
                 currentTime < times.Diamond2
             ) {
-                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
+                swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
                 swapIfNeeded(FrozenCookies.autoWorship2, 2, "JADE");
                 removeCyclius();
@@ -3474,7 +3464,7 @@ function autoCycliusAction() {
                 currentTime < times.Jade2
             ) {
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (
@@ -3493,7 +3483,7 @@ function autoCycliusAction() {
                 currentTime < times.Ruby2
             ) {
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (
@@ -3503,7 +3493,7 @@ function autoCycliusAction() {
                 currentTime < times.Diamond4
             ) {
                 swapIn(3, 2);
-                logEvent("autoCyclius", "Putting Cyclius in JADE");
+                logEvent("autoCyclius", "Putting Cyclius in JADE (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 1, "RUBY");
             } else if (
@@ -3513,7 +3503,7 @@ function autoCycliusAction() {
                 currentTime < times.CycNone1
             ) {
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (
@@ -3532,7 +3522,7 @@ function autoCycliusAction() {
                 currentTime < times.CycNone2
             ) {
                 swapIn(3, 1);
-                logEvent("autoCyclius", "Putting Cyclius in RUBY");
+                logEvent("autoCyclius", "Putting Cyclius in RUBY (SI)");
                 swapIfNeeded(FrozenCookies.autoWorship0, 0, "DIAMOND");
                 swapIfNeeded(FrozenCookies.autoWorship1, 2, "JADE");
             } else if (currentTime >= times.CycNone2) {
@@ -6109,13 +6099,8 @@ function FCStart() {
         FrozenCookies.recommendedSettingsBot = 0;
     }
 
-    // Remove until timing issues are fixed
-    //  if (FrozenCookies.goldenCookieBot) {
-    //    clearInterval(FrozenCookies.goldenCookieBot);
-    //    FrozenCookies.goldenCookieBot = 0;
-    //  }
-
     // Now create new intervals with their specified frequencies.
+    // Default frequency is 100ms = 1/10th of a second
 
     if (FrozenCookies.frequency) {
         FrozenCookies.cookieBot = setTimeout(
@@ -6123,13 +6108,6 @@ function FCStart() {
             FrozenCookies.frequency
         );
     }
-
-    /*if (FrozenCookies.autoGC) {
-          FrozenCookies.goldenCookieBot = setInterval(
-            autoGoldenCookie, 
-            FrozenCookies.frequency
-          );
-      }*/
 
     if (FrozenCookies.autoClick && FrozenCookies.cookieClickSpeed) {
         FrozenCookies.autoclickBot = setInterval(
@@ -6190,42 +6168,42 @@ function FCStart() {
     if (FrozenCookies.autoSweet) {
         FrozenCookies.autoSweetBot = setInterval(
             autoSweetAction,
-            FrozenCookies.frequency * 2
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoEaster) {
         FrozenCookies.autoEasterBot = setInterval(
             autoEasterAction,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 5
         );
     }
 
     if (FrozenCookies.autoHalloween) {
         FrozenCookies.autoHalloweenBot = setInterval(
             autoHalloweenAction,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 5
         );
     }
 
     if (FrozenCookies.autoBank) {
         FrozenCookies.autoBankBot = setInterval(
             autoBankAction,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoBroker) {
         FrozenCookies.autoBrokerBot = setInterval(
             autoBrokerAction,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoLoan) {
         FrozenCookies.autoLoanBot = setInterval(
             autoLoanBuy,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 2
         );
     }
 
@@ -6239,21 +6217,21 @@ function FCStart() {
     if (FrozenCookies.petDragon) {
         FrozenCookies.petDragonBot = setInterval(
             petDragonAction,
-            FrozenCookies.frequency * 2
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoDragonAura0) {
         FrozenCookies.autoDragonAura0Bot = setInterval(
             autoDragonAura0Action,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoDragonAura1) {
         FrozenCookies.autoDragonAura1Bot = setInterval(
             autoDragonAura1Action,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 10
         );
     }
 
@@ -6274,35 +6252,35 @@ function FCStart() {
     if (FrozenCookies.autoWorship0) {
         FrozenCookies.autoWorship0Bot = setInterval(
             autoWorship0Action,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 5
         );
     }
 
     if (FrozenCookies.autoWorship1) {
         FrozenCookies.autoWorship1Bot = setInterval(
             autoWorship1Action,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 5
         );
     }
 
     if (FrozenCookies.autoWorship2) {
         FrozenCookies.autoWorship2Bot = setInterval(
             autoWorship2Action,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 5
         );
     }
 
     if (FrozenCookies.otherUpgrades) {
         FrozenCookies.otherUpgradesBot = setInterval(
             buyOtherUpgrades,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 10
         );
     }
 
     if (FrozenCookies.autoCyclius) {
         FrozenCookies.autoCycliusBot = setInterval(
             autoCycliusAction,
-            FrozenCookies.frequency
+            FrozenCookies.frequency * 600 // 1 minute
         );
     }
 
