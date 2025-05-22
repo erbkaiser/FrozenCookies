@@ -115,6 +115,7 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 
 -   Reduced over-all lag a bit by changing timer intervals
 -   Reduced lag for auto-Cyclius by only checking values once per minute
+-   Rewrote the options menu
 
 2025 May 20
 
