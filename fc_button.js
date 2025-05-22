@@ -309,6 +309,14 @@ if (typeof Game.oldUpdateMenu != "function") {
             background: #222;
             color: #fff;
         }
+        .fc-section-heading {
+            font-variant: small-caps;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 2px;
+        }
         .fc-choose-one-label {
             font-size: smaller;
             color: #aaa;
@@ -545,6 +553,21 @@ function FCMenu() {
                     preferenceButtonId = preference + "Button";
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
+                    // Show hint as a subsection head before the button(s)
+                    if (hint) {
+                        listing.append(
+                            $("<label>")
+                                .addClass("fc-section-heading")
+                                .text(
+                                    hint.replace(
+                                        /\$\{(.+)\}/g,
+                                        function (s, id) {
+                                            return FrozenCookies[id];
+                                        }
+                                    )
+                                )
+                        );
+                    }
                     if (display.length === 2) {
                         // Toggle button for two options
                         listing.append(
@@ -581,7 +604,6 @@ function FCMenu() {
                         });
                         listing.append(buttonGroup);
                     }
-                    // --- NEW LOGIC END ---
                     if (hint) {
                         listing.append(
                             $("<label>").text(
