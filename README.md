@@ -50,9 +50,9 @@ If you see the **FrozenCookies** button at the top right of Cookie Clicker (repl
 
 Click the button to open the FrozenCookies menu, where you can configure settings or use the Recommended Settings for a quick start. See below for installation instructions if you do not see the button.
 
-### Steam (Recommended)
+### Steam
 
--   **Workshop:**  
+-   **Workshop: (Recommended)**  
      Subscribe at [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538).
 -   **Manual Install:**
     1.  Download the Steam folder from [here](https://erbkaiser.github.io/FrozenCookies/Steam/).
@@ -71,6 +71,10 @@ Click the button to open the FrozenCookies menu, where you can configure setting
     ```
 4. You should see a confirmation message in the console.
 5. You might need to enable pasting in the browser console first, it will tell you if that is the case
+6. Some net nanny programs may block my website. In that case, try to load from
+   **Game.LoadMod("https://erbkaiser.github.io/FrozenCookies/frozen_cookies.js");**. If
+   that also fails, contact your internet administrator and ask them to unblock
+   github.erbkaiser.com
 
 ### Bookmarklet
 
@@ -117,6 +121,10 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 -   Possibly, finally, fixed issue #19: Raw cookies per second is set to a very high value on initial load
 -   FC Button now opens the original game Info Button and the FC Readme with buttons at the top of the page
 -   Begun a full code rewrite which may or may not materialize. Goal is to optimize everything and reduce lag
+
+2024 Mar 08
+
+-   Significantly speed up Autosweet, thanks to dsf3449 for the PR
 
 2024 Jan 24
 
@@ -1013,4 +1021,3 @@ From the Cookie Clicker IRC, thanks to the following users:
 -   Saeldur, for helping make the timers suck less
 -   Icehawk78, for writing this section and being a conceited ass
 -   Other people who I've temporarily forgotten and will add later
-```
