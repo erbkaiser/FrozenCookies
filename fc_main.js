@@ -845,6 +845,29 @@ function updateASFMultMin(base) {
     );
 }
 
+function cyclePreference(preferenceName) {
+    var preference = FrozenCookies.preferenceValues[preferenceName];
+    if (preference) {
+        var display = preference.display;
+        var current = FrozenCookies[preferenceName];
+        var preferenceButton = $("#" + preferenceName + "Button");
+        if (
+            display &&
+            display.length > 0 &&
+            preferenceButton &&
+            preferenceButton.length > 0
+        ) {
+            var newValue = (current + 1) % display.length;
+            preferenceButton[0].innerText = display[newValue];
+            FrozenCookies[preferenceName] = newValue;
+            FrozenCookies.recalculateCaches = true;
+            Game.RefreshStore();
+            Game.RebuildUpgrades();
+            FCStart();
+        }
+    }
+}
+
 function toggleFrozen(setting) {
     if (!FrozenCookies[setting]) {
         FrozenCookies[setting] = 1;
@@ -2749,12 +2772,7 @@ function autoEasterAction() {
         return;
     }
 
-    if (
-        Game.hasBuff("Cookie storm") &&
-        Game.season != "easter" &&
-        !haveAll("easter") &&
-        Game.UpgradesById[181].unlocked
-    ) {
+    if (Game.hasBuff("Cookie storm") && Game.season != "easter" && !haveAll("easter") && Game.UpgradesById[181].unlocked) {
         Game.UpgradesById[209].buy();
     }
 }

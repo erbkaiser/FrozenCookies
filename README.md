@@ -9,7 +9,7 @@
 > **Auto Sweet** and **Auto Cast 100% Consistency Combo** are _experimental_ features.  
 > Enabling them can ruin your game or cause irreversible changes.  
 > Use at your own risk!
-
+> 
 # FrozenCookies
 
 An automated Cookie Clicker tool.
@@ -115,7 +115,6 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 
 -   Reduced over-all lag a bit by changing timer intervals
 -   Reduced lag for auto-Cyclius by only checking values once per minute
--   Rewrote the options menu
 
 2025 May 20
 
@@ -434,7 +433,6 @@ been changed. Existing settings should transfer 1:1.
 </details>
 
 ### Changelogs from upstream
-
 <details>
   <summary>Click to expand!</summary>
 
@@ -734,108 +732,108 @@ For more issues or feature requests, see the [GitHub issues page](https://github
 
 ## Auto Clicking Options
 
-| Option                 | Description                                                                                                                                                                                                      |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Autoclick**          | Simulates clicking the big cookie automatically. Value sets clicks per second (e.g., 250 for web, up to 1000 for fast Steam PCs). Increase until issues appear, then lower. May prevent manual wrinkler popping. |
-| **Autofrenzy**         | Like Autoclick, but only during click frenzies. Allows higher value if system can't handle high-speed Autoclick always.                                                                                          |
-| **Autoclick GC**       | Automatically clicks all golden and wrath cookies as soon as they appear.                                                                                                                                        |
-| **Autoclick Reindeer** | Instantly clicks reindeer when they appear.                                                                                                                                                                      |
-| **Auto Fortune**       | Instantly clicks fortunes in the news ticker. Consider disabling during active play, as some fortunes are best saved for later.                                                                                  |
+| Option                | Description |
+|-----------------------|-------------|
+| **Autoclick**         | Simulates clicking the big cookie automatically. Value sets clicks per second (e.g., 250 for web, up to 1000 for fast Steam PCs). Increase until issues appear, then lower. May prevent manual wrinkler popping. |
+| **Autofrenzy**        | Like Autoclick, but only during click frenzies. Allows higher value if system can't handle high-speed Autoclick always. |
+| **Autoclick GC**      | Automatically clicks all golden and wrath cookies as soon as they appear. |
+| **Autoclick Reindeer**| Instantly clicks reindeer when they appear. |
+| **Auto Fortune**      | Instantly clicks fortunes in the news ticker. Consider disabling during active play, as some fortunes are best saved for later. |
 
 ## Auto Buying Options
 
-| Option                 | Description                                                                                                                                   |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Autobuy**            | Automates all purchases except upgrades in the vault or buildings above set limits. Blacklists/research may pause purchases for optimal play. |
-| **Other Upgrades**     | Buys upgrades that don’t directly boost CpS (which Autobuy would otherwise skip).                                                             |
-| **Auto Blacklist**     | Disables the selected blacklist once its goal is achieved.                                                                                    |
-| **Blacklist**          | Choose restrictions for Speedrun/Hardcore achievements, Grandmapocalypse, or to block all building purchases.                                 |
-| **Mine/Factory Limit** | Caps mines/factories (used by Auto-Godzamok). Recommended: ~500 for mid-game, 800+ for late game (factories usually 50–100 less than mines).  |
-| **Pastemode**          | Ignores efficiency and buys as many buildings as possible. Not recommended.                                                                   |
+| Option                | Description |
+|-----------------------|-------------|
+| **Autobuy**           | Automates all purchases except upgrades in the vault or buildings above set limits. Blacklists/research may pause purchases for optimal play. |
+| **Other Upgrades**    | Buys upgrades that don’t directly boost CpS (which Autobuy would otherwise skip). |
+| **Auto Blacklist**    | Disables the selected blacklist once its goal is achieved. |
+| **Blacklist**         | Choose restrictions for Speedrun/Hardcore achievements, Grandmapocalypse, or to block all building purchases. |
+| **Mine/Factory Limit**| Caps mines/factories (used by Auto-Godzamok). Recommended: ~500 for mid-game, 800+ for late game (factories usually 50–100 less than mines). |
+| **Pastemode**         | Ignores efficiency and buys as many buildings as possible. Not recommended. |
 
 ## Other Automation Options
 
-| Option                     | Description                                                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **Auto Bulkbuy**           | Sets bulk buy mode after ascending (does not persist after reload).                                                       |
-| **Auto Buy All Upgrades**  | Repeatedly buys all upgrades until at least one prestige level is earned.                                                 |
-| **Auto-ascend**            | Automatically ascends when reaching a set number of new HCs or when prestige doubles.                                     |
-| **Ascending during combo** | Prevents auto-ascend during large combos (above minimum Frenzy).                                                          |
-| **Autopop Wrinklers**      | Pops wrinklers automatically, except during Halloween/Easter if you still need event drops.                               |
-| **Save Shiny Wrinklers**   | Protects shiny wrinklers from being popped and prevents ending the Grandmapocalypse.                                      |
-| **Autoharvest Sugar Lump** | Harvests ripe sugar lumps automatically, with optional Rigidel swap for early harvest.                                    |
-| **Auto-Dragon's Curve**    | Swaps to Dragon's Curve aura (and optionally Reality Bending) when harvesting lumps for a higher chance of unusual lumps. |
-| **Sugar Baking Guard**     | Prevents automated lump spending if it would drop your lump count below 100 (to preserve Sugar Baking bonus).             |
-| **Auto-Golden Switch**     | Toggles Golden Switch on for click frenzies and off afterward.                                                            |
-| **Auto-Godzamok**          | Sells mines/factories during click frenzies if Godzamok is slotted, then rebuys up to the cap.                            |
-| **Auto-Banking**           | Upgrades bank office level as soon as possible.                                                                           |
-| **Auto-Broker**            | Hires stock brokers if the next Autobuy is a building and funds allow.                                                    |
-| **Auto-Loans**             | Takes loans automatically during click frenzies if certain conditions are met.                                            |
+| Option                | Description |
+|-----------------------|-------------|
+| **Auto Bulkbuy**      | Sets bulk buy mode after ascending (does not persist after reload). |
+| **Auto Buy All Upgrades** | Repeatedly buys all upgrades until at least one prestige level is earned. |
+| **Auto-ascend**       | Automatically ascends when reaching a set number of new HCs or when prestige doubles. |
+| **Ascending during combo** | Prevents auto-ascend during large combos (above minimum Frenzy). |
+| **Autopop Wrinklers** | Pops wrinklers automatically, except during Halloween/Easter if you still need event drops. |
+| **Save Shiny Wrinklers** | Protects shiny wrinklers from being popped and prevents ending the Grandmapocalypse. |
+| **Autoharvest Sugar Lump** | Harvests ripe sugar lumps automatically, with optional Rigidel swap for early harvest. |
+| **Auto-Dragon's Curve** | Swaps to Dragon's Curve aura (and optionally Reality Bending) when harvesting lumps for a higher chance of unusual lumps. |
+| **Sugar Baking Guard** | Prevents automated lump spending if it would drop your lump count below 100 (to preserve Sugar Baking bonus). |
+| **Auto-Golden Switch** | Toggles Golden Switch on for click frenzies and off afterward. |
+| **Auto-Godzamok**     | Sells mines/factories during click frenzies if Godzamok is slotted, then rebuys up to the cap. |
+| **Auto-Banking**      | Upgrades bank office level as soon as possible. |
+| **Auto-Broker**       | Hires stock brokers if the next Autobuy is a building and funds allow. |
+| **Auto-Loans**        | Takes loans automatically during click frenzies if certain conditions are met. |
 
 ## Pantheon Options
 
-| Option            | Description                                                                                                                                                                                   |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Auto Pantheon** | Automatically slots selected gods. If a god is set for multiple slots, only the highest slot is used.                                                                                         |
-| **Auto-Cyclius**  | Periodically swaps Cyclius between slots for maximum bonus. Works best if other Pantheon slots are filled with different gods. If Supreme Intellect aura is active, uses a modified schedule. |
+| Option                | Description |
+|-----------------------|-------------|
+| **Auto Pantheon**     | Automatically slots selected gods. If a god is set for multiple slots, only the highest slot is used. |
+| **Auto-Cyclius**      | Periodically swaps Cyclius between slots for maximum bonus. Works best if other Pantheon slots are filled with different gods. If Supreme Intellect aura is active, uses a modified schedule. |
 
 ## Grimoire Options
 
-| Option                                                     | Description                                                                                                                                                                 |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Wizard Tower Cap**                                       | Sets a mana cap for spellcasting. 37 is best for single FTHOF casting; 81–100 for double casting. Values above 100 waste mana.                                              |
-| **Auto Cast / Double Cast FTHOF / 100% Consistency Combo** | Choose one auto-casting method (see details elsewhere in the README). Only the lowest enabled option is active.                                                             |
-| **Auto Sugar Frenzy**                                      | Buys Sugar Frenzy with a lump during the first big combo of an ascension (if you have 101+ lumps and Sugar Baking Guard is active). You can set a minimum frenzy threshold. |
-| **Auto Sweet**                                             | Experimental: rapidly ascends and casts spells to farm sugar lumps. Only disable via console. Do not use unless you know how.                                               |
+| Option                | Description |
+|-----------------------|-------------|
+| **Wizard Tower Cap**  | Sets a mana cap for spellcasting. 37 is best for single FTHOF casting; 81–100 for double casting. Values above 100 waste mana. |
+| **Auto Cast / Double Cast FTHOF / 100% Consistency Combo** | Choose one auto-casting method (see details elsewhere in the README). Only the lowest enabled option is active. |
+| **Auto Sugar Frenzy** | Buys Sugar Frenzy with a lump during the first big combo of an ascension (if you have 101+ lumps and Sugar Baking Guard is active). You can set a minimum frenzy threshold. |
+| **Auto Sweet**        | Experimental: rapidly ascends and casts spells to farm sugar lumps. Only disable via console. Do not use unless you know how. |
 
 ## Dragon Options
 
-| Option               | Description                                                                                               |
-| -------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Dragon Upgrading** | Buys dragon upgrades as soon as possible, ignoring chains.                                                |
-| **Dragon Petting**   | Rapidly pets the dragon until all drops are unlocked for the ascension.                                   |
-| **Dragon Auras**     | Sets desired auras in order (Aura 1 in slot 1, Aura 2 in slot 2).                                         |
-| **Auto Dragon Orbs** | If Dragon Orbs aura is active and Godzamok is not slotted, repeatedly sells Yous to spawn golden cookies. |
-| **You Limit**        | Caps the number of Yous bought to avoid losing all cookies to Auto Dragon Orbs.                           |
+| Option                | Description |
+|-----------------------|-------------|
+| **Dragon Upgrading**  | Buys dragon upgrades as soon as possible, ignoring chains. |
+| **Dragon Petting**    | Rapidly pets the dragon until all drops are unlocked for the ascension. |
+| **Dragon Auras**      | Sets desired auras in order (Aura 1 in slot 1, Aura 2 in slot 2). |
+| **Auto Dragon Orbs**  | If Dragon Orbs aura is active and Godzamok is not slotted, repeatedly sells Yous to spawn golden cookies. |
+| **You Limit**         | Caps the number of Yous bought to avoid losing all cookies to Auto Dragon Orbs. |
 
 ## Season Options
 
-| Option                    | Description                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **Default Season**        | Sets the default season if all drops from other seasons are unlocked. Disables Auto-Buy to avoid overpaying. |
-| **Free Season**           | Overrides Default Season to stay in the base season (Christmas/Business Day or all seasons).                 |
-| **Auto-Easter Switch**    | Switches to Easter during Cookie Storms if you still need eggs.                                              |
-| **Auto-Halloween Switch** | Switches to Halloween if you still need spooky biscuits and wrinklers are present.                           |
+| Option                | Description |
+|-----------------------|-------------|
+| **Default Season**    | Sets the default season if all drops from other seasons are unlocked. Disables Auto-Buy to avoid overpaying. |
+| **Free Season**       | Overrides Default Season to stay in the base season (Christmas/Business Day or all seasons). |
+| **Auto-Easter Switch**| Switches to Easter during Cookie Storms if you still need eggs. |
+| **Auto-Halloween Switch** | Switches to Halloween if you still need spooky biscuits and wrinklers are present. |
 
 ## Bank Options
 
 _All bank options add a reserve to the next Autobuy purchase, so you never drop below the set amount. The highest active bank is used._
 
-| Option                               | Description                                                                                    |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| **SE Bank**                          | Keeps half the cost of your most expensive building in reserve (always on if auto-casting SE). |
-| **Harvesting bank**                  | Keeps enough cookies in reserve to maximize plant harvests (e.g., Bakeberries).                |
-| **Harvesting during CpS multiplier** | Increases the harvesting bank if you want to harvest during frenzies or other multipliers.     |
+| Option                | Description |
+|-----------------------|-------------|
+| **SE Bank**           | Keeps half the cost of your most expensive building in reserve (always on if auto-casting SE). |
+| **Harvesting bank**   | Keeps enough cookies in reserve to maximize plant harvests (e.g., Bakeberries). |
+| **Harvesting during CpS multiplier** | Increases the harvesting bank if you want to harvest during frenzies or other multipliers. |
 
 ## Other Options
 
-| Option                    | Description                                                                                                                                                                                                    |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Shortcuts**             | Enables keyboard shortcuts:<br>• 'a': toggle autobuy<br>• 'b': show building spread<br>• 'c': toggle auto-GC<br>• 'e': show export string<br>• 'r': reset window<br>• 's': manual save<br>• 'w': wrinkler info |
-| **GC Clicked percentage** | Sets the assumed percentage of golden cookies clicked for efficiency calculations. Leave at default unless you know what you’re doing.                                                                         |
+| Option                | Description |
+|-----------------------|-------------|
+| **Shortcuts**         | Enables keyboard shortcuts:<br>• 'a': toggle autobuy<br>• 'b': show building spread<br>• 'c': toggle auto-GC<br>• 'e': show export string<br>• 'r': reset window<br>• 's': manual save<br>• 'w': wrinkler info |
+| **GC Clicked percentage** | Sets the assumed percentage of golden cookies clicked for efficiency calculations. Leave at default unless you know what you’re doing. |
 
 ## Display Options
 
-| Option              | Description                                                                                                                                                                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Show Missed GCs** | Displays missed golden cookie clicks in the info panel.                                                                                                                                                                                      |
-| **Number Display**  | Choose how numbers are shown:<br>• RAW: plain numbers<br>• FULL: full names (e.g., "3.753 trillion")<br>• INITIALS: short names (e.g., "3.753T")<br>• SI Units: SI prefixes (up to 1e33)<br>• SCIENTIFIC: scientific notation (e.g., 6.3e12) |
-| **Infobox**         | Shows next purchase and active frenzies in the milk window (as text, graphics, or both).                                                                                                                                                     |
-| **Logging**         | Logs mod actions to the console (except Autobuy purchases). Disabling may improve performance.                                                                                                                                               |
-| **Purchase Log**    | Logs every purchase and resulting CpS.                                                                                                                                                                                                       |
-| **Frame Rate**      | Adjusts the game’s speed.                                                                                                                                                                                                                    |
-| **Tracking**        | Tracks stats over time for graphing. May slow the game or use lots of memory if left on.                                                                                                                                                     |
-| **Recommended**     | Sets all options to recommended defaults for mid/late game. Forces a save and reload. **Warning:** Resets all options.                                                                                                                       |
+| Option                | Description |
+|-----------------------|-------------|
+| **Show Missed GCs**   | Displays missed golden cookie clicks in the info panel. |
+| **Number Display**    | Choose how numbers are shown:<br>• RAW: plain numbers<br>• FULL: full names (e.g., "3.753 trillion")<br>• INITIALS: short names (e.g., "3.753T")<br>• SI Units: SI prefixes (up to 1e33)<br>• SCIENTIFIC: scientific notation (e.g., 6.3e12) |
+| **Infobox**           | Shows next purchase and active frenzies in the milk window (as text, graphics, or both). |
+| **Logging**           | Logs mod actions to the console (except Autobuy purchases). Disabling may improve performance. |
+| **Purchase Log**      | Logs every purchase and resulting CpS. |
+| **Frame Rate**        | Adjusts the game’s speed. |
+| **Tracking**          | Tracks stats over time for graphing. May slow the game or use lots of memory if left on. |
+| **Recommended**       | Sets all options to recommended defaults for mid/late game. Forces a save and reload. **Warning:** Resets all options. |
 
 # Auto Cast and Combos
 
@@ -851,27 +849,27 @@ Frozen Cookies offers several ways to automate spell casting in the Grimoire min
 ## Auto Cast Options
 
 -   **Conjure Baked Goods:**
-    Automatically casts Conjure Baked Goods whenever possible.
+     Automatically casts Conjure Baked Goods whenever possible.
 
 -   **Force the Hand of Fate (Simple):**
-    Casts FTHOF as soon as you have enough mana. If a minimum Frenzy is set, it waits for that Frenzy before casting.
+     Casts FTHOF as soon as you have enough mana. If a minimum Frenzy is set, it waits for that Frenzy before casting.
 
 -   **Force the Hand of Fate (Smart):**
-    Like the simple method, but with extra logic: - If the next spell is _Click Frenzy_, it waits for a _Frenzy_ or _Dragon Harvest_ (plus a _Building Special_) to be active for the full duration. - If _Reaper of Fields_ aura is active, both _Frenzy_ and _Dragon Harvest_ must be active. - If the next spell is _Elder Frenzy_ or _Cursed Finger_, it waits for a _Click Frenzy_ or _Dragonflight_ to be active for the full duration.
+     Like the simple method, but with extra logic: - If the next spell is _Click Frenzy_, it waits for a _Frenzy_ or _Dragon Harvest_ (plus a _Building Special_) to be active for the full duration. - If _Reaper of Fields_ aura is active, both _Frenzy_ and _Dragon Harvest_ must be active. - If the next spell is _Elder Frenzy_ or _Cursed Finger_, it waits for a _Click Frenzy_ or _Dragonflight_ to be active for the full duration.
 
 -   **FTHOF (Click and Building Specials Only):**
-    Like the smart method, but only casts when the next spell is a Click or Building Special. All other spells are replaced with _Haggler's Charm_.
+     Like the smart method, but only casts when the next spell is a Click or Building Special. All other spells are replaced with _Haggler's Charm_.
 
 -   **Spontaneous Edifice:**
-    Sells one You, then casts Spontaneous Edifice to try for a free building. Not useful after 400+ of each building.
+     Sells one You, then casts Spontaneous Edifice to try for a free building. Not useful after 400+ of each building.
 
 -   **Haggler's Charm:**
-    Always casts Haggler's Charm, regardless of outcome. Useful for rapid spell casting.
+     Always casts Haggler's Charm, regardless of outcome. Useful for rapid spell casting.
 
 ## Combo Options
 
 -   **Double Cast FTHOF:**
-    Replaces all other auto-cast methods. Looks for a combo of click frenzies and building specials, then double-casts FTHOF for a huge boost. If no combo is available, casts _Haggler's Charm_ instead.
+     Replaces all other auto-cast methods. Looks for a combo of click frenzies and building specials, then double-casts FTHOF for a huge boost. If no combo is available, casts _Haggler's Charm_ instead.
 
     **Possible combos include:** - Stored _Click Frenzy_ and _Elder Frenzy_ plus a natural _Frenzy_ or _Dragon Harvest_ and a _Building Special_. - Stored _Click Frenzy_ and a _Building Special_ plus a natural _Frenzy_ or _Dragon Harvest_ and another _Building Special_. - Two stored _Building Specials_ plus a natural _Frenzy_ or _Dragon Harvest_ and any click frenzy (_Click Frenzy_, _Dragonflight_, or _Elder Frenzy_). - With _Reaper of Fields_ aura, both _Frenzy_ and _Dragon Harvest_ must be active.
 
@@ -880,7 +878,7 @@ Frozen Cookies offers several ways to automate spell casting in the Grimoire min
     Setting max mana to 100 is recommended for all levels. Do not upgrade Wizard Towers beyond level 10 for this combo.
 
 -   **100% Consistency Combo:**
-    An advanced endgame combo that automates the FTHOF double cast and adds extra steps for maximum effect. Requires: - Wizard Towers at level 10 with at least 98 max mana - At least 1 sugar lump (101+ recommended for Sugar Baking bonus) - Fully upgraded dragon (two aura slots) - At least 1 god swap, or Godzamok in Diamond and Mokalsium in Ruby - Whiskerblooms unlocked in the garden (all plants will be harvested, including Juicy Queenbeets)
+     An advanced endgame combo that automates the FTHOF double cast and adds extra steps for maximum effect. Requires: - Wizard Towers at level 10 with at least 98 max mana - At least 1 sugar lump (101+ recommended for Sugar Baking bonus) - Fully upgraded dragon (two aura slots) - At least 1 god swap, or Godzamok in Diamond and Mokalsium in Ruby - Whiskerblooms unlocked in the garden (all plants will be harvested, including Juicy Queenbeets)
 
     For best results, disable mine and factory caps in Frozen Cookies settings. While active, the combo will ignore wrath cookies (they are likely to be clots).
 
@@ -892,11 +890,9 @@ Not a spell combo, but an experimental feature. When enabled, Auto Sweet will re
 
 **Warning:**
 Once Auto Sweet is enabled, it can only be turned off in the browser console with the following code:
-
 ```js
-FrozenCookies.autosweet = 0;
+FrozenCookies.autosweet = 0
 ```
-
 It will auto-disable after casting _Sweet_.
 **Note:** On Steam, there is no way to disable Auto Sweet once enabled except by waiting for it to finish.
 
