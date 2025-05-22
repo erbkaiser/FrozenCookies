@@ -576,7 +576,11 @@ function FCMenu() {
                 $("<div>").addClass("title").text("Frozen Cookie Controls"),
                 // Add warning below the title
                 $("<div>")
-                    .addClass("fc-warning")
+                    .css({
+                        fontSize: "smaller",
+                        color: "#a00",
+                        marginBottom: "6px",
+                    })
                     .text("⚠️ All options take effect immediately.")
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
@@ -668,16 +672,11 @@ function FCMenu() {
                     if (hint) {
                         listing.append(
                             $("<br>"),
-                            $("<label>")
-                                .addClass("fc-section-heading")
-                                .text(
-                                    hint.replace(
-                                        /\$\{(.+)\}/g,
-                                        function (s, id) {
-                                            return FrozenCookies[id];
-                                        }
-                                    )
-                                )
+                            $("<label>").text(
+                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
+                                    return FrozenCookies[id];
+                                })
+                            )
                         );
                     }
                     subsection.append(listing);
