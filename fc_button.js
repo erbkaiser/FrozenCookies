@@ -275,7 +275,7 @@ if (typeof Game.oldUpdateMenu != "function") {
     Game.oldUpdateMenu = Game.UpdateMenu;
 }
 
-// Add custom style
+// Add custom styles
 (function () {
     var style = document.createElement("style");
     style.innerHTML = `
@@ -296,34 +296,63 @@ if (typeof Game.oldUpdateMenu != "function") {
             cursor: pointer;
             font-size: 1em;
             text-align: left;
-            transition: background 0.2s, color 0.2s;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            opacity: 0.7; /* Default: greyed out */
+            filter: grayscale(30%);
         }
         .fc-multichoice-group-vertical .selected,
         .option.selected {
-            background: #cfc;
-            color: #111;
+            background: #222;
+            color: #fff;
             font-weight: bold;
+            opacity: 1;
+            filter: none;
+            /* Add shiny effect */
+            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
+        }
+        .fc-multichoice-group-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .fc-multichoice-group-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            margin: 4px 0;
         }
         .fc-multichoice-btn:hover,
         .option:hover {
             background: #222;
             color: #fff;
-        }
-        .fc-choose-one-label {
-            font-size: smaller;
-            color: #aaa;
-            margin-bottom: 2px;
-        }
-        .fc-warning {
-            font-size: smaller;
-            color: #a00;
-            margin-bottom: 6px;
+            opacity: 1;
+            filter: none;
+            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #cfc inset;
         }
         .fc-section-heading {
             font-variant: small-caps;
             font-weight: bold;
             letter-spacing: 1px;
             font-size: 1.1em;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .fc-hint-label {
+            font-size: smaller;
+            color: #aaa;
+            margin-bottom: 2px;
+        }
+        .fc-choose-one-label {
+            font-size: smaller;
+            color: #aaa;
+            margin-bottom: 2px;
+            margin-top: 10px; /* Add space above to separate from hint */
+        }
+        .fc-warning {
+            font-size: smaller;
+            color: #a00;
+            margin-bottom: 6px;
         }
     `;
     document.head.appendChild(style);
@@ -531,21 +560,6 @@ function FCMenu() {
         menu.append(subsection);
 
         // --- OPTIONS SECTION ---
-        // --- NEW FRENZY INFO SECTION ---
-        subsection = $("<div>").addClass("subsection");
-        subsection.append($("<div>").addClass("title").text("Frenzy Info"));
-        subsection.append(
-            buildListing("Current Frenzy", Beautify(currentFrenzy))
-        );
-        subsection.append(
-            buildListing(
-                "Last Golden Cookie Effect",
-                Game.shimmerTypes.golden.last
-            )
-        );
-        menu.append(subsection);
-
-        // --- OPTIONS SECTION ---
         if (FrozenCookies.preferenceValues) {
             subsection = $("<div>").addClass("subsection");
             subsection.append(
@@ -567,39 +581,21 @@ function FCMenu() {
                     preferenceButtonId = preference + "Button";
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
-                    // --- NEW LOGIC START ---
-                    if (display.length === 2) {
-                        // Toggle button for two options
+                    // Show hint as a subsection head before the button(s)
+                    if (hint) {
                         listing.append(
-                            $("<button>")
-                                .addClass("option")
-                                .prop("id", preferenceButtonId)
-                                .click(function () {
-                                    cyclePreference(preference);
-                                })
-                                .text(display[current])
+                            $("<label>")
+                                .addClass("fc-hint-label")
+                                .text(
+                                    hint.replace(
+                                        /\$\{(.+)\}/g,
+                                        function (s, id) {
+                                            return FrozenCookies[id];
+                                        }
+                                    )
+                                )
                         );
-                    } else {
-                        // Render a group of buttons for direct selection
-                        var buttonGroup = $("<span>").addClass(
-                            "fc-multichoice-group"
-                        );
-                        display.forEach(function (label, idx) {
-                            buttonGroup.append(
-                                $("<button>")
-                                    .addClass("option")
-                                    .toggleClass("selected", idx === current)
-                                    .prop("id", preferenceButtonId + "_" + idx)
-                                    .click(function () {
-                                        setPreferenceDirect(preference, idx);
-                                    })
-                                    .text(label)
-                            );
-                        });
-                        listing.append(buttonGroup);
                     }
-                    // --- NEW LOGIC END ---
-                    // --- NEW LOGIC START ---
                     if (display.length === 2) {
                         // Toggle button for two options
                         listing.append(
@@ -618,20 +614,15 @@ function FCMenu() {
                                 .addClass("fc-choose-one-label")
                                 .text("Choose one:")
                         );
-                        //
-                        if (prefVal.showChooseUnique) {
-                            listing.append(
-                                $("<div>")
-                                    .addClass("fc-choose-one-label")
-                                    .text(
-                                        " (Do not select same in more than one option) "
-                                    )
-                            );
+                        // Determine column class based on number of options
+                        let groupClass = "fc-multichoice-group-vertical";
+                        if (display.length > 8) {
+                            groupClass = "fc-multichoice-group-3col";
+                        } else if (display.length > 4) {
+                            groupClass = "fc-multichoice-group-2col";
                         }
-                        // Render a group of buttons for direct selection, stacked vertically
-                        var buttonGroup = $("<div>").addClass(
-                            "fc-multichoice-group-vertical"
-                        );
+                        // Render a group of buttons for direct selection, stacked or in columns
+                        var buttonGroup = $("<div>").addClass(groupClass);
                         display.forEach(function (label, idx) {
                             buttonGroup.append(
                                 $("<button>")
@@ -646,28 +637,7 @@ function FCMenu() {
                         });
                         listing.append(buttonGroup);
                     }
-                    // --- NEW LOGIC END ---
-                    if (hint) {
-                        listing.append(
-                            $("<label>").text(
-                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
-                                    return FrozenCookies[id];
-                                })
-                            )
-                        );
-                    }
                     if (extras) {
-                        // If extras is a function, call it with FrozenCookies, else treat as string
-                        var extrasHtml =
-                            typeof extras === "function"
-                                ? extras(FrozenCookies)
-                                : extras.replace(
-                                      /\$\{(.+)\}/g,
-                                      function (s, id) {
-                                          return fcBeautify(FrozenCookies[id]);
-                                      }
-                                  );
-                        listing.append($(extrasHtml));
                         // If extras is a function, call it with FrozenCookies, else treat as string
                         var extrasHtml =
                             typeof extras === "function"
@@ -684,20 +654,15 @@ function FCMenu() {
                 }
                 // if no options, still display the hint as a subsection head
                 if (!display) {
-                    listing = $("<div>").addClass("listing");
+                    listing = $("<div>").addClass("fc-section-heading");
                     if (hint) {
                         listing.append(
                             $("<br>"),
-                            $("<label>")
-                                .addClass("fc-section-heading")
-                                .text(
-                                    hint.replace(
-                                        /\$\{(.+)\}/g,
-                                        function (s, id) {
-                                            return FrozenCookies[id];
-                                        }
-                                    )
-                                )
+                            $("<label>").text(
+                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
+                                    return FrozenCookies[id];
+                                })
+                            )
                         );
                     }
                     subsection.append(listing);
