@@ -555,17 +555,28 @@ function FCMenu() {
         menu.append(subsection);
 
         // --- OPTIONS SECTION ---
+        // --- NEW FRENZY INFO SECTION ---
+        subsection = $("<div>").addClass("subsection");
+        subsection.append($("<div>").addClass("title").text("Frenzy Info"));
+        subsection.append(
+            buildListing("Current Frenzy", Beautify(currentFrenzy))
+        );
+        subsection.append(
+            buildListing(
+                "Last Golden Cookie Effect",
+                Game.shimmerTypes.golden.last
+            )
+        );
+        menu.append(subsection);
+
+        // --- OPTIONS SECTION ---
         if (FrozenCookies.preferenceValues) {
             subsection = $("<div>").addClass("subsection");
             subsection.append(
                 $("<div>").addClass("title").text("Frozen Cookie Controls"),
                 // Add warning below the title
                 $("<div>")
-                    .css({
-                        fontSize: "smaller",
-                        color: "#a00",
-                        marginBottom: "6px",
-                    })
+                    .addClass("fc-warning")
                     .text("⚠️ All options take effect immediately.")
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
@@ -657,11 +668,16 @@ function FCMenu() {
                     if (hint) {
                         listing.append(
                             $("<br>"),
-                            $("<label>").text(
-                                hint.replace(/\$\{(.+)\}/g, function (s, id) {
-                                    return FrozenCookies[id];
-                                })
-                            )
+                            $("<label>")
+                                .addClass("fc-section-heading")
+                                .text(
+                                    hint.replace(
+                                        /\$\{(.+)\}/g,
+                                        function (s, id) {
+                                            return FrozenCookies[id];
+                                        }
+                                    )
+                                )
                         );
                     }
                     subsection.append(listing);
