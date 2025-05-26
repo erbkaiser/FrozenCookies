@@ -555,46 +555,40 @@ function FCMenu() {
                     .addClass("fc-warning")
                     .text(" ⚠️ All options take effect immediately.")
             );
-            // Create a single test span for all measurements
-            const testSpan = $("<span>")
-                .css({
-                    position: "absolute",
-                    visibility: "hidden",
-                    fontSize: "1em",
-                    fontFamily: "inherit",
-                    fontWeight: "bold",
-                })
-                .appendTo(document.body);
-
-            // Pre-calculate all button widths once
-            const buttonWidthCache = {};
-            _.keys(FrozenCookies.preferenceValues).forEach(function (pref) {
-                const display = FrozenCookies.preferenceValues[pref].display;
-                if (display && display.length) {
-                    const buttonWidths = display.map(function (label) {
-                        testSpan.text(label);
-                        return testSpan[0].offsetWidth + 20; // 20px padding
-                    });
-                    buttonWidthCache[pref] = {
-                        widths: buttonWidths,
-                        maxWidth: Math.max(...buttonWidths),
-                    };
-                }
-            });
-            testSpan.remove();
-
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference
-            ) {
-                var listing,
+            ) {                var listing,
                     prefVal = FrozenCookies.preferenceValues[preference],
                     hint = prefVal.hint,
                     display = prefVal.display,
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
-                    preferenceButtonId = preference + "Button"; // Use cached button widths
-                const buttonWidths = buttonWidthCache[preference];
-                const maxButtonWidth = buttonWidths ? buttonWidths.maxWidth : 0;
+                    preferenceButtonId = preference + "Button";
+                (maxLabelLength = display && display.length ? Math.max.apply(
+                    null,
+                    display.map(function (label) {
+                        return label.length;
+                    })
+                ) : 0),
+                    (                testSpan = $("<span>")
+                        .css({
+                            position: "absolute",
+                            visibility: "hidden",
+                            fontSize: "1em",
+                            fontFamily: "inherit",
+                            fontWeight: "bold",
+                        })
+                        .appendTo(document.body)),
+                    (maxButtonWidth = 0);
+                if (display && display.length) {
+                    display.forEach(function (label) {
+                        testSpan.text(label);
+                        var width = testSpan[0].offsetWidth;
+                        if (width > maxButtonWidth) maxButtonWidth = width;
+                    });
+                }
+                testSpan.remove();
+                maxButtonWidth += 24; // Add padding for button borders and spacing
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
