@@ -12,12 +12,13 @@ function scientificNotation(value) {
     return value;
 }
 
-// Implemented much better in base mod so just call that, except for SI prefixes
+// Implemented much better in base mod so just call that for raw, long, and short
+// Used by FrozenCookies.numberDisplay
 var numberFormatters = [
     rawFormatter,
-    formatEveryThirdPower(formatShort),
-    formatEveryThirdPower(formatLong),
-    formatEveryThirdPower([
+    formatEveryThirdPower(formatLong), // 1: long: millions, billions etc.
+    formatEveryThirdPower(formatShort), // 2: short: M, B, T etc.
+    formatEveryThirdPower([ // 3: SI prefixes: M, G, T etc.
         "",
         " M",
         " G",
@@ -29,7 +30,7 @@ var numberFormatters = [
         " R",
         " Q",
     ]),
-    scientificNotation,
+    scientificNotation, // 4: scientific: 6.3e12 etc. 
 ];
 
 function fcBeautify(value) {
