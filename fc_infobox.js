@@ -363,4 +363,17 @@ function updateTimers() {
     }
     height = $("#backgroundLeftCanvas").height() - 140;
     drawCircles(t_draw, 20, height);
+    // Add Beautify(currentFrenzy) to the bottom of the Infobox
+    var currentFrenzy = cpsBonus() * clickBuffBonus();
+    var c = $("#backgroundLeftCanvas");
+    if (typeof c.drawText === "function") {
+        c.drawText({
+            fontSize: "14px",
+            fontFamily: "Arial",
+            fillStyle: "#fff",
+            x: 30,
+            y: c.height() - 20,
+            text: "Current Frenzy: " + Beautify(currentFrenzy),
+        });
+    }
 }

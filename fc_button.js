@@ -545,20 +545,6 @@ function FCMenu() {
         }
         menu.append(subsection);
 
-        // --- NEW FRENZY INFO SECTION ---
-        subsection = $("<div>").addClass("subsection");
-        subsection.append($("<div>").addClass("title").text("Frenzy Info"));
-        subsection.append(
-            buildListing("Current Frenzy", Beautify(currentFrenzy))
-        );
-        subsection.append(
-            buildListing(
-                "Last Golden Cookie Effect",
-                Game.shimmerTypes.golden.last
-            )
-        );
-        menu.append(subsection);
-
         // --- OPTIONS SECTION ---
         if (FrozenCookies.preferenceValues) {
             subsection = $("<div>").addClass("subsection");
