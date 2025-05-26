@@ -278,18 +278,20 @@ if (typeof Game.oldUpdateMenu != "function") {
 // Add custom styles
 (function () {
     var style = document.createElement("style");
-    style.innerHTML = `        .fc-multichoice-group-vertical {
+    style.innerHTML = `
+        .fc-multichoice-group-vertical {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 4px;
             margin: 4px 0;
         }
-        .fc-multichoice-btn, .option {
+        .fc-multichoice-btn,
+        .option {
             background: #111;
             color: #fff;
             border: 1px solid #444;
             border-radius: 4px;
-            padding: 3px 6px;
+            padding: 4px 10px;
             margin: 0;
             cursor: pointer;
             font-size: 1em;
@@ -309,15 +311,15 @@ if (typeof Game.oldUpdateMenu != "function") {
             box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
         }
         .fc-multichoice-group-2col {
-            display: flex;
-            justify-content: flex-start;
-            gap: 1px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
             margin: 4px 0;
         }
         .fc-multichoice-group-3col {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 1px;
+            gap: 4px;
             margin: 4px 0;
         }
         .fc-multichoice-btn:hover,
@@ -361,8 +363,6 @@ function FCMenu() {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
         }
-        // Disabling auto-refresh that causes scrolling issues
-        /*
         if (!Game.callingMenu) {
             Game.callingMenu = true;
             setTimeout(() => {
@@ -370,7 +370,6 @@ function FCMenu() {
                 Game.UpdateMenu();
             }, 1000);
         }
-        */
         var currentCookies,
             maxCookies,
             isTarget,
@@ -566,34 +565,6 @@ function FCMenu() {
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
-                (maxLabelLength =
-                    display && display.length
-                        ? Math.max.apply(
-                              null,
-                              display.map(function (label) {
-                                  return label.length;
-                              })
-                          )
-                        : 0),
-                    (testSpan = $("<span>")
-                        .css({
-                            position: "absolute",
-                            visibility: "hidden",
-                            fontSize: "1em",
-                            fontFamily: "inherit",
-                            fontWeight: "bold",
-                        })
-                        .appendTo(document.body)),
-                    (maxButtonWidth = 0);
-                if (display && display.length) {
-                    display.forEach(function (label) {
-                        testSpan.text(label);
-                        var width = testSpan[0].offsetWidth;
-                        if (width > maxButtonWidth) maxButtonWidth = width;
-                    });
-                }
-                testSpan.remove();
-                maxButtonWidth += 12; // Add padding for button borders and spacing (reduced from 24)
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
@@ -621,7 +592,6 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
-                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
@@ -651,7 +621,6 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
-                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
@@ -797,14 +766,12 @@ function FCMenu() {
                     return result;
                 }, {}),
             (rate, time) => {
-                if (time / 1000 >= 1) {
-                    subsection.append(
-                        buildListing(
-                            "Total Recorded Time at x" + Beautify(rate),
-                            timeDisplay(time / 1000)
-                        )
-                    );
-                }
+                subsection.append(
+                    buildListing(
+                        "Total Recorded Time at x" + Beautify(rate),
+                        timeDisplay(time / 1000)
+                    )
+                );
             }
         );
         menu.append(subsection);
