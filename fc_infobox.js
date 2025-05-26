@@ -12,94 +12,11 @@ function scientificNotation(value) {
     return value;
 }
 
+// Implemented much better in base mod so just call that, except for SI prefixes
 var numberFormatters = [
     rawFormatter,
-    formatEveryThirdPower([
-        "",
-        " million",
-        " billion",
-        " trillion",
-        " quadrillion",
-        " quintillion",
-        " sextillion",
-        " septillion",
-        " octillion",
-        " nonillion",
-        " decillion",
-        " undecillion",
-        " duodecillion",
-        " tredecillion",
-        " quattuordecillion",
-        " quindecillion",
-        " sexdecillion",
-        " septendecillion",
-        " octodecillion",
-        " novemdecillion",
-        " vigintillion",
-        " unvigintillion",
-        " duovigintillion",
-        " trevigintillion",
-        " quattuorvigintillion",
-        " quinvigintillion",
-        " sexvigintillion",
-        " septenvigintillion",
-        " octovigintillion",
-        " novemvigintillion",
-        " trigintillion",
-        " untrigintillion",
-        " duotrigintillion",
-        " tretrigintillion",
-        " quattuortrigintillion",
-        " quintrigintillion",
-        " sextrigintillion",
-        " septentrigintillion",
-        " octotrigintillion",
-        " novemtrigintillion",
-    ]),
-
-    formatEveryThirdPower([
-        "",
-        " M",
-        " B",
-        " T",
-        " Qa",
-        " Qi",
-        " Sx",
-        " Sp",
-        " Oc",
-        " No",
-        " De",
-        " UnD",
-        " DoD",
-        " TrD",
-        " QaD",
-        " QiD",
-        " SxD",
-        " SpD",
-        " OcD",
-        " NoD",
-        " Vg",
-        " UnV",
-        " DoV",
-        " TrV",
-        " QaV",
-        " QiV",
-        " SxV",
-        " SpV",
-        " OcV",
-        " NoV",
-        " Tg",
-        " UnT",
-        " DoT",
-        " TrT",
-        " QaT",
-        " QiT",
-        " SxT",
-        " SpT",
-        " OcT",
-        " NoT",
-    ]),
-
+    formatEveryThirdPower(formatShort),
+    formatEveryThirdPower(formatLong),
     formatEveryThirdPower([
         "",
         " M",
@@ -118,6 +35,15 @@ var numberFormatters = [
 function fcBeautify(value) {
     var negative = value < 0;
     value = Math.abs(value);
+    // There are no SI prefixes larger than 1e33, so we'll use scientific notation for these values
+    // The game will show Infinity otherwise, which is not useful
+    if (FrozenCookies.numberDisplay === 3 && value >= 1e33) {
+        // Use scientificNotation (case 4)
+        var output = numberFormatters[4](value)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return negative ? "-" + output : output;
+    }
     var formatter = numberFormatters[FrozenCookies.numberDisplay];
     var output = formatter(value)
         .toString()
@@ -552,3 +478,18 @@ function updateTimers() {
         });
     }
 }
+
+// Patch ascend number display to use Beautify instead of SimpleBeautify
+(function patchAscendNumberDisplay() {
+    // Save the original Game.Logic if not already patched
+    if (!Game._fcOldLogic) {
+        Game._fcOldLogic = Game.Logic;
+        Game.Logic = function () {
+            Game._fcOldLogic.apply(this, arguments);
+            // Patch the ascend number display after the original logic runs
+            if (typeof ascendNowToGet !== "undefined" && Game.ascendNumber) {
+                Game.ascendNumber.textContent = "+" + Beautify(ascendNowToGet);
+            }
+        };
+    }
+})();

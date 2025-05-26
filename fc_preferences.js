@@ -500,7 +500,7 @@ FrozenCookies.preferenceValues = {
             "Number Display RAW",
             "Number Display FULL (million, billion)",
             "Number Display INITIALS (M, B)",
-            "Number Display SI UNITS (M, G, T)",
+            "Number Display SI PREFIXES (M, G, T)",
             "Number Display SCIENTIFIC (6.3e12)",
         ],
         default: 1,
