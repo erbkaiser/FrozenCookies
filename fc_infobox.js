@@ -343,6 +343,7 @@ function updateTimers() {
         chainTotal = 0,
         chainFinished,
         chainCompletion = 0;
+        c = $("#backgroundLeftCanvas");
     if (nextChainedPurchase().cost > nextPurchase().cost) {
         chainPurchase = nextChainedPurchase().purchase;
         chainTotal =
