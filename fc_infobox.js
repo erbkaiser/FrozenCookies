@@ -531,17 +531,25 @@ function updateTimers() {
     }
     height = $("#backgroundLeftCanvas").height() - 140;
     drawCircles(t_draw, 20, height);
-    // Add Beautify(currentFrenzy) to the bottom of the Infobox
-    var currentFrenzy = cpsBonus() * clickBuffBonus();
-    var c = $("#backgroundLeftCanvas");
+
+    // Remove any previous text overlays to prevent stacking
+    if (typeof c.clearCanvas === "function") {
+        c.clearCanvas({ layer: true, name: "fcCurrentFrenzyText" });
+    }
+
+    // Draw the current frenzy at the bottom of the canvas
     if (typeof c.drawText === "function") {
         c.drawText({
+            layer: true,
+            name: "fcCurrentFrenzyText",
             fontSize: "14px",
             fontFamily: "Arial",
             fillStyle: "#fff",
-            x: 30,
-            y: c.height() - 20,
-            text: "Current Frenzy: " + Beautify(currentFrenzy),
+            x: c.width() / 2,
+            y: c.height() - 18,
+            text: "Frenzy: " + Beautify(currentFrenzy),
+            align: "center",
+            baseline: "bottom",
         });
     }
 }
