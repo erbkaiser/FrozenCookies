@@ -27,7 +27,8 @@ function registerMod(mod_id = "frozen_cookies") {
             });
             Game.registerHook("draw", updateTimers); // called every draw tick
             Game.registerHook("ticker", function () {
-                // called when determining news ticker text (about every ten seconds); should return an array of possible choices to add
+                // News ticker messages, split between normal and Business Day (April Fools)
+                // Todo: add messages for garden and stock market minigames
                 if (
                     Game.cookiesEarned >= 1000 &&
                     Math.random() < 0.3 &&
@@ -39,6 +40,7 @@ function registerMod(mod_id = "frozen_cookies") {
                         "News : Frozen Cookies considered 'cool'. Pun-haters heard groaning.",
                         "News : Scientists baffled as cookies are now measured in 'efficiency' instead of calories.",
                         "News : Cookie clickers debate: is it cheating if the bot is more efficient than you?",
+                        "News : Famous movie studio lets it go: no grounds found to freeze out Frozen Cookies.",
                     ];
                 }
                 if (
@@ -79,11 +81,10 @@ function registerMod(mod_id = "frozen_cookies") {
                     return [
                         "Investigation into potential cheating with Frozen Cookies is blocked by your lawyers.",
                         "Your Frozen Cookies are now available in stores everywhere.",
-                        "Famous movie studio lets it go: no grounds found to freeze out Frozen Cookies.",
-                        "Cookie banks report record deposits, but nobody knows what a 'bestBank' actually is.",
-                        "Cookie banks now offering 'harvestBank' accounts with 0% interest and infinite cookies.",
+                        "Cookie banks report record deposits, but nobody knows what a 'Lucky Bank' actually is.",
+                        "Cookie banks now offering 'Harvest Bank' accounts with 0% interest and infinite cookies.",
                         "Cookie economy destabilized by mysterious entity known only as 'FrozenCookies'.",
-                        "Cookie market analysts confused by sudden spike in 'efficiencyScore'.",
+                        "Cookie market analysts confused by sudden spike in 'Purchase Efficiency'.",
                     ];
                 }
                 if (
@@ -98,6 +99,16 @@ function registerMod(mod_id = "frozen_cookies") {
                                     .cost * 0.08
                             ) +
                             " cookie dollars just sitting in your wallet.",
+                    ];
+                }
+                if (M && Game.season == "fools") {
+                    return [
+                        "Analyst report: Current bussiness relation between Memes and spells is 'complicated'.",
+                    ];
+                }
+                if (T && Game.season == "fools") {
+                    return [
+                        "Likes and shares of Cookie Gods' social media accounts are at an all-time high.",
                     ];
                 }
                 if (

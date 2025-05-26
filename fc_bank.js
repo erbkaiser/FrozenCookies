@@ -1,4 +1,3 @@
-
 function autoBankAction() {
     if (!B || hasClickBuff()) return;
 
