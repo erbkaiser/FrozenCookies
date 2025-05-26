@@ -13,12 +13,13 @@ function scientificNotation(value) {
 }
 
 // Implemented much better in base mod so just call that for raw, long, and short
-// Used by FrozenCookies.numberDisplay
+// Used by FrozenCookies.numberDisplay in fcBeautify
 var numberFormatters = [
     rawFormatter,
     formatEveryThirdPower(formatLong), // 1: long: millions, billions etc.
     formatEveryThirdPower(formatShort), // 2: short: M, B, T etc.
-    formatEveryThirdPower([ // 3: SI prefixes: M, G, T etc.
+    formatEveryThirdPower([
+        // 3: SI prefixes: M, G, T etc.
         "",
         " M",
         " G",
@@ -30,13 +31,13 @@ var numberFormatters = [
         " R",
         " Q",
     ]),
-    scientificNotation, // 4: scientific: 6.3e12 etc. 
+    scientificNotation, // 4: scientific: 6.3e12 etc.
 ];
 
 function fcBeautify(value) {
     var negative = value < 0;
     value = Math.abs(value);
-    // There are no SI prefixes larger than 1e33, so we'll use scientific notation for these values
+    // There are no SI prefixes larger than 1e30, so we'll use scientific notation
     // The game will show Infinity otherwise, which is not useful
     if (FrozenCookies.numberDisplay === 3 && value >= 1e33) {
         // Use scientificNotation (case 4)
@@ -480,7 +481,7 @@ function updateTimers() {
     }
 }
 
-// Patch ascend number display to use Beautify instead of SimpleBeautify
+// Patch base game ascend number display to use Beautify instead of SimpleBeautify
 (function patchAscendNumberDisplay() {
     // Save the original Game.Logic if not already patched
     if (!Game._fcOldLogic) {
