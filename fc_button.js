@@ -545,20 +545,6 @@ function FCMenu() {
         }
         menu.append(subsection);
 
-        // --- NEW FRENZY INFO SECTION ---
-        subsection = $("<div>").addClass("subsection");
-        subsection.append($("<div>").addClass("title").text("Frenzy Info"));
-        subsection.append(
-            buildListing("Current Frenzy", Beautify(currentFrenzy))
-        );
-        subsection.append(
-            buildListing(
-                "Last Golden Cookie Effect",
-                Game.shimmerTypes.golden.last
-            )
-        );
-        menu.append(subsection);
-
         // --- OPTIONS SECTION ---
         if (FrozenCookies.preferenceValues) {
             subsection = $("<div>").addClass("subsection");
@@ -597,16 +583,23 @@ function FCMenu() {
                         );
                     }
                     if (display.length === 2) {
-                        // Toggle button for two options
-                        listing.append(
-                            $("<button>")
-                                .addClass("option")
-                                .prop("id", preferenceButtonId)
-                                .click(function () {
-                                    cyclePreference(preference);
-                                })
-                                .text(display[current])
+                        // Render on/off option buttons side by side
+                        var buttonGroup = $("<div>").addClass(
+                            "fc-multichoice-group-2col"
                         );
+                        display.forEach(function (label, idx) {
+                            buttonGroup.append(
+                                $("<button>")
+                                    .addClass("option fc-multichoice-btn")
+                                    .toggleClass("selected", idx === current)
+                                    .prop("id", preferenceButtonId + "_" + idx)
+                                    .click(function () {
+                                        setPreferenceDirect(preference, idx);
+                                    })
+                                    .text(label)
+                            );
+                        });
+                        listing.append(buttonGroup);
                     } else {
                         // Add "choose one" label automatically
                         listing.append(
