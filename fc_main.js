@@ -54,12 +54,12 @@ function registerMod(mod_id = "frozen_cookies") {
                             " banked cookies are still fresh.",
                     ];
                 }
-                if (M) {
+                if (M && Game.season != "fools") {
                     return [
                         "News : Local wizards claim they can predict the next golden cookie, while munching on Frozen Cookies.",
                     ];
                 }
-                if (T) {
+                if (T && Game.season != "fools") {
                     return [
                         "News : Cookie gods issue statement: 'Stop swapping us so much, we're getting dizzy!'",
                     ];
