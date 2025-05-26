@@ -557,21 +557,20 @@ function FCMenu() {
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference
-            ) {
-                var listing,
+            ) {                var listing,
                     prefVal = FrozenCookies.preferenceValues[preference],
                     hint = prefVal.hint,
                     display = prefVal.display,
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
-                (maxLabelLength = Math.max.apply(
+                (maxLabelLength = display && display.length ? Math.max.apply(
                     null,
                     display.map(function (label) {
                         return label.length;
                     })
-                )),
-                    (testSpan = $("<span>")
+                ) : 0),
+                    (                testSpan = $("<span>")
                         .css({
                             position: "absolute",
                             visibility: "hidden",
@@ -581,11 +580,13 @@ function FCMenu() {
                         })
                         .appendTo(document.body)),
                     (maxButtonWidth = 0);
-                display.forEach(function (label) {
-                    testSpan.text(label);
-                    var width = testSpan[0].offsetWidth;
-                    if (width > maxButtonWidth) maxButtonWidth = width;
-                });
+                if (display && display.length) {
+                    display.forEach(function (label) {
+                        testSpan.text(label);
+                        var width = testSpan[0].offsetWidth;
+                        if (width > maxButtonWidth) maxButtonWidth = width;
+                    });
+                }
                 testSpan.remove();
                 maxButtonWidth += 24; // Add padding for button borders and spacing
                 if (display && display.length > 0 && display.length > current) {
