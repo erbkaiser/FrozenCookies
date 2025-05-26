@@ -766,12 +766,14 @@ function FCMenu() {
                     return result;
                 }, {}),
             (rate, time) => {
-                subsection.append(
-                    buildListing(
-                        "Total Recorded Time at x" + Beautify(rate),
-                        timeDisplay(time / 1000)
-                    )
-                );
+                if (time / 1000 >= 1) {
+                    subsection.append(
+                        buildListing(
+                            "Total Recorded Time at x" + Beautify(rate),
+                            timeDisplay(time / 1000)
+                        )
+                    );
+                }
             }
         );
         menu.append(subsection);
