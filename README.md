@@ -53,7 +53,9 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 ### Steam
 
 -   **Workshop: (Recommended)**  
-     Subscribe at [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538).
+    1.  Subscribe at [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538).
+    2.  Restart or refresh Cookie Clicker.
+    3.  Enable Frozen Cookies in 'Manage mods' under Options.
 -   **Manual Install:**
     1.  Download the Steam folder from [here](https://erbkaiser.github.io/FrozenCookies/Steam/).
     2.  Place the `FrozenCookies` folder into your `mods/local` directory.
@@ -728,7 +730,6 @@ been changed. Existing settings should transfer 1:1.
 ### Planned Features
 
 -   General code and performance improvements
--   Redesign of the options menu to make settings easier to adjust and changes less immediate
 -   Increased customization for user preferences
 
 ### Known Issues
@@ -792,7 +793,7 @@ For more issues or feature requests, see the [GitHub issues page](https://github
 
 | Option                | Description |
 |-----------------------|-------------|
-| **Wizard Tower Cap**  | Sets a mana cap for spellcasting. 37 is best for single FTHOF casting; 81–100 for double casting. Values above 100 waste mana. |
+| **Wizard Tower Cap**  | Sets a mana cap for spellcasting. 37 is best for single FTHOF casting; 81–100 for double casting. Values above 100 waste mana and time. |
 | **Auto Cast / Double Cast FTHOF / 100% Consistency Combo** | Choose one auto-casting method (see details elsewhere in the README). Only the lowest enabled option is active. |
 | **Auto Sugar Frenzy** | Buys Sugar Frenzy with a lump during the first big combo of an ascension (if you have 101+ lumps and Sugar Baking Guard is active). You can set a minimum frenzy threshold. |
 | **Auto Sweet**        | Experimental: rapidly ascends and casts spells to farm sugar lumps. Only disable via console. Do not use unless you know how. |
@@ -866,7 +867,10 @@ Frozen Cookies offers several ways to automate spell casting in the Grimoire min
      Casts FTHOF as soon as you have enough mana. If a minimum Frenzy is set, it waits for that Frenzy before casting.
 
 -   **Force the Hand of Fate (Smart):**
-     Like the simple method, but with extra logic: - If the next spell is _Click Frenzy_, it waits for a _Frenzy_ or _Dragon Harvest_ (plus a _Building Special_) to be active for the full duration. - If _Reaper of Fields_ aura is active, both _Frenzy_ and _Dragon Harvest_ must be active. - If the next spell is _Elder Frenzy_ or _Cursed Finger_, it waits for a _Click Frenzy_ or _Dragonflight_ to be active for the full duration.
+     Like the simple method, but with extra logic:
+    - If the next spell is _Click Frenzy_, it waits for a _Frenzy_ or _Dragon Harvest_ (plus a _Building Special_) to be active for the full duration.
+    - If _Reaper of Fields_ aura is active, both _Frenzy_ and _Dragon Harvest_ must be active.
+    - If the next spell is _Elder Frenzy_ or _Cursed Finger_, it waits for a _Click Frenzy_ or _Dragonflight_ to be active for the full duration.
 
 -   **FTHOF (Click and Building Specials Only):**
      Like the smart method, but only casts when the next spell is a Click or Building Special. All other spells are replaced with _Haggler's Charm_.
@@ -882,14 +886,31 @@ Frozen Cookies offers several ways to automate spell casting in the Grimoire min
 -   **Double Cast FTHOF:**
      Replaces all other auto-cast methods. Looks for a combo of click frenzies and building specials, then double-casts FTHOF for a huge boost. If no combo is available, casts _Haggler's Charm_ instead.
 
-    **Possible combos include:** - Stored _Click Frenzy_ and _Elder Frenzy_ plus a natural _Frenzy_ or _Dragon Harvest_ and a _Building Special_. - Stored _Click Frenzy_ and a _Building Special_ plus a natural _Frenzy_ or _Dragon Harvest_ and another _Building Special_. - Two stored _Building Specials_ plus a natural _Frenzy_ or _Dragon Harvest_ and any click frenzy (_Click Frenzy_, _Dragonflight_, or _Elder Frenzy_). - With _Reaper of Fields_ aura, both _Frenzy_ and _Dragon Harvest_ must be active.
+    **Possible combos include:**
+    - Stored _Click Frenzy_ and _Elder Frenzy_ plus a natural _Frenzy_ or _Dragon Harvest_ and a _Building Special_.
+    - Stored _Click Frenzy_ and a _Building Special_ plus a natural _Frenzy_ or _Dragon Harvest_ and another _Building Special_.
+    - Two stored _Building Specials_ plus a natural _Frenzy_ or _Dragon Harvest_ and any click frenzy (_Click Frenzy_, _Dragonflight_, or _Elder Frenzy_).
+    - With _Reaper of Fields_ aura, both _Frenzy_ and _Dragon Harvest_ must be active.
 
-    **Mana requirements for double casting (by Wizard Tower level):** - Level 1–4: 81 mana - Level 5: 83 mana - Level 6: 88 mana - Level 7: 91 mana - Level 8: 93 mana - Level 9: 96 mana - Level 10: 98 mana
+    **Mana requirements for double casting (by Wizard Tower level):**
+    - Level 1–4: 81 mana
+    - Level 5: 83 mana
+    - Level 6: 88 mana
+    - Level 7: 91 mana
+    - Level 8: 93 mana
+    - Level 9: 96 mana
+    - Level 10: 98 mana
 
-    Setting max mana to 100 is recommended for all levels. Do not upgrade Wizard Towers beyond level 10 for this combo.
+    Setting max mana to 100 is recommended for all levels. Never upgrade Wizard Towers beyond level 10 for this combo.
 
 -   **100% Consistency Combo:**
-     An advanced endgame combo that automates the FTHOF double cast and adds extra steps for maximum effect. Requires: - Wizard Towers at level 10 with at least 98 max mana - At least 1 sugar lump (101+ recommended for Sugar Baking bonus) - Fully upgraded dragon (two aura slots) - At least 1 god swap, or Godzamok in Diamond and Mokalsium in Ruby - Whiskerblooms unlocked in the garden (all plants will be harvested, including Juicy Queenbeets)
+     An advanced endgame combo that automates the FTHOF double cast and adds extra steps for maximum effect.
+     Requires:
+    - Wizard Towers at level 10 with at least 98 max mana
+    - At least 1 sugar lump (101+ recommended for Sugar Baking bonus)
+    - Fully upgraded dragon (two aura slots)
+    - At least 1 god swap, or Godzamok in Diamond and Mokalsium in Ruby
+    - Whiskerblooms unlocked in the garden (all plants will be harvested, including Juicy Queenbeets)
 
     For best results, disable mine and factory caps in Frozen Cookies settings. While active, the combo will ignore wrath cookies (they are likely to be clots).
 
