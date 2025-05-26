@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FrozenCookies Button Width Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .test-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .pass { color: green; }
+        .fail { color: red; }
+        
+        /* Import the actual FrozenCookies button styles */
+        .fc-multichoice-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        
+        .fc-multichoice-btn,
+        .option {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            opacity: 0.7;
+            filter: grayscale(30%);
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            /* Allow text to wrap by default */
+            white-space: normal;
+        }
+          .fc-multichoice-group-2col {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(0, auto));
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+        }
+          .fc-multichoice-group-3col {
+            display: inline-grid;
+            grid-template-columns: repeat(3, auto);
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        /* Make buttons in the same column have equal widths */
+        .fc-multichoice-group-3col .fc-multichoice-btn {
+            /* Match the widest button in the same column position */
+            width: var(--col-width, auto);
+        }
+
+        /* Support multiple rows by calculating max width per column position */
+        .fc-multichoice-group-3col {
+            --col1-width: auto;
+            --col2-width: auto;
+            --col3-width: auto;
+        }
+
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+1) {
+            --col-width: var(--col1-width);
+        }
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+2) {
+            --col-width: var(--col2-width);
+        }        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n) {
+            --col-width: var(--col3-width);
+        }
+
+        /* Add class for text truncation when needed */
+        .fc-multichoice-btn.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        #debugInfo {
+            font-family: monospace;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>FrozenCookies Button Width Test</h1>
+    
+    <div class="test-section">
+        <div class="test-title">Test 1a: Two-Column Layout with Equal Width</div>
+        <div class="fc-multichoice-group-2col">
+            <button class="fc-multichoice-btn">Short Text</button>
+            <button class="fc-multichoice-btn">Longer Button Text</button>
+        </div>
+        <div class="result" id="result1a"></div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">Test 1b: Two-Column Layout with Equal Width</div>
+        <div class="fc-multichoice-group-2col">
+            <button class="fc-multichoice-btn">Short Text</button>
+            <button class="fc-multichoice-btn">Much Longer Button Text Than That</button>
+        </div>
+        <div class="result" id="result1b"></div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">Test 2a: Three-Column Layout with Text Overflow</div>
+        <div class="fc-multichoice-group-3col">
+            <button class="fc-multichoice-btn">Short</button>
+            <button class="fc-multichoice-btn">Medium Length</button>
+            <button class="fc-multichoice-btn">This is a very very very long text</button>
+        </div>
+        <div class="result" id="result2a"></div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">Test 2b: Three-Column Layout with Text Overflow</div>
+        <div class="fc-multichoice-group-3col">
+            <button class="fc-multichoice-btn">Short</button>
+            <button class="fc-multichoice-btn">Medium Length</button>
+            <button class="fc-multichoice-btn">This is a very very very long text</button>
+            <button class="fc-multichoice-btn">This is now longer</button>
+            <button class="fc-multichoice-btn">Medium Length</button>
+            <button class="fc-multichoice-btn">Short</button>
+        </div>
+        <div class="result" id="result2b"></div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">Test 3: Dynamic Width Adjustment</div>
+        <div class="fc-multichoice-group-2col" id="dynamicTest">
+            <button class="fc-multichoice-btn">Initial Text</button>
+            <button class="fc-multichoice-btn">Second Button</button>
+        </div>
+        <button onclick="changeText()">Change Button Text</button>
+        <div class="result" id="result3"></div>
+    </div>
+
+    <div id="debugInfo"></div>    <script>
+        function updateColumnWidths() {
+            document.querySelectorAll('.fc-multichoice-group-3col').forEach(group => {
+                // Get all buttons in the group
+                const buttons = Array.from(group.querySelectorAll('.fc-multichoice-btn'));
+                const numCols = 3;
+                
+                // Calculate max width for each column position
+                const colWidths = Array(numCols).fill(0);
+                buttons.forEach((btn, i) => {
+                    const colIndex = i % numCols;
+                    const naturalWidth = btn.scrollWidth;
+                    colWidths[colIndex] = Math.max(colWidths[colIndex], naturalWidth);
+                });
+                
+                // Set CSS variables for column widths
+                group.style.setProperty('--col1-width', `${colWidths[0]}px`);
+                group.style.setProperty('--col2-width', `${colWidths[1]}px`);
+                group.style.setProperty('--col3-width', `${colWidths[2]}px`);
+            });
+        }
+
+        function runTests() {
+            updateColumnWidths();
+
+            // Test 1: Check if buttons in 2-col layout have equal width
+            const test1Buttons = document.querySelectorAll('.fc-multichoice-group-2col .fc-multichoice-btn');
+            const test1Widths = Array.from(test1Buttons).map(btn => btn.offsetWidth);
+            const test1Result = test1Widths[0] === test1Widths[1];
+            document.getElementById('result1').innerHTML = 
+                `Equal Width Test: <span class="${test1Result ? 'pass' : 'fail'}">${test1Result ? 'PASS' : 'FAIL'}</span><br>` +
+                `Button Widths: ${test1Widths.join('px, ')}px`;
+
+            // Test 2: Check text overflow and equal widths in 3-col layout
+            const test2Buttons = document.querySelectorAll('.fc-multichoice-group-3col .fc-multichoice-btn');
+            const test2Widths = Array.from(test2Buttons).map(btn => btn.offsetWidth);
+            const test2Equal = test2Widths.every(w => w === test2Widths[0]);
+            const test2Overflow = window.getComputedStyle(test2Buttons[2]).textOverflow === 'ellipsis';
+            document.getElementById('result2').innerHTML = 
+                `Equal Width Test: <span class="${test2Equal ? 'pass' : 'fail'}">${test2Equal ? 'PASS' : 'FAIL'}</span><br>` +
+                `Text Overflow Test: <span class="${test2Overflow ? 'pass' : 'fail'}">${test2Overflow ? 'PASS' : 'FAIL'}</span><br>` +
+                `Button Widths: ${test2Widths.join('px, ')}px`;
+
+            // Debug info
+            document.getElementById('debugInfo').textContent = 
+                'Debug Information:\n' +
+                `Viewport Width: ${window.innerWidth}px\n` +
+                `Container Width: ${document.querySelector('.fc-multichoice-group-2col').offsetWidth}px\n` +
+                `Computed Styles:\n` +
+                `- Button 1: ${JSON.stringify(window.getComputedStyle(test1Buttons[0]).width)}\n` +
+                `- Button 2: ${JSON.stringify(window.getComputedStyle(test1Buttons[1]).width)}`;
+        }
+
+        // Test 3: Dynamic width adjustment
+        let expanded = false;
+        function changeText() {
+            const buttons = document.querySelectorAll('#dynamicTest .fc-multichoice-btn');
+            if (!expanded) {
+                buttons[0].textContent = 'This is now a much longer text than before';
+                buttons[1].textContent = 'Short';
+            } else {
+                buttons[0].textContent = 'Initial Text';
+                buttons[1].textContent = 'Second Button';
+            }
+            expanded = !expanded;
+            
+            // Check widths after change
+            setTimeout(() => {
+                const widths = Array.from(buttons).map(btn => btn.offsetWidth);
+                const equal = widths[0] === widths[1];
+                document.getElementById('result3').innerHTML = 
+                    `Dynamic Width Test: <span class="${equal ? 'pass' : 'fail'}">${equal ? 'PASS' : 'FAIL'}</span><br>` +
+                    `Button Widths: ${widths.join('px, ')}px`;
+            }, 50);
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+        // Re-run tests on window resize
+        window.addEventListener('resize', runTests);
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@ This file contains a chronological record of all changes made to the FrozenCooki
 
 -   Version bumped to 2.052.8
 -   Performance improvements throughout the codebase. For more information, see [PERFORMANCE_UPDATE.md](PERFORMANCE_UPDATE.md).
+-   Add rudimentary testing suite
 
 2025 May 26
 

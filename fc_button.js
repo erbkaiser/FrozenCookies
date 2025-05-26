@@ -1,6 +1,165 @@
 // This file replaces the Info button with the Frozen Cookies button
 // which adds a new menu for Frozen Cookies
 
+// Initialize persistent button width cache
+if (!window.FrozenCookies) window.FrozenCookies = {};
+if (!window.FrozenCookies.buttonWidthCache) {
+    window.FrozenCookies.buttonWidthCache = {};
+    window.FrozenCookies.buttonWidthsCalculated = false;
+}
+
+// Initialize improved button styles
+(function() {
+    var style = document.createElement('style');
+    style.textContent = `
+        .fc-multichoice-btn {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            opacity: 0.7;
+            filter: grayscale(30%);
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            white-space: normal;
+        }
+        
+        .fc-multichoice-group-2col {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(0, auto));
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+        }
+        
+        .fc-multichoice-group-3col {
+            display: inline-grid;
+            grid-template-columns: repeat(3, auto);
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .fc-multichoice-group-3col .fc-multichoice-btn {
+            width: var(--col-width, auto);
+        }
+
+        .fc-multichoice-group-3col {
+            --col1-width: auto;
+            --col2-width: auto;
+            --col3-width: auto;
+        }
+
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+1) {
+            --col-width: var(--col1-width);
+        }
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+2) {
+            --col-width: var(--col2-width);
+        }
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n) {
+            --col-width: var(--col3-width);
+        }
+        
+        .fc-multichoice-btn.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fc-multichoice-btn:hover {
+            opacity: 1;
+            filter: none;
+        }
+        
+        .fc-multichoice-btn.selected {
+            opacity: 1;
+            filter: none;
+            background: #333;
+            box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Function to update column widths for three-column layouts
+    function updateColumnWidths() {
+        document.querySelectorAll('.fc-multichoice-group-3col').forEach(group => {
+            const buttons = Array.from(group.querySelectorAll('.fc-multichoice-btn'));
+            const numCols = 3;
+            const colWidths = Array(numCols).fill(0);
+
+            buttons.forEach((btn, i) => {
+                const colIndex = i % numCols;
+                const naturalWidth = btn.scrollWidth;
+                colWidths[colIndex] = Math.max(colWidths[colIndex], naturalWidth);
+            });
+
+            group.style.setProperty('--col1-width', `${colWidths[0]}px`);
+            group.style.setProperty('--col2-width', `${colWidths[1]}px`);
+            group.style.setProperty('--col3-width', `${colWidths[2]}px`);
+        });
+    }
+
+    // Update column widths when content changes
+    function onContentChanged() {
+        requestAnimationFrame(updateColumnWidths);
+    }
+
+    // Update column widths initially and on relevant events
+    if (document.readyState === 'complete') {
+        updateColumnWidths();
+    }
+    window.addEventListener('load', updateColumnWidths);
+    window.addEventListener('resize', updateColumnWidths);
+
+    // Set up a MutationObserver to watch for content changes
+    const observer = new MutationObserver(onContentChanged);
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+})();
+
+// Function to calculate button widths once
+function calculateButtonWidths() {
+    if (window.FrozenCookies.buttonWidthsCalculated) return;
+
+    const testSpan = $("<span>")
+        .css({
+            position: "absolute",
+            visibility: "hidden",
+            fontSize: "1em",
+            fontFamily: "inherit",
+            fontWeight: "bold",
+            whiteSpace: "nowrap",
+        })
+        .appendTo(document.body);
+
+    _.keys(FrozenCookies.preferenceValues).forEach(function (pref) {
+        const display = FrozenCookies.preferenceValues[pref].display;
+        if (display && display.length) {
+            const buttonWidths = display.map(function (label) {
+                testSpan.text(label);
+                return testSpan[0].offsetWidth + 24; // 24px for padding and borders
+            });
+            window.FrozenCookies.buttonWidthCache[pref] = Math.max(
+                ...buttonWidths
+            );
+        }
+    });
+
+    testSpan.remove();
+    window.FrozenCookies.buttonWidthsCalculated = true;
+}
+
 $("#logButton").before(
     $("<div>")
         .attr("id", "fcButton")
@@ -23,7 +182,45 @@ $("<style>")
             ".average {border-width:1px; border-style:solid; border-color:#663399;}" +
             ".good {border-width:1px; border-style:solid; border-color:#3399FF;}" +
             ".best {border-width:1px; border-style:solid; border-color:#00FFFF;}" +
-            ".ui-dialog {z-index:1000000;}"
+            ".ui-dialog {z-index:1000000;}" +
+            ".fc-multichoice-group-2col {" +
+            "display: inline-grid;" +
+            "grid-template-columns: repeat(2, minmax(0, auto));" +
+            "gap: 4px;" +
+            "margin: 4px 0;" +
+            "width: fit-content;" +
+            "}" +
+            ".fc-multichoice-group-3col {" +
+            "display: inline-grid;" +
+            "grid-template-columns: repeat(3, auto);" +
+            "gap: 4px;" +
+            "margin: 4px 0;" +
+            "width: fit-content;" +
+            "max-width: 100%;" +
+            "}" +
+            ".fc-multichoice-btn {" +
+            "background: #111;" +
+            "color: #fff;" +
+            "border: 1px solid #444;" +
+            "border-radius: 4px;" +
+            "padding: 4px 10px;" +
+            "margin: 0;" +
+            "cursor: pointer;" +
+            "font-size: 1em;" +
+            "text-align: left;" +
+            "transition: background 0.2s, color 0.2s, box-shadow 0.2s;" +
+            "opacity: 0.7;" +
+            "filter: grayscale(30%);" +
+            "flex: 1;" +
+            "min-width: 0;" +
+            "max-width: none;" +
+            "white-space: normal;" + // Allow text wrapping by default
+            "}" +
+            ".fc-multichoice-btn.truncate {" +
+            "white-space: nowrap;" +
+            "overflow: hidden;" +
+            "text-overflow: ellipsis;" +
+            "}"
     )
     .appendTo("head");
 
@@ -275,8 +472,12 @@ if (typeof Game.oldUpdateMenu != "function") {
     Game.oldUpdateMenu = Game.UpdateMenu;
 }
 
-// Add custom styles
+// Add custom styles and initialize global cache
 (function () {
+    // Create a persistent cache for button widths
+    window.FrozenCookies.buttonWidthCache =
+        window.FrozenCookies.buttonWidthCache || {};
+
     var style = document.createElement("style");
     style.innerHTML = `
         .fc-multichoice-group-vertical {
@@ -299,36 +500,36 @@ if (typeof Game.oldUpdateMenu != "function") {
             transition: background 0.2s, color 0.2s, box-shadow 0.2s;
             opacity: 0.7; /* Default: greyed out */
             filter: grayscale(30%);
-        }
-        .fc-multichoice-group-vertical .selected,
-        .option.selected {
-            background: #222;
-            color: #fff;
-            font-weight: bold;
-            opacity: 1;
-            filter: none;
-            /* Add shiny effect */
-            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
-        }
-        .fc-multichoice-group-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
-            margin: 4px 0;
-        }
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+        }        
+        .fc-multichoice-group-vertical,
+        .fc-multichoice-group-2col,
         .fc-multichoice-group-3col {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
             gap: 4px;
             margin: 4px 0;
-        }
-        .fc-multichoice-btn:hover,
-        .option:hover {
-            background: #222;
-            color: #fff;
-            opacity: 1;
-            filter: none;
-            box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #cfc inset;
+            width: 100%;
+        }        
+        .fc-multichoice-group-vertical {
+            grid-template-columns: 1fr;
+        }        
+        .fc-multichoice-group-2col {
+            grid-template-columns: repeat(2, 1fr);
+        }        
+        .fc-multichoice-group-3col {
+            grid-template-columns: repeat(3, 1fr);
+        }        
+        .fc-multichoice-group-vertical .fc-multichoice-btn,
+        .fc-multichoice-group-2col .fc-multichoice-btn,
+        .fc-multichoice-group-3col .fc-multichoice-btn {
+            width: 100%;
+            min-width: 0;
+            max-width: none;
         }
         .fc-section-heading {
             font-variant: small-caps;
@@ -557,38 +758,14 @@ function FCMenu() {
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference
-            ) {                var listing,
+            ) {
+                var listing,
                     prefVal = FrozenCookies.preferenceValues[preference],
                     hint = prefVal.hint,
                     display = prefVal.display,
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
-                (maxLabelLength = display && display.length ? Math.max.apply(
-                    null,
-                    display.map(function (label) {
-                        return label.length;
-                    })
-                ) : 0),
-                    (                testSpan = $("<span>")
-                        .css({
-                            position: "absolute",
-                            visibility: "hidden",
-                            fontSize: "1em",
-                            fontFamily: "inherit",
-                            fontWeight: "bold",
-                        })
-                        .appendTo(document.body)),
-                    (maxButtonWidth = 0);
-                if (display && display.length) {
-                    display.forEach(function (label) {
-                        testSpan.text(label);
-                        var width = testSpan[0].offsetWidth;
-                        if (width > maxButtonWidth) maxButtonWidth = width;
-                    });
-                }
-                testSpan.remove();
-                maxButtonWidth += 24; // Add padding for button borders and spacing
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
@@ -607,7 +784,29 @@ function FCMenu() {
                         );
                     }
                     if (display.length === 2) {
-                        // Render on/off option buttons side by side
+                        // Calculate max width for this preference's buttons if not already done
+                        if (!FrozenCookies.buttonWidthCache[preference]) {
+                            const testSpan = $("<span>")
+                                .css({
+                                    position: "absolute",
+                                    visibility: "hidden",
+                                    fontSize: "1em",
+                                    fontFamily: "inherit",
+                                    fontWeight: "bold",
+                                    whiteSpace: "nowrap",
+                                })
+                                .appendTo(document.body);
+
+                            const buttonWidths = display.map(function (label) {
+                                testSpan.text(label);
+                                return testSpan[0].offsetWidth + 24; // 24px for padding and borders
+                            });
+                            FrozenCookies.buttonWidthCache[preference] =
+                                Math.max(...buttonWidths);
+                            testSpan.remove();
+                        }
+
+                        // Render on/off option buttons side by side with calculated width
                         var buttonGroup = $("<div>").addClass(
                             "fc-multichoice-group-2col"
                         );
@@ -616,8 +815,13 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
-                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
+                                    .css(
+                                        "width",
+                                        FrozenCookies.buttonWidthCache[
+                                            preference
+                                        ] + "px"
+                                    )
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
                                     })
@@ -634,9 +838,9 @@ function FCMenu() {
                         );
                         // Determine column class based on number of options
                         let groupClass = "fc-multichoice-group-vertical";
-                        if (display.length > 8) {
+                        if (display.length >= 6) {
                             groupClass = "fc-multichoice-group-3col";
-                        } else if (display.length > 4) {
+                        } else if (display.length >= 3) {
                             groupClass = "fc-multichoice-group-2col";
                         }
                         // Render a group of buttons for direct selection, stacked or in columns
@@ -646,7 +850,6 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
-                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
@@ -1190,4 +1393,123 @@ function openDocumentationPage() {
         "_blank",
         "noopener,noreferrer,width=800,height=600"
     );
+}
+
+// New function to initialize the improved button styles
+function initializeImprovedButtonStyles() {
+    // Create the styles element
+    var style = document.createElement("style");
+    style.textContent = `
+        .fc-multichoice-btn {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            opacity: 0.7;
+            filter: grayscale(30%);
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            white-space: normal;
+        }
+        
+        .fc-multichoice-group-2col {
+            display: inline-grid;
+            grid-template-columns: repeat(2, minmax(0, auto));
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+        }
+        
+        .fc-multichoice-group-3col {
+            display: inline-grid;
+            grid-template-columns: repeat(3, auto);
+            gap: 4px;
+            margin: 4px 0;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .fc-multichoice-group-3col .fc-multichoice-btn {
+            width: var(--col-width, auto);
+        }
+
+        .fc-multichoice-group-3col {
+            --col1-width: auto;
+            --col2-width: auto;
+            --col3-width: auto;
+        }
+
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+1) {
+            --col-width: var(--col1-width);
+        }
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n+2) {
+            --col-width: var(--col2-width);
+        }
+        .fc-multichoice-group-3col .fc-multichoice-btn:nth-child(3n) {
+            --col-width: var(--col3-width);
+        }
+        
+        .fc-multichoice-btn.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fc-multichoice-btn:hover {
+            opacity: 1;
+            filter: none;
+        }
+        
+        .fc-multichoice-btn.selected {
+            opacity: 1;
+            filter: none;
+            background: #333;
+            box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Function to update column widths for three-column layouts
+    function updateColumnWidths() {
+        document
+            .querySelectorAll(".fc-multichoice-group-3col")
+            .forEach((group) => {
+                const buttons = Array.from(
+                    group.querySelectorAll(".fc-multichoice-btn")
+                );
+                const numCols = 3;
+                const colWidths = Array(numCols).fill(0);
+
+                buttons.forEach((btn, i) => {
+                    const colIndex = i % numCols;
+                    const naturalWidth = btn.scrollWidth;
+                    colWidths[colIndex] = Math.max(
+                        colWidths[colIndex],
+                        naturalWidth
+                    );
+                });
+
+                group.style.setProperty("--col1-width", `${colWidths[0]}px`);
+                group.style.setProperty("--col2-width", `${colWidths[1]}px`);
+                group.style.setProperty("--col3-width", `${colWidths[2]}px`);
+            });
+    }
+
+    // Update column widths initially and on window resize
+    updateColumnWidths();
+    window.addEventListener("resize", updateColumnWidths);
+}
+
+// Call the initialization function when the document loads
+if (document.readyState === "complete") {
+    initializeImprovedButtonStyles();
+} else {
+    window.addEventListener("load", initializeImprovedButtonStyles);
 }
