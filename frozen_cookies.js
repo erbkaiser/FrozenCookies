@@ -24,7 +24,7 @@ var baseUrl =
 var FrozenCookies = {
     baseUrl: baseUrl,
     branch: "erb-",
-    version: "2.052.6",
+    version: "2.052.7",
 };
 
 // Load external libraries and FC scripts in order
@@ -49,7 +49,7 @@ var script_list = [
     FrozenCookies.baseUrl + "/fc_spells.js", // spells minigame and autocasting
     FrozenCookies.baseUrl + "/fc_bank.js", // bank minigame
     FrozenCookies.baseUrl + "/fc_button.js", // button to open the Frozen Cookies menu
-    FrozenCookies.baseUrl + "/fc_infobox.js", // infobox, used last
+    FrozenCookies.baseUrl + "/fc_infobox.js", // infobox
 ];
 
 FrozenCookies.loadInterval = setInterval(function () {

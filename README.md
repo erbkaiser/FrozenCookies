@@ -1,6 +1,6 @@
 ![A single round cookie with a soft, slightly crumbly texture, topped with blue candy pieces and silver sprinkles. The cookie rests on a bed of shredded coconut, creating a wintry, festive atmosphere. No text is present. The overall tone alludes to winter, a frozen atmosphere.](https://user-images.githubusercontent.com/6014923/165900996-4726d38f-3c7c-4932-8d2e-f98bed93a836.png)
 
-![Version](https://img.shields.io/badge/version-2.052.6-blue)
+![Version](https://img.shields.io/badge/version-2.052.7-blue)
 ![License](https://img.shields.io/github/license/erbkaiser/FrozenCookies)
 [![GitHub issues](https://img.shields.io/github/issues/erbkaiser/FrozenCookies?label=issues)](https://github.com/erbkaiser/FrozenCookies/issues)
 [![Last commit](https://img.shields.io/github/last-commit/erbkaiser/FrozenCookies?label=last%20commit)](https://github.com/erbkaiser/FrozenCookies/commits/main)
@@ -36,7 +36,7 @@ An automated Cookie Clicker tool.
 
 ## Compatibility
 
-**Current version:** erb-2.052.6  
+**Current version:** erb-2.052.7  
 Supports: Cookie Clicker web version 2.052 and Steam version 2.053
 
 FrozenCookies works with most other mods, including [CCSE](https://github.com/klattmose/klattmose.github.io/tree/master/CookieClicker).  
@@ -111,8 +111,19 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 <details>
 <summary>Click to expand!</summary>
 
+2025 May 26
+
+-   Version bumped to 2.052.7
+-   Changed autoGodzamok rebuy to be more dependable
+-   Some tweaks to the auto 100% combo to make it hopefully fail less
+-   Split up the code from fc_main.js to sub files for easier editing
+-   Added current Frenzy multiplier to the bottom of the milk
+-   Added some ticker messages
+-   Made the options display for toggles look the same as other options
+
 2025 May 22
 
+-   Version bumped to 2.052.6
 -   Reduced over-all lag a bit by changing timer intervals
 -   Reduced lag for auto-Cyclius by only checking values once per minute
 -   Rewrote the options menu
