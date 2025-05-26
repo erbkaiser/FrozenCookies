@@ -12,95 +12,14 @@ function scientificNotation(value) {
     return value;
 }
 
+// Implemented much better in base mod so just call that for raw, long, and short
+// Used by FrozenCookies.numberDisplay in fcBeautify
 var numberFormatters = [
     rawFormatter,
+    formatEveryThirdPower(formatLong), // 1: long: millions, billions etc.
+    formatEveryThirdPower(formatShort), // 2: short: M, B, T etc.
     formatEveryThirdPower([
-        "",
-        " million",
-        " billion",
-        " trillion",
-        " quadrillion",
-        " quintillion",
-        " sextillion",
-        " septillion",
-        " octillion",
-        " nonillion",
-        " decillion",
-        " undecillion",
-        " duodecillion",
-        " tredecillion",
-        " quattuordecillion",
-        " quindecillion",
-        " sexdecillion",
-        " septendecillion",
-        " octodecillion",
-        " novemdecillion",
-        " vigintillion",
-        " unvigintillion",
-        " duovigintillion",
-        " trevigintillion",
-        " quattuorvigintillion",
-        " quinvigintillion",
-        " sexvigintillion",
-        " septenvigintillion",
-        " octovigintillion",
-        " novemvigintillion",
-        " trigintillion",
-        " untrigintillion",
-        " duotrigintillion",
-        " tretrigintillion",
-        " quattuortrigintillion",
-        " quintrigintillion",
-        " sextrigintillion",
-        " septentrigintillion",
-        " octotrigintillion",
-        " novemtrigintillion",
-    ]),
-
-    formatEveryThirdPower([
-        "",
-        " M",
-        " B",
-        " T",
-        " Qa",
-        " Qi",
-        " Sx",
-        " Sp",
-        " Oc",
-        " No",
-        " De",
-        " UnD",
-        " DoD",
-        " TrD",
-        " QaD",
-        " QiD",
-        " SxD",
-        " SpD",
-        " OcD",
-        " NoD",
-        " Vg",
-        " UnV",
-        " DoV",
-        " TrV",
-        " QaV",
-        " QiV",
-        " SxV",
-        " SpV",
-        " OcV",
-        " NoV",
-        " Tg",
-        " UnT",
-        " DoT",
-        " TrT",
-        " QaT",
-        " QiT",
-        " SxT",
-        " SpT",
-        " OcT",
-        " NoT",
-    ]),
-
-    formatEveryThirdPower([
+        // 3: SI prefixes: M, G, T etc.
         "",
         " M",
         " G",
@@ -112,12 +31,21 @@ var numberFormatters = [
         " R",
         " Q",
     ]),
-    scientificNotation,
+    scientificNotation, // 4: scientific: 6.3e12 etc.
 ];
 
 function fcBeautify(value) {
     var negative = value < 0;
     value = Math.abs(value);
+    // There are no SI prefixes larger than 1e30, so we'll use scientific notation
+    // The game will show Infinity otherwise, which is not useful
+    if (FrozenCookies.numberDisplay === 3 && value >= 1e33) {
+        // Use scientificNotation (case 4)
+        var output = numberFormatters[4](value)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return negative ? "-" + output : output;
+    }
     var formatter = numberFormatters[FrozenCookies.numberDisplay];
     var output = formatter(value)
         .toString()
