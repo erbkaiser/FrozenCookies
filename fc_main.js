@@ -5502,13 +5502,34 @@ function autoGSBuy() {
 }
 
 function safeBuy(bldg, count) {
-    // If store is in Sell mode, Game.Objects[].buy will sell the building!
-    if (Game.buyMode == -1) {
-        Game.buyMode = 1;
-        bldg.buy(count);
-        Game.buyMode = -1;
-    } else {
-        bldg.buy(count);
+    if (count <= 0) return;
+    var initialAmount = bldg.amount;
+    var toBuy = count;
+    var maxAttempts = 2;
+    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+        if (Game.buyMode == -1) {
+            Game.buyMode = 1;
+            bldg.buy(toBuy);
+            Game.buyMode = -1;
+        } else {
+            bldg.buy(toBuy);
+        }
+        var newAmount = bldg.amount;
+        var actuallyBought = newAmount - initialAmount;
+        if (actuallyBought >= toBuy) {
+            return; // Success
+        } else if (actuallyBought > 0) {
+            // Partial success, try to buy the rest
+            safeBuy(bldg, toBuy - actuallyBought);
+            return;
+        }
+        // If nothing was bought, try again (loop)
+    }
+    // If still not enough, recursively try to buy half, then the rest
+    if (toBuy > 1) {
+        var half = Math.floor(toBuy / 2);
+        safeBuy(bldg, half);
+        safeBuy(bldg, toBuy - half);
     }
 }
 
