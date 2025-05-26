@@ -538,6 +538,9 @@ function updateTimers() {
         c.clearCanvas({ layer: true, name: "fcCurrentFrenzyText" });
     }
 
+    // Calculate currentFrenzy before drawing it
+    var currentFrenzy = cpsBonus() * clickBuffBonus();
+
     // Draw the current frenzy at the bottom of the canvas
     if (typeof c.drawText === "function") {
         c.drawText({
