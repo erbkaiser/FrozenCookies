@@ -343,7 +343,7 @@ function updateTimers() {
         chainTotal = 0,
         chainFinished,
         chainCompletion = 0;
-        c = $("#backgroundLeftCanvas");
+    c = $("#backgroundLeftCanvas");
     if (nextChainedPurchase().cost > nextPurchase().cost) {
         chainPurchase = nextChainedPurchase().purchase;
         chainTotal =
@@ -535,9 +535,9 @@ function updateTimers() {
 
     // Calculate currentFrenzy before drawing it
     var currentFrenzy = cpsBonus() * clickBuffBonus();
-
     // Draw the current frenzy at the bottom of the canvas
-    if (typeof c.drawText === "function") {
+    if (FrozenCookies.fancyui && typeof c.drawText === "function") {
+        c.removeLayer && c.removeLayer("fcCurrentFrenzyText");
         c.drawText({
             layer: true,
             name: "fcCurrentFrenzyText",
@@ -546,7 +546,7 @@ function updateTimers() {
             fillStyle: "#fff",
             x: c.width() / 2,
             y: c.height() - 18,
-            text: "Frenzy: " + Beautify(currentFrenzy),
+            text: "Frenzy: " + fcBeautify(currentFrenzy),
             align: "center",
             baseline: "bottom",
         });
