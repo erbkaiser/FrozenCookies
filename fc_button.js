@@ -555,6 +555,34 @@ function FCMenu() {
                     .addClass("fc-warning")
                     .text(" ⚠️ All options take effect immediately.")
             );
+            // Create a single test span for all measurements
+            const testSpan = $("<span>")
+                .css({
+                    position: "absolute",
+                    visibility: "hidden",
+                    fontSize: "1em",
+                    fontFamily: "inherit",
+                    fontWeight: "bold",
+                })
+                .appendTo(document.body);
+
+            // Pre-calculate all button widths once
+            const buttonWidthCache = {};
+            _.keys(FrozenCookies.preferenceValues).forEach(function (pref) {
+                const display = FrozenCookies.preferenceValues[pref].display;
+                if (display && display.length) {
+                    const buttonWidths = display.map(function (label) {
+                        testSpan.text(label);
+                        return testSpan[0].offsetWidth + 20; // 20px padding
+                    });
+                    buttonWidthCache[pref] = {
+                        widths: buttonWidths,
+                        maxWidth: Math.max(...buttonWidths),
+                    };
+                }
+            });
+            testSpan.remove();
+
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference
             ) {
@@ -564,58 +592,9 @@ function FCMenu() {
                     display = prefVal.display,
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
-                    preferenceButtonId = preference + "Button";
-                (maxLabelLength =
-                    display && display.length
-                        ? Math.max.apply(
-                              null,
-                              display.map(function (label) {
-                                  return label.length;
-                              })
-                          )
-                        : 0),
-                    (testSpan = $("<span>")
-                        .css({
-                            position: "absolute",
-                            visibility: "hidden",
-                            fontSize: "1em",
-                            fontFamily: "inherit",
-                            fontWeight: "bold",
-                        })
-                        .appendTo(document.body)),
-                    (maxButtonWidth = 0),
-                    (columnWidths = []);
-                if (display && display.length) {
-                    // Calculate individual button widths
-                    let buttonWidths = display.map(function (label) {
-                        testSpan.text(label);
-                        return testSpan[0].offsetWidth + 20; // 20px for padding
-                    });
-
-                    // For columns, ensure each column has consistent width
-                    let numColumns = 1;
-                    if (display.length > 8) numColumns = 3;
-                    else if (display.length > 3 || display.length === 2)
-                        numColumns = 2;
-
-                    if (numColumns > 1) {
-                        // Split into columns and find max width per column
-                        let rowsPerColumn = Math.ceil(
-                            buttonWidths.length / numColumns
-                        );
-                        for (let col = 0; col < numColumns; col++) {
-                            let colWidths = buttonWidths.slice(
-                                col * rowsPerColumn,
-                                (col + 1) * rowsPerColumn
-                            );
-                            columnWidths[col] = Math.max(...colWidths);
-                        }
-                        maxButtonWidth = Math.max(...columnWidths);
-                    } else {
-                        maxButtonWidth = Math.max(...buttonWidths);
-                    }
-                }
-                testSpan.remove();
+                    preferenceButtonId = preference + "Button"; // Use cached button widths
+                const buttonWidths = buttonWidthCache[preference];
+                const maxButtonWidth = buttonWidths ? buttonWidths.maxWidth : 0;
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
