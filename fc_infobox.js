@@ -1,5 +1,3 @@
-
-
 function scientificNotation(value) {
     if (
         value === 0 ||
