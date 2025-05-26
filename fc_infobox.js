@@ -480,18 +480,3 @@ function updateTimers() {
         });
     }
 }
-
-// Patch base game ascend number display to use Beautify instead of SimpleBeautify
-(function patchAscendNumberDisplay() {
-    // Save the original Game.Logic if not already patched
-    if (!Game._fcOldLogic) {
-        Game._fcOldLogic = Game.Logic;
-        Game.Logic = function () {
-            Game._fcOldLogic.apply(this, arguments);
-            // Patch the ascend number display after the original logic runs
-            if (typeof ascendNowToGet !== "undefined" && Game.ascendNumber) {
-                Game.ascendNumber.textContent = "+" + Beautify(ascendNowToGet);
-            }
-        };
-    }
-})();
