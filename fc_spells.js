@@ -1175,9 +1175,7 @@ function auto100ConsistencyComboAction() {
 
     // Not currently possible to do the combo
     if (
-        Game.dragonLevel < 27 || // Fully upgraded dragon needed for two auras
-        !G.canPlant(G.plantsById[14]) || // Can currently plant whiskerbloom (cost)
-        G.plantsById[14].unlocked == 0 // Whiskerbloom seed unlocked
+        Game.dragonLevel < 27 // Fully upgraded dragon needed for two auras
     ) {
         return;
     }
@@ -1374,24 +1372,31 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 3: // Check for whiskerbloom (14) and if not found, plant it
-            var whisk = false;
-            for (let i = 0; i < 6; i++) {
-                for (let j = 0; j < 6; j++) {
-                    if (G.plot[i][j][0] - 1 === 14) {
-                        whisk = true;
+            if (G.plantsById[14].unlocked == 0) {
+                // Whiskerbloom seed unlocked
+                var whisk = false;
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 6; j++) {
+                        if (G.plot[i][j][0] - 1 === 14) {
+                            whisk = true;
+                        }
                     }
                 }
-            }
-            if (whisk) {
-                auto100ConsistencyComboAction.state = 4;
+                if (whisk) {
+                    auto100ConsistencyComboAction.state = 4;
+                } else {
+                    G.harvestAll();
+                    for (var y = 0; y <= 5; y++) {
+                        for (var x = 0; x <= 5; x++) {
+                            if (G.canPlant(G.plantsById[14])) {
+                                G.seedSelected = G.plants["whiskerbloom"].id;
+                                G.clickTile(x, y);
+                            }
+                        }
+                    }
+                    auto100ConsistencyComboAction.state = 4;
+                }
             } else {
-                G.harvestAll();
-                for (var y = 0; y <= 5; y++) {
-                    for (var x = 0; x <= 5; x++) {
-                        G.seedSelected = G.plants["whiskerbloom"].id;
-                        G.clickTile(x, y);
-                    }
-                }
                 auto100ConsistencyComboAction.state = 4;
             }
             return;
@@ -1537,7 +1542,13 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 14: // Swap Mokalsium to ruby slot
-            if (!Game.hasGod("mother") && T.swaps >= 1) swapIn(8, 1);
+            if (!Game.hasGod("mother") && T.swaps >= 1) {
+                swapIn(8, 1);
+            }
+            // Fallback: if swap not possible, still advance
+            if (T.swaps == 0 || Game.hasGod("mother")) {
+                // No swap performed, but continue
+            }
             auto100ConsistencyComboAction.state = 15;
             return;
 
