@@ -37,6 +37,8 @@ function registerMod(mod_id = "frozen_cookies") {
                         "News : debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
                         "News : Supreme Court rules Frozen Cookies not unauthorized cheating after all.",
                         "News : Frozen Cookies considered 'cool'. Pun-haters heard groaning.",
+                        "News : Scientists baffled as cookies are now measured in 'efficiency' instead of calories.",
+                        "News : Cookie clickers debate: is it cheating if the bot is more efficient than you?",
                     ];
                 }
                 if (
@@ -50,6 +52,16 @@ function registerMod(mod_id = "frozen_cookies") {
                                 bestBank(nextChainedPurchase().efficiency).cost
                             ) +
                             " banked cookies are still fresh.",
+                    ];
+                }
+                if (M) {
+                    return [
+                        "News : Local wizards claim they can predict the next golden cookie, while munching on Frozen Cookies.",
+                    ];
+                }
+                if (T) {
+                    return [
+                        "News : Cookie gods issue statement: 'Stop swapping us so much, we're getting dizzy!'",
                     ];
                 }
                 if (
@@ -67,7 +79,11 @@ function registerMod(mod_id = "frozen_cookies") {
                     return [
                         "Investigation into potential cheating with Frozen Cookies is blocked by your lawyers.",
                         "Your Frozen Cookies are now available in stores everywhere.",
-                        "Movie studio suit against your use of 'Frozen' dismissed with prejudice.",
+                        "Famous movie studio lets it go: no grounds found to freeze out Frozen Cookies.",
+                        "Cookie banks report record deposits, but nobody knows what a 'bestBank' actually is.",
+                        "Cookie banks now offering 'harvestBank' accounts with 0% interest and infinite cookies.",
+                        "Cookie economy destabilized by mysterious entity known only as 'FrozenCookies'.",
+                        "Cookie market analysts confused by sudden spike in 'efficiencyScore'.",
                     ];
                 }
                 if (
