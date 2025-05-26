@@ -6305,3 +6305,84 @@ function FCStart() {
 
     FCMenu();
 }
+
+// --- Reward Cookie Helper ---
+function isRewardCookie(upgrade) {
+    // Reward cookies: upgrades that require all buildings to reach a certain number
+    // See cc_upgrade_prerequisites.js, e.g. ids 334, 335, 336, 337, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414
+    // We'll check if the prereq is all buildings > 0 and the array is long (i.e. 15-20 buildings)
+    if (!upgrade || !upgradeJson[upgrade.id]) return false;
+    var prereq = upgradeJson[upgrade.id].buildings;
+    if (!prereq || prereq.length < 10) return false;
+    var allSame = prereq.every(function (v) {
+        return v > 0 && v === prereq[0];
+    });
+    return allSame;
+}
+
+function getRewardCookieBuildingTargets(upgrade) {
+    // Returns an array of {id, amount} for each building type needed
+    if (!upgrade || !upgradeJson[upgrade.id]) return [];
+    var prereq = upgradeJson[upgrade.id].buildings;
+    return prereq.map(function (amt, idx) {
+        return { id: idx, amount: amt };
+    });
+}
+
+function restoreBuildingLimits() {
+    // Sells excess buildings to return to user limits
+    if (FrozenCookies.towerLimit) {
+        var obj = Game.Objects["Wizard tower"];
+        if (obj.amount > FrozenCookies.manaMax)
+            obj.sell(obj.amount - FrozenCookies.manaMax);
+    }
+    if (FrozenCookies.mineLimit) {
+        var obj = Game.Objects["Mine"];
+        if (obj.amount > FrozenCookies.mineMax)
+            obj.sell(obj.amount - FrozenCookies.mineMax);
+    }
+    if (FrozenCookies.factoryLimit) {
+        var obj = Game.Objects["Factory"];
+        if (obj.amount > FrozenCookies.factoryMax)
+            obj.sell(obj.amount - FrozenCookies.factoryMax);
+    }
+    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
+        var obj = Game.Objects["You"];
+        if (obj.amount > FrozenCookies.orbMax)
+            obj.sell(obj.amount - FrozenCookies.orbMax);
+    }
+}
+
+// --- Patch autoCookie for reward cookies ---
+var _oldAutoCookie = autoCookie;
+autoCookie = function () {
+    var chainRec = nextChainedPurchase();
+    if (
+        chainRec &&
+        chainRec.type === "upgrade" &&
+        isRewardCookie(chainRec.purchase)
+    ) {
+        // Temporarily ignore limits and buy up to required amount for each building
+        var targets = getRewardCookieBuildingTargets(chainRec.purchase);
+        targets.forEach(function (t) {
+            var obj = Game.ObjectsById[t.id];
+            if (obj && obj.amount < t.amount) {
+                obj.buy(t.amount - obj.amount);
+            }
+        });
+        // Try to buy the reward cookie if unlocked and affordable
+        if (
+            chainRec.purchase.unlocked &&
+            !chainRec.purchase.bought &&
+            Game.cookies >= chainRec.purchase.getPrice()
+        ) {
+            chainRec.purchase.buy();
+            restoreBuildingLimits();
+        }
+        // Continue with normal autobuy for other things
+        _oldAutoCookie();
+        return;
+    }
+    // Default behavior
+    _oldAutoCookie();
+};
