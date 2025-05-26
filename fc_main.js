@@ -3179,6 +3179,49 @@ function fcClickCookie() {
         Game.ClickCookie();
 }
 
+// --- Reward cookie handling functions ---
+function isRewardCookie(upgrade) {
+    if (!upgrade || !upgradeJson[upgrade.id]) return false;
+    var prereq = upgradeJson[upgrade.id].buildings;
+    if (!prereq || prereq.length < 10) return false;
+    var allSame = prereq.every(function (v) {
+        return v > 0 && v === prereq[0];
+    });
+    return allSame;
+}
+
+function getRewardCookieBuildingTargets(upgrade) {
+    if (!upgrade || !upgradeJson[upgrade.id]) return [];
+    var prereq = upgradeJson[upgrade.id].buildings;
+    return prereq.map(function (amt, idx) {
+        return { id: idx, amount: amt };
+    });
+}
+
+function restoreBuildingLimits() {
+    // Sells excess buildings to return to user limits
+    if (FrozenCookies.towerLimit) {
+        var obj = Game.Objects["Wizard tower"];
+        if (obj.amount > FrozenCookies.manaMax)
+            obj.sell(obj.amount - FrozenCookies.manaMax);
+    }
+    if (FrozenCookies.mineLimit) {
+        var obj = Game.Objects["Mine"];
+        if (obj.amount > FrozenCookies.mineMax)
+            obj.sell(obj.amount - FrozenCookies.mineMax);
+    }
+    if (FrozenCookies.factoryLimit) {
+        var obj = Game.Objects["Factory"];
+        if (obj.amount > FrozenCookies.factoryMax)
+            obj.sell(obj.amount - FrozenCookies.factoryMax);
+    }
+    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
+        var obj = Game.Objects["You"];
+        if (obj.amount > FrozenCookies.orbMax)
+            obj.sell(obj.amount - FrozenCookies.orbMax);
+    }
+}
+
 function autoCookie() {
     // Skip if we're already processing, or if game is in ascension state
     if (!FrozenCookies.processing && !Game.OnAscend && !Game.AscendTimer) {
@@ -3215,56 +3258,12 @@ function autoCookie() {
                     "RewardCookie",
                     "Auto-bought " + chainRec.purchase.name
                 );
+                // Call the global function to restore building limits after buying special cookies
                 restoreBuildingLimits();
 
                 // We need to recalculate caches after this special purchase
                 invalidateUpgradeCache();
                 invalidateBuildingCache();
-            }
-        }
-
-        // --- Built-in reward cookie handling functions ---
-        function isRewardCookie(upgrade) {
-            // Check if an upgrade is a "reward cookie" (requires building counts)
-            if (!upgrade || !upgradeJson[upgrade.id]) return false;
-            var prereq = upgradeJson[upgrade.id].buildings;
-            if (!prereq || prereq.length < 10) return false;
-            var allSame = prereq.every(function (v) {
-                return v > 0 && v === prereq[0];
-            });
-            return allSame;
-        }
-
-        function getRewardCookieBuildingTargets(upgrade) {
-            // Returns building targets needed for reward cookie
-            if (!upgrade || !upgradeJson[upgrade.id]) return [];
-            var prereq = upgradeJson[upgrade.id].buildings;
-            return prereq.map(function (amt, idx) {
-                return { id: idx, amount: amt };
-            });
-        }
-
-        function restoreBuildingLimits() {
-            // Sells excess buildings to return to user limits
-            if (FrozenCookies.towerLimit) {
-                var obj = Game.Objects["Wizard tower"];
-                if (obj.amount > FrozenCookies.manaMax)
-                    obj.sell(obj.amount - FrozenCookies.manaMax);
-            }
-            if (FrozenCookies.mineLimit) {
-                var obj = Game.Objects["Mine"];
-                if (obj.amount > FrozenCookies.mineMax)
-                    obj.sell(obj.amount - FrozenCookies.mineMax);
-            }
-            if (FrozenCookies.factoryLimit) {
-                var obj = Game.Objects["Factory"];
-                if (obj.amount > FrozenCookies.factoryMax)
-                    obj.sell(obj.amount - FrozenCookies.factoryMax);
-            }
-            if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
-                var obj = Game.Objects["You"];
-                if (obj.amount > FrozenCookies.orbMax)
-                    obj.sell(obj.amount - FrozenCookies.orbMax);
             }
         }
 
