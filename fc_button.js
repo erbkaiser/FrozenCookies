@@ -278,18 +278,20 @@ if (typeof Game.oldUpdateMenu != "function") {
 // Add custom styles
 (function () {
     var style = document.createElement("style");
-    style.innerHTML = `        .fc-multichoice-group-vertical {
+    style.innerHTML = `
+        .fc-multichoice-group-vertical {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 4px;
             margin: 4px 0;
         }
-        .fc-multichoice-btn, .option {
+        .fc-multichoice-btn,
+        .option {
             background: #111;
             color: #fff;
             border: 1px solid #444;
             border-radius: 4px;
-            padding: 3px 6px;
+            padding: 4px 10px;
             margin: 0;
             cursor: pointer;
             font-size: 1em;
@@ -309,15 +311,15 @@ if (typeof Game.oldUpdateMenu != "function") {
             box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
         }
         .fc-multichoice-group-2col {
-            display: flex;
-            justify-content: flex-start;
-            gap: 1px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
             margin: 4px 0;
         }
         .fc-multichoice-group-3col {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 1px;
+            gap: 4px;
             margin: 4px 0;
         }
         .fc-multichoice-btn:hover,
@@ -361,47 +363,13 @@ function FCMenu() {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
         }
-
-        // Store scroll position
-        var menu = $("#menu")[0];
-        var scrollPosition = menu ? menu.scrollTop : 0;
-
-        // Only update if preference-affecting values have changed
-        var now = Date.now();
-        if (
-            FrozenCookies.lastPreferenceUpdate &&
-            now - FrozenCookies.lastPreferenceUpdate < 1000
-        ) {
-            // Don't update preferences more than once per second
-            return;
-        }
-
-        // Calculate hash only from values that affect preferences display
-        var gameStateHash = [
-            Game.elderWrath,
-            Game.Has("Chocolate egg"),
-            Game.shimmerTypes.golden.last,
-            FrozenCookies.autoClick,
-            Math.floor(Game.cookies / 100000), // Only care about major cookie changes
-            Math.floor(Game.cookiesPs / 100), // Only care about major CPS changes
-        ].join("|");
-        
-        if (
-            !Game.callingMenu &&
-            (!FrozenCookies.lastGameStateHash ||
-                FrozenCookies.lastGameStateHash !== gameStateHash)
-        ) {
+        if (!Game.callingMenu) {
             Game.callingMenu = true;
-            FrozenCookies.lastGameStateHash = gameStateHash;
-            FrozenCookies.lastPreferenceUpdate = now;
-
-            // Schedule next update
             setTimeout(() => {
                 Game.callingMenu = false;
                 Game.UpdateMenu();
             }, 1000);
         }
-
         var currentCookies,
             maxCookies,
             isTarget,
@@ -589,24 +557,20 @@ function FCMenu() {
             );
             _.keys(FrozenCookies.preferenceValues).forEach(function (
                 preference
-            ) {
-                var listing,
+            ) {                var listing,
                     prefVal = FrozenCookies.preferenceValues[preference],
                     hint = prefVal.hint,
                     display = prefVal.display,
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
-                (maxLabelLength =
-                    display && display.length
-                        ? Math.max.apply(
-                              null,
-                              display.map(function (label) {
-                                  return label.length;
-                              })
-                          )
-                        : 0),
-                    (testSpan = $("<span>")
+                (maxLabelLength = display && display.length ? Math.max.apply(
+                    null,
+                    display.map(function (label) {
+                        return label.length;
+                    })
+                ) : 0),
+                    (                testSpan = $("<span>")
                         .css({
                             position: "absolute",
                             visibility: "hidden",
@@ -624,7 +588,7 @@ function FCMenu() {
                     });
                 }
                 testSpan.remove();
-                maxButtonWidth += 12; // Add padding for button borders and spacing (reduced from 24)
+                maxButtonWidth += 24; // Add padding for button borders and spacing
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
@@ -1172,16 +1136,6 @@ function FCMenu() {
                         'px;"></div></div>'
                 )
             );
-
-        // Restore scroll position
-        if (scrollPosition > 0) {
-            requestAnimationFrame(() => {
-                menu = $("#menu")[0];
-                if (menu) {
-                    menu.scrollTop = scrollPosition;
-                }
-            });
-        }
     };
 }
 
