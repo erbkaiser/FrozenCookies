@@ -27,7 +27,7 @@ var FrozenCookies = {
     version: "2.052.6",
 };
 
-// Load external libraries
+// Load external libraries and FC scripts in order
 var script_list = [
     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js",
     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css",
@@ -42,12 +42,14 @@ var script_list = [
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.logAxisRenderer.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.cursor.min.js",
-    FrozenCookies.baseUrl + "/fc_preferences.js",
-    FrozenCookies.baseUrl + "/cc_upgrade_prerequisites.js",
-    FrozenCookies.baseUrl + "/fc_main.js",
-    FrozenCookies.baseUrl + "/fc_button.js",
-    FrozenCookies.baseUrl + "/fc_spellpredict.js",
-    FrozenCookies.baseUrl + "/fc_infobox.js",
+    FrozenCookies.baseUrl + "/fc_preferences.js", // preferences must be loaded before the rest of the scripts
+    FrozenCookies.baseUrl + "/cc_upgrade_prerequisites.js", // upgrade prerequisites, used in fc_main.js
+    FrozenCookies.baseUrl + "/fc_main.js", // main logic
+    FrozenCookies.baseUrl + "/fc_button.js", // button to open the Frozen Cookies menu
+    FrozenCookies.baseUrl + "/fc_gods.js", // gods minigame and dragon options
+    FrozenCookies.baseUrl + "/fc_spells.js", // spells minigame and autocasting
+    FrozenCookies.baseUrl + "/fc_bank.js", // bank minigame
+    FrozenCookies.baseUrl + "/fc_infobox.js", // infobox, used last
 ];
 
 FrozenCookies.loadInterval = setInterval(function () {

@@ -1,3 +1,173 @@
+
+
+function scientificNotation(value) {
+    if (
+        value === 0 ||
+        !Number.isFinite(value) ||
+        (Math.abs(value) >= 1 && Math.abs(value) <= 1000)
+    ) {
+        return rawFormatter(value);
+    }
+    value = parseFloat(value);
+    value = value.toExponential(2);
+    value = value.replace("+", "");
+    return value;
+}
+
+var numberFormatters = [
+    rawFormatter,
+    formatEveryThirdPower([
+        "",
+        " million",
+        " billion",
+        " trillion",
+        " quadrillion",
+        " quintillion",
+        " sextillion",
+        " septillion",
+        " octillion",
+        " nonillion",
+        " decillion",
+        " undecillion",
+        " duodecillion",
+        " tredecillion",
+        " quattuordecillion",
+        " quindecillion",
+        " sexdecillion",
+        " septendecillion",
+        " octodecillion",
+        " novemdecillion",
+        " vigintillion",
+        " unvigintillion",
+        " duovigintillion",
+        " trevigintillion",
+        " quattuorvigintillion",
+        " quinvigintillion",
+        " sexvigintillion",
+        " septenvigintillion",
+        " octovigintillion",
+        " novemvigintillion",
+        " trigintillion",
+        " untrigintillion",
+        " duotrigintillion",
+        " tretrigintillion",
+        " quattuortrigintillion",
+        " quintrigintillion",
+        " sextrigintillion",
+        " septentrigintillion",
+        " octotrigintillion",
+        " novemtrigintillion",
+    ]),
+
+    formatEveryThirdPower([
+        "",
+        " M",
+        " B",
+        " T",
+        " Qa",
+        " Qi",
+        " Sx",
+        " Sp",
+        " Oc",
+        " No",
+        " De",
+        " UnD",
+        " DoD",
+        " TrD",
+        " QaD",
+        " QiD",
+        " SxD",
+        " SpD",
+        " OcD",
+        " NoD",
+        " Vg",
+        " UnV",
+        " DoV",
+        " TrV",
+        " QaV",
+        " QiV",
+        " SxV",
+        " SpV",
+        " OcV",
+        " NoV",
+        " Tg",
+        " UnT",
+        " DoT",
+        " TrT",
+        " QaT",
+        " QiT",
+        " SxT",
+        " SpT",
+        " OcT",
+        " NoT",
+    ]),
+
+    formatEveryThirdPower([
+        "",
+        " M",
+        " G",
+        " T",
+        " P",
+        " E",
+        " Z",
+        " Y",
+        " R",
+        " Q",
+    ]),
+    scientificNotation,
+];
+
+function fcBeautify(value) {
+    var negative = value < 0;
+    value = Math.abs(value);
+    var formatter = numberFormatters[FrozenCookies.numberDisplay];
+    var output = formatter(value)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return negative ? "-" + output : output;
+}
+
+// Runs numbers in upgrades and achievements through our beautify function
+function beautifyUpgradesAndAchievements() {
+    function beautifyFn(str) {
+        return Beautify(parseInt(str.replace(/,/, ""), 10));
+    }
+
+    var numre = /\d\d?\d?(?:,\d\d\d)*/;
+    Object.values(Game.AchievementsById).forEach(function (ach) {
+        ach.desc = ach.desc.replace(numre, beautifyFn);
+    });
+
+    // These might not have any numbers in them, but just in case...
+    Object.values(Game.UpgradesById).forEach(function (upg) {
+        upg.desc = upg.desc.replace(numre, beautifyFn);
+    });
+}
+
+function timeDisplay(seconds) {
+    if (seconds === "---" || seconds === 0) {
+        return "Done!";
+    } else if (seconds == Number.POSITIVE_INFINITY) {
+        return "Never!";
+    }
+    seconds = Math.floor(seconds);
+    var years, days, hours, minutes;
+    years = Math.floor(seconds / (365.25 * 24 * 60 * 60));
+    years = years > 0 ? Beautify(years) + "y " : "";
+    seconds %= 365.25 * 24 * 60 * 60;
+    days = Math.floor(seconds / (24 * 60 * 60));
+    days = days > 0 ? days + "d " : "";
+    seconds %= 24 * 60 * 60;
+    hours = Math.floor(seconds / (60 * 60));
+    hours = hours > 0 ? hours + "h " : "";
+    seconds %= 60 * 60;
+    minutes = Math.floor(seconds / 60);
+    minutes = minutes > 0 ? minutes + "m " : "";
+    seconds %= 60;
+    seconds = seconds > 0 ? seconds + "s" : "";
+    return (years + days + hours + minutes + seconds).trim();
+}
+
 // functionality for the infobox
 function drawCircles(t_d, x, y) {
     var maxRadius,
