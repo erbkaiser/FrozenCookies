@@ -533,11 +533,6 @@ function updateTimers() {
     height = $("#backgroundLeftCanvas").height() - 140;
     drawCircles(t_draw, 20, height);
 
-    // Remove any previous text overlays to prevent stacking
-    if (typeof c.clearCanvas === "function") {
-        c.clearCanvas({ layer: true, name: "fcCurrentFrenzyText" });
-    }
-
     // Calculate currentFrenzy before drawing it
     var currentFrenzy = cpsBonus() * clickBuffBonus();
 
