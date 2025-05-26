@@ -366,21 +366,26 @@ function FCMenu() {
         var menu = $("#menu")[0];
         var scrollPosition = menu ? menu.scrollTop : 0;
 
-        // Only update if something has changed
+        // Only update if preference-affecting values have changed
+        var now = Date.now();
+        if (
+            FrozenCookies.lastPreferenceUpdate &&
+            now - FrozenCookies.lastPreferenceUpdate < 1000
+        ) {
+            // Don't update preferences more than once per second
+            return;
+        }
+
+        // Calculate hash only from values that affect preferences display
         var gameStateHash = [
-            Game.cookies,
-            Game.cookiesPs,
-            Game.goldenClicks,
-            Game.missedGoldenClicks,
             Game.elderWrath,
             Game.Has("Chocolate egg"),
-            liveWrinklers().length,
             Game.shimmerTypes.golden.last,
-            Game.heavenlyChips,
             FrozenCookies.autoClick,
-            Game.hasBuff("Frenzy"),
+            Math.floor(Game.cookies / 100000), // Only care about major cookie changes
+            Math.floor(Game.cookiesPs / 100), // Only care about major CPS changes
         ].join("|");
-
+        
         if (
             !Game.callingMenu &&
             (!FrozenCookies.lastGameStateHash ||
@@ -388,6 +393,7 @@ function FCMenu() {
         ) {
             Game.callingMenu = true;
             FrozenCookies.lastGameStateHash = gameStateHash;
+            FrozenCookies.lastPreferenceUpdate = now;
 
             // Schedule next update
             setTimeout(() => {
