@@ -565,6 +565,29 @@ function FCMenu() {
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
+                (maxLabelLength = Math.max.apply(
+                    null,
+                    display.map(function (label) {
+                        return label.length;
+                    })
+                )),
+                    (testSpan = $("<span>")
+                        .css({
+                            position: "absolute",
+                            visibility: "hidden",
+                            fontSize: "1em",
+                            fontFamily: "inherit",
+                            fontWeight: "bold",
+                        })
+                        .appendTo(document.body)),
+                    (maxButtonWidth = 0);
+                display.forEach(function (label) {
+                    testSpan.text(label);
+                    var width = testSpan[0].offsetWidth;
+                    if (width > maxButtonWidth) maxButtonWidth = width;
+                });
+                testSpan.remove();
+                maxButtonWidth += 24; // Add padding for button borders and spacing
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
@@ -592,6 +615,7 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
+                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
@@ -621,6 +645,7 @@ function FCMenu() {
                                 $("<button>")
                                     .addClass("option fc-multichoice-btn")
                                     .toggleClass("selected", idx === current)
+                                    .css("width", maxButtonWidth + "px")
                                     .prop("id", preferenceButtonId + "_" + idx)
                                     .click(function () {
                                         setPreferenceDirect(preference, idx);
