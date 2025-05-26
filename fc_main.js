@@ -176,6 +176,8 @@ function registerMod(mod_id = "frozen_cookies") {
             FrozenCookies.version +
             ". (You should only ever see this once.)"
     );
+    // Only for now
+    logEvent("Load", "Performance test loaded.");
 }
 
 // Initialize caches
