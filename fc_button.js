@@ -278,20 +278,18 @@ if (typeof Game.oldUpdateMenu != "function") {
 // Add custom styles
 (function () {
     var style = document.createElement("style");
-    style.innerHTML = `
-        .fc-multichoice-group-vertical {
+    style.innerHTML = `        .fc-multichoice-group-vertical {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 1px;
             margin: 4px 0;
         }
-        .fc-multichoice-btn,
-        .option {
+        .fc-multichoice-btn, .option {
             background: #111;
             color: #fff;
             border: 1px solid #444;
             border-radius: 4px;
-            padding: 4px 10px;
+            padding: 3px 6px;
             margin: 0;
             cursor: pointer;
             font-size: 1em;
@@ -311,15 +309,15 @@ if (typeof Game.oldUpdateMenu != "function") {
             box-shadow: 0 0 8px 2px #fff, 0 0 2px 1px #fff inset; /* Keep shiny effect, but neutral color */
         }
         .fc-multichoice-group-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
+            display: flex;
+            justify-content: flex-start;
+            gap: 1px;
             margin: 4px 0;
         }
         .fc-multichoice-group-3col {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 4px;
+            gap: 1px;
             margin: 4px 0;
         }
         .fc-multichoice-btn:hover,
@@ -363,6 +361,8 @@ function FCMenu() {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
         }
+        // Disabling auto-refresh that causes scrolling issues
+        /*
         if (!Game.callingMenu) {
             Game.callingMenu = true;
             setTimeout(() => {
@@ -370,6 +370,7 @@ function FCMenu() {
                 Game.UpdateMenu();
             }, 1000);
         }
+        */
         var currentCookies,
             maxCookies,
             isTarget,
@@ -565,12 +566,15 @@ function FCMenu() {
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + "Button";
-                (maxLabelLength = Math.max.apply(
-                    null,
-                    display.map(function (label) {
-                        return label.length;
-                    })
-                )),
+                (maxLabelLength =
+                    display && display.length
+                        ? Math.max.apply(
+                              null,
+                              display.map(function (label) {
+                                  return label.length;
+                              })
+                          )
+                        : 0),
                     (testSpan = $("<span>")
                         .css({
                             position: "absolute",
@@ -581,13 +585,15 @@ function FCMenu() {
                         })
                         .appendTo(document.body)),
                     (maxButtonWidth = 0);
-                display.forEach(function (label) {
-                    testSpan.text(label);
-                    var width = testSpan[0].offsetWidth;
-                    if (width > maxButtonWidth) maxButtonWidth = width;
-                });
+                if (display && display.length) {
+                    display.forEach(function (label) {
+                        testSpan.text(label);
+                        var width = testSpan[0].offsetWidth;
+                        if (width > maxButtonWidth) maxButtonWidth = width;
+                    });
+                }
                 testSpan.remove();
-                maxButtonWidth += 24; // Add padding for button borders and spacing
+                maxButtonWidth += 12; // Add padding for button borders and spacing (reduced from 24)
                 if (display && display.length > 0 && display.length > current) {
                     listing = $("<div>").addClass("listing");
                     // Show hint as a subsection head before the button(s)
