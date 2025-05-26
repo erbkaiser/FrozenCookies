@@ -3724,16 +3724,34 @@ function autoCookie() {
         let nextFrequency = FrozenCookies.frequency;
         if (executionTime > 100) {
             // If execution took more than 100ms, increase delay slightly
+            const oldFreq = nextFrequency;
             nextFrequency = Math.min(FrozenCookies.frequency + 50, 500);
+            if (oldFreq !== nextFrequency) {
+                logEvent(
+                    "Performance",
+                    "Increasing delay to " +
+                        nextFrequency +
+                        "ms due to lag spike (" +
+                        executionTime +
+                        "ms execution)"
+                );
+            }
         } else if (
             executionTime < 10 &&
             nextFrequency > FrozenCookies.frequency
         ) {
             // If we're running fast again, gradually return to normal frequency
+            const oldFreq = nextFrequency;
             nextFrequency = Math.max(
                 FrozenCookies.frequency,
                 nextFrequency - 10
             );
+            if (oldFreq !== nextFrequency) {
+                logEvent(
+                    "Performance",
+                    "Decreasing delay back to " + nextFrequency + "ms"
+                );
+            }
         }
 
         // Reset processing flag
