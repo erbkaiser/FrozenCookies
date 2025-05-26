@@ -361,16 +361,41 @@ function FCMenu() {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
         }
-        // Disabling auto-refresh that causes scrolling issues
-        /*
-        if (!Game.callingMenu) {
+
+        // Store scroll position
+        var menu = $("#menu")[0];
+        var scrollPosition = menu ? menu.scrollTop : 0;
+
+        // Only update if something has changed
+        var gameStateHash = [
+            Game.cookies,
+            Game.cookiesPs,
+            Game.goldenClicks,
+            Game.missedGoldenClicks,
+            Game.elderWrath,
+            Game.Has("Chocolate egg"),
+            liveWrinklers().length,
+            Game.shimmerTypes.golden.last,
+            Game.heavenlyChips,
+            FrozenCookies.autoClick,
+            Game.hasBuff("Frenzy"),
+        ].join("|");
+
+        if (
+            !Game.callingMenu &&
+            (!FrozenCookies.lastGameStateHash ||
+                FrozenCookies.lastGameStateHash !== gameStateHash)
+        ) {
             Game.callingMenu = true;
+            FrozenCookies.lastGameStateHash = gameStateHash;
+
+            // Schedule next update
             setTimeout(() => {
                 Game.callingMenu = false;
                 Game.UpdateMenu();
             }, 1000);
         }
-        */
+
         var currentCookies,
             maxCookies,
             isTarget,
@@ -1141,6 +1166,16 @@ function FCMenu() {
                         'px;"></div></div>'
                 )
             );
+
+        // Restore scroll position
+        if (scrollPosition > 0) {
+            requestAnimationFrame(() => {
+                menu = $("#menu")[0];
+                if (menu) {
+                    menu.scrollTop = scrollPosition;
+                }
+            });
+        }
     };
 }
 
