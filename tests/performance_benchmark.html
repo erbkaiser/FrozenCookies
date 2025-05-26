@@ -88,6 +88,25 @@
         .tab-content.active {
             display: block;
         }
+        #liveResults {
+            font-family: monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 4px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+        .test-running {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -108,6 +127,10 @@
                 <h3>Test Results</h3>
                 <div id="simpleResultContent"></div>
                 <div id="simpleChart" class="chart"></div>
+            </div>
+            
+            <div id="liveResults">
+                Click "Run Simple Test" to begin...
             </div>
         </div>
         
@@ -220,9 +243,11 @@
         function runPerformanceTest(iterations, upgradeCount, simulatedDelay, testType) {
             const resultsDiv = document.getElementById(testType + 'Results');
             const resultContent = document.getElementById(testType + 'ResultContent');
+            const liveResultsDiv = document.getElementById('liveResults');
             
             resultsDiv.style.display = 'block';
             resultContent.innerHTML = `<p>Running performance test with ${iterations} iterations and ${upgradeCount} upgrades...</p>`;
+            liveResultsDiv.innerHTML = 'Test running...';
             
             // Setup test environment
             const Game = createMockGame(upgradeCount);
@@ -417,6 +442,8 @@
                         </div>
                     </div>
                 `;
+                
+                liveResultsDiv.innerHTML = 'Test completed.';
                 
             }, 10); // Small delay to let the UI update
         }

@@ -1,6 +1,58 @@
 // Performance test for FrozenCookies
 // This script measures the performance of the upgradeStats function with and without optimizations
 
+// Advanced live reporting function
+function updateAdvancedResults(data) {
+    const resultDiv = document.getElementById('liveResults');
+    if (!resultDiv._metrics) {
+        resultDiv._metrics = {
+            iterationTimes: [],
+            memoryUsage: [],
+            cacheHits: 0,
+            cacheMisses: 0,
+            gcTime: 0
+        };
+    }
+    
+    // Format the data nicely
+    const timestamp = new Date().toISOString().split('T')[1].slice(0,-1);
+    const memoryMB = Math.round(data.memory/1024/1024);
+    const phase = data.phase.padEnd(20);
+    
+    // Add color codes for performance indicators
+    let timeColor = data.time < 50 ? '\x1b[32m' : data.time < 100 ? '\x1b[33m' : '\x1b[31m';
+    let memoryColor = memoryMB < 100 ? '\x1b[32m' : memoryMB < 200 ? '\x1b[33m' : '\x1b[31m';
+    
+    const output = `[${timestamp}] ${phase} | Time: ${timeColor}${data.time.toFixed(2)}ms\x1b[0m | Memory: ${memoryColor}${memoryMB}MB\x1b[0m | Cache: ${data.cacheInfo || 'N/A'}`;
+    
+    // Update metrics
+    resultDiv._metrics.iterationTimes.push(data.time);
+    resultDiv._metrics.memoryUsage.push(memoryMB);
+    if (data.cacheHit) resultDiv._metrics.cacheHits++;
+    else if (data.cacheMiss) resultDiv._metrics.cacheMisses++;
+    
+    // Show live output
+    if (!resultDiv._buffer) resultDiv._buffer = [];
+    resultDiv._buffer.push(output);
+    
+    // Keep only last 20 lines in view
+    if (resultDiv._buffer.length > 20) {
+        resultDiv._buffer.shift();
+    }
+    
+    resultDiv.innerHTML = resultDiv._buffer.join('<br>');
+    resultDiv.scrollTop = resultDiv.scrollHeight;
+    
+    // Show summary every 10 iterations
+    if (data.showSummary) {
+        const summary = calculateMetrics(resultDiv._metrics);
+        resultDiv.innerHTML += '<br><br>--- Current Summary ---<br>' +
+            `Avg Time: ${summary.avgTime.toFixed(2)}ms<br>` +
+            `Max Memory: ${summary.maxMemory}MB<br>` +
+            `Cache Hit Rate: ${summary.cacheHitRate}%<br>`;
+    }
+}
+
 // Mock the Game object to simulate Cookie Clicker's environment
 const Game = {
   BuildingsOwned: 100,
@@ -70,32 +122,48 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
 }
 
 // Function to run a performance test
-function runPerformanceTest(iterations) {
-  console.log(`Running performance test with ${iterations} iterations...`);
-  
-  // First run: without cache (simulate old behavior)
-  FrozenCookies.upgradeCache.cacheValid = false;
-  FrozenCookies.upgradeCache.upgradeCached = {};
-  
-  console.time('Without cache');
-  for (let i = 0; i < iterations; i++) {
-    upgradeStats(true); // Force recalculation every time
-  }
-  console.timeEnd('Without cache');
-  
-  // Second run: with cache (new optimized behavior)
-  FrozenCookies.upgradeCache.cacheValid = false;
-  FrozenCookies.upgradeCache.upgradeCached = {};
-  
-  console.time('With cache');
-  for (let i = 0; i < iterations; i++) {
-    if (i === 0) {
-      upgradeStats(true); // First call populates cache
-    } else {
-      upgradeStats(false); // Subsequent calls use cache when possible
+async function runPerformanceTest(iterations) {
+    const resultDiv = document.getElementById('liveResults');
+    resultDiv.innerHTML = 'Starting performance test...<br>';
+    
+    // First run: without cache (simulate old behavior)
+    FrozenCookies.upgradeCache.cacheValid = false;
+    FrozenCookies.upgradeCache.upgradeCached = {};
+    
+    for (let i = 1; i <= iterations; i++) {
+        const startTime = performance.now();
+        upgradeStats(true); // Force recalculation every time
+        const endTime = performance.now();
+        const memory = performance.memory ? performance.memory.usedJSHeapSize : 0;
+        
+        updateLiveResults('Without Cache', i, (endTime - startTime).toFixed(2), memory);
+        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for UI update
     }
-  }
-  console.timeEnd('With cache');
+    
+    resultDiv.innerHTML += '<br>Cache test completed. Starting optimized test...<br>';
+    
+    // Second run: with cache (new optimized behavior)
+    FrozenCookies.upgradeCache.cacheValid = false;
+    FrozenCookies.upgradeCache.upgradeCached = {};
+    
+    for (let i = 1; i <= iterations; i++) {
+        const startTime = performance.now();
+        if (i === 1) {
+            upgradeStats(true); // First call populates cache
+        } else {
+            upgradeStats(false); // Subsequent calls use cache when possible
+        }
+        const endTime = performance.now();
+        const memory = performance.memory ? performance.memory.usedJSHeapSize : 0;
+        
+        updateLiveResults('With Cache', i, (endTime - startTime).toFixed(2), memory);
+        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for UI update
+    }
+    
+    // Show final summary
+    const summary = document.createElement('div');
+    summary.innerHTML = '<br><strong>Test Complete!</strong>';
+    resultDiv.appendChild(summary);
 }
 
 // Import the actual upgradeStats function from fc_main.js
@@ -154,6 +222,54 @@ function upgradeStats(recalculate) {
     }
     
     return FrozenCookies.caches.upgrades;
+}
+
+// Advanced test function
+async function runAdvancedTest(config) {
+    const {iterations, upgradeCount, simulatedDelay} = config;
+    
+    // Initialize test environment
+    Game.BuildingsOwned = upgradeCount;
+    Game.UpgradesOwned = Math.floor(upgradeCount / 2);
+    
+    // Full simulation test
+    for (let i = 1; i <= iterations; i++) {
+        // Simulate game state changes
+        Game.cookiesPs *= 1.1;
+        Game.BuildingsOwned += 1;
+        
+        const startTime = performance.now();
+        const memoryBefore = performance.memory ? performance.memory.usedJSHeapSize : 0;
+        
+        // Run the actual test
+        const result = upgradeStats(i === 1);
+        
+        const endTime = performance.now();
+        const memoryAfter = performance.memory ? performance.memory.usedJSHeapSize : 0;
+        
+        // Report results
+        updateAdvancedResults({
+            phase: `Iteration ${i}/${iterations}`,
+            time: endTime - startTime,
+            memory: memoryAfter,
+            cacheInfo: `${result.length} upgrades processed`,
+            cacheHit: i > 1,
+            cacheMiss: i === 1,
+            showSummary: i % 10 === 0 || i === iterations
+        });
+        
+        // Add small delay between iterations
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+}
+
+// Helper function to calculate summary metrics
+function calculateMetrics(metrics) {
+    return {
+        avgTime: metrics.iterationTimes.reduce((a,b) => a + b, 0) / metrics.iterationTimes.length,
+        maxMemory: Math.max(...metrics.memoryUsage),
+        cacheHitRate: (metrics.cacheHits / (metrics.cacheHits + metrics.cacheMisses) * 100) || 0
+    };
 }
 
 // Run the test with 10 iterations
