@@ -24,7 +24,7 @@ var baseUrl =
 var FrozenCookies = {
     baseUrl: baseUrl,
     branch: "erb-",
-    version: "2.052.7",
+    version: "2.052.8",
 };
 
 // Load external libraries and FC scripts in order

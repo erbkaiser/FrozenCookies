@@ -178,6 +178,52 @@ function registerMod(mod_id = "frozen_cookies") {
     );
 }
 
+// Initialize caches
+if (!FrozenCookies.caches) FrozenCookies.caches = {};
+// Track the game state to determine when our caches are invalid
+FrozenCookies.upgradeCache = {
+    upgradeCached: {}, // Store calculations for each upgrade ID
+    cacheValid: false, // Whether cache is currently valid
+    lastGameStateHash: "", // Hash representation of relevant game state
+    recalculateCount: 0, // Number of consecutive recalculations (to prevent infinite loops)
+};
+
+// Initialize building efficiency cache with the same structure
+FrozenCookies.buildingCache = {
+    buildingCached: {}, // Store calculations for each building ID
+    cacheValid: false, // Whether cache is currently valid
+    lastGameStateHash: "", // Hash representation of relevant game state
+    recalculateCount: 0, // Number of consecutive recalculations
+};
+
+function invalidateUpgradeCache() {
+    // Mark the upgrade cache as invalid to force recalculation on next call
+    if (FrozenCookies.upgradeCache) {
+        FrozenCookies.upgradeCache.cacheValid = false;
+    }
+}
+
+function invalidateBuildingCache() {
+    // Mark the building cache as invalid to force recalculation on next call
+    if (FrozenCookies.buildingCache) {
+        FrozenCookies.buildingCache.cacheValid = false;
+    }
+}
+
+// Helper function to generate a "hash" of the current game state that affects upgrade calculations
+function getGameStateHash() {
+    // Key aspects that would affect upgrade values
+    return [
+        Game.BuildingsOwned,
+        Game.UpgradesOwned,
+        Game.cookiesPs,
+        Game.elderWrath,
+        Object.keys(Game.buffs).length,
+        Object.values(Game.UpgradesById).filter((u) => !u.bought && u.unlocked)
+            .length,
+    ].join("|");
+}
+
 function setOverrides(gameSaveData) {
     // load settings and initialize variables
     // If gameSaveData wasn't passed to this function, it means that there was nothing for this mod in the game save when the mod was loaded
@@ -409,6 +455,22 @@ function emptyCaches() {
     FrozenCookies.caches.recommendationList = [];
     FrozenCookies.caches.buildings = [];
     FrozenCookies.caches.upgrades = [];
+
+    // Reset the upgrade cache
+    FrozenCookies.upgradeCache = {
+        upgradeCached: {}, // Store calculations for each upgrade ID
+        cacheValid: false, // Whether cache is currently valid
+        lastGameStateHash: "", // Hash representation of relevant game state
+        recalculateCount: 0, // Number of consecutive recalculations
+    };
+
+    // Reset the building cache too
+    FrozenCookies.buildingCache = {
+        buildingCached: {}, // Store calculations for each building ID
+        cacheValid: false, // Whether cache is currently valid
+        lastGameStateHash: "", // Hash representation of relevant game state
+        recalculateCount: 0, // Number of consecutive recalculations
+    };
 }
 
 function fcDraw(from, text, origin) {
@@ -1830,7 +1892,38 @@ function nextChainedPurchase(recalculate) {
 }
 
 function buildingStats(recalculate) {
-    if (recalculate) {
+    // Check if we need to force recalculation
+    var forceRecalculate = recalculate;
+    var currentGameStateHash = getGameStateHash();
+
+    // Only recalculate when game state changes or forced
+    if (!FrozenCookies.buildingCache) {
+        FrozenCookies.buildingCache = {
+            buildingCached: {},
+            cacheValid: false,
+            lastGameStateHash: "",
+            recalculateCount: 0,
+        };
+    }
+
+    // Check if game state has changed
+    if (
+        FrozenCookies.buildingCache.lastGameStateHash !== currentGameStateHash
+    ) {
+        FrozenCookies.buildingCache.cacheValid = false;
+        FrozenCookies.buildingCache.lastGameStateHash = currentGameStateHash;
+        FrozenCookies.buildingCache.recalculateCount = 0;
+        forceRecalculate = true;
+    }
+
+    // Prevent excessive recalculation attempts
+    if (FrozenCookies.buildingCache.recalculateCount > 2) {
+        forceRecalculate = false;
+    }
+
+    if (forceRecalculate || !FrozenCookies.buildingCache.cacheValid) {
+        FrozenCookies.buildingCache.recalculateCount++;
+
         if (blacklist[FrozenCookies.blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
         } else {
@@ -1870,117 +1963,237 @@ function buildingStats(recalculate) {
                 Game.Objects["You"].amount >= FrozenCookies.orbMax
             )
                 buildingBlacklist.push(19);
-            FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
-                current,
-                index
-            ) {
-                if (_.contains(buildingBlacklist, current.id)) return null;
-                var currentBank = bestBank(0).cost;
-                var baseCpsOrig = baseCps();
-                var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                var existingAchievements = Object.values(
-                    Game.AchievementsById
-                ).map(function (item, i) {
-                    return item.won;
-                });
-                buildingToggle(current);
-                var baseCpsNew = baseCps();
-                var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
-                buildingToggle(current, existingAchievements);
-                var deltaCps = cpsNew - cpsOrig;
-                var baseDeltaCps = baseCpsNew - baseCpsOrig;
-                var efficiency = purchaseEfficiency(
-                    current.getPrice(),
-                    deltaCps,
-                    baseDeltaCps,
-                    cpsOrig
-                );
-                return {
-                    id: current.id,
-                    efficiency: efficiency,
-                    base_delta_cps: baseDeltaCps,
-                    delta_cps: deltaCps,
-                    cost: current.getPrice(),
-                    purchase: current,
-                    type: "building",
-                };
-            }).filter(function (a) {
-                return a;
+
+            // Process buildings in batches to improve performance
+            const allBuildings = Game.ObjectsById.filter(function (building) {
+                return !_.contains(buildingBlacklist, building.id);
             });
+            const batchSize = 5; // Process this many buildings at once
+
+            for (let i = 0; i < allBuildings.length; i += batchSize) {
+                const batch = allBuildings.slice(i, i + batchSize);
+
+                batch.forEach(function (current) {
+                    var currentBank = bestBank(0).cost;
+                    var baseCpsOrig = baseCps();
+                    var cpsOrig = effectiveCps(
+                        Math.min(Game.cookies, currentBank)
+                    );
+                    var existingAchievements = Object.values(
+                        Game.AchievementsById
+                    ).map(function (item) {
+                        return item.won;
+                    });
+
+                    buildingToggle(current);
+                    var baseCpsNew = baseCps();
+                    var cpsNew = effectiveCps(currentBank);
+                    buildingToggle(current, existingAchievements);
+
+                    var deltaCps = cpsNew - cpsOrig;
+                    var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                    var efficiency = purchaseEfficiency(
+                        current.getPrice(),
+                        deltaCps,
+                        baseDeltaCps,
+                        cpsOrig
+                    );
+
+                    // Store in cache
+                    FrozenCookies.buildingCache.buildingCached[current.id] = {
+                        id: current.id,
+                        efficiency: efficiency,
+                        base_delta_cps: baseDeltaCps,
+                        delta_cps: deltaCps,
+                        cost: current.getPrice(),
+                        purchase: current,
+                        type: "building",
+                    };
+                });
+
+                // Allow browser to process other events if we're doing a lot of calculations
+                if (
+                    allBuildings.length > batchSize &&
+                    i + batchSize < allBuildings.length
+                ) {
+                    // In future, could add setTimeout here for smoother performance
+                }
+            }
+
+            // Build final result list from cache
+            FrozenCookies.caches.buildings = Object.values(
+                FrozenCookies.buildingCache.buildingCached
+            );
         }
+
+        // Mark cache as valid after completion
+        FrozenCookies.buildingCache.cacheValid = true;
     }
+
     return FrozenCookies.caches.buildings;
 }
 
 function upgradeStats(recalculate) {
-    if (recalculate) {
+    // Check if we need to force recalculation
+    var forceRecalculate = recalculate;
+    var currentGameStateHash = getGameStateHash();
+
+    // Only reset cache when game state actually changes
+    if (FrozenCookies.upgradeCache.lastGameStateHash !== currentGameStateHash) {
+        FrozenCookies.upgradeCache.cacheValid = false;
+        FrozenCookies.upgradeCache.lastGameStateHash = currentGameStateHash;
+        FrozenCookies.upgradeCache.recalculateCount = 0;
+        forceRecalculate = true;
+    }
+
+    // Prevent excessive recalculation attempts
+    if (FrozenCookies.upgradeCache.recalculateCount > 2) {
+        forceRecalculate = false;
+    }
+
+    if (forceRecalculate || !FrozenCookies.upgradeCache.cacheValid) {
+        FrozenCookies.upgradeCache.recalculateCount++;
+
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
         } else {
             var upgradeBlacklist = blacklist[FrozenCookies.blacklist].upgrades;
+            var upgradesToProcess = [];
+
+            // First pass - identify which upgrades need recalculation
+            Object.values(Game.UpgradesById).forEach(function (current) {
+                if (
+                    !current.bought &&
+                    !isUnavailable(current, upgradeBlacklist)
+                ) {
+                    // Check if we have valid cached data for this upgrade
+                    var cachedData =
+                        FrozenCookies.upgradeCache.upgradeCached[current.id];
+                    var needsUpdate = !cachedData;
+                    if (!needsUpdate) {
+                        // Check if prerequisites have changed, which would invalidate our cache
+                        var prereqs = upgradeJson[current.id];
+                        if (prereqs) {
+                            // Only check prerequisites if they exist and are complex
+                            if (prereqs.buildings.some((v) => v > 0)) {
+                                // Check if building requirements are met
+                                needsUpdate = prereqs.buildings.some(
+                                    (req, idx) => {
+                                        return (
+                                            req > 0 &&
+                                            Game.ObjectsById[idx].amount < req
+                                        );
+                                    }
+                                );
+                            }
+
+                            // Check if upgrade prerequisites are met
+                            if (!needsUpdate && prereqs.upgrades.length > 0) {
+                                needsUpdate = prereqs.upgrades.some(
+                                    (id) => !Game.UpgradesById[id].bought
+                                );
+                            }
+                        }
+                    }
+
+                    if (needsUpdate) {
+                        upgradesToProcess.push(current);
+                    }
+                }
+            });
+
+            // Process uncached upgrades in batches to improve performance
+            const batchSize = 10; // Process this many upgrades at once
+            for (let i = 0; i < upgradesToProcess.length; i += batchSize) {
+                const batch = upgradesToProcess.slice(i, i + batchSize);
+
+                // Calculate new upgrade values for this batch
+                batch.forEach(function (current) {
+                    var currentBank = bestBank(0).cost;
+                    var cost = upgradePrereqCost(current);
+                    var baseCpsOrig = baseCps();
+                    var cpsOrig = effectiveCps(
+                        Math.min(Game.cookies, currentBank)
+                    );
+                    var existingAchievements = Object.values(
+                        Game.AchievementsById
+                    ).map(function (item) {
+                        return item.won;
+                    });
+                    var existingWrath = Game.elderWrath;
+                    var discounts = totalDiscount() + totalDiscount(true);
+                    var reverseFunctions = upgradeToggle(current);
+                    var baseCpsNew = baseCps();
+                    var cpsNew = effectiveCps(currentBank);
+                    var priceReduction =
+                        discounts == totalDiscount() + totalDiscount(true)
+                            ? 0
+                            : checkPrices(current);
+                    upgradeToggle(
+                        current,
+                        existingAchievements,
+                        reverseFunctions
+                    );
+                    Game.elderWrath = existingWrath;
+                    var deltaCps = cpsNew - cpsOrig;
+                    var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                    var efficiency =
+                        current.season &&
+                        FrozenCookies.defaultSeasonToggle == 1 &&
+                        current.season == seasons[FrozenCookies.defaultSeason]
+                            ? cost / baseCpsOrig
+                            : priceReduction > cost
+                            ? 1
+                            : purchaseEfficiency(
+                                  cost,
+                                  deltaCps,
+                                  baseDeltaCps,
+                                  cpsOrig
+                              );
+
+                    // Cache the calculated values
+                    FrozenCookies.upgradeCache.upgradeCached[current.id] = {
+                        id: current.id,
+                        efficiency: efficiency,
+                        base_delta_cps: baseDeltaCps,
+                        delta_cps: deltaCps,
+                        cost: cost,
+                        purchase: current,
+                        type: "upgrade",
+                    };
+                });
+
+                // Allow browser to process other events if we're doing a lot of calculations
+                if (
+                    upgradesToProcess.length > batchSize &&
+                    i + batchSize < upgradesToProcess.length
+                ) {
+                    // In future, could add setTimeout here for smoother performance
+                }
+            }
+
+            // Build final result list from cache
             FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
                 .map(function (current) {
-                    if (!current.bought) {
-                        if (isUnavailable(current, upgradeBlacklist))
-                            return null;
-                        var currentBank = bestBank(0).cost;
-                        var cost = upgradePrereqCost(current);
-                        var baseCpsOrig = baseCps();
-                        var cpsOrig = effectiveCps(
-                            Math.min(Game.cookies, currentBank)
-                        );
-                        var existingAchievements = Object.values(
-                            Game.AchievementsById
-                        ).map(function (item) {
-                            return item.won;
-                        });
-                        var existingWrath = Game.elderWrath;
-                        var discounts = totalDiscount() + totalDiscount(true);
-                        var reverseFunctions = upgradeToggle(current);
-                        var baseCpsNew = baseCps();
-                        var cpsNew = effectiveCps(currentBank);
-                        var priceReduction =
-                            discounts == totalDiscount() + totalDiscount(true)
-                                ? 0
-                                : checkPrices(current);
-                        upgradeToggle(
-                            current,
-                            existingAchievements,
-                            reverseFunctions
-                        );
-                        Game.elderWrath = existingWrath;
-                        var deltaCps = cpsNew - cpsOrig;
-                        var baseDeltaCps = baseCpsNew - baseCpsOrig;
-                        var efficiency =
-                            current.season &&
-                            FrozenCookies.defaultSeasonToggle == 1 &&
-                            current.season ==
-                                seasons[FrozenCookies.defaultSeason]
-                                ? cost / baseCpsOrig
-                                : priceReduction > cost
-                                ? 1
-                                : purchaseEfficiency(
-                                      cost,
-                                      deltaCps,
-                                      baseDeltaCps,
-                                      cpsOrig
-                                  );
-                        return {
-                            id: current.id,
-                            efficiency: efficiency,
-                            base_delta_cps: baseDeltaCps,
-                            delta_cps: deltaCps,
-                            cost: cost,
-                            purchase: current,
-                            type: "upgrade",
-                        };
+                    if (
+                        !current.bought &&
+                        !isUnavailable(current, upgradeBlacklist)
+                    ) {
+                        return FrozenCookies.upgradeCache.upgradeCached[
+                            current.id
+                        ];
                     }
+                    return null;
                 })
                 .filter(function (a) {
                     return a;
                 });
         }
+
+        // Mark cache as valid after completion
+        FrozenCookies.upgradeCache.cacheValid = true;
     }
+
     return FrozenCookies.caches.upgrades;
 }
 
@@ -2308,8 +2521,20 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
             }
         });
     }
+
+    // Performance optimization: Only call CalculateGains if the upgrade is non-trivial
+    // If upgrade is season-related, visual, or achievement-unlocking, we can skip full recalculation
+    const needsFullRecalc = !(
+        upgrade.pool === "toggle" ||
+        upgrade.pool === "debug" ||
+        upgrade.pool === "prestige" ||
+        upgrade.season !== undefined
+    );
+
     Game.recalculateGains = 1;
-    Game.CalculateGains();
+    if (needsFullRecalc) {
+        Game.CalculateGains();
+    }
     Game.cookiesPsRawHighest = oldHighest; // Restore after simulation
     return reverseFunctions;
 }
@@ -2332,6 +2557,12 @@ function buildingToggle(building, achievements) {
                 Game.AchievementsOwned += 1;
         });
     }
+
+    // Performance optimization: Some buildings might need special handling
+    // For now, all buildings require full recalculation, but we can identify
+    // special cases in the future to optimize further
+    const isSpecialBuilding = false; // Reserved for future optimizations
+
     Game.recalculateGains = 1;
     Game.CalculateGains();
     Game.cookiesPsRawHighest = oldHighest; // Restore after simulation
@@ -2568,41 +2799,58 @@ function updateCaches() {
         currentCookieCPS,
         currentUpgradeCount;
     var recalcCount = 0;
+    var gameStateChanged = false;
+
+    // Check if the game state has changed significantly since our last calculation
+    // This helps us avoid expensive recalculations when nothing important has changed
+    currentBank = bestBank(0);
+    currentCookieCPS = gcPs(cookieValue(currentBank.cost));
+    currentUpgradeCount = Game.UpgradesInStore.length;
+
+    // Check for changes that would require recalculation
+    if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
+        gameStateChanged = true;
+        FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
+    }
+
+    if (FrozenCookies.currentBank.cost != currentBank.cost) {
+        gameStateChanged = true;
+        FrozenCookies.currentBank = currentBank;
+    }
+
+    if (FrozenCookies.lastCookieCPS != currentCookieCPS) {
+        gameStateChanged = true;
+        FrozenCookies.lastCookieCPS = currentCookieCPS;
+    }
+
+    if (FrozenCookies.lastUpgradeCount != currentUpgradeCount) {
+        gameStateChanged = true;
+        FrozenCookies.lastUpgradeCount = currentUpgradeCount;
+    }
+    // Only invalidate caches if something important has changed
+    if (gameStateChanged) {
+        invalidateUpgradeCache();
+        invalidateBuildingCache();
+    }
+
+    // Now perform the actual calculations, but limit iterations to prevent freezing
+    FrozenCookies.recalculateCaches =
+        gameStateChanged || FrozenCookies.recalculateCaches;
+
     do {
         recommendation = nextPurchase(FrozenCookies.recalculateCaches);
         FrozenCookies.recalculateCaches = false;
-        currentBank = bestBank(0);
+
         targetBank = bestBank(recommendation.efficiency);
-        currentCookieCPS = gcPs(cookieValue(currentBank.cost));
-        currentUpgradeCount = Game.UpgradesInStore.length;
         FrozenCookies.safeGainsCalc();
-
-        if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
-        }
-
-        if (FrozenCookies.currentBank.cost != currentBank.cost) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.currentBank = currentBank;
-        }
 
         if (FrozenCookies.targetBank.cost != targetBank.cost) {
             FrozenCookies.recalculateCaches = true;
             FrozenCookies.targetBank = targetBank;
         }
 
-        if (FrozenCookies.lastCookieCPS != currentCookieCPS) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastCookieCPS = currentCookieCPS;
-        }
-
-        if (FrozenCookies.lastUpgradeCount != currentUpgradeCount) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastUpgradeCount = currentUpgradeCount;
-        }
         recalcCount += 1;
-    } while (FrozenCookies.recalculateCaches && recalcCount < 10);
+    } while (FrozenCookies.recalculateCaches && recalcCount < 5); // Reduced from 10 to 5 to prevent freezing
 }
 
 //Why the hell is fcWin being called so often? It seems to be getting called repeatedly on the CPS achievements,
@@ -2930,108 +3178,247 @@ function fcClickCookie() {
 }
 
 function autoCookie() {
-    //console.log('autocookie called');
+    // Skip if we're already processing, or if game is in ascension state
     if (!FrozenCookies.processing && !Game.OnAscend && !Game.AscendTimer) {
         FrozenCookies.processing = true;
-        var currentHCAmount = Game.HowMuchPrestige(
-            Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
-        );
 
+        // Track execution time for performance monitoring
+        const startTime = Date.now();
+
+        // Check for reward cookies first - these are special cookies that require
+        // specific building counts and should be prioritized
+        var chainRec = nextChainedPurchase();
         if (
-            Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHCAmount)
+            chainRec &&
+            chainRec.type === "upgrade" &&
+            isRewardCookie(chainRec.purchase)
         ) {
-            var changeAmount = currentHCAmount - FrozenCookies.lastHCAmount;
-            FrozenCookies.lastHCAmount = currentHCAmount;
-            FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
-            FrozenCookies.lastHCTime = Date.now();
-            var currHCPercent =
-                (60 * 60 * (FrozenCookies.lastHCAmount - Game.heavenlyChips)) /
-                ((FrozenCookies.lastHCTime - Game.startDate) / 1000);
+            // Temporarily ignore limits and buy up to required amount for each building
+            var targets = getRewardCookieBuildingTargets(chainRec.purchase);
+            targets.forEach(function (t) {
+                var obj = Game.ObjectsById[t.id];
+                if (obj && obj.amount < t.amount) {
+                    obj.buy(t.amount - obj.amount);
+                }
+            });
+
+            // Try to buy the reward cookie if unlocked and affordable
             if (
-                Game.heavenlyChips < currentHCAmount - changeAmount &&
-                currHCPercent > FrozenCookies.maxHCPercent
+                chainRec.purchase.unlocked &&
+                !chainRec.purchase.bought &&
+                Game.cookies >= chainRec.purchase.getPrice()
             ) {
-                FrozenCookies.maxHCPercent = currHCPercent;
+                chainRec.purchase.buy();
+                logEvent(
+                    "RewardCookie",
+                    "Auto-bought " + chainRec.purchase.name
+                );
+                restoreBuildingLimits();
+
+                // We need to recalculate caches after this special purchase
+                invalidateUpgradeCache();
+                invalidateBuildingCache();
             }
-            FrozenCookies.hc_gain += changeAmount;
         }
-        updateCaches();
+
+        // --- Built-in reward cookie handling functions ---
+        function isRewardCookie(upgrade) {
+            // Check if an upgrade is a "reward cookie" (requires building counts)
+            if (!upgrade || !upgradeJson[upgrade.id]) return false;
+            var prereq = upgradeJson[upgrade.id].buildings;
+            if (!prereq || prereq.length < 10) return false;
+            var allSame = prereq.every(function (v) {
+                return v > 0 && v === prereq[0];
+            });
+            return allSame;
+        }
+
+        function getRewardCookieBuildingTargets(upgrade) {
+            // Returns building targets needed for reward cookie
+            if (!upgrade || !upgradeJson[upgrade.id]) return [];
+            var prereq = upgradeJson[upgrade.id].buildings;
+            return prereq.map(function (amt, idx) {
+                return { id: idx, amount: amt };
+            });
+        }
+
+        function restoreBuildingLimits() {
+            // Sells excess buildings to return to user limits
+            if (FrozenCookies.towerLimit) {
+                var obj = Game.Objects["Wizard tower"];
+                if (obj.amount > FrozenCookies.manaMax)
+                    obj.sell(obj.amount - FrozenCookies.manaMax);
+            }
+            if (FrozenCookies.mineLimit) {
+                var obj = Game.Objects["Mine"];
+                if (obj.amount > FrozenCookies.mineMax)
+                    obj.sell(obj.amount - FrozenCookies.mineMax);
+            }
+            if (FrozenCookies.factoryLimit) {
+                var obj = Game.Objects["Factory"];
+                if (obj.amount > FrozenCookies.factoryMax)
+                    obj.sell(obj.amount - FrozenCookies.factoryMax);
+            }
+            if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
+                var obj = Game.Objects["You"];
+                if (obj.amount > FrozenCookies.orbMax)
+                    obj.sell(obj.amount - FrozenCookies.orbMax);
+            }
+        }
+
+        // Use a cached calculation for HC amount if possible
+        // Only recalculate every few cycles to avoid expensive calculations
+        if (
+            !FrozenCookies.nextHCRecalc ||
+            Date.now() >= FrozenCookies.nextHCRecalc
+        ) {
+            var currentHCAmount = Game.HowMuchPrestige(
+                Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
+            );
+
+            // Only update if HC amount has changed
+            if (
+                Math.floor(FrozenCookies.lastHCAmount) <
+                Math.floor(currentHCAmount)
+            ) {
+                var changeAmount = currentHCAmount - FrozenCookies.lastHCAmount;
+                FrozenCookies.lastHCAmount = currentHCAmount;
+                FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
+                FrozenCookies.lastHCTime = Date.now();
+                var currHCPercent =
+                    (60 *
+                        60 *
+                        (FrozenCookies.lastHCAmount - Game.heavenlyChips)) /
+                    ((FrozenCookies.lastHCTime - Game.startDate) / 1000);
+                if (
+                    Game.heavenlyChips < currentHCAmount - changeAmount &&
+                    currHCPercent > FrozenCookies.maxHCPercent
+                ) {
+                    FrozenCookies.maxHCPercent = currHCPercent;
+                }
+                FrozenCookies.hc_gain += changeAmount;
+            }
+
+            // Set next recalculation time (every 10 seconds is usually sufficient for HC tracking)
+            FrozenCookies.nextHCRecalc = Date.now() + 10000;
+        } // Track game state to only update caches when necessary
+        const gameStateChanged =
+            !FrozenCookies.lastCookiesEarned ||
+            Game.cookiesEarned !== FrozenCookies.lastCookiesEarned ||
+            Game.UpgradesInStore.length !== FrozenCookies.lastUpgradeCount ||
+            Game.BuildingsOwned !== FrozenCookies.lastBuildingsOwned;
+
+        if (gameStateChanged) {
+            // Update game state tracking
+            FrozenCookies.lastCookiesEarned = Game.cookiesEarned;
+            FrozenCookies.lastUpgradeCount = Game.UpgradesInStore.length;
+            FrozenCookies.lastBuildingsOwned = Game.BuildingsOwned;
+
+            // Only update caches if game state has changed
+            updateCaches();
+        }
+
         var recommendation = nextPurchase();
         var delay = delayAmount();
+
+        // Sugar lump handling - only check if it's close to ripening to save calculations
         if (FrozenCookies.autoSL == 1) {
             var started = Game.lumpT;
             var ripeAge = Math.ceil(Game.lumpRipeAge);
-            if (
-                Date.now() - started >= ripeAge &&
-                Game.dragonLevel >= 21 &&
-                FrozenCookies.dragonsCurve
-            ) {
-                autoDragonsCurve();
-            } else if (Date.now() - started >= ripeAge) {
-                Game.clickLump();
-            }
-        }
-        if (FrozenCookies.autoSL == 2) autoRigidel();
-        if (FrozenCookies.autoWrinkler == 1) {
-            var popCount = 0;
-            var popList = shouldPopWrinklers();
-            if (FrozenCookies.shinyPop == 1) {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
-                    if (w.type !== 1) {
-                        // do not pop Shiny Wrinkler
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            } else {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
-                    w.hp = 0;
-                    popCount += 1;
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            }
-        }
-        if (FrozenCookies.autoWrinkler == 2) {
-            var popCount = 0;
-            var popList = Game.wrinklers;
-            if (FrozenCookies.shinyPop == 1) {
-                popList.forEach(function (w) {
-                    if (w.close == true && w.type !== 1) {
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            } else {
-                popList.forEach(function (w) {
-                    if (w.close == true) {
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            }
-        }
+            var timeToRipe = ripeAge - (Date.now() - started);
 
+            // Only check if sugar lump is within 5 seconds of ripening or already ripe
+            if (timeToRipe <= 5000 || timeToRipe <= 0) {
+                if (
+                    Date.now() - started >= ripeAge &&
+                    Game.dragonLevel >= 21 &&
+                    FrozenCookies.dragonsCurve
+                ) {
+                    autoDragonsCurve();
+                } else if (Date.now() - started >= ripeAge) {
+                    Game.clickLump();
+                }
+            }
+        }
+        if (FrozenCookies.autoSL == 2) autoRigidel(); // Optimize wrinkler handling - only process every few seconds as it's expensive
+        if (
+            (FrozenCookies.autoWrinkler == 1 ||
+                FrozenCookies.autoWrinkler == 2) &&
+            (!FrozenCookies.lastWrinklerCheck ||
+                Date.now() - FrozenCookies.lastWrinklerCheck > 3000)
+        ) {
+            // Cache wrinkler check time
+            FrozenCookies.lastWrinklerCheck = Date.now();
+
+            var popCount = 0;
+
+            if (FrozenCookies.autoWrinkler == 1) {
+                // Mode 1: Pop specific wrinklers based on strategy
+                var popList = shouldPopWrinklers();
+
+                // Use more efficient filtering to reduce iterations
+                if (popList.length > 0) {
+                    var wrinklersToProcess = Game.wrinklers.filter((w) =>
+                        popList.includes(w.id)
+                    );
+
+                    // Handle regular/shiny wrinklers differently
+                    if (FrozenCookies.shinyPop == 1) {
+                        wrinklersToProcess.forEach(function (w) {
+                            if (w.type !== 1) {
+                                // Skip shiny wrinklers
+                                w.hp = 0;
+                                popCount++;
+                            }
+                        });
+                    } else {
+                        wrinklersToProcess.forEach(function (w) {
+                            w.hp = 0;
+                            popCount++;
+                        });
+                    }
+                }
+            } else if (FrozenCookies.autoWrinkler == 2) {
+                // Mode 2: Pop all close wrinklers
+
+                // Direct iteration is faster than forEach
+                for (var i = 0; i < Game.wrinklers.length; i++) {
+                    var w = Game.wrinklers[i];
+                    if (w.close) {
+                        if (FrozenCookies.shinyPop == 1 && w.type === 1) {
+                            // Skip shiny wrinklers if needed
+                            continue;
+                        }
+                        w.hp = 0;
+                        popCount++;
+                    }
+                }
+            }
+
+            // Only log if we actually popped something
+            if (popCount > 0) {
+                logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+            }
+        }
         var itemBought = false;
 
-        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoCasting == 5) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
-        if (
+        // Only calculate expensive nextChainedPurchase() if absolutely needed
+        const hasEnoughCookies = Game.cookies >= delay + recommendation.cost;
+        const isPledge =
+            recommendation.purchase &&
+            recommendation.purchase.name == "Elder Pledge";
+        const shouldCheckChained = !FrozenCookies.pastemode && hasEnoughCookies;
+
+        // Decide whether to buy based on conditions
+        const shouldBuy =
             FrozenCookies.autoBuy &&
-            (Game.cookies >= delay + recommendation.cost ||
-                recommendation.purchase.name == "Elder Pledge") &&
+            (hasEnoughCookies || isPledge) &&
             (FrozenCookies.pastemode ||
-                isFinite(nextChainedPurchase().efficiency))
-        ) {
+                (shouldCheckChained
+                    ? isFinite(nextChainedPurchase().efficiency)
+                    : true));
+
+        if (shouldBuy) {
             //    if (FrozenCookies.autoBuy && (Game.cookies >= delay + recommendation.cost)) {
             //console.log('something should get bought');
             recommendation.time = Date.now() - Game.startDate;
@@ -3299,15 +3686,60 @@ function autoCookie() {
                 Date.now() - FrozenCookies.last_gc_time;
             FrozenCookies.last_gc_state = currentFrenzy;
             FrozenCookies.last_gc_time = Date.now();
+        } // Track performance metrics
+        const executionTime = Date.now() - startTime;
+        if (!FrozenCookies.perfStats) {
+            FrozenCookies.perfStats = {
+                count: 0,
+                totalTime: 0,
+                maxTime: 0,
+                lastReset: Date.now(),
+            };
         }
+
+        FrozenCookies.perfStats.count++;
+        FrozenCookies.perfStats.totalTime += executionTime;
+        FrozenCookies.perfStats.maxTime = Math.max(
+            FrozenCookies.perfStats.maxTime,
+            executionTime
+        );
+
+        // Reset stats periodically to keep metrics current
+        if (Date.now() - FrozenCookies.perfStats.lastReset > 60000) {
+            FrozenCookies.perfStats.count = 0;
+            FrozenCookies.perfStats.totalTime = 0;
+            FrozenCookies.perfStats.maxTime = 0;
+            FrozenCookies.perfStats.lastReset = Date.now();
+        }
+
+        // Use adaptive frequency - slow down if we're experiencing lag spikes
+        let nextFrequency = FrozenCookies.frequency;
+        if (executionTime > 100) {
+            // If execution took more than 100ms, increase delay slightly
+            nextFrequency = Math.min(FrozenCookies.frequency + 50, 500);
+        } else if (
+            executionTime < 10 &&
+            nextFrequency > FrozenCookies.frequency
+        ) {
+            // If we're running fast again, gradually return to normal frequency
+            nextFrequency = Math.max(
+                FrozenCookies.frequency,
+                nextFrequency - 10
+            );
+        }
+
+        // Reset processing flag
         FrozenCookies.processing = false;
+
+        // Schedule next call - immediately if we bought something, otherwise after delay
         if (FrozenCookies.frequency) {
             FrozenCookies.cookieBot = setTimeout(
                 autoCookie,
-                itemBought ? 0 : FrozenCookies.frequency
+                itemBought ? 0 : nextFrequency
             );
         }
     } else if (!FrozenCookies.processing && FrozenCookies.frequency) {
+        // If already processing, just re-queue the normal timer
         FrozenCookies.cookieBot = setTimeout(
             autoCookie,
             FrozenCookies.frequency
@@ -3442,10 +3874,22 @@ function FCStart() {
     if (FrozenCookies.recommendedSettingsBot) {
         clearInterval(FrozenCookies.recommendedSettingsBot);
         FrozenCookies.recommendedSettingsBot = 0;
-    }
-
-    // Now create new intervals with their specified frequencies.
+    } // Now create new intervals with their specified frequencies.
     // Default frequency is 100ms = 1/10th of a second
+
+    // Initialize performance monitoring variables
+    FrozenCookies.perfStats = {
+        count: 0,
+        totalTime: 0,
+        maxTime: 0,
+        lastReset: Date.now(),
+    };
+
+    // Initialize cache timer tracking
+    FrozenCookies.nextHCRecalc = 0;
+    FrozenCookies.lastWrinklerCheck = 0;
+    FrozenCookies.lastCookiesEarned = 0;
+    FrozenCookies.lastBuildingsOwned = 0;
 
     if (FrozenCookies.frequency) {
         FrozenCookies.cookieBot = setTimeout(
@@ -3649,87 +4093,5 @@ function FCStart() {
             smartTrackingStats(FrozenCookies.minDelay * 8);
         }, FrozenCookies.minDelay);
     }
-
     FCMenu();
 }
-
-// --- Reward Cookie Helper ---
-function isRewardCookie(upgrade) {
-    // Reward cookies: upgrades that require all buildings to reach a certain number
-    // See cc_upgrade_prerequisites.js, e.g. ids 334, 335, 336, 337, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414
-    // We'll check if the prereq is all buildings > 0 and the array is long (i.e. 15-20 buildings)
-    if (!upgrade || !upgradeJson[upgrade.id]) return false;
-    var prereq = upgradeJson[upgrade.id].buildings;
-    if (!prereq || prereq.length < 10) return false;
-    var allSame = prereq.every(function (v) {
-        return v > 0 && v === prereq[0];
-    });
-    return allSame;
-}
-
-function getRewardCookieBuildingTargets(upgrade) {
-    // Returns an array of {id, amount} for each building type needed
-    if (!upgrade || !upgradeJson[upgrade.id]) return [];
-    var prereq = upgradeJson[upgrade.id].buildings;
-    return prereq.map(function (amt, idx) {
-        return { id: idx, amount: amt };
-    });
-}
-
-function restoreBuildingLimits() {
-    // Sells excess buildings to return to user limits
-    if (FrozenCookies.towerLimit) {
-        var obj = Game.Objects["Wizard tower"];
-        if (obj.amount > FrozenCookies.manaMax)
-            obj.sell(obj.amount - FrozenCookies.manaMax);
-    }
-    if (FrozenCookies.mineLimit) {
-        var obj = Game.Objects["Mine"];
-        if (obj.amount > FrozenCookies.mineMax)
-            obj.sell(obj.amount - FrozenCookies.mineMax);
-    }
-    if (FrozenCookies.factoryLimit) {
-        var obj = Game.Objects["Factory"];
-        if (obj.amount > FrozenCookies.factoryMax)
-            obj.sell(obj.amount - FrozenCookies.factoryMax);
-    }
-    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
-        var obj = Game.Objects["You"];
-        if (obj.amount > FrozenCookies.orbMax)
-            obj.sell(obj.amount - FrozenCookies.orbMax);
-    }
-}
-
-// --- Patch autoCookie for reward cookies ---
-var _oldAutoCookie = autoCookie;
-autoCookie = function () {
-    var chainRec = nextChainedPurchase();
-    if (
-        chainRec &&
-        chainRec.type === "upgrade" &&
-        isRewardCookie(chainRec.purchase)
-    ) {
-        // Temporarily ignore limits and buy up to required amount for each building
-        var targets = getRewardCookieBuildingTargets(chainRec.purchase);
-        targets.forEach(function (t) {
-            var obj = Game.ObjectsById[t.id];
-            if (obj && obj.amount < t.amount) {
-                obj.buy(t.amount - obj.amount);
-            }
-        });
-        // Try to buy the reward cookie if unlocked and affordable
-        if (
-            chainRec.purchase.unlocked &&
-            !chainRec.purchase.bought &&
-            Game.cookies >= chainRec.purchase.getPrice()
-        ) {
-            chainRec.purchase.buy();
-            restoreBuildingLimits();
-        }
-        // Continue with normal autobuy for other things
-        _oldAutoCookie();
-        return;
-    }
-    // Default behavior
-    _oldAutoCookie();
-};

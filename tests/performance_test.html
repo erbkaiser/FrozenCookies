@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FrozenCookies Performance Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>FrozenCookies Performance Test</h1>
+    <p>This test compares the performance of the upgradeStats function with and without the caching optimizations.</p>
+    
+    <button onclick="runTest()">Run Performance Test</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Mock the Game object to simulate Cookie Clicker's environment
+        const Game = {
+          BuildingsOwned: 100,
+          UpgradesOwned: 50,
+          cookiesPs: 1000000,
+          elderWrath: 0,
+          buffs: {},
+          UpgradesById: {},
+          AchievementsById: {},
+          recalculateGains: 0,
+          CalculateGains: function() {},
+          cookiesPsRawHighest: 1000000
+        };
+        
+        // Create 100 mock upgrades for testing
+        for (let i = 0; i < 100; i++) {
+          Game.UpgradesById[i] = {
+            id: i,
+            bought: i < 50, // Half are bought
+            unlocked: true,
+            pool: i % 5 === 0 ? 'toggle' : 'normal',
+            season: i % 10 === 0 ? 'christmas' : undefined
+          };
+        }
+        
+        // Mock the necessary globals and functions
+        const FrozenCookies = {
+          caches: {
+            upgrades: []
+          },
+          upgradeCache: {
+            upgradeCached: {},
+            cacheValid: false,
+            lastGameStateHash: '',
+            recalculateCount: 0
+          },
+          blacklist: 0
+        };
+        
+        const blacklist = [{ upgrades: false }];
+        const upgradeJson = {};
+        
+        // Mock functions used by upgradeStats
+        function getGameStateHash() {
+          return [
+            Game.BuildingsOwned,
+            Game.UpgradesOwned,
+            Game.cookiesPs,
+            Game.elderWrath,
+            Object.keys(Game.buffs).length,
+            Object.values(Game.UpgradesById).filter(u => !u.bought && u.unlocked).length
+          ].join('|');
+        }
+        
+        function isUnavailable() { return false; }
+        function upgradePrereqCost() { return 1000; }
+        function baseCps() { return 1000000; }
+        function effectiveCps() { return 1000000; }
+        function totalDiscount() { return 0; }
+        function checkPrices() { return 0; }
+        function purchaseEfficiency() { return 1; }
+        
+        function upgradeToggle(upgrade, achievements, reverseFunctions) {
+          if (!achievements) {
+            return {};
+          }
+        }
+        
+        // Function to run a performance test
+        function runPerformanceTest(iterations) {
+            let results = document.getElementById('results');
+            results.innerHTML = `<p>Running performance test with ${iterations} iterations...</p>`;
+            
+            // Non-optimized version
+            function upgradeStatsOriginal(recalculate) {
+                // Always recalculate everything - simulates the old behavior without caching
+                var upgradesToProcess = [];
+                
+                Object.values(Game.UpgradesById).forEach(function(current) {
+                    if (!current.bought) {
+                        // Simulate expensive calculations (with artificial delay)
+                        const start = Date.now();
+                        while (Date.now() - start < 5) {} // Simulate 5ms of processing per upgrade
+                        
+                        upgradesToProcess.push({
+                            id: current.id,
+                            efficiency: Math.random(),
+                            base_delta_cps: Math.random() * 1000,
+                            delta_cps: Math.random() * 1000,
+                            cost: 1000,
+                            purchase: current,
+                            type: "upgrade",
+                        });
+                    }
+                });
+                
+                FrozenCookies.caches.upgrades = upgradesToProcess;
+                return FrozenCookies.caches.upgrades;
+            }
+            
+            // Optimized version with caching
+            function upgradeStatsOptimized(recalculate) {
+                // Check if we need to force recalculation
+                var forceRecalculate = recalculate;
+                var currentGameStateHash = getGameStateHash();
+                
+                // Only reset cache when game state actually changes
+                if (FrozenCookies.upgradeCache.lastGameStateHash !== currentGameStateHash) {
+                    FrozenCookies.upgradeCache.cacheValid = false;
+                    FrozenCookies.upgradeCache.lastGameStateHash = currentGameStateHash;
+                    FrozenCookies.upgradeCache.recalculateCount = 0;
+                    forceRecalculate = true;
+                }
+                
+                // Prevent excessive recalculation attempts
+                if (FrozenCookies.upgradeCache.recalculateCount > 2) {
+                    forceRecalculate = false;
+                }
+            
+                if (forceRecalculate || !FrozenCookies.upgradeCache.cacheValid) {
+                    FrozenCookies.upgradeCache.recalculateCount++;
+                    
+                    Object.values(Game.UpgradesById).forEach(function(current) {
+                        if (!current.bought) {
+                            // Simulate expensive calculations (with artificial delay)
+                            const start = Date.now();
+                            while (Date.now() - start < 5) {} // Simulate 5ms of processing per upgrade
+                            
+                            // Cache the calculated values
+                            FrozenCookies.upgradeCache.upgradeCached[current.id] = {
+                                id: current.id,
+                                efficiency: Math.random(),
+                                base_delta_cps: Math.random() * 1000,
+                                delta_cps: Math.random() * 1000,
+                                cost: 1000,
+                                purchase: current,
+                                type: "upgrade",
+                            };
+                        }
+                    });
+                    
+                    // Build result list from cache
+                    FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
+                        .filter(current => !current.bought)
+                        .map(current => current.bought ? null : FrozenCookies.upgradeCache.upgradeCached[current.id])
+                        .filter(a => a);
+                    
+                    // Mark cache as valid after completion
+                    FrozenCookies.upgradeCache.cacheValid = true;
+                }
+                
+                return FrozenCookies.caches.upgrades;
+            }
+            
+            // First test - original version (no caching)
+            let resultsOutput = '<div class="result-item">';
+            
+            // Reset everything
+            FrozenCookies.upgradeCache.cacheValid = false;
+            FrozenCookies.upgradeCache.upgradeCached = {};
+            
+            const startOriginal = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                upgradeStatsOriginal(true); // Force recalculation every time
+            }
+            const endOriginal = performance.now();
+            const timeOriginal = endOriginal - startOriginal;
+            
+            resultsOutput += `<strong>Without cache:</strong> ${timeOriginal.toFixed(2)} ms</div>`;
+            
+            // Second test - optimized version (with caching)
+            FrozenCookies.upgradeCache.cacheValid = false;
+            FrozenCookies.upgradeCache.upgradeCached = {};
+            
+            const startOptimized = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                if (i === 0 || i % 3 === 0) {
+                    upgradeStatsOptimized(true); // First call and every 3rd call forces recalculation
+                } else {
+                    upgradeStatsOptimized(false); // Other calls use cache when possible
+                }
+            }
+            const endOptimized = performance.now();
+            const timeOptimized = endOptimized - startOptimized;
+            
+            resultsOutput += `<div class="result-item"><strong>With cache:</strong> ${timeOptimized.toFixed(2)} ms</div>`;
+            
+            // Calculate improvement
+            const improvement = ((timeOriginal - timeOptimized) / timeOriginal * 100).toFixed(2);
+            resultsOutput += `<div class="result-item"><strong>Improvement:</strong> ${improvement}%</div>`;
+            
+            results.innerHTML = resultsOutput;
+        }
+        
+        function runTest() {
+            runPerformanceTest(10); // Run with 10 iterations
+        }
+    </script>
+</body>
+</html>

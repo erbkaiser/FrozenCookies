@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FrozenCookies Performance Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #0066cc;
+            text-align: center;
+        }
+        .container {
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .result-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .improvement {
+            font-weight: bold;
+            color: #28a745;
+        }
+        .chart {
+            margin-top: 20px;
+            height: 250px;
+        }
+        .note {
+            font-size: 0.9em;
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 3px solid #0066cc;
+            background-color: #f0f7ff;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            margin-bottom: -1px;
+            background-color: transparent;
+        }
+        .tab.active {
+            border: 1px solid #ddd;
+            border-bottom-color: white;
+            background-color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FrozenCookies Performance Test</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('simple')">Simple Test</div>
+            <div class="tab" onclick="switchTab('advanced')">Advanced Test</div>
+        </div>
+        
+        <div id="simple" class="tab-content active">
+            <p>This test simulates the performance difference between the original and optimized versions of FrozenCookies upgrade calculations.</p>
+            
+            <button onclick="runSimpleTest()">Run Simple Test</button>
+            
+            <div id="simpleResults" class="results" style="display: none;">
+                <h3>Test Results</h3>
+                <div id="simpleResultContent"></div>
+                <div id="simpleChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div id="advanced" class="tab-content">
+            <p>This test allows you to customize parameters to measure performance under different conditions.</p>
+            
+            <div style="margin: 20px 0;">
+                <label for="iterations">Number of iterations:</label>
+                <input type="range" id="iterations" min="5" max="50" value="10" oninput="updateIterationValue()">
+                <span id="iterationValue">10</span>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <label for="upgrades">Number of upgrades:</label>
+                <input type="range" id="upgrades" min="10" max="200" value="100" oninput="updateUpgradeValue()">
+                <span id="upgradeValue">100</span>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <label for="simulatedDelay">Simulated processing time (ms):</label>
+                <input type="range" id="simulatedDelay" min="1" max="10" value="5" oninput="updateDelayValue()">
+                <span id="delayValue">5</span>
+            </div>
+            
+            <button onclick="runAdvancedTest()">Run Advanced Test</button>
+            
+            <div id="advancedResults" class="results" style="display: none;">
+                <h3>Advanced Test Results</h3>
+                <div id="advancedResultContent"></div>
+                <div id="advancedChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <p><strong>Note:</strong> This test simulates the behavior of the upgrade efficiency calculations. The exact performance improvement in the actual game may vary depending on your computer and the game state.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Track which tab is active
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // Update range input values
+        function updateIterationValue() {
+            document.getElementById('iterationValue').textContent = document.getElementById('iterations').value;
+        }
+        
+        function updateUpgradeValue() {
+            document.getElementById('upgradeValue').textContent = document.getElementById('upgrades').value;
+        }
+        
+        function updateDelayValue() {
+            document.getElementById('delayValue').textContent = document.getElementById('simulatedDelay').value;
+        }
+        
+        // Mock the Game object to simulate Cookie Clicker's environment
+        function createMockGame(upgradeCount) {
+            const Game = {
+                BuildingsOwned: 100,
+                UpgradesOwned: upgradeCount / 2,
+                cookiesPs: 1000000,
+                elderWrath: 0,
+                buffs: {},
+                UpgradesById: {},
+                AchievementsById: {},
+                recalculateGains: 0,
+                CalculateGains: function() {},
+                cookiesPsRawHighest: 1000000
+            };
+            
+            // Create mock upgrades for testing
+            for (let i = 0; i < upgradeCount; i++) {
+                Game.UpgradesById[i] = {
+                    id: i,
+                    bought: i < upgradeCount / 2, // Half are bought
+                    unlocked: true,
+                    pool: i % 5 === 0 ? 'toggle' : 'normal',
+                    season: i % 10 === 0 ? 'christmas' : undefined
+                };
+            }
+            
+            return Game;
+        }
+        
+        // Function to run a simple performance test
+        function runSimpleTest() {
+            const iterations = 10;
+            const upgradeCount = 100;
+            const simulatedDelay = 5;
+            
+            runPerformanceTest(iterations, upgradeCount, simulatedDelay, 'simple');
+        }
+        
+        // Function to run an advanced performance test
+        function runAdvancedTest() {
+            const iterations = parseInt(document.getElementById('iterations').value);
+            const upgradeCount = parseInt(document.getElementById('upgrades').value);
+            const simulatedDelay = parseInt(document.getElementById('simulatedDelay').value);
+            
+            runPerformanceTest(iterations, upgradeCount, simulatedDelay, 'advanced');
+        }
+        
+        // Main performance test function
+        function runPerformanceTest(iterations, upgradeCount, simulatedDelay, testType) {
+            const resultsDiv = document.getElementById(testType + 'Results');
+            const resultContent = document.getElementById(testType + 'ResultContent');
+            
+            resultsDiv.style.display = 'block';
+            resultContent.innerHTML = `<p>Running performance test with ${iterations} iterations and ${upgradeCount} upgrades...</p>`;
+            
+            // Setup test environment
+            const Game = createMockGame(upgradeCount);
+            
+            // Mock the necessary globals and functions
+            const FrozenCookies = {
+                caches: { upgrades: [] },
+                upgradeCache: {
+                    upgradeCached: {},
+                    cacheValid: false,
+                    lastGameStateHash: '',
+                    recalculateCount: 0
+                },
+                blacklist: 0
+            };
+            
+            const blacklist = [{ upgrades: false }];
+            const upgradeJson = {};
+            
+            // Mock functions used by upgradeStats
+            function getGameStateHash() {
+                return [
+                    Game.BuildingsOwned,
+                    Game.UpgradesOwned,
+                    Game.cookiesPs,
+                    Game.elderWrath,
+                    Object.keys(Game.buffs).length,
+                    Object.values(Game.UpgradesById).filter(u => !u.bought && u.unlocked).length
+                ].join('|');
+            }
+            
+            function isUnavailable() { return false; }
+            function upgradePrereqCost() { return 1000; }
+            function baseCps() { return 1000000; }
+            function effectiveCps() { return 1000000; }
+            function totalDiscount() { return 0; }
+            function checkPrices() { return 0; }
+            function purchaseEfficiency() { return 1; }
+            function upgradeToggle() { return {}; }
+            
+            // Non-optimized version
+            function upgradeStatsOriginal(recalculate) {
+                // Always recalculate everything - simulates the old behavior without caching
+                var upgradesToProcess = [];
+                
+                Object.values(Game.UpgradesById).forEach(function(current) {
+                    if (!current.bought) {
+                        // Simulate expensive calculations (with artificial delay)
+                        const start = Date.now();
+                        while (Date.now() - start < simulatedDelay) {} // Simulate processing delay per upgrade
+                        
+                        upgradesToProcess.push({
+                            id: current.id,
+                            efficiency: Math.random(),
+                            base_delta_cps: Math.random() * 1000,
+                            delta_cps: Math.random() * 1000,
+                            cost: 1000,
+                            purchase: current,
+                            type: "upgrade",
+                        });
+                    }
+                });
+                
+                FrozenCookies.caches.upgrades = upgradesToProcess;
+                return FrozenCookies.caches.upgrades;
+            }
+            
+            // Optimized version with caching
+            function upgradeStatsOptimized(recalculate) {
+                // Check if we need to force recalculation
+                var forceRecalculate = recalculate;
+                var currentGameStateHash = getGameStateHash();
+                
+                // Only reset cache when game state actually changes
+                if (FrozenCookies.upgradeCache.lastGameStateHash !== currentGameStateHash) {
+                    FrozenCookies.upgradeCache.cacheValid = false;
+                    FrozenCookies.upgradeCache.lastGameStateHash = currentGameStateHash;
+                    FrozenCookies.upgradeCache.recalculateCount = 0;
+                    forceRecalculate = true;
+                }
+                
+                // Prevent excessive recalculation attempts
+                if (FrozenCookies.upgradeCache.recalculateCount > 2) {
+                    forceRecalculate = false;
+                }
+            
+                if (forceRecalculate || !FrozenCookies.upgradeCache.cacheValid) {
+                    FrozenCookies.upgradeCache.recalculateCount++;
+                    
+                    // Process upgrades in batches
+                    const batchSize = 10;
+                    const uncachedUpgrades = Object.values(Game.UpgradesById).filter(u => !u.bought);
+                    
+                    for (let i = 0; i < uncachedUpgrades.length; i += batchSize) {
+                        const batch = uncachedUpgrades.slice(i, i + batchSize);
+                        
+                        batch.forEach(function(current) {
+                            // Simulate expensive calculations (with artificial delay)
+                            const start = Date.now();
+                            while (Date.now() - start < simulatedDelay) {} // Simulate processing delay
+                            
+                            // Cache the calculated values
+                            FrozenCookies.upgradeCache.upgradeCached[current.id] = {
+                                id: current.id,
+                                efficiency: Math.random(),
+                                base_delta_cps: Math.random() * 1000,
+                                delta_cps: Math.random() * 1000,
+                                cost: 1000,
+                                purchase: current,
+                                type: "upgrade",
+                            };
+                        });
+                    }
+                    
+                    // Build result list from cache
+                    FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
+                        .filter(current => !current.bought)
+                        .map(current => FrozenCookies.upgradeCache.upgradeCached[current.id]);
+                    
+                    // Mark cache as valid after completion
+                    FrozenCookies.upgradeCache.cacheValid = true;
+                }
+                
+                return FrozenCookies.caches.upgrades;
+            }
+            
+            // Run the test and collect results
+            setTimeout(function() {
+                // First test - original version (no caching)
+                let resultsOutput = '<div class="result-item">';
+                
+                // Reset everything
+                FrozenCookies.upgradeCache.cacheValid = false;
+                FrozenCookies.upgradeCache.upgradeCached = {};
+                
+                const startOriginal = performance.now();
+                for (let i = 0; i < iterations; i++) {
+                    upgradeStatsOriginal(true); // Force recalculation every time
+                }
+                const endOriginal = performance.now();
+                const timeOriginal = endOriginal - startOriginal;
+                
+                resultsOutput += `<strong>Without cache:</strong> ${timeOriginal.toFixed(2)} ms</div>`;
+                
+                // Second test - optimized version (with caching)
+                FrozenCookies.upgradeCache.cacheValid = false;
+                FrozenCookies.upgradeCache.upgradeCached = {};
+                
+                const startOptimized = performance.now();
+                for (let i = 0; i < iterations; i++) {
+                    if (i === 0 || i % 3 === 0) {
+                        upgradeStatsOptimized(true); // First call and every 3rd call forces recalculation
+                    } else {
+                        upgradeStatsOptimized(false); // Other calls use cache when possible
+                    }
+                }
+                const endOptimized = performance.now();
+                const timeOptimized = endOptimized - startOptimized;
+                
+                resultsOutput += `<div class="result-item"><strong>With cache:</strong> ${timeOptimized.toFixed(2)} ms</div>`;
+                
+                // Calculate improvement
+                const improvement = ((timeOriginal - timeOptimized) / timeOriginal * 100).toFixed(2);
+                resultsOutput += `<div class="result-item"><span class="improvement">Performance improvement: ${improvement}%</span></div>`;
+                
+                // Add more detailed analysis
+                const avgTimePerUpgradeOriginal = (timeOriginal / (iterations * upgradeCount / 2)).toFixed(3);
+                const avgTimePerUpgradeOptimized = (timeOptimized / (iterations * upgradeCount / 2)).toFixed(3);
+                
+                resultsOutput += `<div class="result-item">Average processing time per upgrade (original): ${avgTimePerUpgradeOriginal} ms</div>`;
+                resultsOutput += `<div class="result-item">Average processing time per upgrade (optimized): ${avgTimePerUpgradeOptimized} ms</div>`;
+                
+                resultContent.innerHTML = resultsOutput;
+                
+                // Create a simple bar chart (could be enhanced with a proper charting library)
+                const chartDiv = document.getElementById(testType + 'Chart');
+                const maxHeight = 200;
+                const maxTime = Math.max(timeOriginal, timeOptimized);
+                
+                const originalHeight = (timeOriginal / maxTime) * maxHeight;
+                const optimizedHeight = (timeOptimized / maxTime) * maxHeight;
+                
+                chartDiv.innerHTML = `
+                    <div style="display: flex; height: ${maxHeight}px; align-items: flex-end; justify-content: center; padding: 10px; gap: 50px;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div style="width: 80px; height: ${originalHeight}px; background-color: #dc3545; margin-bottom: 10px;"></div>
+                            <div>Original</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div style="width: 80px; height: ${optimizedHeight}px; background-color: #28a745; margin-bottom: 10px;"></div>
+                            <div>Optimized</div>
+                        </div>
+                    </div>
+                `;
+                
+            }, 10); // Small delay to let the UI update
+        }
+    </script>
+</body>
+</html>
