@@ -3307,13 +3307,17 @@ function autoCookie() {
             !FrozenCookies.lastCookiesEarned ||
             Game.cookiesEarned !== FrozenCookies.lastCookiesEarned ||
             Game.UpgradesInStore.length !== FrozenCookies.lastUpgradeCount ||
-            Game.BuildingsOwned !== FrozenCookies.lastBuildingsOwned;
+            Game.BuildingsOwned !== FrozenCookies.lastBuildingsOwned ||
+            Game.shimmerTypes.golden.n !== FrozenCookies.lastGCState || // Track golden cookie count
+            Game.shimmerTypes.reindeer.n !== FrozenCookies.lastReindeerState; // Track reindeer count
 
         if (gameStateChanged) {
             // Update game state tracking
             FrozenCookies.lastCookiesEarned = Game.cookiesEarned;
             FrozenCookies.lastUpgradeCount = Game.UpgradesInStore.length;
             FrozenCookies.lastBuildingsOwned = Game.BuildingsOwned;
+            FrozenCookies.lastGCState = Game.shimmerTypes.golden.n;
+            FrozenCookies.lastReindeerState = Game.shimmerTypes.reindeer.n;
 
             // Only update caches if game state has changed
             updateCaches();
@@ -3392,6 +3396,9 @@ function autoCookie() {
                         }
                         w.hp = 0;
                         popCount++;
+                        // Invalidate caches after popping wrinklers
+                        invalidateUpgradeCache();
+                        invalidateBuildingCache();
                     }
                 }
             }
