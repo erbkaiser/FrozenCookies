@@ -221,6 +221,7 @@ function getGameStateHash() {
         Game.cookiesPs,
         Game.elderWrath,
         Object.keys(Game.buffs).length,
+        // Track only unlocked upgrades for cache invalidation
         Object.values(Game.UpgradesById).filter((u) => !u.bought && u.unlocked)
             .length,
     ].join("|");
@@ -1906,7 +1907,21 @@ function buildingStats(recalculate) {
             lastGameStateHash: "",
             recalculateCount: 0,
         };
+    } // Initialize timing trackers if they don't exist
+    if (!FrozenCookies.buildingCache.timing) {
+        FrozenCookies.buildingCache.timing = {
+            lastFullUpdate: 0,
+            updateInterval: 10000, // 10 seconds between full recalculations
+            lastPartialUpdate: 0,
+            partialUpdateInterval: 2000, // 2 seconds between partial updates
+        };
     }
+
+    var now = Date.now();
+    var timeSinceFullUpdate =
+        now - FrozenCookies.buildingCache.timing.lastFullUpdate;
+    var timeSincePartialUpdate =
+        now - FrozenCookies.buildingCache.timing.lastPartialUpdate;
 
     // Check if game state has changed
     if (
@@ -1918,13 +1933,24 @@ function buildingStats(recalculate) {
         forceRecalculate = true;
     }
 
+    // Determine if we should do a full or partial update
+    var shouldFullUpdate =
+        forceRecalculate ||
+        timeSinceFullUpdate >=
+            FrozenCookies.buildingCache.timing.updateInterval;
+    var shouldPartialUpdate =
+        !shouldFullUpdate &&
+        timeSincePartialUpdate >=
+            FrozenCookies.buildingCache.timing.partialUpdateInterval;
+
     // Prevent excessive recalculation attempts
-    if (FrozenCookies.buildingCache.recalculateCount > 2) {
-        forceRecalculate = false;
+    if (FrozenCookies.buildingCache.recalculateCount > 2 && !shouldFullUpdate) {
+        return FrozenCookies.caches.buildings;
     }
 
-    if (forceRecalculate || !FrozenCookies.buildingCache.cacheValid) {
+    if (shouldFullUpdate || !FrozenCookies.buildingCache.cacheValid) {
         FrozenCookies.buildingCache.recalculateCount++;
+        FrozenCookies.buildingCache.timing.lastFullUpdate = now;
 
         if (blacklist[FrozenCookies.blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
@@ -1964,52 +1990,89 @@ function buildingStats(recalculate) {
                 FrozenCookies.orbLimit &&
                 Game.Objects["You"].amount >= FrozenCookies.orbMax
             )
-                buildingBlacklist.push(19);
-
-            // Process buildings in batches to improve performance
+                buildingBlacklist.push(19); // Process buildings in batches to improve performance
             const allBuildings = Game.ObjectsById.filter(function (building) {
                 return !_.contains(buildingBlacklist, building.id);
             });
-            const batchSize = 5; // Process this many buildings at once
 
-            for (let i = 0; i < allBuildings.length; i += batchSize) {
+            // Sort buildings by priority for partial updates
+            if (shouldPartialUpdate) {
+                allBuildings.sort((a, b) => {
+                    const aCache =
+                        FrozenCookies.buildingCache.buildingCached[a.id];
+                    const bCache =
+                        FrozenCookies.buildingCache.buildingCached[b.id];
+                    // Prioritize buildings that haven't been calculated recently
+                    if (!aCache || !bCache) return !aCache ? -1 : 1;
+                    return (
+                        (aCache.calculatedAt || 0) - (bCache.calculatedAt || 0)
+                    );
+                });
+            }
+
+            const batchSize = shouldFullUpdate ? 10 : 3; // Smaller batches for partial updates
+
+            for (
+                let i = 0;
+                i <
+                (shouldPartialUpdate
+                    ? Math.min(3, allBuildings.length)
+                    : allBuildings.length);
+                i += batchSize
+            ) {
                 const batch = allBuildings.slice(i, i + batchSize);
 
                 batch.forEach(function (current) {
+                    // Check if we already have valid cached data for this building
+                    if (
+                        FrozenCookies.buildingCache.buildingCached[
+                            current.id
+                        ] &&
+                        FrozenCookies.buildingCache.buildingCached[current.id]
+                            .lastPrice === current.getPrice()
+                    ) {
+                        return; // Skip calculation if price hasn't changed
+                    }
+
                     var currentBank = bestBank(0).cost;
                     var baseCpsOrig = baseCps();
                     var cpsOrig = effectiveCps(
                         Math.min(Game.cookies, currentBank)
                     );
-                    var existingAchievements = Object.values(
-                        Game.AchievementsById
-                    ).map(function (item) {
-                        return item.won;
-                    });
+
+                    // Cache achievement state
+                    if (!FrozenCookies.achievementsCache) {
+                        FrozenCookies.achievementsCache = Object.values(
+                            Game.AchievementsById
+                        ).map((item) => item.won);
+                    }
 
                     buildingToggle(current);
                     var baseCpsNew = baseCps();
                     var cpsNew = effectiveCps(currentBank);
-                    buildingToggle(current, existingAchievements);
+                    buildingToggle(current, FrozenCookies.achievementsCache);
 
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                    var currentPrice = current.getPrice();
                     var efficiency = purchaseEfficiency(
-                        current.getPrice(),
+                        currentPrice,
                         deltaCps,
                         baseDeltaCps,
                         cpsOrig
                     );
 
-                    // Store in cache
+                    // Store in cache with price tracking
                     FrozenCookies.buildingCache.buildingCached[current.id] = {
                         id: current.id,
                         efficiency: efficiency,
                         base_delta_cps: baseDeltaCps,
                         delta_cps: deltaCps,
-                        cost: current.getPrice(),
+                        cost: currentPrice,
+                        lastPrice: currentPrice,
                         purchase: current,
                         type: "building",
+                        calculatedAt: Date.now(),
                     };
                 });
 
@@ -2040,6 +2103,59 @@ function upgradeStats(recalculate) {
     var forceRecalculate = recalculate;
     var currentGameStateHash = getGameStateHash();
 
+    // Initialize cache and timing trackers if they don't exist
+    if (!FrozenCookies.upgradeCache) {
+        FrozenCookies.upgradeCache = {
+            upgradeCached: {},
+            priceHistory: {}, // Track price changes
+            cacheValid: false,
+            lastGameStateHash: "",
+            recalculateCount: 0,
+            batchSize: 10, // Process upgrades in batches
+            timing: {
+                lastFullUpdate: 0,
+                updateInterval: 10000,
+                lastPartialUpdate: 0,
+                partialUpdateInterval: 2000,
+                lastPriceCheck: 0,
+                priceCheckInterval: 1000,
+                lastCalculations: {},
+            },
+        };
+    }
+
+    var now = Date.now();
+    var timeSinceFullUpdate =
+        now - (FrozenCookies.upgradeCache.timing.lastFullUpdate || 0);
+    var timeSincePartialUpdate =
+        now - (FrozenCookies.upgradeCache.timing.lastPartialUpdate || 0);
+    var timeSincePriceCheck =
+        now - (FrozenCookies.upgradeCache.timing.lastPriceCheck || 0);
+
+    // Quick price check to detect changes that would invalidate cache
+    if (
+        timeSincePriceCheck >=
+        FrozenCookies.upgradeCache.timing.priceCheckInterval
+    ) {
+        var priceChanged = false;
+        for (var i in Game.UpgradesInStore) {
+            var upgrade = Game.UpgradesInStore[i];
+            var currentPrice = upgrade.getPrice();
+            if (
+                FrozenCookies.upgradeCache.priceHistory[upgrade.id] !==
+                currentPrice
+            ) {
+                FrozenCookies.upgradeCache.priceHistory[upgrade.id] =
+                    currentPrice;
+                priceChanged = true;
+            }
+        }
+        if (priceChanged) {
+            FrozenCookies.upgradeCache.cacheValid = false;
+        }
+        FrozenCookies.upgradeCache.timing.lastPriceCheck = now;
+    }
+
     // Only reset cache when game state actually changes
     if (FrozenCookies.upgradeCache.lastGameStateHash !== currentGameStateHash) {
         FrozenCookies.upgradeCache.cacheValid = false;
@@ -2048,13 +2164,23 @@ function upgradeStats(recalculate) {
         forceRecalculate = true;
     }
 
+    // Determine update type
+    var shouldFullUpdate =
+        forceRecalculate ||
+        timeSinceFullUpdate >= FrozenCookies.upgradeCache.timing.updateInterval;
+    var shouldPartialUpdate =
+        !shouldFullUpdate &&
+        timeSincePartialUpdate >=
+            FrozenCookies.upgradeCache.timing.partialUpdateInterval;
+
     // Prevent excessive recalculation attempts
-    if (FrozenCookies.upgradeCache.recalculateCount > 2) {
-        forceRecalculate = false;
+    if (FrozenCookies.upgradeCache.recalculateCount > 2 && !shouldFullUpdate) {
+        return FrozenCookies.caches.upgrades;
     }
 
-    if (forceRecalculate || !FrozenCookies.upgradeCache.cacheValid) {
+    if (shouldFullUpdate || !FrozenCookies.upgradeCache.cacheValid) {
         FrozenCookies.upgradeCache.recalculateCount++;
+        FrozenCookies.upgradeCache.timing.lastFullUpdate = now;
 
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
@@ -2062,54 +2188,51 @@ function upgradeStats(recalculate) {
             var upgradeBlacklist = blacklist[FrozenCookies.blacklist].upgrades;
             var upgradesToProcess = [];
 
-            // First pass - identify which upgrades need recalculation
-            Object.values(Game.UpgradesById).forEach(function (current) {
-                if (
-                    !current.bought &&
-                    !isUnavailable(current, upgradeBlacklist)
-                ) {
-                    // Check if we have valid cached data for this upgrade
-                    var cachedData =
-                        FrozenCookies.upgradeCache.upgradeCached[current.id];
-                    var needsUpdate = !cachedData;
-                    if (!needsUpdate) {
-                        // Check if prerequisites have changed, which would invalidate our cache
-                        var prereqs = upgradeJson[current.id];
-                        if (prereqs) {
-                            // Only check prerequisites if they exist and are complex
-                            if (prereqs.buildings.some((v) => v > 0)) {
-                                // Check if building requirements are met
-                                needsUpdate = prereqs.buildings.some(
-                                    (req, idx) => {
-                                        return (
-                                            req > 0 &&
-                                            Game.ObjectsById[idx].amount < req
-                                        );
-                                    }
-                                );
-                            }
-
-                            // Check if upgrade prerequisites are met
-                            if (!needsUpdate && prereqs.upgrades.length > 0) {
-                                needsUpdate = prereqs.upgrades.some(
-                                    (id) => !Game.UpgradesById[id].bought
-                                );
-                            }
-                        }
-                    }
-
-                    if (needsUpdate) {
-                        upgradesToProcess.push(current);
-                    }
+            // Get all valid upgrades
+            var validUpgrades = Object.values(Game.UpgradesById).filter(
+                function (upgrade) {
+                    return (
+                        !upgrade.bought &&
+                        !isUnavailable(upgrade, upgradeBlacklist)
+                    );
                 }
-            });
+            );
 
-            // Process uncached upgrades in batches to improve performance
-            const batchSize = 10; // Process this many upgrades at once
-            for (let i = 0; i < upgradesToProcess.length; i += batchSize) {
-                const batch = upgradesToProcess.slice(i, i + batchSize);
+            // Sort upgrades by priority for partial updates
+            if (shouldPartialUpdate) {
+                validUpgrades.sort(function (a, b) {
+                    const aCache =
+                        FrozenCookies.upgradeCache.upgradeCached[a.id];
+                    const bCache =
+                        FrozenCookies.upgradeCache.upgradeCached[b.id];
 
-                // Calculate new upgrade values for this batch
+                    // Prioritize uncached upgrades
+                    if (!aCache) return -1;
+                    if (!bCache) return 1;
+
+                    // Then prioritize by last calculation time
+                    const aTime =
+                        FrozenCookies.upgradeCache.timing.lastCalculations[
+                            a.id
+                        ] || 0;
+                    const bTime =
+                        FrozenCookies.upgradeCache.timing.lastCalculations[
+                            b.id
+                        ] || 0;
+                    return aTime - bTime;
+                });
+            }
+
+            // Process only a subset for partial updates
+            var upgradesToCheck = shouldPartialUpdate
+                ? validUpgrades.slice(0, 5) // Process 5 most important upgrades in partial update
+                : validUpgrades;
+
+            // Process upgrades in batches
+            const batchSize = FrozenCookies.upgradeCache.batchSize;
+            for (let i = 0; i < upgradesToCheck.length; i += batchSize) {
+                const batch = upgradesToCheck.slice(i, i + batchSize);
+
                 batch.forEach(function (current) {
                     var currentBank = bestBank(0).cost;
                     var cost = upgradePrereqCost(current);
@@ -2117,13 +2240,13 @@ function upgradeStats(recalculate) {
                     var cpsOrig = effectiveCps(
                         Math.min(Game.cookies, currentBank)
                     );
+
                     var existingAchievements = Object.values(
                         Game.AchievementsById
-                    ).map(function (item) {
-                        return item.won;
-                    });
+                    ).map((item) => item.won);
                     var existingWrath = Game.elderWrath;
                     var discounts = totalDiscount() + totalDiscount(true);
+
                     var reverseFunctions = upgradeToggle(current);
                     var baseCpsNew = baseCps();
                     var cpsNew = effectiveCps(currentBank);
@@ -2131,12 +2254,14 @@ function upgradeStats(recalculate) {
                         discounts == totalDiscount() + totalDiscount(true)
                             ? 0
                             : checkPrices(current);
+
                     upgradeToggle(
                         current,
                         existingAchievements,
                         reverseFunctions
                     );
                     Game.elderWrath = existingWrath;
+
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
                     var efficiency =
@@ -2163,29 +2288,26 @@ function upgradeStats(recalculate) {
                         purchase: current,
                         type: "upgrade",
                     };
+
+                    // Track calculation time
+                    FrozenCookies.upgradeCache.timing.lastCalculations[
+                        current.id
+                    ] = now;
                 });
 
-                // Allow browser to process other events if we're doing a lot of calculations
+                // Allow browser to process other events between batches
                 if (
-                    upgradesToProcess.length > batchSize &&
-                    i + batchSize < upgradesToProcess.length
+                    upgradesToCheck.length > batchSize &&
+                    i + batchSize < upgradesToCheck.length
                 ) {
-                    // In future, could add setTimeout here for smoother performance
+                    // Could add setTimeout here for smoother performance in future
                 }
             }
 
             // Build final result list from cache
-            FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
+            FrozenCookies.caches.upgrades = validUpgrades
                 .map(function (current) {
-                    if (
-                        !current.bought &&
-                        !isUnavailable(current, upgradeBlacklist)
-                    ) {
-                        return FrozenCookies.upgradeCache.upgradeCached[
-                            current.id
-                        ];
-                    }
-                    return null;
+                    return FrozenCookies.upgradeCache.upgradeCached[current.id];
                 })
                 .filter(function (a) {
                     return a;
@@ -2194,6 +2316,7 @@ function upgradeStats(recalculate) {
 
         // Mark cache as valid after completion
         FrozenCookies.upgradeCache.cacheValid = true;
+        FrozenCookies.upgradeCache.timing.lastPartialUpdate = now;
     }
 
     return FrozenCookies.caches.upgrades;
@@ -3005,14 +3128,14 @@ function shouldPopWrinklers() {
                 })
                 .reduce(
                     function (current, w) {
-                        var futureWrinklers =
+                        var futureWrinklerCount =
                             living.length - (current.ids.length + 1);
                         if (
                             current.total < nextRecNeeded &&
                             effectiveCps(
                                 delay,
                                 Game.elderWrath,
-                                futureWrinklers
+                                futureWrinklerCount
                             ) +
                                 nextRecCps >
                                 effectiveCps()
