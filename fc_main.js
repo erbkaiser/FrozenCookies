@@ -596,10 +596,13 @@ function toggleFrozen(setting) {
 }
 
 
-var G = Game.Objects["Farm"].minigame; //Garden
-var B = Game.Objects["Bank"].minigame; //Stock Market
-var T = Game.Objects["Temple"].minigame; //Pantheon
-var M = Game.Objects["Wizard tower"].minigame; //Grimoire
+const {
+  Farm: { minigame: G },
+  Bank: { minigame: B },
+  Temple: { minigame: T },
+  "Wizard tower": { minigame: M }
+} = Game.Objects;
+
 
 function autoTicker() {
     if (Game.TickerEffect && Game.TickerEffect.type == "fortune") Game.tickerL.click();
