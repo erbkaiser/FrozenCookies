@@ -417,17 +417,12 @@ function saveFCData() {
 }
 
 
-function divCps(value, cps) {
-    var result = 0;
-    if (value) {
-        if (cps) {
-            result = value / cps;
-        } else {
-            result = Number.POSITIVE_INFINITY;
-        }
-    }
-    return result;
+function divCps(value = 0, cps = 0) {
+  if (typeof value !== "number" || typeof cps !== "number") return NaN;
+  if (!value) return 0;
+  return cps ? value / cps : Number.POSITIVE_INFINITY;
 }
+
 
 function nextHC(tg) {
     var futureHC = Math.ceil(
