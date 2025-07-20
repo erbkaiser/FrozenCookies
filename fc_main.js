@@ -384,31 +384,38 @@ function fcReset() {
 
 
 function saveFCData() {
-    var saveString = {};
-    _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
-        saveString[preference] = FrozenCookies[preference];
-    });
-    saveString.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
-    saveString.cookieClickSpeed = FrozenCookies.cookieClickSpeed;
-    saveString.HCAscendAmount = FrozenCookies.HCAscendAmount;
-    saveString.mineMax = FrozenCookies.mineMax;
-    saveString.factoryMax = FrozenCookies.factoryMax;
-    saveString.minCpSMult = FrozenCookies.minCpSMult;
-    saveString.minLoanMult = FrozenCookies.minLoanMult;
-    saveString.minASFMult = FrozenCookies.minASFMult;
-    saveString.frenzyTimes = JSON.stringify(FrozenCookies.frenzyTimes);
-    //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
-    //  saveString.frenzyTime = FrozenCookies.gc_time;
-    saveString.lastHCAmount = FrozenCookies.lastHCAmount;
-    saveString.maxHCPercent = FrozenCookies.maxHCPercent;
-    saveString.lastHCTime = FrozenCookies.lastHCTime;
-    saveString.manaMax = FrozenCookies.manaMax;
-    saveString.maxSpecials = FrozenCookies.maxSpecials;
-    saveString.orbMax = FrozenCookies.orbMax;
-    saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
-    saveString.saveVersion = FrozenCookies.version;
-    return JSON.stringify(saveString);
+  const keysToSave = [
+    ...Object.keys(FrozenCookies.preferenceValues),
+    "frenzyClickSpeed",
+    "cookieClickSpeed",
+    "HCAscendAmount",
+    "mineMax",
+    "factoryMax",
+    "manaMax",
+    "orbMax",
+    "minCpSMult",
+    "minLoanMult",
+    "minASFMult",
+    "maxSpecials",
+    "lastHCAmount",
+    "maxHCPercent",
+    "lastHCTime",
+    "prevLastHCTime",
+    "saveVersion"
+  ];
+
+  const saveString = {};
+
+  keysToSave.forEach(key => {
+    saveString[key] = FrozenCookies[key];
+  });
+
+  // Handle serialized fields separately
+  saveString.frenzyTimes = JSON.stringify(FrozenCookies.frenzyTimes);
+
+  return JSON.stringify(saveString);
 }
+
 
 function divCps(value, cps) {
     var result = 0;
