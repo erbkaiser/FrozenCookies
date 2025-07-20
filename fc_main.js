@@ -10,7 +10,7 @@
 function registerMod(modId = "frozen_cookies") {
   Game.registerMod(modId, {
     init() {
-      // 🧙 Reincarnate Hook
+      // Reincarnate Hook
       Game.registerHook("reincarnate", () => {
         if (!FrozenCookies.autoBulk) return;
         const buttonId = FrozenCookies.autoBulk === 1 ? "storeBulk10" : "storeBulk100";
@@ -18,10 +18,10 @@ function registerMod(modId = "frozen_cookies") {
         if (button) button.click();
       });
 
-      // ⏱️ Draw Hook
+      //  Draw Hook
       Game.registerHook("draw", updateTimers);
 
-      // 📰 Ticker Hook
+      // Ticker Hook
       Game.registerHook("ticker", () => {
         const isFools = Game.season === "fools";
         const cookieThreshold = Game.cookiesEarned >= 1000;
@@ -105,7 +105,7 @@ function registerMod(modId = "frozen_cookies") {
         return tickerMessages.length ? [tickerMessages[Math.floor(Math.random() * tickerMessages.length)]] : undefined;
       });
 
-      // 🔄 Reset Hook
+      // Reset Hook
       Game.registerHook("reset", (hard) => {
         if (hard) emptyCaches();
       });
@@ -337,15 +337,15 @@ function fcDraw(from, text, origin) {
 function fcReset() {
   Game.CollectWrinklers();
 
-  // 📉 Sell all stock market goods
+  // Sell all stock market goods
   if (B?.goodsById?.length) {
     B.goodsById.forEach((_, index) => B.sellGood(index, 10000));
   }
 
-  // 🌱 Harvest all plants
+  // Harvest all plants
   G?.harvestAll?.();
 
-  // 🍫 Handle Chocolate Egg logic
+  // Handle Chocolate Egg logic
   const hasChocoEgg = Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg");
 
   if (Game.dragonLevel > 5 && hasChocoEgg && !Game.hasAura("Earth Shatterer")) {
@@ -359,10 +359,10 @@ function fcReset() {
     Game.Upgrades["Chocolate egg"].buy();
   }
 
-  // 🔄 Perform actual game reset
+  // Perform actual game reset
   Game.oldReset();
 
-  // 🧠 Reset FrozenCookies tracking data
+  // Reset FrozenCookies tracking data
   const now = Date.now();
   const frenzyMult = Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1;
 
@@ -446,7 +446,7 @@ function getBuildingSpread() {
   return Game.ObjectsById.map(obj => obj.amount).join("/");
 }
 
-// 🔥 Keyboard Shortcut Map
+// Keyboard Shortcut Map
 const keyBindings = {
   65: () => {
     Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
@@ -471,7 +471,7 @@ const keyBindings = {
   }
 };
 
-// 🎹 Shortcut Listener
+// Shortcut Listener
 document.addEventListener("keydown", event => {
   if (!Game.promptOn && FrozenCookies.FCshortcuts && keyBindings[event.keyCode]) {
     keyBindings[event.keyCode]();
@@ -484,7 +484,7 @@ function writeFCButton(setting) {
   // Could use this to visually update buttons based on state later
 }
 
-// 📥 Generic input prompt with confirmation
+// Generic input prompt with confirmation
 function userInputPrompt(title, description, existingValue, callback) {
   Game.Prompt(
     `<h3>${title}</h3>
@@ -504,7 +504,7 @@ function userInputPrompt(title, description, existingValue, callback) {
   input.select();
 }
 
-// 🛡️ Validate numerical input with optional bounds
+// Validate numerical input with optional bounds
 function validateNumber(value, min = null, max = null) {
   const num = Number(value);
   return (
@@ -514,7 +514,7 @@ function validateNumber(value, min = null, max = null) {
   );
 }
 
-// 🔄 Store validated number and restart
+// Store validated number and restart
 function storeNumberCallback(setting, min, max) {
   return (input) => {
     FrozenCookies[setting] = validateNumber(input, min, max)
@@ -524,12 +524,12 @@ function storeNumberCallback(setting, min, max) {
   };
 }
 
-// 🧩 Unified update function
+// Unified update function
 function createUpdatePrompt(setting, title, description, min, max) {
   userInputPrompt(title, description, FrozenCookies[setting], storeNumberCallback(setting, min, max));
 }
 
-// 🎯 Specific updates
+// Specific updates
 function updateSpeed(base) {
   createUpdatePrompt(base, "Autoclicking!", "How many times per second do you want to click? (250 recommended, 1000 max)", 0, 1000);
 }
@@ -660,7 +660,7 @@ function recommendedSettingsAction() {
   if (FrozenCookies.recommendedSettings !== 1) return;
 
   const recommended = {
-    // 🍪 Clicking options
+    // Clicking options
     autoClick: 1,
     cookieClickSpeed: 250,
     autoFrenzy: 1,
@@ -669,7 +669,7 @@ function recommendedSettingsAction() {
     autoReindeer: 1,
     autoFortune: 1,
 
-    // 🛒 Autobuy options
+    // Autobuy options
     autoBuy: 1,
     otherUpgrades: 1,
     autoBlacklistOff: 0,
@@ -680,7 +680,7 @@ function recommendedSettingsAction() {
     factoryMax: 500,
     pastemode: 0,
 
-    // 🔄 Ascension and bulk purchasing
+    // Ascension and bulk purchasing
     autoAscendToggle: 0,
     autoAscend: 2,
     comboAscend: 0,
@@ -688,7 +688,7 @@ function recommendedSettingsAction() {
     autoBulk: 2,
     autoBuyAll: 1,
 
-    // 🧟 Wrinkler & soul options
+    // Wrinkler & soul options
     autoWrinkler: 1,
     shinyPop: 0,
     autoSL: 2,
@@ -697,20 +697,20 @@ function recommendedSettingsAction() {
     autoGS: 1,
     autoGodzamok: 1,
 
-    // 🏦 Stock market
+    // Stock market
     autoBank: 1,
     autoBroker: 1,
     autoLoan: 1,
     minLoanMult: 777,
 
-    // ⛪ Pantheon options
+    // Pantheon options
     autoWorshipToggle: 1,
     autoWorship0: 2,
     autoWorship1: 8,
     autoWorship2: 6,
     autoCyclius: 0,
 
-    // 🔮 Spellcasting
+    // Spellcasting
     towerLimit: 1,
     manaMax: 37,
     autoCasting: 3,
@@ -721,7 +721,7 @@ function recommendedSettingsAction() {
     minASFMult: 7777,
     autoSweet: 0,
 
-    // 🐲 Dragon options
+    // Dragon options
     autoDragon: 1,
     petDragon: 1,
     autoDragonToggle: 1,
@@ -731,24 +731,24 @@ function recommendedSettingsAction() {
     orbLimit: 0,
     orbMax: 200,
 
-    // 🎁 Seasons
+    // Seasons
     defaultSeasonToggle: 1,
     defaultSeason: 1,
     freeSeason: 1,
     autoEaster: 1,
     autoHalloween: 1,
 
-    // 🌱 Bank & Harvest
+    // Bank & Harvest
     holdSEBank: 0,
     setHarvestBankPlant: 0,
     setHarvestBankType: 3,
     maxSpecials: 1,
 
-    // 🔧 Other
+    // Other
     FCshortcuts: 1,
     simulatedGCPercent: 1,
 
-    // 🖥️ Display
+    // Display
     showMissedCookies: 0,
     numberDisplay: 1,
     fancyui: 1,
@@ -758,12 +758,12 @@ function recommendedSettingsAction() {
     trackStats: 0
   };
 
-  // 🧩 Apply recommended settings
+  // Apply recommended settings
   for (const [key, value] of Object.entries(recommended)) {
     FrozenCookies[key] = value;
   }
 
-  // 📣 Log and flag reload
+  // Log and flag reload
   logEvent("recommendedSettings", "Set all options to recommended values");
   FrozenCookies.recommendedSettings = 0;
   Game.toSave = true;
@@ -2638,6 +2638,53 @@ function reindeerLife() {
     return null;
 }
 
+// --- Reward Cookie Helper ---
+function isRewardCookie(upgrade) {
+    // Reward cookies: upgrades that require all buildings to reach a certain number
+    // See cc_upgrade_prerequisites.js, e.g. ids 334, 335, 336, 337, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414
+    // We'll check if the prereq is all buildings > 0 and the array is long (i.e. 15-20 buildings)
+    if (!upgrade || !upgradeJson[upgrade.id]) return false;
+    var prereq = upgradeJson[upgrade.id].buildings;
+    if (!prereq || prereq.length < 10) return false;
+    var allSame = prereq.every(function (v) {
+        return v > 0 && v === prereq[0];
+    });
+    return allSame;
+}
+
+function getRewardCookieBuildingTargets(upgrade) {
+    // Returns an array of {id, amount} for each building type needed
+    if (!upgrade || !upgradeJson[upgrade.id]) return [];
+    var prereq = upgradeJson[upgrade.id].buildings;
+    return prereq.map(function (amt, idx) {
+        return { id: idx, amount: amt };
+    });
+}
+
+function restoreBuildingLimits() {
+    // Sells excess buildings to return to user limits
+    if (FrozenCookies.towerLimit) {
+        var obj = Game.Objects["Wizard tower"];
+        if (obj.amount > FrozenCookies.manaMax)
+            obj.sell(obj.amount - FrozenCookies.manaMax);
+    }
+    if (FrozenCookies.mineLimit) {
+        var obj = Game.Objects["Mine"];
+        if (obj.amount > FrozenCookies.mineMax)
+            obj.sell(obj.amount - FrozenCookies.mineMax);
+    }
+    if (FrozenCookies.factoryLimit) {
+        var obj = Game.Objects["Factory"];
+        if (obj.amount > FrozenCookies.factoryMax)
+            obj.sell(obj.amount - FrozenCookies.factoryMax);
+    }
+    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
+        var obj = Game.Objects["You"];
+        if (obj.amount > FrozenCookies.orbMax)
+            obj.sell(obj.amount - FrozenCookies.orbMax);
+    }
+}
+
 function fcClickCookie() {
     if (!Game.OnAscend && !Game.AscendTimer && !Game.specialTabHovered)
         Game.ClickCookie();
@@ -2750,6 +2797,24 @@ function autoCookie() {
             recommendation.purchase.clickFunction = null;
             disabledPopups = false;
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
+            if (nextChainedPurchase?.type === "upgrade" && isRewardCookie(nextChainedPurchase.purchase)) {
+                // Ensure building thresholds for reward cookie
+                const targets = getRewardCookieBuildingTargets(nextChainedPurchase.purchase);
+
+                targets.forEach(t => {
+                const building = Game.ObjectsById[t.id];
+                    if (building && building.amount < t.amount) {
+                        building.buy(t.amount - building.amount);
+                    }
+                });
+
+                // Try to buy the reward cookie if unlocked and affordable
+                const upgrade = nextChainedPurchase.purchase;
+                if (upgrade.unlocked && !upgrade.bought && Game.cookies >= upgrade.getPrice()) {
+                upgrade.buy();
+                restoreBuildingLimits(); // reset any limits you temporarily relaxed
+                }
+            }
             if (
                 Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)) -
                     Math.floor(Game.HowMuchPrestige(Game.cookiesReset)) <
@@ -3005,36 +3070,6 @@ function autoCookie() {
         FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
     }
 }
-
-// --- Patch autoCookie for reward cookies ---
-var _oldAutoCookie = autoCookie;
-autoCookie = function () {
-    var chainRec = nextChainedPurchase();
-    if (chainRec && chainRec.type === "upgrade" && isRewardCookie(chainRec.purchase)) {
-        // Temporarily ignore limits and buy up to required amount for each building
-        var targets = getRewardCookieBuildingTargets(chainRec.purchase);
-        targets.forEach(function (t) {
-            var obj = Game.ObjectsById[t.id];
-            if (obj && obj.amount < t.amount) {
-                obj.buy(t.amount - obj.amount);
-            }
-        });
-        // Try to buy the reward cookie if unlocked and affordable
-        if (
-            chainRec.purchase.unlocked &&
-            !chainRec.purchase.bought &&
-            Game.cookies >= chainRec.purchase.getPrice()
-        ) {
-            chainRec.purchase.buy();
-            restoreBuildingLimits();
-        }
-        // Continue with normal autobuy for other things
-        _oldAutoCookie();
-        return;
-    }
-    // Default behavior
-    _oldAutoCookie();
-};
 
 function FCStart() {
     //  To allow polling frequency to change, clear intervals before setting new ones.
@@ -3348,51 +3383,4 @@ function FCStart() {
     }
 
     FCMenu();
-}
-
-// --- Reward Cookie Helper ---
-function isRewardCookie(upgrade) {
-    // Reward cookies: upgrades that require all buildings to reach a certain number
-    // See cc_upgrade_prerequisites.js, e.g. ids 334, 335, 336, 337, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414
-    // We'll check if the prereq is all buildings > 0 and the array is long (i.e. 15-20 buildings)
-    if (!upgrade || !upgradeJson[upgrade.id]) return false;
-    var prereq = upgradeJson[upgrade.id].buildings;
-    if (!prereq || prereq.length < 10) return false;
-    var allSame = prereq.every(function (v) {
-        return v > 0 && v === prereq[0];
-    });
-    return allSame;
-}
-
-function getRewardCookieBuildingTargets(upgrade) {
-    // Returns an array of {id, amount} for each building type needed
-    if (!upgrade || !upgradeJson[upgrade.id]) return [];
-    var prereq = upgradeJson[upgrade.id].buildings;
-    return prereq.map(function (amt, idx) {
-        return { id: idx, amount: amt };
-    });
-}
-
-function restoreBuildingLimits() {
-    // Sells excess buildings to return to user limits
-    if (FrozenCookies.towerLimit) {
-        var obj = Game.Objects["Wizard tower"];
-        if (obj.amount > FrozenCookies.manaMax)
-            obj.sell(obj.amount - FrozenCookies.manaMax);
-    }
-    if (FrozenCookies.mineLimit) {
-        var obj = Game.Objects["Mine"];
-        if (obj.amount > FrozenCookies.mineMax)
-            obj.sell(obj.amount - FrozenCookies.mineMax);
-    }
-    if (FrozenCookies.factoryLimit) {
-        var obj = Game.Objects["Factory"];
-        if (obj.amount > FrozenCookies.factoryMax)
-            obj.sell(obj.amount - FrozenCookies.factoryMax);
-    }
-    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
-        var obj = Game.Objects["You"];
-        if (obj.amount > FrozenCookies.orbMax)
-            obj.sell(obj.amount - FrozenCookies.orbMax);
-    }
 }
