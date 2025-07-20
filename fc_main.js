@@ -640,17 +640,19 @@ function autoHalloweenAction() {
 }
 
 function autoBlacklistOff() {
+  setTimeout(() => {
     switch (FrozenCookies.blacklist) {
-        case 1:
-            FrozenCookies.blacklist = Game.cookiesEarned >= 1000000 ? 0 : 1;
-            break;
-        case 2:
-            FrozenCookies.blacklist = Game.cookiesEarned >= 1000000000 ? 0 : 2;
-            break;
-        case 3:
-            FrozenCookies.blacklist = haveAll("halloween") && haveAll("easter") ? 0 : 3;
-            break;
+      case 1:
+        FrozenCookies.blacklist = Game.cookiesEarned >= 1_000_000 ? 0 : 1;
+        break;
+      case 2:
+        FrozenCookies.blacklist = Game.cookiesEarned >= 1_000_000_000 ? 0 : 2;
+        break;
+      case 3:
+        FrozenCookies.blacklist = haveAll("halloween") && haveAll("easter") ? 0 : 3;
+        break;
     }
+  }, 1000);
 }
 
 function buyOtherUpgrades() {
