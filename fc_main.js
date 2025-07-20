@@ -323,16 +323,16 @@ function emptyCaches() {
 
 
 function fcDraw(from, text, origin) {
-    if (typeof text == "string") {
-        if (text.includes("Devastation")) {
-            text = text.replace(
-                /\+\d+\%/,
-                "+" + Math.round((Game.hasBuff("Devastation").multClick - 1) * 100) + "%"
-            );
-        }
+  if (typeof text === "string" && text.includes("Devastation")) {
+    const devastationBuff = Game.hasBuff("Devastation") && Game.buffs["Devastation"];
+    if (devastationBuff && devastationBuff.multClick) {
+      const percentBoost = Math.round((devastationBuff.multClick - 1) * 100);
+      text = text.replace(/\+\d+%/, `+${percentBoost}%`);
     }
-    Game.tooltip.oldDraw(from, text, origin);
+  }
+  Game.tooltip.oldDraw(from, text, origin);
 }
+
 
 function fcReset() {
     Game.CollectWrinklers();
