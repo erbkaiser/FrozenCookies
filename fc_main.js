@@ -655,52 +655,6 @@ function autoBlacklistOff() {
   }, 1000);
 }
 
-function buyOtherUpgrades() {
-    if (blacklist[FrozenCookies.blacklist].upgrades === true) return true;
-
-    // List of upgrades not covered by efficiency calculations
-    var upgradesToBuy = [
-        "Faberge egg",
-        "Wrinklerspawn",
-        "Omelette",
-        '"egg"',
-        "Weighted sleighs",
-        "Santa's bottomless bag",
-        "Dragon fang",
-        "Dragon teddy bear",
-        "Sacrificial rolling pins",
-        "Green yeast digestives",
-        "Fern tea",
-        "Ichor syrup",
-        "Fortune #102",
-    ];
-
-    upgradesToBuy.forEach((name) => {
-        var upg = Game.Upgrades[name];
-        if (!upg) return;
-
-        // Special conditions for some upgrades
-        if (
-            (name === "Weighted sleighs" || name === "Santa's bottomless bag") &&
-            Game.season !== "christmas"
-        )
-            return;
-        if (
-            (name === "Dragon fang" || name === "Dragon teddy bear") &&
-            Game.dragonLevel <= 26
-        )
-            return;
-        if (
-            name === "Sacrificial rolling pins" &&
-            Game.Upgrades["Elder Pact"].bought !== 1
-        )
-            return;
-
-        if (upg.unlocked === 1 && !upg.bought && Game.cookies > upg.getPrice()) {
-            upg.buy();
-        }
-    });
-}
 
 function recommendedSettingsAction() {
     if (FrozenCookies.recommendedSettings == 1) {
@@ -1552,41 +1506,76 @@ function addScores(recommendations) {
 }
 
 function nextPurchase(recalculate) {
-    if (recalculate) {
-        FrozenCookies.showAchievements = false;
-        var recList = recommendationList(recalculate);
-        var purchase = null;
-        var target = null;
-        for (var i = 0; i < recList.length; i++) {
-            target = recList[i];
-            if (
-                target.type == "upgrade" &&
-                unfinishedUpgradePrereqs(Game.UpgradesById[target.id])
-            ) {
-                var prereqList = unfinishedUpgradePrereqs(Game.UpgradesById[target.id]);
-                purchase = recList.filter(function (a) {
-                    return prereqList.some(function (b) {
-                        return b.id == a.id && b.type == a.type;
-                    });
-                })[0];
-            } else {
-                purchase = target;
-            }
-            if (purchase) {
-                FrozenCookies.caches.nextPurchase = purchase;
-                FrozenCookies.caches.nextChainedPurchase = target;
-                break;
-            }
-        }
-        if (purchase == null) {
-            FrozenCookies.caches.nextPurchase = defaultPurchase();
-            FrozenCookies.caches.nextChainedPurchase = defaultPurchase();
-        }
-        FrozenCookies.showAchievements = true;
+  if (recalculate) {
+    FrozenCookies.showAchievements = false;
+
+    let recList = recommendationList(recalculate);
+    const inefficientIDs = FrozenCookies.otherUpgrades
+      ? [
+          80, 81, 82, 83, 147, 153, 205, 206,
+          174, 163, 164, 165, 282 // Inefficient upgrades
+        ]
+      : [];
+
+    // Inject non-efficient upgrades into the recList if enabled
+    if (inefficientIDs.length > 0) {
+      const extras = inefficientIDs
+        .map(id => Game.UpgradesById[id])
+        .filter(upg =>
+          upg &&
+          !upg.bought &&
+          upg.unlocked &&
+          !Game.vault.includes(upg.id)
+        )
+        .map(upg => ({
+          id: upg.id,
+          type: "upgrade",
+          purchase: upg,
+          cost: upg.getPrice(),
+          efficiency: Infinity, // Marked inefficient
+          delta_cps: 0,
+          time: Date.now() - Game.startDate
+        }));
+
+      // Optionally add extras at end (or start) of list
+      recList = recList.concat(extras);
     }
-    return FrozenCookies.caches.nextPurchase;
-    //  return purchase;
+
+    let purchase = null;
+    let target = null;
+
+    for (let i = 0; i < recList.length; i++) {
+      target = recList[i];
+      if (
+        target.type === "upgrade" &&
+        unfinishedUpgradePrereqs(Game.UpgradesById[target.id])
+      ) {
+        const prereqList = unfinishedUpgradePrereqs(Game.UpgradesById[target.id]);
+        purchase = recList.find(a =>
+          prereqList.some(b => b.id === a.id && b.type === a.type)
+        );
+      } else {
+        purchase = target;
+      }
+
+      if (purchase) {
+        FrozenCookies.caches.nextPurchase = purchase;
+        FrozenCookies.caches.nextChainedPurchase = target;
+        break;
+      }
+    }
+
+    if (!purchase) {
+      FrozenCookies.caches.nextPurchase = defaultPurchase();
+      FrozenCookies.caches.nextChainedPurchase = defaultPurchase();
+    }
+
+    FrozenCookies.showAchievements = true;
+  }
+
+  return FrozenCookies.caches.nextPurchase;
 }
+
 
 function nextChainedPurchase(recalculate) {
     nextPurchase(recalculate);
@@ -3145,11 +3134,6 @@ function FCStart() {
         FrozenCookies.autoWorship2Bot = 0;
     }
 
-    if (FrozenCookies.otherUpgradesBot) {
-        clearInterval(FrozenCookies.otherUpgradesBot);
-        FrozenCookies.otherUpgradesBot = 0;
-    }
-
     if (FrozenCookies.autoCycliusBot) {
         clearInterval(FrozenCookies.autoCycliusBot);
         FrozenCookies.autoCycliusBot = 0;
@@ -3319,13 +3303,6 @@ function FCStart() {
         FrozenCookies.autoWorship2Bot = setInterval(
             autoWorship2Action,
             FrozenCookies.frequency * 5
-        );
-    }
-
-    if (FrozenCookies.otherUpgrades) {
-        FrozenCookies.otherUpgradesBot = setInterval(
-            buyOtherUpgrades,
-            FrozenCookies.frequency * 10
         );
     }
 
