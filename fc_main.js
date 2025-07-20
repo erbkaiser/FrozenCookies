@@ -435,51 +435,49 @@ function nextHC(showRaw = false) {
 
 
 function copyToClipboard(text) {
+  navigator.clipboard?.writeText(text).catch(() => {
     Game.promptOn = 1;
     window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     Game.promptOn = 0;
+  });
 }
 
 function getBuildingSpread() {
-    return Game.ObjectsById.map(function (a) {
-        return a.amount;
-    }).join("/");
+  return Game.ObjectsById.map(obj => obj.amount).join("/");
 }
 
-// todo: add bind for autoascend
-// Press 'a' to toggle autoBuy.
-// Press 'b' to pop up a copyable window with building spread.
-// Press 'c' to toggle auto-GC
-// Press 'e' to pop up a copyable window with your export string
-// Press 'r' to pop up the reset window
-// Press 's' to do a manual save
-// Press 'w' to display a wrinkler-info window
-document.addEventListener("keydown", function (event) {
-    if (!Game.promptOn && FrozenCookies.FCshortcuts) {
-        if (event.keyCode == 65) {
-            Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
-            toggleFrozen("autoBuy");
-        }
-        if (event.keyCode == 66) copyToClipboard(getBuildingSpread());
-        if (event.keyCode == 67) {
-            Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
-            toggleFrozen("autoGC");
-        }
-        if (event.keyCode == 69) copyToClipboard(Game.WriteSave(true));
-        if (event.keyCode == 82) Game.Reset();
-        if (event.keyCode == 83) Game.WriteSave();
-        if (event.keyCode == 87) {
-            Game.Notify(
-                "Wrinkler Info",
-                "Popping all wrinklers will give you " +
-                    Beautify(wrinklerValue()) +
-                    ' cookies. <input type="button" value="Click here to pop all wrinklers" onclick="Game.CollectWrinklers()"></input>',
-                [19, 8],
-                7
-            );
-        }
-    }
+// 🔥 Keyboard Shortcut Map
+const keyBindings = {
+  65: () => {
+    Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
+    toggleFrozen("autoBuy");
+  },
+  66: () => copyToClipboard(getBuildingSpread()),
+  67: () => {
+    Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
+    toggleFrozen("autoGC");
+  },
+  69: () => copyToClipboard(Game.WriteSave(true)),
+  82: () => Game.Reset(),
+  83: () => Game.WriteSave(),
+  87: () => {
+    Game.Notify(
+      "Wrinkler Info",
+      `Popping all wrinklers will give you ${Beautify(wrinklerValue())} cookies. 
+      <input type="button" value="Click here to pop all wrinklers" onclick="Game.CollectWrinklers()">`,
+      [19, 8],
+      7
+    );
+  }
+};
+
+// 🎹 Shortcut Listener
+document.addEventListener("keydown", event => {
+  if (!Game.promptOn && FrozenCookies.FCshortcuts && keyBindings[event.keyCode]) {
+    keyBindings[event.keyCode]();
+  }
 });
+
 
 function writeFCButton(setting) {
     var current = FrozenCookies[setting];
