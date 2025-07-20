@@ -2828,36 +2828,35 @@ function autoGSBuy() {
 }
 
 function safeBuy(bldg, count) {
-    if (count <= 0) return;
-    var initialAmount = bldg.amount;
-    var toBuy = count;
-    var maxAttempts = 2;
-    for (var attempt = 0; attempt < maxAttempts; attempt++) {
-        if (Game.buyMode == -1) {
-            Game.buyMode = 1;
-            bldg.buy(toBuy);
-            Game.buyMode = -1;
-        } else {
-            bldg.buy(toBuy);
+    const toBuy = Math.max(Math.floor(count ?? 1), 1);
+    const initialAmount = bldg.amount;
+    const maxAttempts = 2;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const buyModeWasNegative = Game.buyMode === -1;
+
+        if (buyModeWasNegative) Game.buyMode = 1;
+        bldg.buy(toBuy);
+        if (buyModeWasNegative) Game.buyMode = -1;
+
+        const newAmount = bldg.amount;
+        const actuallyBought = newAmount - initialAmount;
+
+        if (actuallyBought >= toBuy) return; // Full success
+        if (actuallyBought > 0) {
+            return safeBuy(bldg, toBuy - actuallyBought); // Partial success
         }
-        var newAmount = bldg.amount;
-        var actuallyBought = newAmount - initialAmount;
-        if (actuallyBought >= toBuy) {
-            return; // Success
-        } else if (actuallyBought > 0) {
-            // Partial success, try to buy the rest
-            safeBuy(bldg, toBuy - actuallyBought);
-            return;
-        }
-        // If nothing was bought, try again (loop)
+        // If nothing bought, loop again
     }
-    // If still not enough, recursively try to buy half, then the rest
+
+    // Retry in halves if all attempts fail
     if (toBuy > 1) {
-        var half = Math.floor(toBuy / 2);
+        const half = Math.floor(toBuy / 2);
         safeBuy(bldg, half);
         safeBuy(bldg, toBuy - half);
     }
 }
+
 
 function autoGodzamokAction() {
     if (!T) return;
