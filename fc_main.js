@@ -572,27 +572,23 @@ function updateASFMultMin(base) {
 
 
 function cyclePreference(preferenceName) {
-    var preference = FrozenCookies.preferenceValues[preferenceName];
-    if (preference) {
-        var display = preference.display;
-        var current = FrozenCookies[preferenceName];
-        var preferenceButton = $("#" + preferenceName + "Button");
-        if (
-            display &&
-            display.length > 0 &&
-            preferenceButton &&
-            preferenceButton.length > 0
-        ) {
-            var newValue = (current + 1) % display.length;
-            preferenceButton[0].innerText = display[newValue];
-            FrozenCookies[preferenceName] = newValue;
-            FrozenCookies.recalculateCaches = true;
-            Game.RefreshStore();
-            Game.RebuildUpgrades();
-            FCStart();
-        }
-    }
+  const preference = FrozenCookies.preferenceValues?.[preferenceName];
+  if (!preference?.display?.length) return;
+
+  const currentIndex = FrozenCookies[preferenceName] ?? 0;
+  const newIndex = (currentIndex + 1) % preference.display.length;
+
+  const button = document.getElementById(`${preferenceName}Button`);
+  if (button) button.innerText = preference.display[newIndex];
+
+  FrozenCookies[preferenceName] = newIndex;
+  FrozenCookies.recalculateCaches = true;
+
+  Game.RefreshStore();
+  Game.RebuildUpgrades();
+  FCStart();
 }
+
 
 function toggleFrozen(setting) {
     if (!FrozenCookies[setting]) {
