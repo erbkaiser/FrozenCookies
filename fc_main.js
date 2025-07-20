@@ -335,48 +335,53 @@ function fcDraw(from, text, origin) {
 
 
 function fcReset() {
-    Game.CollectWrinklers();
-    if (B) {
-        for (let i = 0; i < B.goodsById.length; i++) {
-            B.sellGood(i, 10000);
-        } // sell all stock
-    }
-    if (G) G.harvestAll(); // harvest all plants
-    if (
-        Game.dragonLevel > 5 &&
-        !Game.hasAura("Earth Shatterer") &&
-        Game.HasUnlocked("Chocolate egg") &&
-        !Game.Has("Chocolate egg")
-    ) {
-        Game.specialTab = "dragon";
-        Game.SetDragonAura(5, 0);
-        Game.ConfirmPrompt();
-        Game.ObjectsById.forEach(function (b) {
-            b.sell(-1);
-        });
-        Game.Upgrades["Chocolate egg"].buy();
-    } else if (Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg")) {
-        Game.ObjectsById.forEach(function (b) {
-            b.sell(-1);
-        });
-        Game.Upgrades["Chocolate egg"].buy();
-    }
-    Game.oldReset();
-    FrozenCookies.frenzyTimes = {};
-    FrozenCookies.last_gc_state =
-        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
-    FrozenCookies.last_gc_time = Date.now();
-    FrozenCookies.lastHCAmount = Game.HowMuchPrestige(
-        Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
-    );
-    FrozenCookies.lastHCTime = Date.now();
-    FrozenCookies.maxHCPercent = 0;
-    FrozenCookies.prevLastHCTime = Date.now();
-    FrozenCookies.lastCps = 0;
-    FrozenCookies.lastBaseCps = 0;
-    FrozenCookies.trackedStats = [];
-    recommendationList(true);
+  Game.CollectWrinklers();
+
+  // 📉 Sell all stock market goods
+  if (B?.goodsById?.length) {
+    B.goodsById.forEach((_, index) => B.sellGood(index, 10000));
+  }
+
+  // 🌱 Harvest all plants
+  G?.harvestAll?.();
+
+  // 🍫 Handle Chocolate Egg logic
+  const hasChocoEgg = Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg");
+
+  if (Game.dragonLevel > 5 && hasChocoEgg && !Game.hasAura("Earth Shatterer")) {
+    Game.specialTab = "dragon";
+    Game.SetDragonAura(5, 0);
+    Game.ConfirmPrompt();
+    Game.ObjectsById.forEach(b => b.sell(-1));
+    Game.Upgrades["Chocolate egg"].buy();
+  } else if (hasChocoEgg) {
+    Game.ObjectsById.forEach(b => b.sell(-1));
+    Game.Upgrades["Chocolate egg"].buy();
+  }
+
+  // 🔄 Perform actual game reset
+  Game.oldReset();
+
+  // 🧠 Reset FrozenCookies tracking data
+  const now = Date.now();
+  const frenzyMult = Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1;
+
+  Object.assign(FrozenCookies, {
+    frenzyTimes: {},
+    last_gc_state: frenzyMult * clickBuffBonus(),
+    last_gc_time: now,
+    lastHCAmount: Game.HowMuchPrestige(Game.cookiesEarned + Game.cookiesReset + wrinklerValue()),
+    lastHCTime: now,
+    prevLastHCTime: now,
+    maxHCPercent: 0,
+    lastCps: 0,
+    lastBaseCps: 0,
+    trackedStats: []
+  });
+
+  recommendationList(true);
 }
+
 
 function saveFCData() {
     var saveString = {};
