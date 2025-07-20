@@ -657,97 +657,119 @@ function autoBlacklistOff() {
 
 
 function recommendedSettingsAction() {
-    if (FrozenCookies.recommendedSettings == 1) {
-        // clicking options
-        FrozenCookies.autoClick = 1;
-        FrozenCookies.cookieClickSpeed = 250;
-        FrozenCookies.autoFrenzy = 1;
-        FrozenCookies.frenzyClickSpeed = 1000;
-        FrozenCookies.autoGC = 1;
-        // FrozenCookies.autoWC = 1;
-        FrozenCookies.autoReindeer = 1;
-        FrozenCookies.autoFortune = 1;
-        // autobuy options
-        FrozenCookies.autoBuy = 1;
-        FrozenCookies.otherUpgrades = 1;
-        FrozenCookies.autoBlacklistOff = 0;
-        FrozenCookies.blacklist = 0;
-        FrozenCookies.mineLimit = 1;
-        FrozenCookies.mineMax = 500;
-        FrozenCookies.factoryLimit = 1;
-        FrozenCookies.factoryMax = 500;
-        FrozenCookies.pastemode = 0;
-        // other auto options
-        FrozenCookies.autoAscendToggle = 0;
-        FrozenCookies.autoAscend = 2;
-        FrozenCookies.comboAscend = 0;
-        FrozenCookies.HCAscendAmount = 0;
-        FrozenCookies.autoBulk = 2;
-        FrozenCookies.autoBuyAll = 1;
-        FrozenCookies.autoWrinkler = 1;
-        FrozenCookies.shinyPop = 0;
-        FrozenCookies.autoSL = 2;
-        FrozenCookies.dragonsCurve = 2;
-        FrozenCookies.sugarBakingGuard = 1;
-        FrozenCookies.autoGS = 1;
-        FrozenCookies.autoGodzamok = 1;
-        FrozenCookies.autoBank = 1;
-        FrozenCookies.autoBroker = 1;
-        FrozenCookies.autoLoan = 1;
-        FrozenCookies.minLoanMult = 777;
-        // Pantheon options
-        FrozenCookies.autoWorshipToggle = 1;
-        FrozenCookies.autoWorship0 = 2; // Godzamok
-        FrozenCookies.autoWorship1 = 8; // Mokalsium
-        FrozenCookies.autoWorship2 = 6; // Muridal
-        FrozenCookies.autoCyclius = 0;
-        // Spell options
-        FrozenCookies.towerLimit = 1;
-        FrozenCookies.manaMax = 37;
-        FrozenCookies.autoCasting = 3;
-        FrozenCookies.minCpSMult = 7;
-        FrozenCookies.autoFTHOFCombo = 0;
-        FrozenCookies.auto100ConsistencyCombo = 0;
-        FrozenCookies.autoSugarFrenzy = 0;
-        FrozenCookies.minASFMult = 7777;
-        FrozenCookies.autoSweet = 0;
-        //Dragon options
-        FrozenCookies.autoDragon = 1;
-        FrozenCookies.petDragon = 1;
-        FrozenCookies.autoDragonToggle = 1;
-        FrozenCookies.autoDragonAura0 = 3; // Elder Batallion
-        FrozenCookies.autoDragonAura1 = 15; // Radiant Appetite
-        FrozenCookies.autoDragonOrbs = 0;
-        FrozenCookies.orbLimit = 0;
-        FrozenCookies.orbMax = 200;
-        // Season options
-        FrozenCookies.defaultSeasonToggle = 1;
-        FrozenCookies.defaultSeason = 1;
-        FrozenCookies.freeSeason = 1;
-        FrozenCookies.autoEaster = 1;
-        FrozenCookies.autoHalloween = 1;
-        //Bank options
-        FrozenCookies.holdSEBank = 0;
-        FrozenCookies.setHarvestBankPlant = 0;
-        FrozenCookies.setHarvestBankType = 3;
-        FrozenCookies.maxSpecials = 1;
-        // Other options
-        FrozenCookies.FCshortcuts = 1;
-        FrozenCookies.simulatedGCPercent = 1;
-        //Display options
-        FrozenCookies.showMissedCookies = 0;
-        FrozenCookies.numberDisplay = 1;
-        FrozenCookies.fancyui = 1;
-        FrozenCookies.logging = 1;
-        FrozenCookies.purchaseLog = 0;
-        FrozenCookies.fpsModifier = 2;
-        FrozenCookies.trackStats = 0;
-        logEvent("recommendedSettings", "Set all options to recommended values");
-        FrozenCookies.recommendedSettings = 0;
-        Game.toSave = true;
-        Game.toReload = true;
-    }
+  if (FrozenCookies.recommendedSettings !== 1) return;
+
+  const recommended = {
+    // 🍪 Clicking options
+    autoClick: 1,
+    cookieClickSpeed: 250,
+    autoFrenzy: 1,
+    frenzyClickSpeed: 1000,
+    autoGC: 1,
+    autoReindeer: 1,
+    autoFortune: 1,
+
+    // 🛒 Autobuy options
+    autoBuy: 1,
+    otherUpgrades: 1,
+    autoBlacklistOff: 0,
+    blacklist: 0,
+    mineLimit: 1,
+    mineMax: 500,
+    factoryLimit: 1,
+    factoryMax: 500,
+    pastemode: 0,
+
+    // 🔄 Ascension and bulk purchasing
+    autoAscendToggle: 0,
+    autoAscend: 2,
+    comboAscend: 0,
+    HCAscendAmount: 0,
+    autoBulk: 2,
+    autoBuyAll: 1,
+
+    // 🧟 Wrinkler & soul options
+    autoWrinkler: 1,
+    shinyPop: 0,
+    autoSL: 2,
+    dragonsCurve: 2,
+    sugarBakingGuard: 1,
+    autoGS: 1,
+    autoGodzamok: 1,
+
+    // 🏦 Stock market
+    autoBank: 1,
+    autoBroker: 1,
+    autoLoan: 1,
+    minLoanMult: 777,
+
+    // ⛪ Pantheon options
+    autoWorshipToggle: 1,
+    autoWorship0: 2,
+    autoWorship1: 8,
+    autoWorship2: 6,
+    autoCyclius: 0,
+
+    // 🔮 Spellcasting
+    towerLimit: 1,
+    manaMax: 37,
+    autoCasting: 3,
+    minCpSMult: 7,
+    autoFTHOFCombo: 0,
+    auto100ConsistencyCombo: 0,
+    autoSugarFrenzy: 0,
+    minASFMult: 7777,
+    autoSweet: 0,
+
+    // 🐲 Dragon options
+    autoDragon: 1,
+    petDragon: 1,
+    autoDragonToggle: 1,
+    autoDragonAura0: 3,
+    autoDragonAura1: 15,
+    autoDragonOrbs: 0,
+    orbLimit: 0,
+    orbMax: 200,
+
+    // 🎁 Seasons
+    defaultSeasonToggle: 1,
+    defaultSeason: 1,
+    freeSeason: 1,
+    autoEaster: 1,
+    autoHalloween: 1,
+
+    // 🌱 Bank & Harvest
+    holdSEBank: 0,
+    setHarvestBankPlant: 0,
+    setHarvestBankType: 3,
+    maxSpecials: 1,
+
+    // 🔧 Other
+    FCshortcuts: 1,
+    simulatedGCPercent: 1,
+
+    // 🖥️ Display
+    showMissedCookies: 0,
+    numberDisplay: 1,
+    fancyui: 1,
+    logging: 1,
+    purchaseLog: 0,
+    fpsModifier: 2,
+    trackStats: 0
+  };
+
+  // 🧩 Apply recommended settings
+  for (const [key, value] of Object.entries(recommended)) {
+    FrozenCookies[key] = value;
+  }
+
+  // 📣 Log and flag reload
+  logEvent("recommendedSettings", "Set all options to recommended values");
+  FrozenCookies.recommendedSettings = 0;
+  Game.toSave = true;
+  Game.toReload = true;
 }
+
 
 function generateProbabilities(upgradeMult, minBase, maxMult) {
     var cumProb = [];
