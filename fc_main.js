@@ -605,45 +605,38 @@ const {
 
 
 function autoTicker() {
-    if (Game.TickerEffect && Game.TickerEffect.type == "fortune") Game.tickerL.click();
+  const ticker = Game.TickerEffect;
+  if (ticker?.type === "fortune") {
+    Game.tickerL?.click?.();
+  }
 }
 
 function autoEasterAction() {
-    if (!FrozenCookies.autoEaster || Game.season == "easter" || haveAll("easter")) {
-        return;
-    }
+  if (!FrozenCookies.autoEaster || Game.season === "easter" || haveAll("easter")) return;
 
-    if (
-        Game.hasBuff("Cookie storm") &&
-        Game.season != "easter" &&
-        !haveAll("easter") &&
-        Game.UpgradesById[181].unlocked
-    ) {
-        Game.UpgradesById[209].buy();
-    }
+  const switchUpgrade = Game.UpgradesById[209]; // Easter switch
+  const seasonSwitchUnlocked = Game.UpgradesById[181]?.unlocked;
+
+  if (Game.hasBuff("Cookie storm") && switchUpgrade && seasonSwitchUnlocked) {
+    switchUpgrade.buy();
+  }
 }
 
 function autoHalloweenAction() {
-    if (
-        !FrozenCookies.autoHalloween ||
-        Game.season == "valentines" ||
-        Game.season == "easter" ||
-        Game.season == "halloween" ||
-        haveAll("halloween")
-    ) {
-        return;
-    }
+  if (
+    !FrozenCookies.autoHalloween ||
+    ["valentines", "easter", "halloween"].includes(Game.season) ||
+    haveAll("halloween")
+  ) return;
 
-    var living = liveWrinklers();
-    if (
-        living.length > 0 &&
-        Game.season != "easter" &&
-        Game.season != "halloween" &&
-        !haveAll("halloween")
-    ) {
-        Game.UpgradesById[183].buy();
-        logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
-    }
+  const livingWrinks = liveWrinklers();
+  const switchUpgrade = Game.UpgradesById[183]; // Halloween switch
+  const seasonSwitchUnlocked = Game.UpgradesById[181]?.unlocked;
+
+  if (livingWrinks.length > 0 && switchUpgrade && seasonSwitchUnlocked) {
+    switchUpgrade.buy();
+    logEvent("autoHalloween", "Swapping to Halloween season to use wrinklers");
+  }
 }
 
 function autoBlacklistOff() {
