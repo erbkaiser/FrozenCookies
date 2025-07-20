@@ -591,13 +591,10 @@ function cyclePreference(preferenceName) {
 
 
 function toggleFrozen(setting) {
-    if (!FrozenCookies[setting]) {
-        FrozenCookies[setting] = 1;
-    } else {
-        FrozenCookies[setting] = 0;
-    }
-    FCStart();
+  FrozenCookies[setting] = FrozenCookies[setting] ? 0 : 1;
+  FCStart();
 }
+
 
 var G = Game.Objects["Farm"].minigame; //Garden
 var B = Game.Objects["Bank"].minigame; //Stock Market
