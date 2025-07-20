@@ -311,13 +311,16 @@ function decodeHtml(html) {
 }
 
 function emptyCaches() {
-    FrozenCookies.recalculateCaches = true;
-    FrozenCookies.caches = {};
-    FrozenCookies.caches.nextPurchase = {};
-    FrozenCookies.caches.recommendationList = [];
-    FrozenCookies.caches.buildings = [];
-    FrozenCookies.caches.upgrades = [];
+  FrozenCookies.recalculateCaches = true;
+
+  FrozenCookies.caches = {
+    nextPurchase: {},
+    recommendationList: [],
+    buildings: [],
+    upgrades: []
+  };
 }
+
 
 function fcDraw(from, text, origin) {
     if (typeof text == "string") {
