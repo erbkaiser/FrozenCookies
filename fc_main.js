@@ -1,15 +1,11 @@
 // Add polyfills:
 (function (global) {
-    var global_isFinite = global.isFinite;
-    Object.defineProperty(Number, "isFinite", {
-        value: function isFinite(value) {
-            return typeof value === "number" && global_isFinite(value);
-        },
-        configurable: true,
-        enumerable: false,
-        writable: true,
-    });
-})(this);
+  if (typeof Number.isFinite !== 'function') {
+    Number.isFinite = value =>
+      typeof value === "number" && global.isFinite(value);
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
 
 function registerMod(mod_id = "frozen_cookies") {
     // register with the modding API
