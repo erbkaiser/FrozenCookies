@@ -125,214 +125,164 @@ function registerMod(modId = "frozen_cookies") {
 
 
 function setOverrides(gameSaveData) {
-    // load settings and initialize variables
-    // If gameSaveData wasn't passed to this function, it means that there was nothing for this mod in the game save when the mod was loaded
-    // In that case, set the "loadedData" var to an empty object. When the loadFCData() function runs and finds no data from the game save,
-    // it pulls data from local storage or sets default values
-    if (gameSaveData) {
-        FrozenCookies.loadedData = JSON.parse(gameSaveData);
-    } else {
-        FrozenCookies.loadedData = {};
-    }
-    loadFCData();
-    FrozenCookies.frequency = 100;
-    FrozenCookies.efficiencyWeight = 1.0;
-
-    // Becomes 0 almost immediately after user input, so default to 0
-    FrozenCookies.timeTravelAmount = 0;
-
-    // Force redraw every 10 purchases
-    FrozenCookies.autobuyCount = 0;
-
-    // Set default values for calculations
-    FrozenCookies.hc_gain = 0;
-    FrozenCookies.hc_gain_time = Date.now();
-    FrozenCookies.last_gc_state =
-        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
-    FrozenCookies.last_gc_time = Date.now();
-    FrozenCookies.lastCPS = Game.cookiesPs;
-    FrozenCookies.lastBaseCPS = Game.cookiesPs;
-    FrozenCookies.lastCookieCPS = 0;
-    FrozenCookies.lastUpgradeCount = 0;
-    FrozenCookies.currentBank = {
-        cost: 0,
-        efficiency: 0,
-    };
-    FrozenCookies.targetBank = {
-        cost: 0,
-        efficiency: 0,
-    };
-    FrozenCookies.disabledPopups = true;
-    FrozenCookies.trackedStats = [];
-    FrozenCookies.lastGraphDraw = 0;
-    FrozenCookies.calculatedCpsByType = {};
-
-    // Allow autoCookie to run
-    FrozenCookies.processing = false;
-    FrozenCookies.priceReductionTest = false;
-
-    FrozenCookies.cookieBot = 0;
-    FrozenCookies.autoclickBot = 0;
-    FrozenCookies.autoFrenzyBot = 0;
-    FrozenCookies.frenzyClickBot = 0;
-
-    // Smart tracking details
-    FrozenCookies.smartTrackingBot = 0;
-    FrozenCookies.minDelay = 1000 * 10; // 10s minimum reporting between purchases with "smart tracking" on
-    FrozenCookies.delayPurchaseCount = 0;
-
-    // Caching
-    emptyCaches();
-
-    //Whether to currently display achievement popups
-    FrozenCookies.showAchievements = true;
-
-    if (!blacklist[FrozenCookies.blacklist]) FrozenCookies.blacklist = 0;
-
-    // Set `App`, on older version of CC it's not set to anything, so default it to `undefined`
-    if (!window.App) window.App = undefined;
-
-    Beautify = fcBeautify;
-    Game.sayTime = function (time, detail) {
-        return timeDisplay(time / Game.fps);
-    };
-    if (typeof Game.tooltip.oldDraw != "function") {
-        Game.tooltip.oldDraw = Game.tooltip.draw;
-        Game.tooltip.draw = fcDraw;
-    }
-    if (typeof Game.oldReset != "function") {
-        Game.oldReset = Game.Reset;
-        Game.Reset = fcReset;
-    }
-    Game.Win = fcWin;
-    // Remove the following when turning on tooltip code
-    nextPurchase(true);
-    Game.RefreshStore();
-    Game.RebuildUpgrades();
-    beautifyUpgradesAndAchievements();
-    // Replace Game.Popup references with event logging
-    eval(
-        "Game.shimmerTypes.golden.popFunc = " +
-            Game.shimmerTypes.golden.popFunc
-                .toString()
-                .replace(/Game\.Popup\((.+)\)\;/g, 'logEvent("GC", $1, true);')
-    );
-    eval(
-        "Game.UpdateWrinklers = " +
-            Game.UpdateWrinklers.toString().replace(
-                /Game\.Popup\((.+)\)\;/g,
-                'logEvent("Wrinkler", $1, true);'
-            )
-    );
-    eval(
-        "FrozenCookies.safeGainsCalc = " +
-            Game.CalculateGains.toString()
-                .replace(/eggMult\+=\(1.+/, "eggMult++; // CENTURY EGGS SUCK")
-                .replace(/Game\.cookiesPs/g, "FrozenCookies.calculatedCps")
-                .replace(/Game\.globalCpsMult/g, "mult")
-    );
-
-    // Give free achievements!
-    if (!Game.HasAchiev("Third-party")) Game.Win("Third-party");
-
-    function loadFCData() {
-        // Set all cycleable preferences
-        _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
-            FrozenCookies[preference] = preferenceParse(
-                preference,
-                FrozenCookies.preferenceValues[preference].default
-            );
-        });
-        // Separate because these are user-input values
-        FrozenCookies.cookieClickSpeed = preferenceParse("cookieClickSpeed", 0);
-        FrozenCookies.frenzyClickSpeed = preferenceParse("frenzyClickSpeed", 0);
-        FrozenCookies.HCAscendAmount = preferenceParse("HCAscendAmount", 0);
-        FrozenCookies.minCpSMult = preferenceParse("minCpSMult", 1);
-        FrozenCookies.maxSpecials = preferenceParse("maxSpecials", 1);
-        FrozenCookies.minLoanMult = preferenceParse("minLoanMult", 1);
-        FrozenCookies.minASFMult = preferenceParse("minASFMult", 1);
-
-        // building max values
-        FrozenCookies.mineMax = preferenceParse("mineMax", 0);
-        FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
-        FrozenCookies.manaMax = preferenceParse("manaMax", 0);
-        FrozenCookies.orbMax = preferenceParse("orbMax", 0);
-
-        // Restore some possibly broken settings
-        if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
-            FrozenCookies.autoBuy = 1;
-            autoSweetAction.autobuyyes = 0;
-        }
-        if (!FrozenCookies.autoFTHOFCombo && autoFTHOFComboAction.autobuyyes == 1) {
-            FrozenCookies.autoBuy = 1;
-            autoFTHOFComboAction.autobuyyes = 0;
-        }
-        if (
-            !FrozenCookies.auto100ConsistencyCombo &&
-            auto100ConsistencyComboAction.autobuyyes == 1
-        ) {
-            FrozenCookies.autoBuy = 1;
-            auto100ConsistencyComboAction.autobuyyes = 0;
-        }
-        if (
-            !FrozenCookies.auto100ConsistencyCombo &&
-            auto100ConsistencyComboAction.autogcyes == 1
-        ) {
-            FrozenCookies.autoGC = 1;
-            auto100ConsistencyComboAction.autogcyes = 0;
-        }
-        if (
-            !FrozenCookies.auto100ConsistencyCombo &&
-            auto100ConsistencyComboAction.autogodyes == 1
-        ) {
-            FrozenCookies.autoGodzamok = 1;
-            auto100ConsistencyComboAction.autogodyes = 0;
-        }
-        if (
-            !FrozenCookies.auto100ConsistencyCombo &&
-            auto100ConsistencyComboAction.autoworshipyes == 1
-        ) {
-            FrozenCookies.autoWorshipToggle = 1;
-            auto100ConsistencyComboAction.autoworshipyes = 0;
-        }
-        if (
-            !FrozenCookies.auto100ConsistencyCombo &&
-            auto100ConsistencyComboAction.autodragonyes == 1
-        ) {
-            FrozenCookies.autoDragonToggle = 1;
-            auto100ConsistencyComboAction.autodragonyes = 0;
-        }
-
-        // Get historical data
-        FrozenCookies.frenzyTimes =
-            JSON.parse(
-                FrozenCookies.loadedData["frenzyTimes"] ||
-                    localStorage.getItem("frenzyTimes")
-            ) || {};
-        //  FrozenCookies.non_gc_time = Number(FrozenCookies.loadedData['nonFrenzyTime']) || Number(localStorage.getItem('nonFrenzyTime')) || 0;
-        //  FrozenCookies.gc_time = Number(FrozenCookies.loadedData['frenzyTime']) || Number(localStorage.getItem('frenzyTime')) || 0;;
-        FrozenCookies.lastHCAmount = preferenceParse("lastHCAmount", 0);
-        FrozenCookies.lastHCTime = preferenceParse("lastHCTime", 0);
-        FrozenCookies.prevLastHCTime = preferenceParse("prevLastHCTime", 0);
-        FrozenCookies.maxHCPercent = preferenceParse("maxHCPercent", 0);
-        if (Object.keys(FrozenCookies.loadedData).length > 0) {
-            logEvent("Load", "Restored Frozen Cookies settings from previous save");
-        }
-    }
-
-    function preferenceParse(setting, defaultVal) {
-        var value = defaultVal;
-        if (setting in FrozenCookies.loadedData) {
-            // first look in the data from the game save
-            value = FrozenCookies.loadedData[setting];
-        } else if (localStorage.getItem(setting)) {
-            // if the setting isn't there, check localStorage
-            value = localStorage.getItem(setting);
-        }
-        return Number(value); // if not overridden by game save or localStorage, defaultVal is returned
-    }
-    FCStart();
+  FrozenCookies.loadedData = gameSaveData ? JSON.parse(gameSaveData) : {};
+  initializeDefaults();
+  applyPreferences();
+  overrideGameFunctions();
+  FCStart();
 }
+
+function initializeDefaults() {
+  FrozenCookies.frequency = 100;
+  FrozenCookies.efficiencyWeight = 1.0;
+  FrozenCookies.timeTravelAmount = 0;
+  FrozenCookies.autobuyCount = 0;
+  FrozenCookies.hc_gain = 0;
+  FrozenCookies.hc_gain_time = Date.now();
+  FrozenCookies.last_gc_state =
+    (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
+  FrozenCookies.last_gc_time = Date.now();
+  FrozenCookies.lastCPS = Game.cookiesPs;
+  FrozenCookies.lastBaseCPS = Game.cookiesPs;
+  FrozenCookies.lastCookieCPS = 0;
+  FrozenCookies.lastUpgradeCount = 0;
+  FrozenCookies.currentBank = { cost: 0, efficiency: 0 };
+  FrozenCookies.targetBank = { cost: 0, efficiency: 0 };
+  FrozenCookies.disabledPopups = true;
+  FrozenCookies.trackedStats = [];
+  FrozenCookies.lastGraphDraw = 0;
+  FrozenCookies.calculatedCpsByType = {};
+  FrozenCookies.processing = false;
+  FrozenCookies.priceReductionTest = false;
+  FrozenCookies.cookieBot = 0;
+  FrozenCookies.autoclickBot = 0;
+  FrozenCookies.autoFrenzyBot = 0;
+  FrozenCookies.frenzyClickBot = 0;
+  FrozenCookies.smartTrackingBot = 0;
+  FrozenCookies.minDelay = 10000;
+  FrozenCookies.delayPurchaseCount = 0;
+  FrozenCookies.showAchievements = true;
+  FrozenCookies.blacklist = blacklist[FrozenCookies.blacklist] ? FrozenCookies.blacklist : 0;
+  if (!window.App) window.App = undefined;
+  emptyCaches();
+}
+
+function applyPreferences() {
+  const loadFCData = () => {
+    for (const key of Object.keys(FrozenCookies.preferenceValues)) {
+      FrozenCookies[key] = preferenceParse(key, FrozenCookies.preferenceValues[key].default);
+    }
+
+    Object.assign(FrozenCookies, {
+      cookieClickSpeed: preferenceParse("cookieClickSpeed", 0),
+      frenzyClickSpeed: preferenceParse("frenzyClickSpeed", 0),
+      HCAscendAmount: preferenceParse("HCAscendAmount", 0),
+      minCpSMult: preferenceParse("minCpSMult", 1),
+      maxSpecials: preferenceParse("maxSpecials", 1),
+      minLoanMult: preferenceParse("minLoanMult", 1),
+      minASFMult: preferenceParse("minASFMult", 1),
+      mineMax: preferenceParse("mineMax", 0),
+      factoryMax: preferenceParse("factoryMax", 0),
+      manaMax: preferenceParse("manaMax", 0),
+      orbMax: preferenceParse("orbMax", 0),
+      frenzyTimes: JSON.parse(FrozenCookies.loadedData.frenzyTimes || localStorage.getItem("frenzyTimes")) || {},
+      lastHCAmount: preferenceParse("lastHCAmount", 0),
+      lastHCTime: preferenceParse("lastHCTime", 0),
+      prevLastHCTime: preferenceParse("prevLastHCTime", 0),
+      maxHCPercent: preferenceParse("maxHCPercent", 0),
+    });
+
+    restoreLegacySettings();
+
+    if (Object.keys(FrozenCookies.loadedData).length > 0) {
+      logEvent("Load", "Restored Frozen Cookies settings from previous save");
+    }
+  };
+
+  const preferenceParse = (setting, defaultVal) =>
+    setting in FrozenCookies.loadedData
+      ? Number(FrozenCookies.loadedData[setting])
+      : Number(localStorage.getItem(setting) || defaultVal);
+
+  const restoreLegacySettings = () => {
+    const actions = [
+      { key: "autoSweet", action: autoSweetAction },
+      { key: "autoFTHOFCombo", action: autoFTHOFComboAction },
+      { key: "auto100ConsistencyCombo", action: auto100ConsistencyComboAction },
+    ];
+
+    for (const { key, action } of actions) {
+      if (!FrozenCookies[key]) {
+        if (action.autobuyyes) {
+          FrozenCookies.autoBuy = 1;
+          action.autobuyyes = 0;
+        }
+        if (action.autogcyes) {
+          FrozenCookies.autoGC = 1;
+          action.autogcyes = 0;
+        }
+        if (action.autogodyes) {
+          FrozenCookies.autoGodzamok = 1;
+          action.autogodyes = 0;
+        }
+        if (action.autoworshipyes) {
+          FrozenCookies.autoWorshipToggle = 1;
+          action.autoworshipyes = 0;
+        }
+        if (action.autodragonyes) {
+          FrozenCookies.autoDragonToggle = 1;
+          action.autodragonyes = 0;
+        }
+      }
+    }
+  };
+
+  loadFCData();
+}
+
+function overrideGameFunctions() {
+  Beautify = fcBeautify;
+
+  Game.sayTime = (time, detail) => timeDisplay(time / Game.fps);
+
+  if (typeof Game.tooltip.oldDraw !== "function") {
+    Game.tooltip.oldDraw = Game.tooltip.draw;
+    Game.tooltip.draw = fcDraw;
+  }
+
+  if (typeof Game.oldReset !== "function") {
+    Game.oldReset = Game.Reset;
+    Game.Reset = fcReset;
+  }
+
+  Game.Win = fcWin;
+
+  nextPurchase(true);
+  Game.RefreshStore();
+  Game.RebuildUpgrades();
+  beautifyUpgradesAndAchievements();
+
+  // Replace Game.Popup references
+  Game.shimmerTypes.golden.popFunc = new Function(
+    Game.shimmerTypes.golden.popFunc
+      .toString()
+      .replace(/Game\.Popup\((.+?)\);/g, 'logEvent("GC", $1, true);')
+  );
+
+  Game.UpdateWrinklers = new Function(
+    Game.UpdateWrinklers.toString().replace(/Game\.Popup\((.+?)\);/g, 'logEvent("Wrinkler", $1, true);')
+  );
+
+  FrozenCookies.safeGainsCalc = new Function(
+    Game.CalculateGains.toString()
+      .replace(/eggMult\+=\(1.+/, "eggMult++; // CENTURY EGGS SUCK")
+      .replace(/Game\.cookiesPs/g, "FrozenCookies.calculatedCps")
+      .replace(/Game\.globalCpsMult/g, "mult")
+  );
+
+  if (!Game.HasAchiev("Third-party")) Game.Win("Third-party");
+}
+
 
 function decodeHtml(html) {
     // used to convert text with an HTML entity (like "&eacute;") into readable text
