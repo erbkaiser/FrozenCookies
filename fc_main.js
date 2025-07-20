@@ -480,128 +480,96 @@ document.addEventListener("keydown", event => {
 
 
 function writeFCButton(setting) {
-    var current = FrozenCookies[setting];
+  const current = FrozenCookies[setting];
+  // Could use this to visually update buttons based on state later
 }
 
+// 📥 Generic input prompt with confirmation
 function userInputPrompt(title, description, existingValue, callback) {
-    Game.Prompt(
-        `<h3>${title}</h3><div class="block" style="text-align:center;">${description}</div><div class="block"><input type="text" style="text-align:center;width:100%;" id="fcGenericInput" value="${existingValue}"/></div>`,
-        ["Confirm", "Cancel"]
-    );
-    $("#promptOption0").click(() => {
-        callback(l("fcGenericInput").value);
-    });
-    l("fcGenericInput").focus();
-    l("fcGenericInput").select();
+  Game.Prompt(
+    `<h3>${title}</h3>
+     <div class="block" style="text-align:center;">${description}</div>
+     <div class="block">
+       <input type="text" id="fcGenericInput" style="text-align:center;width:100%;" value="${existingValue}" />
+     </div>`,
+    ["Confirm", "Cancel"]
+  );
+
+  const input = document.getElementById("fcGenericInput");
+  document.getElementById("promptOption0").addEventListener("click", () => {
+    callback(input.value);
+  });
+
+  input.focus();
+  input.select();
 }
 
-function validateNumber(value, minValue = null, maxValue = null) {
-    if (typeof value == "undefined" || value == null) return false;
-    const numericValue = Number(value);
-    return (
-        !isNaN(numericValue) &&
-        (minValue == null || numericValue >= minValue) &&
-        (maxValue == null || numericValue <= maxValue)
-    );
+// 🛡️ Validate numerical input with optional bounds
+function validateNumber(value, min = null, max = null) {
+  const num = Number(value);
+  return (
+    !isNaN(num) &&
+    (min === null || num >= min) &&
+    (max === null || num <= max)
+  );
 }
 
-function storeNumberCallback(base, min, max) {
-    return (result) => {
-        if (!validateNumber(result, min, max)) result = FrozenCookies[base];
-        FrozenCookies[base] = Number(result);
-        FCStart();
-    };
+// 🔄 Store validated number and restart
+function storeNumberCallback(setting, min, max) {
+  return (input) => {
+    FrozenCookies[setting] = validateNumber(input, min, max)
+      ? Number(input)
+      : FrozenCookies[setting];
+    FCStart();
+  };
 }
 
+// 🧩 Unified update function
+function createUpdatePrompt(setting, title, description, min, max) {
+  userInputPrompt(title, description, FrozenCookies[setting], storeNumberCallback(setting, min, max));
+}
+
+// 🎯 Specific updates
 function updateSpeed(base) {
-    userInputPrompt(
-        "Autoclicking!",
-        "How many times per second do you want to click? (250 recommended, 1000 max)",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0, 1000)
-    );
+  createUpdatePrompt(base, "Autoclicking!", "How many times per second do you want to click? (250 recommended, 1000 max)", 0, 1000);
 }
 
 function updateCpSMultMin(base) {
-    userInputPrompt(
-        "Autocasting!",
-        'What CpS multiplier should trigger Auto Casting? (e.g. "7" will trigger during a Frenzy, "1" prevents triggering during a clot, etc.)',
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Autocasting!", 'What CpS multiplier should trigger Auto Casting? (e.g. "7" for Frenzy, "1" for clot)', 0, null);
 }
 
 function updateAscendAmount(base) {
-    userInputPrompt(
-        "Autoascending!",
-        "How many heavenly chips do you want to auto-ascend at?",
-        FrozenCookies[base],
-        storeNumberCallback(base, 1)
-    );
+  createUpdatePrompt(base, "Autoascending!", "How many heavenly chips do you want to auto-ascend at?", 1, null);
 }
 
 function updateManaMax(base) {
-    userInputPrompt(
-        "Mana Cap!",
-        "Choose a maximum mana amount (100 max recommended)",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Mana Cap!", "Choose a maximum mana amount (100 max recommended)", 0, null);
 }
 
 function updateMaxSpecials(base) {
-    userInputPrompt(
-        "Harvest Bank!",
-        "Set amount of stacked Building specials for Harvest Bank",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Harvest Bank!", "Set amount of stacked Building specials for Harvest Bank", 0, null);
 }
 
 function updateMineMax(base) {
-    userInputPrompt(
-        "Mine Cap!",
-        "How many Mines should autoBuy stop at?",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Mine Cap!", "How many Mines should autoBuy stop at?", 0, null);
 }
 
 function updateFactoryMax(base) {
-    userInputPrompt(
-        "Factory Cap!",
-        "How many Factories should autoBuy stop at?",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Factory Cap!", "How many Factories should autoBuy stop at?", 0, null);
 }
 
 function updateOrbMax(base) {
-    userInputPrompt(
-        "You Cap!",
-        "How many Yous should autoBuy stop at?",
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "You Cap!", "How many Yous should autoBuy stop at?", 0, null);
 }
 
 function updateLoanMultMin(base) {
-    userInputPrompt(
-        "Loans!",
-        'What CpS multiplier should trigger taking loans (e.g. "7" will trigger for a normal Frenzy, "500" will require a huge building buff combo, etc.)?',
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Loans!", 'What CpS multiplier should trigger loan use? (e.g. "7" for Frenzy, "500" for big buff)', 0, null);
 }
 
 function updateASFMultMin(base) {
-    userInputPrompt(
-        "Sugar Frenzy!",
-        'What CpS multiplier should trigger buying the sugar frenzy (e.g. "100" will trigger for a decent early combo, "1000" will require a huge building buff combo, etc.)?',
-        FrozenCookies[base],
-        storeNumberCallback(base, 0)
-    );
+  createUpdatePrompt(base, "Sugar Frenzy!", 'What CpS multiplier should trigger buying Sugar Frenzy? (e.g. "100", "1000")', 0, null);
 }
+
 
 function cyclePreference(preferenceName) {
     var preference = FrozenCookies.preferenceValues[preferenceName];
