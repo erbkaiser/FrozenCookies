@@ -3088,7 +3088,7 @@ function autoCookie() {
                             FrozenCookies.orbMax - 100))
             ) {
                 document.getElementById("storeBulk10").click();
-                safeBuy(recommendation.purchase);
+                safeBuy(recommendation.purchase, 1);
                 document.getElementById("storeBulk100").click();
             } else if (
                 recommendation.type == "building" &&
@@ -3115,10 +3115,10 @@ function autoCookie() {
                             FrozenCookies.orbMax - 10))
             ) {
                 document.getElementById("storeBulk1").click();
-                safeBuy(recommendation.purchase);
+                safeBuy(recommendation.purchase, 1);
                 document.getElementById("storeBulk10").click();
             } else if (recommendation.type == "building") {
-                safeBuy(recommendation.purchase);
+                safeBuy(recommendation.purchase, 1);
             } else {
                 recommendation.purchase.buy();
             }
