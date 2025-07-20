@@ -4,6 +4,10 @@ This file contains a chronological record of all changes made to the FrozenCooki
 
 ## What's new?
 
+2025 Jul 20
+
+-   Fixed an issue with buildings and safebuy, closes #186
+
 2025 May 26 (2)
 
 -   Version bumped to 2.052.8
