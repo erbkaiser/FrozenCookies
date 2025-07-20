@@ -424,14 +424,15 @@ function divCps(value = 0, cps = 0) {
 }
 
 
-function nextHC(tg) {
-    var futureHC = Math.ceil(
-        Game.HowMuchPrestige(Game.cookiesEarned + Game.cookiesReset)
-    );
-    var nextHC = Game.HowManyCookiesReset(futureHC);
-    var toGo = nextHC - (Game.cookiesEarned + Game.cookiesReset);
-    return tg ? toGo : timeDisplay(divCps(toGo, Game.cookiesPs));
+function nextHC(showRaw = false) {
+  const totalCookies = Game.cookiesEarned + Game.cookiesReset;
+  const futureHC = Math.ceil(Game.HowMuchPrestige(totalCookies));
+  const requiredCookies = Game.HowManyCookiesReset(futureHC);
+  const cookiesToGo = requiredCookies - totalCookies;
+
+  return showRaw ? cookiesToGo : timeDisplay(divCps(cookiesToGo, Game.cookiesPs));
 }
+
 
 function copyToClipboard(text) {
     Game.promptOn = 1;
