@@ -842,77 +842,61 @@ function probabilitySpan(listType, start = 0, targetProb = 0) {
   return _.sortedIndex(list, targetVal);
 }
 
-
 function clickBuffBonus() {
-    var ret = 1;
-    for (var i in Game.buffs) {
-        // Devastation, Godzamok's buff, is too variable
-        if (
-            typeof Game.buffs[i].multClick != "undefined" &&
-            Game.buffs[i].name != "Devastation"
-        ) {
-            ret *= Game.buffs[i].multClick;
-        }
-    }
-    return ret;
+  return Object.values(Game.buffs)
+    .filter(buff => typeof buff.multClick !== "undefined" && buff.name !== "Devastation")
+    .reduce((mult, buff) => mult * buff.multClick, 1);
 }
 
 function cpsBonus() {
-    var ret = 1;
-    for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") ret *= Game.buffs[i].multCpS;
-    }
-    return ret;
+  return Object.values(Game.buffs)
+    .filter(buff => typeof buff.multCpS !== "undefined")
+    .reduce((mult, buff) => mult * buff.multCpS, 1);
 }
 
 function hasClickBuff() {
-    return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
+  return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
 }
 
 function baseCps() {
-    var buffMod = 1;
-    for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") buffMod *= Game.buffs[i].multCpS;
-    }
-    if (buffMod === 0) return FrozenCookies.lastBaseCPS;
-    var baseCPS = Game.cookiesPs / buffMod;
-    FrozenCookies.lastBaseCPS = baseCPS;
-    return baseCPS;
+  const buffMod = cpsBonus();
+  if (buffMod === 0) return FrozenCookies.lastBaseCPS;
+
+  const baseCPS = Game.cookiesPs / buffMod;
+  FrozenCookies.lastBaseCPS = baseCPS;
+  return baseCPS;
 }
 
 function baseClickingCps(clickSpeed) {
-    var clickFrenzyMod = clickBuffBonus();
-    var frenzyMod = Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1;
-    var cpc = Game.mouseCps() / (clickFrenzyMod * frenzyMod);
-    return clickSpeed * cpc;
+  const clickMod = clickBuffBonus();
+  const frenzyMod = Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"]?.multCpS || 1 : 1;
+  const cpc = Game.mouseCps() / (clickMod * frenzyMod);
+
+  return clickSpeed * cpc;
 }
 
-function effectiveCps(delay, wrathValue, wrinklerCount) {
-    wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    wrinklerCount = wrinklerCount != null ? wrinklerCount : wrathValue ? 10 : 0;
-    var wrinkler = wrinklerMod(wrinklerCount);
-    if (delay == null) delay = delayAmount();
-    return (
-        baseCps() * wrinkler +
-        gcPs(cookieValue(delay, wrathValue, wrinklerCount)) +
-        baseClickingCps(FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick) +
-        reindeerCps(wrathValue)
-    );
+function effectiveCps(delay = delayAmount(), wrathValue = Game.elderWrath, wrinklerCount = null) {
+  const wrinks = wrinklerCount !== null ? wrinklerCount : wrathValue ? 10 : 0;
+  const wrinkler = wrinklerMod(wrinks);
+
+  return (
+    baseCps() * wrinkler +
+    gcPs(cookieValue(delay, wrathValue, wrinks)) +
+    baseClickingCps(FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick) +
+    reindeerCps(wrathValue)
+  );
 }
 
-function frenzyProbability(wrathValue) {
-    wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.frenzy.odds[wrathValue]; // + cookieInfo.frenzyRuin.odds[wrathValue] + cookieInfo.frenzyLucky.odds[wrathValue] + cookieInfo.frenzyClick.odds[wrathValue];
+function frenzyProbability(wrathValue = Game.elderWrath) {
+  return cookieInfo?.frenzy?.odds?.[wrathValue] ?? 0;
 }
 
-function clotProbability(wrathValue) {
-    wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.clot.odds[wrathValue]; // + cookieInfo.clotRuin.odds[wrathValue] + cookieInfo.clotLucky.odds[wrathValue] + cookieInfo.clotClick.odds[wrathValue];
+function clotProbability(wrathValue = Game.elderWrath) {
+  return cookieInfo?.clot?.odds?.[wrathValue] ?? 0;
 }
 
-function bloodProbability(wrathValue) {
-    wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.blood.odds[wrathValue];
+function bloodProbability(wrathValue = Game.elderWrath) {
+  return cookieInfo?.blood?.odds?.[wrathValue] ?? 0;
 }
 
 function cookieValue(bankAmount, wrathValue, wrinklerCount) {
