@@ -7,162 +7,122 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 
 
-function registerMod(mod_id = "frozen_cookies") {
-    // register with the modding API
-    Game.registerMod(mod_id, {
-        init: function () {
-            Game.registerHook("reincarnate", function () {
-                // called when the player has reincarnated after an ascension
-                if (!FrozenCookies.autoBulk) return;
-                if (FrozenCookies.autoBulk == 1) {
-                    document.getElementById("storeBulk10").click();
-                }
-                if (FrozenCookies.autoBulk == 2) {
-                    document.getElementById("storeBulk100").click();
-                }
-            });
-            Game.registerHook("draw", updateTimers); // called every draw tick
-            Game.registerHook("ticker", function () {
-                // News ticker messages, split between normal and Business Day (April Fools)
-                // Todo: add messages for garden and stock market minigames
-                if (
-                    Game.cookiesEarned >= 1000 &&
-                    Math.random() < 0.3 &&
-                    Game.season != "fools"
-                ) {
-                    return [
-                        "News : debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
-                        "News : Supreme Court rules Frozen Cookies not unauthorized cheating after all.",
-                        "News : Frozen Cookies considered 'cool'. Pun-haters heard groaning.",
-                        "News : Scientists baffled as cookies are now measured in 'efficiency' instead of calories.",
-                        "News : Cookie clickers debate: is it cheating if the bot is more efficient than you?",
-                        "News : Famous movie studio lets it go: no grounds found to freeze out Frozen Cookies.",
-                    ];
-                }
-                if (
-                    bestBank(nextChainedPurchase().efficiency).cost > 0 &&
-                    Math.random() < 0.3 &&
-                    Game.season != "fools"
-                ) {
-                    return [
-                        "You wonder if those " +
-                            Beautify(bestBank(nextChainedPurchase().efficiency).cost) +
-                            " banked cookies are still fresh.",
-                    ];
-                }
-                if (M && Game.season != "fools") {
-                    return [
-                        "News : Local wizards claim they can predict the next golden cookie, while munching on Frozen Cookies.",
-                    ];
-                }
-                if (T && Game.season != "fools") {
-                    return [
-                        "News : Cookie gods issue statement: 'Stop swapping us so much, we're getting dizzy!'",
-                    ];
-                }
-                if (
-                    nextPurchase().cost > 0 &&
-                    Math.random() < 0.3 &&
-                    Game.season != "fools"
-                ) {
-                    return ["You should buy " + nextPurchase().purchase.name + " next."];
-                }
-                if (Math.random() < 0.3 && Game.season == "fools") {
-                    return [
-                        "Investigation into potential cheating with Frozen Cookies is blocked by your lawyers.",
-                        "Your Frozen Cookies are now available in stores everywhere.",
-                        "Cookie banks report record deposits, but nobody knows what a 'Lucky Bank' actually is.",
-                        "Cookie banks now offering 'Harvest Bank' accounts with 0% interest and infinite cookies.",
-                        "Cookie economy destabilized by mysterious entity known only as 'FrozenCookies'.",
-                        "Cookie market analysts confused by sudden spike in 'Purchase Efficiency'.",
-                    ];
-                }
-                if (
-                    bestBank(nextChainedPurchase().efficiency).cost > 0 &&
-                    Math.random() < 0.3 &&
-                    Game.season == "fools"
-                ) {
-                    return [
-                        "You have " +
-                            Beautify(
-                                bestBank(nextChainedPurchase().efficiency).cost * 0.08
-                            ) +
-                            " cookie dollars just sitting in your wallet.",
-                    ];
-                }
-                if (M && Game.season == "fools") {
-                    return [
-                        "Analyst report: Current bussiness relation between Memes and spells is 'complicated'.",
-                    ];
-                }
-                if (T && Game.season == "fools") {
-                    return [
-                        "Likes and shares of Cookie Gods' social media accounts are at an all-time high.",
-                    ];
-                }
-                if (
-                    nextPurchase().cost > 0 &&
-                    nextPurchase().type != "building" &&
-                    Math.random() < 0.3 &&
-                    Game.season == "fools"
-                ) {
-                    return [
-                        "Your next investment: " + nextPurchase().purchase.name + ".",
-                    ];
-                }
-                if (
-                    nextPurchase().cost > 0 &&
-                    nextPurchase().type == "building" &&
-                    Math.random() < 0.3 &&
-                    Game.season == "fools"
-                ) {
-                    return [
-                        "Your next investment: " +
-                            Game.foolObjects[nextPurchase().purchase.name].name +
-                            ".",
-                    ];
-                }
-            });
-            Game.registerHook("reset", function (hard) {
-                // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
-                if (hard) emptyCaches();
-                // if the user is starting fresh, code will likely need to be called to reinitialize some historical data here as well
-            });
-            /*  other hooks that can be used
-                  Game.registerHook('logic', function () {   // called every logic tick. seems to correspond with fps
-                  });
-                  Game.registerHook('reincarnate', function () {
-                  });
-                  Game.registerHook('check', function () {   // called every few seconds when we check for upgrade/achiev unlock conditions; you can also use this for other checks that you don't need happening every logic frame. called about every five seconds?
-                  });
-                  Game.registerHook('cps', function (cps) { // called when determining the CpS; parameter is the current CpS; should return the modified CpS. called on change or about every ten seconds
-                      return cps;
-                  });
-                  Game.registerHook('cookiesPerClick', function (cookiesPerClick) { // called when determining the cookies per click; parameter is the current value; should return the modified value. called on change or about every ten seconds
-                      return cookiesPerClick;
-                  });
-                  Game.registerHook('click', function () {    // called when the big cookie is clicked
-                  });
-                  Game.registerHook('create', function () {   // called after the game declares all buildings, upgrades and achievs; use this to declare your own - note that saving/loading functionality for custom content is not explicitly implemented and may be unpredictable and broken
-                  });
-                  */
-        },
-        save: saveFCData,
-        load: setOverrides, // called whenever a game save is loaded. If the mod has data in the game save when the mod is initially registered, this hook is also called at that time as well.
-    });
+function registerMod(modId = "frozen_cookies") {
+  Game.registerMod(modId, {
+    init() {
+      // 🧙 Reincarnate Hook
+      Game.registerHook("reincarnate", () => {
+        if (!FrozenCookies.autoBulk) return;
+        const buttonId = FrozenCookies.autoBulk === 1 ? "storeBulk10" : "storeBulk100";
+        const button = document.getElementById(buttonId);
+        if (button) button.click();
+      });
 
-    // If Frozen Cookes was loaded and there was previous Frozen Cookies data in the game save, the "load" hook ran so the setOverrides function was called and things got initialized.
-    // However, if there wasn't previous Frozen Cookies data in the game save, the "load" hook wouldn't have been called. So, we have to manually call setOverrides here to start Frozen Cookies.
-    if (!FrozenCookies.loadedData) setOverrides();
-    logEvent(
-        "Load",
-        "Initial Load of Frozen Cookies v " +
-            FrozenCookies.branch +
-            "." +
-            FrozenCookies.version +
-            ". (You should only ever see this once.)"
-    );
+      // ⏱️ Draw Hook
+      Game.registerHook("draw", updateTimers);
+
+      // 📰 Ticker Hook
+      Game.registerHook("ticker", () => {
+        const isFools = Game.season === "fools";
+        const cookieThreshold = Game.cookiesEarned >= 1000;
+        const purchase = nextPurchase();
+        const bankCost = bestBank(nextChainedPurchase().efficiency).cost;
+
+        const tickerMessages = [];
+
+        const chance = Math.random();
+        if (!isFools && chance < 0.3) {
+          if (cookieThreshold) {
+            tickerMessages.push(
+              "News : debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
+              "News : Supreme Court rules Frozen Cookies not unauthorized cheating after all.",
+              "News : Frozen Cookies considered 'cool'. Pun-haters heard groaning.",
+              "News : Scientists baffled as cookies are now measured in 'efficiency' instead of calories.",
+              "News : Cookie clickers debate: is it cheating if the bot is more efficient than you?",
+              "News : Famous movie studio lets it go: no grounds found to freeze out Frozen Cookies."
+            );
+          }
+
+          if (bankCost > 0) {
+            tickerMessages.push(
+              `You wonder if those ${Beautify(bankCost)} banked cookies are still fresh.`
+            );
+          }
+
+          if (M) {
+            tickerMessages.push(
+              "News : Local wizards claim they can predict the next golden cookie, while munching on Frozen Cookies."
+            );
+          }
+
+          if (T) {
+            tickerMessages.push(
+              "News : Cookie gods issue statement: 'Stop swapping us so much, we're getting dizzy!'"
+            );
+          }
+
+          if (purchase.cost > 0) {
+            tickerMessages.push(`You should buy ${purchase.purchase.name} next.`);
+          }
+
+        } else if (isFools && chance < 0.3) {
+          tickerMessages.push(
+            "Investigation into potential cheating with Frozen Cookies is blocked by your lawyers.",
+            "Your Frozen Cookies are now available in stores everywhere.",
+            "Cookie banks report record deposits, but nobody knows what a 'Lucky Bank' actually is.",
+            "Cookie banks now offering 'Harvest Bank' accounts with 0% interest and infinite cookies.",
+            "Cookie economy destabilized by mysterious entity known only as 'FrozenCookies'.",
+            "Cookie market analysts confused by sudden spike in 'Purchase Efficiency'."
+          );
+
+          if (bankCost > 0) {
+            tickerMessages.push(
+              `You have ${Beautify(bankCost * 0.08)} cookie dollars just sitting in your wallet.`
+            );
+          }
+
+          if (M) {
+            tickerMessages.push(
+              "Analyst report: Current business relation between Memes and spells is 'complicated'."
+            );
+          }
+
+          if (T) {
+            tickerMessages.push(
+              "Likes and shares of Cookie Gods' social media accounts are at an all-time high."
+            );
+          }
+
+          if (purchase.cost > 0) {
+            const name =
+              purchase.type === "building"
+                ? Game.foolObjects[purchase.purchase.name].name
+                : purchase.purchase.name;
+            tickerMessages.push(`Your next investment: ${name}.`);
+          }
+        }
+
+        return tickerMessages.length ? [tickerMessages[Math.floor(Math.random() * tickerMessages.length)]] : undefined;
+      });
+
+      // 🔄 Reset Hook
+      Game.registerHook("reset", (hard) => {
+        if (hard) emptyCaches();
+      });
+    },
+
+    save: saveFCData,
+    load: setOverrides,
+  });
+
+  if (!FrozenCookies.loadedData) setOverrides();
+
+  logEvent(
+    "Load",
+    `Initial Load of Frozen Cookies v ${FrozenCookies.branch}.${FrozenCookies.version}. (You should only ever see this once.)`
+  );
 }
+
 
 function setOverrides(gameSaveData) {
     // load settings and initialize variables
