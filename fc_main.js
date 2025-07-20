@@ -770,68 +770,78 @@ function recommendedSettingsAction() {
   Game.toReload = true;
 }
 
+function generateProbabilities(upgradeMult = 1, minBase = 1, maxMult = 2) {
+  if (upgradeMult <= 0 || minBase <= 0 || maxMult < 1) return [];
 
-function generateProbabilities(upgradeMult, minBase, maxMult) {
-    var cumProb = [];
-    var remainingProbability = 1;
-    var minTime = minBase * upgradeMult;
-    var maxTime = maxMult * minTime;
-    var spanTime = maxTime - minTime;
-    for (var i = 0; i < maxTime; i++) {
-        var thisFrame =
-            remainingProbability * Math.pow(Math.max(0, (i - minTime) / spanTime), 5);
-        remainingProbability -= thisFrame;
-        cumProb.push(1 - remainingProbability);
-    }
-    return cumProb;
+  const minTime = Math.floor(minBase * upgradeMult);
+  const maxTime = Math.floor(minTime * maxMult);
+  const spanTime = maxTime - minTime;
+
+  if (spanTime <= 0) return [];
+
+  const probabilities = [];
+  let remaining = 1;
+
+  for (let t = 0; t < maxTime; t++) {
+    const decayRate = Math.pow(Math.max(0, (t - minTime) / spanTime), 5);
+    const frameProb = remaining * decayRate;
+    remaining -= frameProb;
+    probabilities.push(1 - remaining);
+  }
+
+  return probabilities;
 }
 
-var cumulativeProbabilityList = {
-    golden: [1, 0.95, 0.5, 0.475, 0.25, 0.2375].reduce(function (r, x) {
-        r[x] = generateProbabilities(x, 5 * 60 * Game.fps, 3);
-        return r;
-    }, {}),
-    reindeer: [1, 0.5].reduce(function (r, x) {
-        r[x] = generateProbabilities(x, 3 * 60 * Game.fps, 2);
-        return r;
-    }, {}),
+const cumulativeProbabilityList = {
+  golden: [1, 0.95, 0.5, 0.475, 0.25, 0.2375].reduce((acc, modifier) => {
+    acc[modifier] = generateProbabilities(modifier, 5 * 60 * Game.fps, 3);
+    return acc;
+  }, {}),
+  reindeer: [1, 0.5].reduce((acc, modifier) => {
+    acc[modifier] = generateProbabilities(modifier, 3 * 60 * Game.fps, 2);
+    return acc;
+  }, {})
 };
 
-function getProbabilityList(listType) {
-    return cumulativeProbabilityList[listType][getProbabilityModifiers(listType)];
-}
-
 function getProbabilityModifiers(listType) {
-    var result;
-    switch (listType) {
-        case "golden":
-            result =
-                (Game.Has("Lucky day") ? 0.5 : 1) *
-                (Game.Has("Serendipity") ? 0.5 : 1) *
-                (Game.Has("Golden goose egg") ? 0.95 : 1);
-            break;
-        case "reindeer":
-            result = Game.Has("Reindeer baking grounds") ? 0.5 : 1;
-            break;
-    }
-    return result;
+  switch (listType) {
+    case "golden":
+      return (
+        (Game.Has("Lucky day") ? 0.5 : 1) *
+        (Game.Has("Serendipity") ? 0.5 : 1) *
+        (Game.Has("Golden goose egg") ? 0.95 : 1)
+      );
+    case "reindeer":
+      return Game.Has("Reindeer baking grounds") ? 0.5 : 1;
+    default:
+      return 1;
+  }
 }
 
-function cumulativeProbability(listType, start, stop) {
-    return (
-        1 -
-        (1 - getProbabilityList(listType)[stop]) /
-            (1 - getProbabilityList(listType)[start])
-    );
+function getProbabilityList(listType) {
+  const modifier = getProbabilityModifiers(listType);
+  const probList = cumulativeProbabilityList[listType]?.[modifier];
+  return Array.isArray(probList) ? probList : [];
 }
 
-function probabilitySpan(listType, start, endProbability) {
-    var startProbability = getProbabilityList(listType)[start];
-    return _.sortedIndex(
-        getProbabilityList(listType),
-        startProbability + endProbability - startProbability * endProbability
-    );
+function cumulativeProbability(listType, start = 0, stop = 0) {
+  const list = getProbabilityList(listType);
+  const startVal = list[start] ?? 0;
+  const stopVal = list[stop] ?? 0;
+
+  if (startVal >= 1) return 0; // Avoid divide-by-zero
+
+  return 1 - (1 - stopVal) / (1 - startVal);
 }
+
+function probabilitySpan(listType, start = 0, targetProb = 0) {
+  const list = getProbabilityList(listType);
+  const startVal = list[start] ?? 0;
+  const targetVal = startVal + targetProb - startVal * targetProb;
+
+  return _.sortedIndex(list, targetVal);
+}
+
 
 function clickBuffBonus() {
     var ret = 1;
