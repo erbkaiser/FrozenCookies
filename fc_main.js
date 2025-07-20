@@ -283,12 +283,31 @@ function overrideGameFunctions() {
   if (!Game.HasAchiev("Third-party")) Game.Win("Third-party");
 }
 
+const decoder = document.createElement("textarea");
 
 function decodeHtml(html) {
-    // used to convert text with an HTML entity (like "&eacute;") into readable text
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
+  decoder.innerHTML = html;
+  const decoded = decoder.value;
+
+  // Strip <script>, <iframe>, <img onerror>, and other potentially dangerous tags/attributes
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = decoded;
+
+  // Remove script-like tags
+  const dangerousTags = tempDiv.querySelectorAll("script, iframe, object, embed");
+  dangerousTags.forEach(tag => tag.remove());
+
+  // Remove dangerous attributes
+  tempDiv.querySelectorAll("*").forEach(el => {
+    [...el.attributes].forEach(attr => {
+      const name = attr.name.toLowerCase();
+      if (name.startsWith("on") || name === "srcdoc" || name === "href" && el.tagName === "BASE") {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+
+  return tempDiv.textContent || "";
 }
 
 function emptyCaches() {
