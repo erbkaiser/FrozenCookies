@@ -24,7 +24,7 @@ var baseUrl =
 var FrozenCookies = {
     baseUrl: baseUrl,
     branch: "erb-",
-    version: "2.052.7",
+    version: "2.052.8", // This should match the version in README.md and Steam info.txt
 };
 
 // Load external libraries and FC scripts in order
