@@ -1578,6 +1578,7 @@ function bestBank(minEfficiency) {
         FrozenCookies.setHarvestBankPlant
             ? harvestBank()
             : 0;
+    var bankOverride = Math.max(edifice, harvest);
     var bankLevels = [0, luckyBank(), luckyFrenzyBank()]
         .sort(function (a, b) {
             return b - a;
@@ -1593,10 +1594,10 @@ function bestBank(minEfficiency) {
                 ? bank
                 : null;
         });
-    if (bankLevels[0].cost > Math.max(edifice, harvest))
+    if (bankLevels[0].cost > bankOverride)
         return bankLevels[0];
     return {
-        cost: Math.max(edifice, harvest),
+        cost: bankOverride,
         efficiency: 1,
     };
 }
