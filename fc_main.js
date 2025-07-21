@@ -1468,8 +1468,14 @@ function cookieEfficiency(startingPoint, bankAmount) {
 function bestBank(minEfficiency) {
     var results = {};
     var edifice =
-        FrozenCookies.autoCasting == 5 || FrozenCookies.holdSEBank ? edificeBank() : 0;
-    var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
+        FrozenCookies.autoCasting == 5 || FrozenCookies.holdSEBank
+            ? edificeBank()
+            : 0;
+        var harvest = 
+            FrozenCookies.setHarvestBankPlant
+                ? harvestBank()
+                : 0;
+        var bankLevels = [0, luckyBank(), luckyFrenzyBank()]
         .sort(function (a, b) {
             return b - a;
         })
@@ -1480,15 +1486,14 @@ function bestBank(minEfficiency) {
             };
         })
         .filter(function (bank) {
-            return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency) ||
-                FrozenCookies.setHarvestBankPlant
+            return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency)
                 ? bank
                 : null;
         });
-    if (bankLevels[0].cost > edifice || FrozenCookies.setHarvestBankPlant)
+    if (bankLevels[0].cost > edifice && bankLevels[0].cost > harvest)
         return bankLevels[0];
     return {
-        cost: edifice,
+        cost: Math.max(edifice, harvest),
         efficiency: 1,
     };
 }
