@@ -1593,7 +1593,7 @@ function bestBank(minEfficiency) {
                 ? bank
                 : null;
         });
-    if (bankLevels[0].cost > edifice && bankLevels[0].cost > harvest)
+    if (bankLevels[0].cost > Math.max(edifice, harvest))
         return bankLevels[0];
     return {
         cost: Math.max(edifice, harvest),
