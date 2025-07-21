@@ -2723,53 +2723,6 @@ function reindeerLife() {
     return null;
 }
 
-// --- Reward Cookie Helper ---
-function isRewardCookie(upgrade) {
-    // Reward cookies: upgrades that require all buildings to reach a certain number
-    // See cc_upgrade_prerequisites.js, e.g. ids 334, 335, 336, 337, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414
-    // We'll check if the prereq is all buildings > 0 and the array is long (i.e. 15-20 buildings)
-    if (!upgrade || !upgradeJson[upgrade.id]) return false;
-    var prereq = upgradeJson[upgrade.id].buildings;
-    if (!prereq || prereq.length < 10) return false;
-    var allSame = prereq.every(function (v) {
-        return v > 0 && v === prereq[0];
-    });
-    return allSame;
-}
-
-function getRewardCookieBuildingTargets(upgrade) {
-    // Returns an array of {id, amount} for each building type needed
-    if (!upgrade || !upgradeJson[upgrade.id]) return [];
-    var prereq = upgradeJson[upgrade.id].buildings;
-    return prereq.map(function (amt, idx) {
-        return { id: idx, amount: amt };
-    });
-}
-
-function restoreBuildingLimits() {
-    // Sells excess buildings to return to user limits
-    if (FrozenCookies.towerLimit) {
-        var obj = Game.Objects["Wizard tower"];
-        if (obj.amount > FrozenCookies.manaMax)
-            obj.sell(obj.amount - FrozenCookies.manaMax);
-    }
-    if (FrozenCookies.mineLimit) {
-        var obj = Game.Objects["Mine"];
-        if (obj.amount > FrozenCookies.mineMax)
-            obj.sell(obj.amount - FrozenCookies.mineMax);
-    }
-    if (FrozenCookies.factoryLimit) {
-        var obj = Game.Objects["Factory"];
-        if (obj.amount > FrozenCookies.factoryMax)
-            obj.sell(obj.amount - FrozenCookies.factoryMax);
-    }
-    if (FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit) {
-        var obj = Game.Objects["You"];
-        if (obj.amount > FrozenCookies.orbMax)
-            obj.sell(obj.amount - FrozenCookies.orbMax);
-    }
-}
-
 function fcClickCookie() {
     if (!Game.OnAscend && !Game.AscendTimer && !Game.specialTabHovered)
         Game.ClickCookie();
@@ -2777,391 +2730,395 @@ function fcClickCookie() {
 
 function autoCookie() {
     //console.log('autocookie called');
-    if (!FrozenCookies.processing && !Game.OnAscend && !Game.AscendTimer) {
-        FrozenCookies.processing = true;
-        var currentHCAmount = Game.HowMuchPrestige(
-            Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
+    if (FrozenCookies.processing || Game.OnAscend || Game.AscendTimer) {
+        if (FrozenCookies.frequency) {
+            FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
+        }
+        return;
+    }
+
+    FrozenCookies.processing = true;
+
+    trackHeavenlyChipGain();
+    updateCaches();
+
+    const recommendation = nextPurchase();
+    const delay = delayAmount();
+
+    handleSugarLump();
+    handleWrinklers();
+    handlePurchaseCondition(recommendation, delay);
+    handleAutoAscend();
+    adjustFps();
+    handleGoldenCookies();
+    handleReindeer();
+    if (FrozenCookies.autoBlacklistOff) autoBlacklistOff();
+    handleFrenzyTracking();
+
+    FrozenCookies.processing = false;
+
+    if (FrozenCookies.frequency) {
+        FrozenCookies.cookieBot = setTimeout(
+            autoCookie,
+            itemBought ? 0 : FrozenCookies.frequency
+        );
+    }
+}
+
+function shouldBuyAllUpgrades() {
+    const prestigeGain =
+        Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)) -
+        Math.floor(Game.HowMuchPrestige(Game.cookiesReset));
+    const upgradeBlacklist = [
+        "Bingo center/Research facility",
+        "Specialized chocolate chips",
+        "Designer cocoa beans",
+        "Ritual rolling pins",
+        "Underworld ovens",
+        "One mind",
+        "Exotic nuts",
+        "Communal brainsweep",
+        "Arcane sugar",
+        "Elder Pact",
+    ];
+    const next = nextPurchase();
+    return (
+        prestigeGain < 1 &&
+        Game.Has("Inspired checklist") &&
+        FrozenCookies.autoBuyAll &&
+        next.type === "upgrade" &&
+        Game.cookies >= next.cost &&
+        !upgradeBlacklist.includes(next.purchase.name)
+    );
+}
+
+function performBulkLogic(recommendation, bulkSize, limit) {
+    const name = recommendation.purchase.name;
+    const building = Game.Objects[name];
+    const checks = {
+        You: () => FrozenCookies.autoSpell === 3 && building.amount >= limit,
+        "Wizard tower": () => M && FrozenCookies.towerLimit && M.magic >= limit,
+        Mine: () => FrozenCookies.mineLimit && building.amount >= limit,
+        Factory: () => FrozenCookies.factoryLimit && building.amount >= limit,
+    };
+    return (
+        recommendation.type === "building" &&
+        Game.buyBulk === bulkSize &&
+        checks[name]?.()
+    );
+}
+
+function handleRewardCookieUpgrade(nextChainedPurchase) {
+    if (!isValidRewardCookie(nextChainedPurchase)) return;
+
+    const upgrade = nextChainedPurchase.purchase;
+
+    // Ensure building thresholds
+    getRequiredBuildingTargets(upgrade).forEach(({ id, amount }) => {
+        const building = Game.ObjectsById[id];
+        if (building && building.amount < amount) {
+            building.buy(amount - building.amount);
+        }
+    });
+
+    // Attempt to buy if conditions are met
+    if (upgrade.unlocked && !upgrade.bought && Game.cookies >= upgrade.getPrice()) {
+        upgrade.buy();
+        restoreExcessBuildings();
+    }
+}
+
+function isValidRewardCookie(chainedPurchase) {
+    if (!chainedPurchase || chainedPurchase.type !== "upgrade") return false;
+    const upgrade = chainedPurchase.purchase;
+    const prereq = upgradeJson?.[upgrade.id]?.buildings;
+    if (!prereq || prereq.length < 10) return false;
+    return prereq.every((count) => count > 0 && count === prereq[0]);
+}
+
+function getRequiredBuildingTargets(upgrade) {
+    const prereq = upgradeJson?.[upgrade.id]?.buildings;
+    if (!prereq) return [];
+    return prereq.map((amount, id) => ({ id, amount }));
+}
+
+function restoreExcessBuildings() {
+    const limits = [
+        {
+            key: "Wizard tower",
+            enabled: FrozenCookies.towerLimit,
+            cap: FrozenCookies.manaMax,
+        },
+        { key: "Mine", enabled: FrozenCookies.mineLimit, cap: FrozenCookies.mineMax },
+        {
+            key: "Factory",
+            enabled: FrozenCookies.factoryLimit,
+            cap: FrozenCookies.factoryMax,
+        },
+        {
+            key: "You",
+            enabled: FrozenCookies.autoDragonOrbs && FrozenCookies.orbLimit,
+            cap: FrozenCookies.orbMax,
+        },
+    ];
+
+    limits.forEach(({ key, enabled, cap }) => {
+        if (enabled) {
+            const obj = Game.Objects[key];
+            if (obj.amount > cap) {
+                obj.sell(obj.amount - cap);
+            }
+        }
+    });
+}
+
+function handlePurchase(recommendation) {
+    recommendation.time = Date.now() - Game.startDate;
+    recommendation.purchase.clickFunction = null;
+    disabledPopups = false;
+
+    attemptRewardCookieUpgrade(nextChainedPurchase);
+
+    if (shouldBuyAllUpgrades()) {
+        document.getElementById("storeBuyAllButton").click();
+        logEvent("Autobuy", "Bought all upgrades!");
+    } else if (performBulkLogic(recommendation, 100, FrozenCookies.orbMax - 100)) {
+        document.getElementById("storeBulk10").click();
+        safeBuy(recommendation.purchase, 1);
+        document.getElementById("storeBulk100").click();
+    } else if (performBulkLogic(recommendation, 10, FrozenCookies.orbMax - 10)) {
+        document.getElementById("storeBulk1").click();
+        safeBuy(recommendation.purchase, 1);
+        document.getElementById("storeBulk10").click();
+    } else if (recommendation.type === "building") {
+        const cookiesAvailable = Game.cookies - delay;
+        const price100 = recommendation.purchase.getSumPrice(100);
+        const price10 = recommendation.purchase.getSumPrice(10);
+
+        if (cookiesAvailable >= price100) {
+            safeBuy(recommendation.purchase, 100);
+        } else if (cookiesAvailable >= price10) {
+            safeBuy(recommendation.purchase, 10);
+        } else {
+            safeBuy(recommendation.purchase, 1);
+        }
+    } else {
+        recommendation.purchase.buy();
+    }
+
+    FrozenCookies.autobuyCount += 1;
+
+    if (FrozenCookies.trackStats === 5 && recommendation.type === "upgrade") {
+        saveStats();
+    } else if (FrozenCookies.trackStats === 6) {
+        FrozenCookies.delayPurchaseCount += 1;
+    }
+
+    if (FrozenCookies.purchaseLog === 1) {
+        logEvent(
+            "Store",
+            `Autobought ${recommendation.purchase.name} for ${Beautify(
+                recommendation.cost
+            )}, resulting in ${Beautify(recommendation.delta_cps)} CPS.`
+        );
+    }
+
+    disabledPopups = true;
+
+    if (FrozenCookies.autobuyCount >= 10) {
+        Game.Draw();
+        FrozenCookies.autobuyCount = 0;
+    }
+
+    FrozenCookies.recalculateCaches = true;
+    FrozenCookies.processing = false;
+    itemBought = true;
+}
+
+function trackHeavenlyChipGain() {
+    const currentHC = Game.HowMuchPrestige(
+        Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
+    );
+    if (Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHC)) {
+        const change = currentHC - FrozenCookies.lastHCAmount;
+        const now = Date.now();
+        FrozenCookies.lastHCAmount = currentHC;
+        FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
+        FrozenCookies.lastHCTime = now;
+
+        const currHCPercent = (3600 * change) / ((now - Game.startDate) / 1000);
+        if (
+            Game.heavenlyChips < currentHC - change &&
+            currHCPercent > FrozenCookies.maxHCPercent
+        ) {
+            FrozenCookies.maxHCPercent = currHCPercent;
+        }
+        FrozenCookies.hc_gain += change;
+    }
+}
+
+function handleSugarLump() {
+    const ripeAge = Math.ceil(Game.lumpRipeAge);
+    const timeSince = Date.now() - Game.lumpT;
+
+    if (FrozenCookies.autoSL === 1) {
+        if (
+            timeSince >= ripeAge &&
+            Game.dragonLevel >= 21 &&
+            FrozenCookies.dragonsCurve
+        ) {
+            autoDragonsCurve();
+        } else if (timeSince >= ripeAge) {
+            Game.clickLump();
+        }
+    } else if (FrozenCookies.autoSL === 2) {
+        autoRigidel();
+    }
+}
+
+function handleWrinklers() {
+    const popWrinklers = (list, skipShiny) => {
+        let count = 0;
+        list.forEach((w) => {
+            if (w.close && (!skipShiny || w.type !== 1)) {
+                w.hp = 0;
+                count++;
+            }
+        });
+        if (count > 0) logEvent("Wrinkler", `Popped ${count} wrinklers.`);
+    };
+
+    if (FrozenCookies.autoWrinkler === 1) {
+        const ids = shouldPopWrinklers();
+        const wrinks = Game.wrinklers.filter((w) => ids.includes(w.id));
+        popWrinklers(wrinks, FrozenCookies.shinyPop === 1);
+    }
+
+    if (FrozenCookies.autoWrinkler === 2) {
+        popWrinklers(Game.wrinklers, FrozenCookies.shinyPop === 1);
+    }
+}
+
+function handlePurchaseCondition(recommendation, delay) {
+    const validChain = isFinite(nextChainedPurchase().efficiency);
+    const condition =
+        FrozenCookies.autoBuy &&
+        (Game.cookies >= delay + recommendation.cost ||
+            recommendation.purchase.name === "Elder Pledge") &&
+        (FrozenCookies.pastemode || validChain);
+
+    if (condition) handlePurchase(recommendation);
+}
+
+function handleAutoAscend() {
+    const baseResetPrestige = () =>
+        Game.HowMuchPrestige(
+            Game.cookiesReset + Game.cookiesEarned + wrinklerValue() + chocolateValue()
         );
 
-        if (Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHCAmount)) {
-            var changeAmount = currentHCAmount - FrozenCookies.lastHCAmount;
-            FrozenCookies.lastHCAmount = currentHCAmount;
-            FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
-            FrozenCookies.lastHCTime = Date.now();
-            var currHCPercent =
-                (60 * 60 * (FrozenCookies.lastHCAmount - Game.heavenlyChips)) /
-                ((FrozenCookies.lastHCTime - Game.startDate) / 1000);
-            if (
-                Game.heavenlyChips < currentHCAmount - changeAmount &&
-                currHCPercent > FrozenCookies.maxHCPercent
-            ) {
-                FrozenCookies.maxHCPercent = currHCPercent;
-            }
-            FrozenCookies.hc_gain += changeAmount;
-        }
-        updateCaches();
-        var recommendation = nextPurchase();
-        var delay = delayAmount();
-        if (FrozenCookies.autoSL == 1) {
-            var started = Game.lumpT;
-            var ripeAge = Math.ceil(Game.lumpRipeAge);
-            if (
-                Date.now() - started >= ripeAge &&
-                Game.dragonLevel >= 21 &&
-                FrozenCookies.dragonsCurve
-            ) {
-                autoDragonsCurve();
-            } else if (Date.now() - started >= ripeAge) {
-                Game.clickLump();
-            }
-        }
-        if (FrozenCookies.autoSL == 2) autoRigidel();
-        if (FrozenCookies.autoWrinkler == 1) {
-            var popCount = 0;
-            var popList = shouldPopWrinklers();
-            if (FrozenCookies.shinyPop == 1) {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
-                    if (w.type !== 1) {
-                        // do not pop Shiny Wrinkler
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+    const canAscend = (condition) =>
+        FrozenCookies.autoAscendToggle === 1 &&
+        FrozenCookies.autoAscend === condition &&
+        !Game.OnAscend &&
+        !Game.AscendTimer &&
+        Game.prestige > 0 &&
+        FrozenCookies.HCAscendAmount > 0 &&
+        (FrozenCookies.comboAscend === 1 || cpsBonus() < FrozenCookies.minCpSMult);
+
+    if (canAscend(1)) {
+        const prestige = baseResetPrestige();
+        if (prestige - Game.prestige >= FrozenCookies.HCAscendAmount) ascendGame();
+    }
+
+    if (canAscend(2)) {
+        const prestige = baseResetPrestige();
+        if (prestige >= Game.prestige * 2) ascendGame();
+    }
+}
+
+function ascendGame() {
+    Game.ClosePrompt();
+    Game.Ascend(1);
+    setTimeout(() => {
+        Game.ClosePrompt();
+        Game.Reincarnate(1);
+    }, 10000);
+}
+
+function adjustFps() {
+    const fpsList = [
+        "15",
+        "24",
+        "30",
+        "48",
+        "60",
+        "72",
+        "88",
+        "100",
+        "120",
+        "144",
+        "200",
+        "240",
+        "300",
+        "5",
+        "10",
+    ];
+    const targetFps = parseInt(fpsList[FrozenCookies.fpsModifier]);
+    if (targetFps !== Game.fps) Game.fps = targetFps;
+}
+
+function handleGoldenCookies() {
+    if (goldenCookieLife() && FrozenCookies.autoGC) {
+        Game.shimmers.filter((s) => s.type === "golden").forEach((s) => s.pop());
+    }
+}
+
+function handleReindeer() {
+    if (reindeerLife() > 0 && FrozenCookies.autoReindeer) {
+        Game.shimmers.filter((s) => s.type === "reindeer").forEach((s) => s.pop());
+    }
+}
+
+function handleFrenzyTracking() {
+    const currentFrenzy = cpsBonus() * clickBuffBonus();
+    const lastState = FrozenCookies.last_gc_state;
+
+    if (currentFrenzy !== lastState) {
+        if (lastState !== 1 && currentFrenzy === 1) {
+            logEvent("GC", "Frenzy ended, cookie production x1");
+            logChipGain("Frenzy");
+        } else {
+            if (lastState !== 1) {
+                logEvent("GC", `Previous Frenzy x${lastState} interrupted.`);
             } else {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
-                    w.hp = 0;
-                    popCount += 1;
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                logChipGain("outside of Frenzy");
             }
-        }
-        if (FrozenCookies.autoWrinkler == 2) {
-            var popCount = 0;
-            var popList = Game.wrinklers;
-            if (FrozenCookies.shinyPop == 1) {
-                popList.forEach(function (w) {
-                    if (w.close == true && w.type !== 1) {
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            } else {
-                popList.forEach(function (w) {
-                    if (w.close == true) {
-                        w.hp = 0;
-                        popCount += 1;
-                    }
-                });
-                if (popCount > 0)
-                    logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
-            }
-        }
-
-        var itemBought = false;
-
-        //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoCasting == 5) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
-        if (
-            FrozenCookies.autoBuy &&
-            (Game.cookies >= delay + recommendation.cost ||
-                recommendation.purchase.name == "Elder Pledge") &&
-            (FrozenCookies.pastemode || isFinite(nextChainedPurchase().efficiency))
-        ) {
-            //    if (FrozenCookies.autoBuy && (Game.cookies >= delay + recommendation.cost)) {
-            //console.log('something should get bought');
-            recommendation.time = Date.now() - Game.startDate;
-            //      full_history.push(recommendation);  // Probably leaky, maybe laggy?
-            recommendation.purchase.clickFunction = null;
-            disabledPopups = false;
-            //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
-            if (
-                nextChainedPurchase?.type === "upgrade" &&
-                isRewardCookie(nextChainedPurchase.purchase)
-            ) {
-                // Ensure building thresholds for reward cookie
-                const targets = getRewardCookieBuildingTargets(
-                    nextChainedPurchase.purchase
-                );
-
-                targets.forEach((t) => {
-                    const building = Game.ObjectsById[t.id];
-                    if (building && building.amount < t.amount) {
-                        building.buy(t.amount - building.amount);
-                    }
-                });
-
-                // Try to buy the reward cookie if unlocked and affordable
-                const upgrade = nextChainedPurchase.purchase;
-                if (
-                    upgrade.unlocked &&
-                    !upgrade.bought &&
-                    Game.cookies >= upgrade.getPrice()
-                ) {
-                    upgrade.buy();
-                    restoreBuildingLimits(); // reset any limits you temporarily relaxed
-                }
-            }
-            if (
-                Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)) -
-                    Math.floor(Game.HowMuchPrestige(Game.cookiesReset)) <
-                    1 &&
-                Game.Has("Inspired checklist") &&
-                FrozenCookies.autoBuyAll &&
-                nextPurchase().type == "upgrade" &&
-                Game.cookies >= nextPurchase().cost &&
-                nextPurchase().purchase.name != "Bingo center/Research facility" &&
-                nextPurchase().purchase.name != "Specialized chocolate chips" &&
-                nextPurchase().purchase.name != "Designer cocoa beans" &&
-                nextPurchase().purchase.name != "Ritual rolling pins" &&
-                nextPurchase().purchase.name != "Underworld ovens" &&
-                nextPurchase().purchase.name != "One mind" &&
-                nextPurchase().purchase.name != "Exotic nuts" &&
-                nextPurchase().purchase.name != "Communal brainsweep" &&
-                nextPurchase().purchase.name != "Arcane sugar" &&
-                nextPurchase().purchase.name != "Elder Pact"
-            ) {
-                document.getElementById("storeBuyAllButton").click();
-                logEvent("Autobuy", "Bought all upgrades!");
-            } else if (
-                recommendation.type == "building" &&
-                Game.buyBulk == 100 &&
-                ((FrozenCookies.autoSpell == 3 &&
-                    recommendation.purchase.name == "You" &&
-                    Game.Objects["You"].amount >= 299) ||
-                    (M &&
-                        FrozenCookies.towerLimit &&
-                        recommendation.purchase.name == "Wizard tower" &&
-                        M.magic >= FrozenCookies.manaMax - 10) ||
-                    (FrozenCookies.mineLimit &&
-                        recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 100) ||
-                    (FrozenCookies.factoryLimit &&
-                        recommendation.purchase.name == "Factory" &&
-                        Game.Objects["Factory"].amount >=
-                            FrozenCookies.factoryMax - 100) ||
-                    (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.orbLimit &&
-                        recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 100))
-            ) {
-                document.getElementById("storeBulk10").click();
-                safeBuy(recommendation.purchase, 1);
-                document.getElementById("storeBulk100").click();
-            } else if (
-                recommendation.type == "building" &&
-                Game.buyBulk == 10 &&
-                ((FrozenCookies.autoSpell == 3 &&
-                    recommendation.purchase.name == "You" &&
-                    Game.Objects["You"].amount >= 389) ||
-                    (M &&
-                        FrozenCookies.towerLimit &&
-                        recommendation.purchase.name == "Wizard tower" &&
-                        M.magic >= FrozenCookies.manaMax - 2) ||
-                    (FrozenCookies.mineLimit &&
-                        recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 10) ||
-                    (FrozenCookies.factoryLimit &&
-                        recommendation.purchase.name == "Factory" &&
-                        Game.Objects["Factory"].amount >=
-                            FrozenCookies.factoryMax - 10) ||
-                    (FrozenCookies.autoDragonOrbs &&
-                        FrozenCookies.orbLimit &&
-                        recommendation.purchase.name == "You" &&
-                        Game.Objects["You"].amount >= FrozenCookies.orbMax - 10))
-            ) {
-                document.getElementById("storeBulk1").click();
-                safeBuy(recommendation.purchase, 1);
-                document.getElementById("storeBulk10").click();
-            } else if (recommendation.type == "building") {
-                safeBuy(recommendation.purchase, 1);
-            } else {
-                recommendation.purchase.buy();
-            }
-            FrozenCookies.autobuyCount += 1;
-            if (FrozenCookies.trackStats == 5 && recommendation.type == "upgrade") {
-                saveStats();
-            } else if (FrozenCookies.trackStats == 6) {
-                FrozenCookies.delayPurchaseCount += 1;
-            }
-            if (FrozenCookies.purchaseLog == 1) {
-                logEvent(
-                    "Store",
-                    "Autobought " +
-                        recommendation.purchase.name +
-                        " for " +
-                        Beautify(recommendation.cost) +
-                        ", resulting in " +
-                        Beautify(recommendation.delta_cps) +
-                        " CPS."
-                );
-            }
-            disabledPopups = true;
-            if (FrozenCookies.autobuyCount >= 10) {
-                Game.Draw();
-                FrozenCookies.autobuyCount = 0;
-            }
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.processing = false;
-            itemBought = true;
-        }
-
-        if (
-            FrozenCookies.autoAscendToggle == 1 &&
-            FrozenCookies.autoAscend == 1 &&
-            !Game.OnAscend &&
-            !Game.AscendTimer &&
-            Game.prestige > 0 &&
-            FrozenCookies.HCAscendAmount > 0 &&
-            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
-        ) {
-            var resetPrestige = Game.HowMuchPrestige(
-                Game.cookiesReset +
-                    Game.cookiesEarned +
-                    wrinklerValue() +
-                    chocolateValue()
-            );
-            if (
-                resetPrestige - Game.prestige >= FrozenCookies.HCAscendAmount &&
-                FrozenCookies.HCAscendAmount > 0
-            ) {
-                Game.ClosePrompt();
-                Game.Ascend(1);
-                setTimeout(function () {
-                    Game.ClosePrompt();
-                    Game.Reincarnate(1);
-                }, 10000);
-            }
-        }
-
-        if (
-            FrozenCookies.autoAscendToggle == 1 &&
-            FrozenCookies.autoAscend == 2 &&
-            !Game.OnAscend &&
-            !Game.AscendTimer &&
-            Game.prestige > 0 &&
-            FrozenCookies.HCAscendAmount > 0 &&
-            (FrozenCookies.comboAscend == 1 || cpsBonus() < FrozenCookies.minCpSMult)
-        ) {
-            var resetPrestige = Game.HowMuchPrestige(
-                Game.cookiesReset +
-                    Game.cookiesEarned +
-                    wrinklerValue() +
-                    chocolateValue()
-            );
-            if (resetPrestige >= Game.prestige * 2 && FrozenCookies.HCAscendAmount > 0) {
-                Game.ClosePrompt();
-                Game.Ascend(1);
-                setTimeout(function () {
-                    Game.ClosePrompt();
-                    Game.Reincarnate(1);
-                }, 10000);
-            }
-        }
-
-        var fps_amounts = [
-            "15",
-            "24",
-            "30",
-            "48",
-            "60",
-            "72",
-            "88",
-            "100",
-            "120",
-            "144",
-            "200",
-            "240",
-            "300",
-            "5",
-            "10",
-        ];
-        if (parseInt(fps_amounts[FrozenCookies["fpsModifier"]]) != Game.fps)
-            Game.fps = parseInt(fps_amounts[FrozenCookies["fpsModifier"]]);
-
-        // This apparently *has* to stay here, or else fast purchases will multi-click it.
-        if (goldenCookieLife() && FrozenCookies.autoGC) {
-            for (var i in Game.shimmers) {
-                if (
-                    Game.shimmers[i].type == "golden"
-                    // && (Game.shimmer.wrath != 1 || FrozenCookies.autoWC)
-                )
-                    Game.shimmers[i].pop();
-            }
-        }
-        if (reindeerLife() > 0 && FrozenCookies.autoReindeer) {
-            for (var i in Game.shimmers) {
-                if (Game.shimmers[i].type == "reindeer") Game.shimmers[i].pop();
-            }
-        }
-        if (FrozenCookies.autoBlacklistOff) autoBlacklistOff();
-        var currentFrenzy = cpsBonus() * clickBuffBonus();
-        if (currentFrenzy != FrozenCookies.last_gc_state) {
-            if (FrozenCookies.last_gc_state != 1 && currentFrenzy == 1) {
-                logEvent("GC", "Frenzy ended, cookie production x1");
-                if (FrozenCookies.hc_gain) {
-                    logEvent(
-                        "HC",
-                        "Won " +
-                            FrozenCookies.hc_gain +
-                            " heavenly chips during Frenzy. Rate: " +
-                            (FrozenCookies.hc_gain * 1000) /
-                                (Date.now() - FrozenCookies.hc_gain_time) +
-                            " HC/s."
-                    );
-                    FrozenCookies.hc_gain_time = Date.now();
-                    FrozenCookies.hc_gain = 0;
-                }
-            } else {
-                if (FrozenCookies.last_gc_state != 1) {
-                    logEvent(
-                        "GC",
-                        "Previous Frenzy x" + FrozenCookies.last_gc_state + "interrupted."
-                    );
-                } else if (FrozenCookies.hc_gain) {
-                    logEvent(
-                        "HC",
-                        "Won " +
-                            FrozenCookies.hc_gain +
-                            " heavenly chips outside of Frenzy. Rate: " +
-                            (FrozenCookies.hc_gain * 1000) /
-                                (Date.now() - FrozenCookies.hc_gain_time) +
-                            " HC/s."
-                    );
-                    FrozenCookies.hc_gain_time = Date.now();
-                    FrozenCookies.hc_gain = 0;
-                }
-                logEvent(
-                    "GC",
-                    "Starting " +
-                        (hasClickBuff() ? "Clicking " : "") +
-                        "Frenzy x" +
-                        currentFrenzy
-                );
-            }
-            if (FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] == null)
-                FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] = 0;
-            FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] +=
-                Date.now() - FrozenCookies.last_gc_time;
-            FrozenCookies.last_gc_state = currentFrenzy;
-            FrozenCookies.last_gc_time = Date.now();
-        }
-        FrozenCookies.processing = false;
-        if (FrozenCookies.frequency) {
-            FrozenCookies.cookieBot = setTimeout(
-                autoCookie,
-                itemBought ? 0 : FrozenCookies.frequency
+            logEvent(
+                "GC",
+                `Starting ${hasClickBuff() ? "Clicking " : ""}Frenzy x${currentFrenzy}`
             );
         }
-    } else if (!FrozenCookies.processing && FrozenCookies.frequency) {
-        FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
+
+        if (FrozenCookies.frenzyTimes[lastState] == null) {
+            FrozenCookies.frenzyTimes[lastState] = 0;
+        }
+
+        FrozenCookies.frenzyTimes[lastState] += Date.now() - FrozenCookies.last_gc_time;
+        FrozenCookies.last_gc_state = currentFrenzy;
+        FrozenCookies.last_gc_time = Date.now();
+    }
+}
+
+function logChipGain(context) {
+    if (FrozenCookies.hc_gain) {
+        const rate =
+            (FrozenCookies.hc_gain * 1000) / (Date.now() - FrozenCookies.hc_gain_time);
+        logEvent(
+            "HC",
+            `Won ${FrozenCookies.hc_gain} heavenly chips ${context}. Rate: ${rate.toFixed(2)} HC/s.`
+        );
+        FrozenCookies.hc_gain_time = Date.now();
+        FrozenCookies.hc_gain = 0;
     }
 }
 
