@@ -730,12 +730,18 @@ function toggleFrozen(setting) {
     FCStart();
 }
 
-const {
-    Farm: { minigame: G },
-    Bank: { minigame: B },
-    Temple: { minigame: T },
-    "Wizard tower": { minigame: M },
-} = Game.Objects;
+const minigameKeys = {
+    G: "Farm",
+    B: "Bank",
+    T: "Temple",
+    M: "Wizard tower",
+};
+
+for (const [alias, name] of Object.entries(minigameKeys)) {
+    if (typeof window[alias] === "undefined") {
+        window[alias] = Game.Objects[name].minigame;
+    }
+}
 
 function autoTicker() {
     const ticker = Game.TickerEffect;
