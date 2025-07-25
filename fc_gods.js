@@ -454,7 +454,7 @@ function autoRigidel() {
     let tryHarvest = false;
 
     // Only proceed if we have swaps available
-    if (T.swaps < 1) return;
+    if (T.swaps < 1 && orderLvl === 0) return;
 
     // Determine if Rigidel is in a slot and act accordingly
     if (orderLvl === 0) {
@@ -467,13 +467,13 @@ function autoRigidel() {
         }
     } else if (orderLvl === 1) {
         // Rigidel is in diamond slot
-        if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 55) tryHarvest = true;
     } else if (orderLvl === 2) {
         // Rigidel is in ruby slot
-        if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 35) tryHarvest = true;
     } else if (orderLvl === 3) {
         // Rigidel is in jade slot
-        if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 15) tryHarvest = true;
     }
 
     if (tryHarvest) {
@@ -513,12 +513,15 @@ function autoDragonsCurve() {
 
     if (
         Game.dragonLevel > 26 &&
-        Game.dragonAura == 18 && //RB
-        !Game.dragonAura2 == 17 // DC
+        !Game.hasAura("Dragon's Curve")
     ) {
-        Game.specialTab = "dragon";
-        Game.SetDragonAura(17, 1);
-        Game.ConfirmPrompt();
+	    if (Game.dragonAura == 18) {
+	        Game.SetDragonAura(17, 1);
+	        Game.ConfirmPrompt();
+	    } else {
+            Game.SetDragonAura(17, 0);
+            Game.ConfirmPrompt();
+	    }
         logEvent(
             "autoDragonsCurve",
             "Dragon auras swapped to manipulate new Sugar Lump"
@@ -538,9 +541,13 @@ function autoDragonsCurve() {
         Game.dragonLevel > 26 &&
         !Game.hasAura("Reality Bending")
     ) {
-        Game.specialTab = "dragon";
-        Game.SetDragonAura(18, 1);
-        Game.ConfirmPrompt();
+        if (Game.dragonAura == 17) {
+	        Game.SetDragonAura(18, 1);
+	        Game.ConfirmPrompt();
+	    } else {
+	        Game.SetDragonAura(18, 0);
+	        Game.ConfirmPrompt();
+	    }
     }
 
     Game.clickLump();
