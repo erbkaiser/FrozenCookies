@@ -467,13 +467,13 @@ function autoRigidel() {
         }
     } else if (orderLvl === 1) {
         // Rigidel is in diamond slot
-        if (timeToRipe < 55 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 55) tryHarvest = true;
     } else if (orderLvl === 2) {
         // Rigidel is in ruby slot
-        if (timeToRipe < 35 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 35) tryHarvest = true;
     } else if (orderLvl === 3) {
         // Rigidel is in jade slot
-        if (timeToRipe < 15 && Game.BuildingsOwned % 10) tryHarvest = true;
+        if (timeToRipe < 15) tryHarvest = true;
     }
 
     if (tryHarvest) {
