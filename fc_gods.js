@@ -454,7 +454,7 @@ function autoRigidel() {
     let tryHarvest = false;
 
     // Only proceed if we have swaps available
-    if (T.swaps < 1) return;
+    if (T.swaps < 1 && orderLvl === 0) return;
 
     // Determine if Rigidel is in a slot and act accordingly
     if (orderLvl === 0) {
