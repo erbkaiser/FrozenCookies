@@ -513,12 +513,15 @@ function autoDragonsCurve() {
 
     if (
         Game.dragonLevel > 26 &&
-        Game.dragonAura == 18 && //RB
-        !Game.dragonAura2 == 17 // DC
+        !Game.hasAura("Dragon's Curve")
     ) {
-        Game.specialTab = "dragon";
-        Game.SetDragonAura(17, 1);
-        Game.ConfirmPrompt();
+	    if (Game.dragonAura == 18) {
+	        Game.SetDragonAura(17, 1);
+	        Game.ConfirmPrompt();
+	    } else {
+            Game.SetDragonAura(17, 0);
+            Game.ConfirmPrompt();
+	    }
         logEvent(
             "autoDragonsCurve",
             "Dragon auras swapped to manipulate new Sugar Lump"
@@ -538,9 +541,13 @@ function autoDragonsCurve() {
         Game.dragonLevel > 26 &&
         !Game.hasAura("Reality Bending")
     ) {
-        Game.specialTab = "dragon";
-        Game.SetDragonAura(18, 1);
-        Game.ConfirmPrompt();
+        if (Game.dragonAura == 17) {
+	        Game.SetDragonAura(18, 1);
+	        Game.ConfirmPrompt();
+	    } else {
+	        Game.SetDragonAura(18, 0);
+	        Game.ConfirmPrompt();
+	    }
     }
 
     Game.clickLump();
