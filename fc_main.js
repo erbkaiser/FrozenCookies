@@ -282,9 +282,16 @@ function setOverrides(gameSaveData) {
     eval(
         "FrozenCookies.safeGainsCalc = " +
             Game.CalculateGains.toString()
-                .replace(/eggMult\+=\(1.+/, "eggMult++; // CENTURY EGGS SUCK")
+                .replace(/Game\.Has\('Century egg'\)/, "false) // CENTURY EGGS SUCK")
                 .replace(/Game\.cookiesPs/g, "FrozenCookies.calculatedCps")
+                .replace(/Game\.unbuffedCps/g, "FrozenCookies.calculatedBaseCps")
                 .replace(/Game\.globalCpsMult/g, "mult")
+                .replace(/Game\.hasGod\('ages'\)/, 0)
+    );
+    eval(
+        "FrozenCookies.safeCookieValueCalc = " +
+            cookieValue.toString()
+                .replace(/baseCps\(\)/, "FrozenCookies.calculatedBaseCps")
     );
 
     // Give free achievements!
@@ -2597,9 +2604,9 @@ function updateCaches() {
         FrozenCookies.recalculateCaches = false;
         currentBank = bestBank(0);
         targetBank = bestBank(recommendation.efficiency);
-        currentCookieCPS = gcPs(cookieValue(currentBank.cost));
-        currentUpgradeCount = Game.UpgradesInStore.length;
         FrozenCookies.safeGainsCalc();
+        currentCookieCPS = gcPs(safeCookieValueCalc(currentBank.cost));
+        currentUpgradeCount = Game.UpgradesInStore.length;
 
         if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
             FrozenCookies.recalculateCaches = true;
