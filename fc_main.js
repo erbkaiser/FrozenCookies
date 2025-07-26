@@ -2714,7 +2714,7 @@ function liveWrinklers() {
     return _.select(Game.wrinklers, function (w) {
         return w.sucked > 0.5 && w.phase > 0;
     }).sort(function (w1, w2) {
-        return w1.sucked < w2.sucked;
+        return w2.sucked - w1.sucked;
     });
 }
 
