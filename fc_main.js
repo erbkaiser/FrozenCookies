@@ -3682,6 +3682,7 @@ function FCStart() {
         FrozenCookies.autoMinigameCheckBot = setInterval(
             minigameCheckAction,
             FrozenCookies.frequency * 600 // 1 minute
+        );
     }
 
     if (statSpeed(FrozenCookies.trackStats) > 0) {
