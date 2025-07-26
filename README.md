@@ -113,6 +113,11 @@ Click the button to open the FrozenCookies menu, where you can configure setting
 <details>
 <summary>Click to expand!</summary>
 
+2025 Jul 26
+
+-   Multiple fixes, thanks to DragonHeart996
+-   Added manual bank delay, thanks to DragonHeart996
+
 2025 Jul 20
 
 -   Fixed an issue with buildings and safebuy, closes #186
@@ -830,6 +835,7 @@ _All bank options add a reserve to the next Autobuy purchase, so you never drop 
 | **SE Bank**           | Keeps half the cost of your most expensive building in reserve (always on if auto-casting SE). |
 | **Harvesting bank**   | Keeps enough cookies in reserve to maximize plant harvests (e.g., Bakeberries). |
 | **Harvesting during CpS multiplier** | Increases the harvesting bank if you want to harvest during frenzies or other multipliers. |
+| **Manual minimal bank** | Stores set minutes of CpS in the bank before doing any purchase |
 
 ## Other Options
 
