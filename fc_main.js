@@ -1064,7 +1064,7 @@ function baseClickingCps(clickSpeed) {
 
 function effectiveCps(delay, wrathValue, wrinklerCount) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    wrinklerCount = wrinklerCount != null ? wrinklerCount : (wrathValue ? (10 + 2 * (Game.Has("Elder Spice") + Game.hasAura("Dragon Guts"))) : 0);
+    wrinklerCount = wrinklerCount != null ? wrinklerCount : (wrathValue ? (10 + 2 * (Game.Has("Elder spice") + Game.hasAura("Dragon Guts"))) : 0);
     var wrinkler = wrinklerMod(wrinklerCount);
     if (delay == null) delay = delayAmount();
     return (
