@@ -755,6 +755,14 @@ var B = Game.Objects["Bank"].minigame; //Stock Market
 var T = Game.Objects["Temple"].minigame; //Pantheon
 var M = Game.Objects["Wizard tower"].minigame; //Grimoire
 
+function minigameCheckAction() {
+    if (!G) G = Game.Objects["Farm"].minigame; //Garden
+    if (!B) B = Game.Objects["Bank"].minigame; //Stock Market
+    if (!T) T = Game.Objects["Temple"].minigame; //Pantheon
+    if (!M) M = Game.Objects["Wizard tower"].minigame; //Grimoire
+    if (G && B && T && M) clearInterval(FrozenCookies.autoMinigameCheckBot);
+}
+
 function autoTicker() {
     if (Game.TickerEffect && Game.TickerEffect.type == "fortune")
         Game.tickerL.click();
@@ -3473,6 +3481,11 @@ function FCStart() {
         FrozenCookies.recommendedSettingsBot = 0;
     }
 
+    if (FrozenCookies.autoMinigameCheckBot) {
+        clearInterval(FrozenCookies.autoMinigameCheckBot);
+        FrozenCookies.autoMinigameCheckBot = 0;
+    }
+
     // Now create new intervals with their specified frequencies.
     // Default frequency is 100ms = 1/10th of a second
 
@@ -3663,6 +3676,12 @@ function FCStart() {
             recommendedSettingsAction,
             FrozenCookies.frequency
         );
+    }
+
+    if (!G || !B || !T || !M) {
+        FrozenCookies.autoMinigameCheckBot = setInterval(
+            minigameCheckAction,
+            FrozenCookies.frequency * 600 // 1 minute
     }
 
     if (statSpeed(FrozenCookies.trackStats) > 0) {
