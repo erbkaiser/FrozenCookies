@@ -439,6 +439,10 @@ FrozenCookies.preferenceValues = {
     bankOptions: {
         hint: "Bank: (delays autobuy until bank is full)",
     },
+    manualBank:{
+        hint: "Manual minimum bank (minutes of base CpS)",
+        extras: '<a class="option" id="manBankMins" onclick="updateManBank(\'manBankMins\');">${manBankMins} Minutes</a>'
+    },
     holdSEBank: {
         hint: "Keep bank for Spontaneous Edifice.",
         display: ["SE Bank OFF", "SE Bank ON"],
