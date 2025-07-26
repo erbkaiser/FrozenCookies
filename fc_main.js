@@ -943,6 +943,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoEaster = 1;
         FrozenCookies.autoHalloween = 1;
         //Bank options
+        FrozenCookies.holdManBank = 0;
         FrozenCookies.manBankMins = 0;
         FrozenCookies.holdSEBank = 0;
         FrozenCookies.setHarvestBankPlant = 0;
@@ -1594,7 +1595,9 @@ function bestBank(minEfficiency) {
         FrozenCookies.setHarvestBankPlant
             ? harvestBank()
             : 0;
-    var manual = Math.max(manualBank(), 0);
+    var manual = FrozenCookies.holdManBank
+            ? manualBank()
+            : 0;
     var bankOverride = Math.max(edifice, harvest, manual);
     var bankLevels = [0, luckyBank(), luckyFrenzyBank()]
         .sort(function (a, b) {
