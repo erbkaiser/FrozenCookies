@@ -306,6 +306,7 @@ function setOverrides(gameSaveData) {
         FrozenCookies.maxSpecials = preferenceParse("maxSpecials", 1);
         FrozenCookies.minLoanMult = preferenceParse("minLoanMult", 1);
         FrozenCookies.minASFMult = preferenceParse("minASFMult", 1);
+        FrozenCookies.manBankMins = preferenceParse("manBankMins", 0);
 
         // building max values
         FrozenCookies.mineMax = preferenceParse("mineMax", 0);
@@ -497,6 +498,7 @@ function saveFCData() {
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
     saveString.orbMax = FrozenCookies.orbMax;
+    saveString.manBankMins = FrozenCookies.manBankMins;
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
@@ -703,6 +705,18 @@ function updateASFMultMin(base) {
         storeNumberCallback(base, 0)
     );
 }
+
+function updateManBank(base) {
+    userInputPrompt(
+        "Manual Bank!",
+        'How many minutes of base CpS should be kept at all times?',
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+
+
 
 function cyclePreference(preferenceName) {
     var preference = FrozenCookies.preferenceValues[preferenceName];
@@ -929,6 +943,8 @@ function recommendedSettingsAction() {
         FrozenCookies.autoEaster = 1;
         FrozenCookies.autoHalloween = 1;
         //Bank options
+        FrozenCookies.holdManBank = 0;
+        FrozenCookies.manBankMins = 0;
         FrozenCookies.holdSEBank = 0;
         FrozenCookies.setHarvestBankPlant = 0;
         FrozenCookies.setHarvestBankType = 3;
@@ -1397,6 +1413,10 @@ function canCastSE() {
     return 0;
 }
 
+function manualBank() {
+    return baseCps() * 60 * FrozenCookies.manBankMins;
+}
+
 function edificeBank() {
     if (!canCastSE) return 0;
     var cmCost = Game.Objects["You"].price;
@@ -1575,7 +1595,10 @@ function bestBank(minEfficiency) {
         FrozenCookies.setHarvestBankPlant
             ? harvestBank()
             : 0;
-    var bankOverride = Math.max(edifice, harvest);
+    var manual = FrozenCookies.holdManBank
+            ? manualBank()
+            : 0;
+    var bankOverride = Math.max(edifice, harvest, manual);
     var bankLevels = [0, luckyBank(), luckyFrenzyBank()]
         .sort(function (a, b) {
             return b - a;
