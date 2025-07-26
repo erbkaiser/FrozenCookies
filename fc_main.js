@@ -1047,11 +1047,8 @@ function hasClickBuff() {
 }
 
 function baseCps() {
-    var buffMod = 1;
-    for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined")
-            buffMod *= Game.buffs[i].multCpS;
-    }
+    var buffMod = cpsBonus();
+
     if (buffMod === 0) return FrozenCookies.lastBaseCPS;
     var baseCPS = Game.cookiesPs / buffMod;
     FrozenCookies.lastBaseCPS = baseCPS;
@@ -1060,7 +1057,7 @@ function baseCps() {
 
 function baseClickingCps(clickSpeed) {
     var clickFrenzyMod = clickBuffBonus();
-    var frenzyMod = Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1;
+    var frenzyMod = cpsBonus(); //Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1;
     var cpc = Game.mouseCps() / (clickFrenzyMod * frenzyMod);
     return clickSpeed * cpc;
 }
