@@ -2759,14 +2759,19 @@ function shouldPopWrinklers() {
                         var futureWrinklers =
                             living.length - (current.ids.length + 1);
                         if (
-                            current.total < nextRecNeeded &&
-                            effectiveCps(
-                                delay,
-                                Game.elderWrath,
-                                futureWrinklers
-                            ) +
-                                nextRecCps >
-                                effectiveCps()
+                            (
+                                current.total < nextRecNeeded &&
+                                effectiveCps(
+                                    delay,
+                                    Game.elderWrath,
+                                    futureWrinklers
+                                ) +
+                                    nextRecCps >
+                                    effectiveCps()
+                            ) || (
+                                current.ids.length == 0 && 
+                                living.length == (10 + 2 * (Game.Has("Elder spice") + Game.hasAura("Dragon Guts"))) //always be willing to pop if at max wrinklers
+                            )
                         ) {
                             current.ids.push(w.id);
                             current.total += popValue(w);
