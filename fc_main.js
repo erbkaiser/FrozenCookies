@@ -1064,7 +1064,7 @@ function baseClickingCps(clickSpeed) {
 
 function effectiveCps(delay, wrathValue, wrinklerCount) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    wrinklerCount = wrinklerCount != null ? wrinklerCount : wrathValue ? 10 : 0;
+    wrinklerCount = wrinklerCount != null ? wrinklerCount : (wrathValue ? (10 + 2 * (Game.Has("Elder Spice") + Game.hasAura("Dragon Guts"))) : 0);
     var wrinkler = wrinklerMod(wrinklerCount);
     if (delay == null) delay = delayAmount();
     return (
@@ -2752,7 +2752,7 @@ function shouldPopWrinklers() {
             var nextRecCps = nextPurchase().delta_cps;
             var wrinklersNeeded = wrinklerList
                 .sort(function (w1, w2) {
-                    return w1.sucked < w2.sucked;
+                    return w2.sucked - w1.sucked;
                 })
                 .reduce(
                     function (current, w) {
