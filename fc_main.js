@@ -291,6 +291,7 @@ function setOverrides(gameSaveData) {
     eval(
         "FrozenCookies.safeCookieValueCalc = " +
             cookieValue.toString()
+                .replace(/ cookieValue/, " ")
                 .replace(/baseCps\(\)/, "FrozenCookies.calculatedBaseCps")
     );
 
