@@ -745,7 +745,6 @@ been changed. Existing settings should transfer 1:1.
 
 -   **Lag:** Frozen Cookies can cause noticeable lag due to its complexity. Lower the auto-click speed if performance drops.
 -   **Golden Cookie timers:** Occasionally, Golden Cookie timers may disappear from the infobox. They will reappear with the next Golden Cookie spawn.
--   **Autocasting:** If Frozen Cookies loads before Wizard Towers are unlocked, autocasting may not activate automatically, even after unlocking them. Reload the game and mod to enable autocasting. This may also affect other minigame features like banks.
 
 For more issues or feature requests, see the [GitHub issues page](https://github.com/erbkaiser/FrozenCookies/issues). Contributions and suggestions are welcome!
 
