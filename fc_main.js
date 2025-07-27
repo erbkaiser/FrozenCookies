@@ -279,13 +279,6 @@ function setOverrides(gameSaveData) {
                 'logEvent("Wrinkler", $1, true);'
             )
     );
-    eval(
-        "FrozenCookies.safeGainsCalc = " +
-            Game.CalculateGains.toString()
-                .replace(/eggMult\+=\(1.+/, "eggMult++; // CENTURY EGGS SUCK")
-                .replace(/Game\.cookiesPs/g, "FrozenCookies.calculatedCps")
-                .replace(/Game\.globalCpsMult/g, "mult")
-    );
 
     // Give free achievements!
     if (!Game.HasAchiev("Third-party")) Game.Win("Third-party");
@@ -2598,8 +2591,10 @@ function updateCaches() {
         currentBank,
         targetBank,
         currentCookieCPS,
-        currentUpgradeCount;
+        currentUpgradeCount,
+        currentCPS;
     var recalcCount = 0;
+    var epsilon = 0.0001; //changes less than 0.01% are trivial and should not force an immediate recalcualtion (saves massive amounts of recalcualtion time without significant loss in accuracy)
     do {
         recommendation = nextPurchase(FrozenCookies.recalculateCaches);
         FrozenCookies.recalculateCaches = false;
@@ -2607,24 +2602,24 @@ function updateCaches() {
         targetBank = bestBank(recommendation.efficiency);
         currentCookieCPS = gcPs(cookieValue(currentBank.cost));
         currentUpgradeCount = Game.UpgradesInStore.length;
-        FrozenCookies.safeGainsCalc();
+        currentCPS = Game.cookiesPs;
 
-        if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
+        if (Math.abs(FrozenCookies.lastCPS - currentCPS) > FrozenCookies.lastCPS * epsilon) {
             FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
+            FrozenCookies.lastCPS = currentCPS;
         }
 
-        if (FrozenCookies.currentBank.cost != currentBank.cost) {
+        if (Math.abs(FrozenCookies.currentBank.cost - currentBank.cost) > FrozenCookies.currentBank.cost * epsilon) {
             FrozenCookies.recalculateCaches = true;
             FrozenCookies.currentBank = currentBank;
         }
 
-        if (FrozenCookies.targetBank.cost != targetBank.cost) {
+        if (Math.abs(FrozenCookies.targetBank.cost - targetBank.cost) > FrozenCookies.targetBank.cost * epsilon) {
             FrozenCookies.recalculateCaches = true;
             FrozenCookies.targetBank = targetBank;
         }
 
-        if (FrozenCookies.lastCookieCPS != currentCookieCPS) {
+        if (Math.abs(FrozenCookies.lastCookieCPS - currentCookieCPS) > FrozenCookies.lastCookieCPS * epsilon) {
             FrozenCookies.recalculateCaches = true;
             FrozenCookies.lastCookieCPS = currentCookieCPS;
         }
