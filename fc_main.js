@@ -2606,7 +2606,7 @@ function updateCaches() {
             FrozenCookies.currentBank = currentBank;
         }
 
-        if (Math.abs(FrozenCookies.targetBank.cost - targetBank.cost) > FrozenCookies.targetBank.costt * epsilon) {
+        if (Math.abs(FrozenCookies.targetBank.cost - targetBank.cost) > FrozenCookies.targetBank.cost * epsilon) {
             FrozenCookies.recalculateCaches = true;
             FrozenCookies.targetBank = targetBank;
         }
