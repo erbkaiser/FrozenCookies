@@ -282,7 +282,7 @@ function setOverrides(gameSaveData) {
     eval(
         "FrozenCookies.safeGainsCalc = " +
             Game.CalculateGains.toString()
-                .replace(/eggMult\+=\(1.+/, "eggMult++; // CENTURY EGGS SUCK")
+                .replace(/Game\.Has\('Century egg'\)/, "false) // CENTURY EGGS SUCK")
                 .replace(/Game\.cookiesPs/g, "FrozenCookies.calculatedCps")
                 .replace(/Game\.globalCpsMult/g, "mult")
     );
