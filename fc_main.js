@@ -2594,7 +2594,7 @@ function updateCaches() {
         targetBank = bestBank(recommendation.efficiency);
         currentCookieCPS = gcPs(cookieValue(currentBank.cost));
         currentUpgradeCount = Game.UpgradesInStore.length;
-        currentCPS = baseCps();
+        currentCPS = Game.cookiesPs;
 
         if (Math.abs(FrozenCookies.lastCPS - currentCPS) > FrozenCookies.lastCPS * epsilon) {
             FrozenCookies.recalculateCaches = true;
