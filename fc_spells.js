@@ -56,7 +56,7 @@ nextSpell = function (i) {
         if (!spell.fail || Math.random() < 1 - failChance) {
             Math.random();
             Math.random();
-            if (Game.season == "valentines" || Game.season == "easter") {
+            if (["valentines", "easter", "halloween", "fools"].indexOf(Game.season) != -1) {
                 Math.random();
             }
             choices.push(
@@ -79,7 +79,7 @@ nextSpell = function (i) {
         } else {
             Math.random();
             Math.random();
-            if (Game.season == "valentines" || Game.season == "easter") {
+            if (["valentines", "easter", "halloween", "fools"].indexOf(Game.season) != -1) {
                 Math.random();
             }
             choices.push(
